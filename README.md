@@ -1,0 +1,2 @@
+# bitirme-projesi
+bitirme-projesi
