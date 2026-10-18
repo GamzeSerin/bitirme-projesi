@@ -1,0 +1,14 @@
+# İmaja yalnızca kod girer; veri, modeller ve sonuçlar çalışırken bağlanır
+.git
+.github
+data/
+outputs/
+outputs_quick/
+work/
+figures/
+notebooks/
+**/__pycache__
+**/*.pyc
+.ipynb_checkpoints
+.venv
+.vscode
