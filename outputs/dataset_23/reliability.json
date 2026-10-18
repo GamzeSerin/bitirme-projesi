@@ -1,170 +1,170 @@
 {
   "DT": {
     "BENIGN": {
-      "precision": 0.695656,
-      "recall": 0.744656,
-      "f1": 0.719323
+      "precision": 0.676696,
+      "recall": 0.703531,
+      "f1": 0.689853
     },
     "RECON": {
-      "precision": 0.800537,
-      "recall": 0.663403,
-      "f1": 0.725547
+      "precision": 0.752574,
+      "recall": 0.722507,
+      "f1": 0.737234
     },
     "SPOOFING": {
-      "precision": 0.899481,
-      "recall": 0.845244,
-      "f1": 0.871519
+      "precision": 0.848829,
+      "recall": 0.84754,
+      "f1": 0.848184
     },
     "BRUTEFORCE": {
-      "precision": 0.099744,
-      "recall": 0.33829,
-      "f1": 0.154063
+      "precision": 0.227551,
+      "recall": 0.276332,
+      "f1": 0.24958
     },
     "WEB": {
-      "precision": 0.075714,
-      "recall": 0.347452,
-      "f1": 0.124334
+      "precision": 0.152976,
+      "recall": 0.205824,
+      "f1": 0.175508
     },
     "DOS": {
-      "precision": 0.569982,
-      "recall": 0.864274,
-      "f1": 0.686935
+      "precision": 0.583298,
+      "recall": 0.77299,
+      "f1": 0.664879
     },
     "DDOS": {
-      "precision": 0.942584,
-      "recall": 0.771847,
-      "f1": 0.848714
+      "precision": 0.910699,
+      "recall": 0.807465,
+      "f1": 0.85598
     },
     "MIRAI": {
-      "precision": 0.997247,
-      "recall": 0.996156,
-      "f1": 0.996701
+      "precision": 0.996831,
+      "recall": 0.996188,
+      "f1": 0.996509
     }
   },
   "RF": {
     "BENIGN": {
-      "precision": 0.750269,
-      "recall": 0.806281,
-      "f1": 0.777267
+      "precision": 0.749608,
+      "recall": 0.806344,
+      "f1": 0.776941
     },
     "RECON": {
-      "precision": 0.803986,
-      "recall": 0.829487,
-      "f1": 0.816538
+      "precision": 0.804043,
+      "recall": 0.829391,
+      "f1": 0.81652
     },
     "SPOOFING": {
-      "precision": 0.942379,
-      "recall": 0.855028,
-      "f1": 0.896581
+      "precision": 0.942607,
+      "recall": 0.854569,
+      "f1": 0.896432
     },
     "BRUTEFORCE": {
-      "precision": 0.460432,
-      "recall": 0.317224,
-      "f1": 0.375642
+      "precision": 0.452128,
+      "recall": 0.315985,
+      "f1": 0.371991
     },
     "WEB": {
-      "precision": 0.411846,
-      "recall": 0.197882,
-      "f1": 0.267322
+      "precision": 0.410615,
+      "recall": 0.194573,
+      "f1": 0.264032
     },
     "DOS": {
-      "precision": 0.609115,
-      "recall": 0.830888,
-      "f1": 0.702924
+      "precision": 0.608101,
+      "recall": 0.833338,
+      "f1": 0.703122
     },
     "DDOS": {
-      "precision": 0.932357,
-      "recall": 0.814558,
-      "f1": 0.869486
+      "precision": 0.933149,
+      "recall": 0.813201,
+      "f1": 0.869056
     },
     "MIRAI": {
-      "precision": 0.99775,
-      "recall": 0.997698,
-      "f1": 0.997724
+      "precision": 0.997729,
+      "recall": 0.997677,
+      "f1": 0.997703
     }
   },
   "XGB": {
     "BENIGN": {
-      "precision": 0.75256,
-      "recall": 0.813,
-      "f1": 0.781613
+      "precision": 0.753349,
+      "recall": 0.819031,
+      "f1": 0.784818
     },
     "RECON": {
-      "precision": 0.815973,
-      "recall": 0.820798,
-      "f1": 0.818378
+      "precision": 0.821744,
+      "recall": 0.817829,
+      "f1": 0.819782
     },
     "SPOOFING": {
-      "precision": 0.924428,
-      "recall": 0.870253,
-      "f1": 0.896523
+      "precision": 0.927226,
+      "recall": 0.871348,
+      "f1": 0.898419
     },
     "BRUTEFORCE": {
-      "precision": 0.532558,
-      "recall": 0.283767,
-      "f1": 0.370251
+      "precision": 0.478346,
+      "recall": 0.301115,
+      "f1": 0.369582
     },
     "WEB": {
-      "precision": 0.398936,
-      "recall": 0.198544,
-      "f1": 0.265135
+      "precision": 0.363351,
+      "recall": 0.229649,
+      "f1": 0.281427
     },
     "DOS": {
-      "precision": 0.5847,
-      "recall": 0.881764,
-      "f1": 0.703144
+      "precision": 0.582583,
+      "recall": 0.886196,
+      "f1": 0.70301
     },
     "DDOS": {
-      "precision": 0.949673,
-      "recall": 0.782581,
-      "f1": 0.858068
+      "precision": 0.951323,
+      "recall": 0.779478,
+      "f1": 0.85687
     },
     "MIRAI": {
-      "precision": 0.99851,
-      "recall": 0.997906,
-      "f1": 0.998208
+      "precision": 0.998198,
+      "recall": 0.997979,
+      "f1": 0.998088
     }
   },
   "LGBM": {
     "BENIGN": {
-      "precision": 0.749826,
-      "recall": 0.81,
-      "f1": 0.778753
+      "precision": 0.749346,
+      "recall": 0.814375,
+      "f1": 0.780508
     },
     "RECON": {
-      "precision": 0.843906,
-      "recall": 0.737564,
-      "f1": 0.78716
+      "precision": 0.824644,
+      "recall": 0.798942,
+      "f1": 0.81159
     },
     "SPOOFING": {
-      "precision": 0.928064,
-      "recall": 0.866791,
-      "f1": 0.896382
+      "precision": 0.917747,
+      "recall": 0.873009,
+      "f1": 0.894819
     },
     "BRUTEFORCE": {
-      "precision": 0.192415,
-      "recall": 0.427509,
-      "f1": 0.265385
+      "precision": 0.449225,
+      "recall": 0.32342,
+      "f1": 0.376081
     },
     "WEB": {
-      "precision": 0.127386,
-      "recall": 0.432826,
-      "f1": 0.19684
+      "precision": 0.244352,
+      "recall": 0.272005,
+      "f1": 0.257438
     },
     "DOS": {
-      "precision": 0.570267,
-      "recall": 0.898985,
-      "f1": 0.697854
+      "precision": 0.582644,
+      "recall": 0.884832,
+      "f1": 0.702624
     },
     "DDOS": {
-      "precision": 0.955661,
-      "recall": 0.764864,
-      "f1": 0.849683
+      "precision": 0.950519,
+      "recall": 0.780034,
+      "f1": 0.856879
     },
     "MIRAI": {
-      "precision": 0.99853,
-      "recall": 0.997729,
-      "f1": 0.998129
+      "precision": 0.998863,
+      "recall": 0.997302,
+      "f1": 0.998082
     }
   },
   "LR": {
