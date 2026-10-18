@@ -1,0 +1,21 @@
+# Ham veri asla GitHub'a girmez (GitHub dosya başına 100 MB sınırı var)
+data/**
+!data/**/
+!data/**/README.md
+
+# Eğitilmiş modeller ve ara sonuçlar Drive'da tutulur
+work/
+outputs_quick/
+models/
+*.joblib
+*.pkl
+*.pt
+*.h5
+
+__pycache__/
+.ipynb_checkpoints/
+.venv/
+outputs_ablation/
+
+# Kişisel editör ayarları
+.vscode/
