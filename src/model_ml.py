@@ -70,6 +70,8 @@ def model_key(name, model):
     """Model tanımı + arama uzayının kısa parmak izi (bellek adresleri temizlenir)."""
     import re
     text = re.sub(r" at 0x[0-9A-Fa-f]+", "", repr(model)) + repr(PARAM_SPACE.get(name))
+    if hasattr(model, "VERSION"):           # yalnızca sürümlü sınıflarda (EarlyStopping)
+        text += f"v{model.VERSION}"
     return hashlib.md5(text.encode()).hexdigest()[:6]
 
 
@@ -80,7 +82,13 @@ class EarlyStopping(ClassifierMixin, BaseEstimator):
     (stratified) doğrulama olarak ayrılır ve doğrulama kaybı `rounds` tur boyunca
     iyileşmeyince eğitim durur. Alt örneklemde seçilen az ağacın tam veride yetersiz
     kalması (underfitting) böylece önlenir. Test seti hiç kullanılmaz.
+
+    Durma kriteri AĞIRLIKSIZ doğrulama kaybıdır. Eğitimde sınıf ağırlıkları kullanılır,
+    ama ağırlıklı doğrulama kaybı nadir sınıfların birkaç düzine örneği ezberlenince
+    erken yükselir (teşhis: ağırlıklı kayıp 64. turda, macro-F1 ve ağırlıksız kayıp
+    ~400. turda en iyi). Bu yüzden durma kararı ağırlıksız kayba göre verilir.
     """
+    VERSION = 2  # davranış değişince önbelleği geçersiz kılar (model_key'e girer)
 
     def __init__(self, estimator=None, val_size=0.1, rounds=50, balanced=False, random_state=42):
         self.estimator = estimator
@@ -92,17 +100,16 @@ class EarlyStopping(ClassifierMixin, BaseEstimator):
     def fit(self, X, y, sample_weight=None):
         Xt, Xv, yt, yv = train_test_split(X, y, test_size=self.val_size, stratify=y,
                                           random_state=self.random_state)
-        wv = compute_sample_weight("balanced", yv)
         est = clone(self.estimator)
         kind = type(est).__name__
         if kind == "XGBClassifier":
             est.set_params(early_stopping_rounds=self.rounds)
             est.fit(Xt, yt, sample_weight=compute_sample_weight("balanced", yt) if self.balanced else None,
-                    eval_set=[(Xv, yv)], sample_weight_eval_set=[wv], verbose=False)
+                    eval_set=[(Xv, yv)], verbose=False)
             self.best_iteration_ = int(est.best_iteration) + 1
         elif kind == "LGBMClassifier":
             import lightgbm as lgb
-            est.fit(Xt, yt, eval_set=[(Xv, yv)], eval_sample_weight=[wv],
+            est.fit(Xt, yt, eval_set=[(Xv, yv)],
                     callbacks=[lgb.early_stopping(self.rounds, verbose=False)])
             self.best_iteration_ = int(est.best_iteration_)
         else:
