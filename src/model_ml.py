@@ -281,16 +281,21 @@ def main():
     p.add_argument("--shap-per-class", type=int, default=100)
     p.add_argument("--pred-per-class", type=int, default=2000,
                    help="test_predictions dosyasına sınıf başına kaç satır yazılsın")
-    p.add_argument("--drop-features", default="",
-                   help="Atılacak ek özellikler, ör. 'Number' (ablation için)")
+    # Resmi protokol (18.10.2026): Number atılır (veri toplama izi), çakışan etiketli
+    # satırlar atılır (ekip kuralı). Duyarlılık analizi için ikisi de kapatılabilir.
+    p.add_argument("--drop-features", default="Number",
+                   help="Atılacak ek özellikler (virgülle). Hiçbirini atmamak için: --drop-features \"\"")
+    p.add_argument("--keep-conflicts", action="store_true",
+                   help="Aynı özellik + farklı etiketli satırları ATMA (duyarlılık analizi)")
     p.add_argument("--drop-conflicts", action="store_true",
-                   help="Aynı özellik + farklı etiketli satırları at")
+                   help="Eski sürümlerle uyumluluk için; artık varsayılan")
     p.add_argument("--gpu", action="store_true", help="XGBoost'u GPU'da eğit")
     p.add_argument("--n-jobs", type=int, default=-1)
     p.add_argument("--seed", type=int, default=42)
     p.add_argument("--quick", action="store_true", help="Küçük örneklem, 3 fold: hızlı deneme")
     p.add_argument("--force", action="store_true", help="Kaydedilmiş model sonuçlarını yok say")
     args = p.parse_args()
+    args.drop_conflicts = not args.keep_conflicts
     if args.quick:
         args.cap, args.folds = min(args.cap, 3000), 3
 

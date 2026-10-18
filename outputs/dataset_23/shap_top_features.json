@@ -1,0 +1,384 @@
+{
+  "model": "RF",
+  "n_rows": 800,
+  "per_class": {
+    "BENIGN": [
+      {
+        "feature": "Max",
+        "mean_abs_shap": 0.097389
+      },
+      {
+        "feature": "HTTPS",
+        "mean_abs_shap": 0.072849
+      },
+      {
+        "feature": "ack_flag_number",
+        "mean_abs_shap": 0.051147
+      },
+      {
+        "feature": "Tot sum",
+        "mean_abs_shap": 0.045984
+      },
+      {
+        "feature": "AVG",
+        "mean_abs_shap": 0.044505
+      },
+      {
+        "feature": "Time_To_Live",
+        "mean_abs_shap": 0.042657
+      },
+      {
+        "feature": "IAT",
+        "mean_abs_shap": 0.041844
+      },
+      {
+        "feature": "Rate",
+        "mean_abs_shap": 0.025482
+      },
+      {
+        "feature": "psh_flag_number",
+        "mean_abs_shap": 0.02228
+      },
+      {
+        "feature": "Min",
+        "mean_abs_shap": 0.021349
+      }
+    ],
+    "RECON": [
+      {
+        "feature": "Tot sum",
+        "mean_abs_shap": 0.114506
+      },
+      {
+        "feature": "HTTPS",
+        "mean_abs_shap": 0.058235
+      },
+      {
+        "feature": "IAT",
+        "mean_abs_shap": 0.048432
+      },
+      {
+        "feature": "Max",
+        "mean_abs_shap": 0.037802
+      },
+      {
+        "feature": "AVG",
+        "mean_abs_shap": 0.036756
+      },
+      {
+        "feature": "HTTP",
+        "mean_abs_shap": 0.033201
+      },
+      {
+        "feature": "Rate",
+        "mean_abs_shap": 0.031456
+      },
+      {
+        "feature": "rst_flag_number",
+        "mean_abs_shap": 0.030232
+      },
+      {
+        "feature": "syn_flag_number",
+        "mean_abs_shap": 0.030165
+      },
+      {
+        "feature": "Min",
+        "mean_abs_shap": 0.029947
+      }
+    ],
+    "SPOOFING": [
+      {
+        "feature": "Min",
+        "mean_abs_shap": 0.1769
+      },
+      {
+        "feature": "Max",
+        "mean_abs_shap": 0.151182
+      },
+      {
+        "feature": "Tot sum",
+        "mean_abs_shap": 0.10781
+      },
+      {
+        "feature": "AVG",
+        "mean_abs_shap": 0.086213
+      },
+      {
+        "feature": "IAT",
+        "mean_abs_shap": 0.050188
+      },
+      {
+        "feature": "HTTPS",
+        "mean_abs_shap": 0.044058
+      },
+      {
+        "feature": "ack_flag_number",
+        "mean_abs_shap": 0.033976
+      },
+      {
+        "feature": "Rate",
+        "mean_abs_shap": 0.028836
+      },
+      {
+        "feature": "Time_To_Live",
+        "mean_abs_shap": 0.018011
+      },
+      {
+        "feature": "SSH",
+        "mean_abs_shap": 0.017969
+      }
+    ],
+    "BRUTEFORCE": [
+      {
+        "feature": "SSH",
+        "mean_abs_shap": 0.138327
+      },
+      {
+        "feature": "Tot sum",
+        "mean_abs_shap": 0.02196
+      },
+      {
+        "feature": "ack_flag_number",
+        "mean_abs_shap": 0.021756
+      },
+      {
+        "feature": "HTTPS",
+        "mean_abs_shap": 0.01857
+      },
+      {
+        "feature": "Time_To_Live",
+        "mean_abs_shap": 0.0169
+      },
+      {
+        "feature": "Max",
+        "mean_abs_shap": 0.015525
+      },
+      {
+        "feature": "HTTP",
+        "mean_abs_shap": 0.014445
+      },
+      {
+        "feature": "IAT",
+        "mean_abs_shap": 0.013725
+      },
+      {
+        "feature": "AVG",
+        "mean_abs_shap": 0.013225
+      },
+      {
+        "feature": "Std",
+        "mean_abs_shap": 0.012804
+      }
+    ],
+    "WEB": [
+      {
+        "feature": "HTTPS",
+        "mean_abs_shap": 0.033821
+      },
+      {
+        "feature": "Max",
+        "mean_abs_shap": 0.030324
+      },
+      {
+        "feature": "IAT",
+        "mean_abs_shap": 0.026331
+      },
+      {
+        "feature": "ack_flag_number",
+        "mean_abs_shap": 0.021559
+      },
+      {
+        "feature": "Time_To_Live",
+        "mean_abs_shap": 0.019553
+      },
+      {
+        "feature": "Tot sum",
+        "mean_abs_shap": 0.019416
+      },
+      {
+        "feature": "AVG",
+        "mean_abs_shap": 0.017812
+      },
+      {
+        "feature": "Std",
+        "mean_abs_shap": 0.014128
+      },
+      {
+        "feature": "Rate",
+        "mean_abs_shap": 0.013766
+      },
+      {
+        "feature": "Min",
+        "mean_abs_shap": 0.011296
+      }
+    ],
+    "DOS": [
+      {
+        "feature": "AVG",
+        "mean_abs_shap": 0.120755
+      },
+      {
+        "feature": "ack_flag_number",
+        "mean_abs_shap": 0.112557
+      },
+      {
+        "feature": "Tot sum",
+        "mean_abs_shap": 0.097953
+      },
+      {
+        "feature": "IAT",
+        "mean_abs_shap": 0.056066
+      },
+      {
+        "feature": "Rate",
+        "mean_abs_shap": 0.033299
+      },
+      {
+        "feature": "syn_flag_number",
+        "mean_abs_shap": 0.023161
+      },
+      {
+        "feature": "Header_Length",
+        "mean_abs_shap": 0.020607
+      },
+      {
+        "feature": "ack_count",
+        "mean_abs_shap": 0.017507
+      },
+      {
+        "feature": "Protocol Type",
+        "mean_abs_shap": 0.015973
+      },
+      {
+        "feature": "psh_flag_number",
+        "mean_abs_shap": 0.015342
+      }
+    ],
+    "DDOS": [
+      {
+        "feature": "AVG",
+        "mean_abs_shap": 0.121268
+      },
+      {
+        "feature": "Tot sum",
+        "mean_abs_shap": 0.113804
+      },
+      {
+        "feature": "ack_flag_number",
+        "mean_abs_shap": 0.092191
+      },
+      {
+        "feature": "Rate",
+        "mean_abs_shap": 0.049421
+      },
+      {
+        "feature": "IAT",
+        "mean_abs_shap": 0.048103
+      },
+      {
+        "feature": "Std",
+        "mean_abs_shap": 0.047213
+      },
+      {
+        "feature": "ack_count",
+        "mean_abs_shap": 0.041031
+      },
+      {
+        "feature": "psh_flag_number",
+        "mean_abs_shap": 0.034927
+      },
+      {
+        "feature": "ICMP",
+        "mean_abs_shap": 0.031395
+      },
+      {
+        "feature": "Header_Length",
+        "mean_abs_shap": 0.031127
+      }
+    ],
+    "MIRAI": [
+      {
+        "feature": "Tot sum",
+        "mean_abs_shap": 0.384837
+      },
+      {
+        "feature": "ack_flag_number",
+        "mean_abs_shap": 0.121903
+      },
+      {
+        "feature": "AVG",
+        "mean_abs_shap": 0.096998
+      },
+      {
+        "feature": "Protocol Type",
+        "mean_abs_shap": 0.085493
+      },
+      {
+        "feature": "Std",
+        "mean_abs_shap": 0.049143
+      },
+      {
+        "feature": "Max",
+        "mean_abs_shap": 0.040957
+      },
+      {
+        "feature": "IAT",
+        "mean_abs_shap": 0.019433
+      },
+      {
+        "feature": "Header_Length",
+        "mean_abs_shap": 0.015731
+      },
+      {
+        "feature": "TCP",
+        "mean_abs_shap": 0.012511
+      },
+      {
+        "feature": "UDP",
+        "mean_abs_shap": 0.010259
+      }
+    ]
+  },
+  "global": [
+    {
+      "feature": "Tot sum",
+      "mean_abs_shap": 0.04707
+    },
+    {
+      "feature": "ack_flag_number",
+      "mean_abs_shap": 0.03015
+    },
+    {
+      "feature": "AVG",
+      "mean_abs_shap": 0.030049
+    },
+    {
+      "feature": "IAT",
+      "mean_abs_shap": 0.021173
+    },
+    {
+      "feature": "Max",
+      "mean_abs_shap": 0.018094
+    },
+    {
+      "feature": "HTTPS",
+      "mean_abs_shap": 0.016833
+    },
+    {
+      "feature": "Min",
+      "mean_abs_shap": 0.015018
+    },
+    {
+      "feature": "Rate",
+      "mean_abs_shap": 0.012734
+    },
+    {
+      "feature": "SSH",
+      "mean_abs_shap": 0.010263
+    },
+    {
+      "feature": "Std",
+      "mean_abs_shap": 0.010195
+    }
+  ]
+}

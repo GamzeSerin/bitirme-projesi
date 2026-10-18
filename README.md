@@ -31,7 +31,7 @@ iot-security-project/
 ## Ortak kurallar (herkes uyar)
 
 1. **Etiketler** `src/common/taxonomy.py` içindeki ortak kategorilere eşlenir (BENIGN, DDOS, DOS, RECON, WEB, BRUTEFORCE, SPOOFING, MALWARE, MIRAI). Yeni kategori gerekiyorsa önce PR ile oraya eklenir.
-2. **Temizlik split'ten önce yapılır:** inf/NaN silinir, tekrarlar dosyalar birleştirildikten sonra silinir.
+2. **Temizlik split'ten önce yapılır:** inf/NaN silinir, tekrarlar dosyalar birleştirildikten sonra silinir, **aynı özellik vektörüne sahip ama etiketi farklı (çakışan) satırların hepsi atılır** (etiket gürültüsü). Kimlik gibi davranan ya da veri toplama izi olan sütunlar (ör. CICIoT2023'te `Number`) atılır ve README'de gerekçesiyle yazılır. Çakışmaları tutan sürüm duyarlılık analizi olarak `outputs_ablation/` altında saklanabilir.
 3. **Stratified 80/20 split, `seed=42`.** Test seti kilitlenir.
 4. **Ön işleme, dengesizlik yönetimi ve hiperparametre araması** yalnızca eğitim verisinde, CV içinde yapılır.
 5. **DSS ağırlıkları OOF (cross-validation) tahminlerinden** hesaplanır. Test yalnızca en sonda raporlama için kullanılır.
@@ -65,13 +65,13 @@ pip install -r requirements.txt
 **2. Hızlı deneme (~2 dk):** Kodun uçtan uca çalıştığını görmek için. Sonuçlar `outputs_quick/` klasörüne gider, Git'e girmez.
 
 ```bash
-python src/model_ml.py --quick --shap --drop-features Number --out-dir outputs_quick/dataset_23 --work-dir work/quick
+python src/model_ml.py --quick --shap --out-dir outputs_quick/dataset_23 --work-dir work/quick
 ```
 
 **3. Asıl deney (~1-2 saat):** Makaledeki sonuçlar. `outputs/dataset_23/` klasörüne yazar. Yarıda kesilirse aynı komutu tekrar çalıştır; biten modeller `work/` klasöründen okunur.
 
 ```bash
-python src/model_ml.py --tune --shap --gpu --drop-features Number
+python src/model_ml.py --tune --shap --gpu
 ```
 
 **4. DSS ve sözleşme kontrolü:**
