@@ -89,14 +89,20 @@ def decide(cls, confidence):
 
 
 def dss_predict(env, probas):
+    """Sınıf tahmini en yüksek skordan; aksiyon ise aynı ciddiyetteki sınıfların
+    TOPLAM olasılığından verilir. Böylece model DoS ile DDoS arasında kararsız kalsa da
+    (ikisi de ciddiyet 3) kritik bir saldırı BLOCK alabilir."""
     score = env.combine(probas)
+    sev = np.array([SEVERITY[c] for c in env.classes])
     top = score.argmax(axis=1)
     out = []
     for i, j in enumerate(top):
         cls, conf = env.classes[j], float(score[i, j])
+        sev_conf = float(score[i, sev == sev[j]].sum())
         out.append({"environment": env.id, "predicted": cls,
                     "confidence": round(conf, 4), "severity": SEVERITY[cls],
-                    "action": decide(cls, conf), "explanation": env.explain(cls)})
+                    "severity_confidence": round(sev_conf, 4),
+                    "action": decide(cls, sev_conf), "explanation": env.explain(cls)})
     return out
 
 

@@ -66,6 +66,13 @@ def gpu_name():
         return None
 
 
+def model_key(name, model):
+    """Model tanımı + arama uzayının kısa parmak izi (bellek adresleri temizlenir)."""
+    import re
+    text = re.sub(r" at 0x[0-9A-Fa-f]+", "", repr(model)) + repr(PARAM_SPACE.get(name))
+    return hashlib.md5(text.encode()).hexdigest()[:6]
+
+
 def build_models(seed, n_jobs, gpu, quick):
     n_est = 100 if quick else 400
     models = {
@@ -76,7 +83,7 @@ def build_models(seed, n_jobs, gpu, quick):
         "LR": Pipeline([
             ("log", FunctionTransformer(signed_log1p)),
             ("scale", StandardScaler()),
-            ("clf", LogisticRegression(max_iter=1000, class_weight="balanced")),
+            ("clf", LogisticRegression(max_iter=5000, class_weight="balanced")),  # 1000 adım yakınsamıyordu
         ]),
     }
     try:
@@ -275,12 +282,14 @@ def main():
     p.add_argument("--folds", type=int, default=5)
     p.add_argument("--models", default="DT,RF,XGB,LGBM,LR")
     p.add_argument("--tune", action="store_true")
-    p.add_argument("--n-iter", type=int, default=10)
-    p.add_argument("--tune-rows", type=int, default=100000)
+    # 10 deneme / 100 bin satır kararsızdı (XGB çalıştırmalar arasında 0,661 <-> 0,704)
+    p.add_argument("--n-iter", type=int, default=30)
+    p.add_argument("--tune-rows", type=int, default=200000)
     p.add_argument("--shap", action="store_true")
     p.add_argument("--shap-per-class", type=int, default=100)
-    p.add_argument("--pred-per-class", type=int, default=2000,
-                   help="test_predictions dosyasına sınıf başına kaç satır yazılsın")
+    p.add_argument("--pred-per-class", type=int, default=0,
+                   help="test_predictions'a sınıf başına en fazla kaç satır (0 = tüm test seti; DSS de "
+                        "modellerle aynı satırlarda değerlendirilsin diye varsayılan)")
     # Resmi protokol (18.10.2026): Number atılır (veri toplama izi), çakışan etiketli
     # satırlar atılır (ekip kuralı). Duyarlılık analizi için ikisi de kapatılabilir.
     p.add_argument("--drop-features", default="Number",
@@ -324,7 +333,9 @@ def main():
     names = [m for m in args.models.split(",") if m in all_models]
     results = {}
     for name in names:
-        cache = os.path.join(run_dir, f"result_{name}.joblib")
+        # Model tanımı (ör. LR max_iter) değişirse yalnızca o model yeniden eğitilir
+        key = model_key(name, all_models[name])
+        cache = os.path.join(run_dir, f"result_{name}_{key}.joblib")
         if os.path.exists(cache) and not args.force:
             print(f"{name}: kayıtlı sonuç kullanılıyor ({cache})")
             results[name] = joblib.load(cache)
@@ -332,9 +343,11 @@ def main():
         print(f"{name} eğitiliyor...")
         res = run_model(name, all_models[name], Xtr, ytr, fine[idx_tr], Xte,
                         len(classes), args)
-        joblib.dump(res.pop("model"), os.path.join(run_dir, "models", f"{name}.joblib"))
+        joblib.dump(res.pop("model"), os.path.join(run_dir, "models", f"{name}_{key}.joblib"))
         joblib.dump(res, cache)
         results[name] = res
+    model_files = {n: os.path.join(run_dir, "models", f"{n}_{model_key(n, all_models[n])}.joblib")
+                   for n in names}
 
     metrics, oof_metrics = {}, {}
     for name, r in results.items():
@@ -355,7 +368,8 @@ def main():
     best_per_class = {c: max(oof_metrics, key=lambda m: oof_metrics[m]["per_class"][c]["f1"])
                       for c in classes}
 
-    sample = contract.stratified_sample(yte, args.pred_per_class, args.seed)
+    sample = (contract.stratified_sample(yte, args.pred_per_class, args.seed)
+              if args.pred_per_class > 0 else np.arange(len(yte)))
     preds = pd.DataFrame({"y_true": [classes[i] for i in yte[sample]],
                           "fine_label": fine[idx_te][sample]})
     for name, r in results.items():
@@ -368,7 +382,7 @@ def main():
             (m for m in names if m in TREE_MODELS), None)
         if shap_model:
             print(f"SHAP hesaplanıyor ({shap_model})...")
-            model = joblib.load(os.path.join(run_dir, "models", f"{shap_model}.joblib"))
+            model = joblib.load(model_files[shap_model])
             shap_top = shap_top_features(model, shap_model, Xte, yte, classes,
                                          args.shap_per_class, args.seed,
                                          fig_dir=os.path.join(args.out_dir, "figures"))

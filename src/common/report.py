@@ -105,7 +105,7 @@ def test_frame(env):
 def nids_binary(env, dss_predict):
     """İkili NIDS bakışı: saldırı var mı? (BENIGN dışı her şey saldırı).
 
-    Not: test_predictions sınıf başına en fazla N satırlık örneklemdir; tespit oranı
+    Not: test_predictions varsayılan olarak tüm test setidir (sınıf oranları sınırlanmış); tespit oranı
     ve FPR sınıf oranından bağımsızdır, ama 'alarm precision' gerçek ağdaki
     saldırı oranına göre değişir.
     """
@@ -138,7 +138,7 @@ def _hbar_labels(ax, bars, fmt="{:.3f}"):
 
 
 def plot_model_comparison(envs, fig_dir, sample_scores):
-    """Her veri seti için bir panel: modeller ve DSS, AYNI test örnekleminde macro-F1.
+    """Her veri seti için bir panel: modeller ve DSS, AYNI test satırlarında macro-F1.
 
     sample_scores[eid] = main.evaluate_environment(...)["macro_f1_on_test_sample"]
     """
@@ -155,7 +155,7 @@ def plot_model_comparison(envs, fig_dir, sample_scores):
         _hbar_labels(ax, bars)
         ax.set_xlim(0, 1.08)
         ax.set_title(f"{eid} (DSS oylayanlar: {', '.join(env.voters)})", fontsize=11)
-        ax.set_xlabel("Macro-F1 (test örneklemi, sınıf başına ≤2.000 satır)")
+        ax.set_xlabel("Macro-F1 (test_predictions: modeller ve DSS aynı satırlarda)")
         ax.grid(axis="x")
         ax.set_axisbelow(True)
     fig.tight_layout()
@@ -269,3 +269,49 @@ def plot_cross_dataset(envs, fig_dir):
     fig.colorbar(im, ax=ax, fraction=0.04, pad=0.02, label="F1")
     fig.tight_layout()
     return fig, save(fig, fig_dir, "fig_cross_dataset_f1")
+
+
+# --- Güven aralıkları ------------------------------------------------------------
+def _f1_from_confusion(cm):
+    tp = np.diag(cm).astype(float)
+    prec = tp / np.clip(cm.sum(axis=0), 1, None)
+    rec = tp / np.clip(cm.sum(axis=1), 1, None)
+    return np.where(prec + rec > 0, 2 * prec * rec / np.clip(prec + rec, 1e-12, None), 0.0)
+
+
+def bootstrap_ci(env, dss_predict, n_boot=500, seed=42, alpha=0.05):
+    """Test satırlarını yerine koyarak yeniden örnekler; macro-F1 ve sınıf F1'i için
+    %95 güven aralığı döner. İki modelin aralıkları çakışıyorsa farkları anlamlı sayılmaz.
+
+    Dönüş: (macro_df, per_class_df)  per_class_df birincil model ve DSS içindir.
+    """
+    df, y = test_frame(env)
+    k = len(env.classes)
+    preds = {m: env.probas_from_frame(df, [m])[0].argmax(1) for m in env.models}
+    preds["DSS"] = np.array([env.classes.index(d["predicted"])
+                             for d in dss_predict(env, env.probas_from_frame(df))])
+    rng = np.random.default_rng(seed)
+    n = len(y)
+    boots = {m: np.empty((n_boot, k)) for m in preds}
+    for b in range(n_boot):
+        idx = rng.integers(0, n, n)
+        yb = y[idx]
+        for m, p in preds.items():
+            cm = np.bincount(yb * k + p[idx], minlength=k * k).reshape(k, k)
+            boots[m][b] = _f1_from_confusion(cm)
+    lo, hi = 100 * alpha / 2, 100 * (1 - alpha / 2)
+    macro_rows, class_rows = [], []
+    for m, p in preds.items():
+        point = _f1_from_confusion(np.bincount(y * k + p, minlength=k * k).reshape(k, k))
+        mb = boots[m].mean(axis=1)
+        macro_rows.append({"model": m, "macro-F1": point.mean(),
+                           "%95 alt": np.percentile(mb, lo), "%95 üst": np.percentile(mb, hi)})
+        if m in (env.manifest["primary_model"], "DSS"):
+            for i, c in enumerate(env.classes):
+                class_rows.append({"model": m, "sınıf": c, "F1": point[i],
+                                   "%95 alt": np.percentile(boots[m][:, i], lo),
+                                   "%95 üst": np.percentile(boots[m][:, i], hi),
+                                   "destek": int((y == i).sum())})
+    macro = pd.DataFrame(macro_rows).set_index("model").sort_values("macro-F1", ascending=False)
+    per_class = pd.DataFrame(class_rows).set_index(["model", "sınıf"])
+    return macro.round(4), per_class.round(4)
