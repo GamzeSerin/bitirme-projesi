@@ -30,7 +30,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import joblib
 import numpy as np
 import pandas as pd
-from sklearn.base import clone
+from sklearn.base import BaseEstimator, ClassifierMixin, clone
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import (RandomizedSearchCV, StratifiedKFold,
                                      train_test_split)
@@ -48,7 +48,7 @@ LABEL = "Label"
 # Veride doğrulandı: Tot size == AVG (satırların %100'ü), Variance == Std^2 (~%100)
 REDUNDANT = ["Tot size", "Variance"]
 TREE_MODELS = {"DT", "RF", "XGB", "LGBM"}
-NEEDS_SAMPLE_WEIGHT = {"XGB"}  # diğerleri class_weight ile dengeleniyor
+NEEDS_SAMPLE_WEIGHT = set()  # XGB dengelemesini EarlyStopping sarmalayıcısı yapıyor
 
 
 def signed_log1p(x):
@@ -73,8 +73,54 @@ def model_key(name, model):
     return hashlib.md5(text.encode()).hexdigest()[:6]
 
 
+class EarlyStopping(ClassifierMixin, BaseEstimator):
+    """Boosting modelleri için early stopping sarmalayıcısı.
+
+    Ağaç sayısı tuning'de sabitlenmez: her eğitimde, VERİLEN eğitim verisinin %10'u
+    (stratified) doğrulama olarak ayrılır ve doğrulama kaybı `rounds` tur boyunca
+    iyileşmeyince eğitim durur. Alt örneklemde seçilen az ağacın tam veride yetersiz
+    kalması (underfitting) böylece önlenir. Test seti hiç kullanılmaz.
+    """
+
+    def __init__(self, estimator=None, val_size=0.1, rounds=50, balanced=False, random_state=42):
+        self.estimator = estimator
+        self.val_size = val_size
+        self.rounds = rounds
+        self.balanced = balanced
+        self.random_state = random_state
+
+    def fit(self, X, y, sample_weight=None):
+        Xt, Xv, yt, yv = train_test_split(X, y, test_size=self.val_size, stratify=y,
+                                          random_state=self.random_state)
+        wv = compute_sample_weight("balanced", yv)
+        est = clone(self.estimator)
+        kind = type(est).__name__
+        if kind == "XGBClassifier":
+            est.set_params(early_stopping_rounds=self.rounds)
+            est.fit(Xt, yt, sample_weight=compute_sample_weight("balanced", yt) if self.balanced else None,
+                    eval_set=[(Xv, yv)], sample_weight_eval_set=[wv], verbose=False)
+            self.best_iteration_ = int(est.best_iteration) + 1
+        elif kind == "LGBMClassifier":
+            import lightgbm as lgb
+            est.fit(Xt, yt, eval_set=[(Xv, yv)], eval_sample_weight=[wv],
+                    callbacks=[lgb.early_stopping(self.rounds, verbose=False)])
+            self.best_iteration_ = int(est.best_iteration_)
+        else:
+            raise ValueError(f"EarlyStopping desteklemiyor: {kind}")
+        self.estimator_ = est
+        self.classes_ = est.classes_
+        return self
+
+    def predict_proba(self, X):
+        return self.estimator_.predict_proba(X)
+
+    def predict(self, X):
+        return self.classes_[self.predict_proba(X).argmax(axis=1)]
+
+
 def build_models(seed, n_jobs, gpu, quick):
-    n_est = 100 if quick else 400
+    # Boosting: üst sınır geniş, gerçek ağaç sayısını early stopping belirler
+    n_est = 300 if quick else 3000
     models = {
         "DT": DecisionTreeClassifier(class_weight="balanced", random_state=seed),
         "RF": RandomForestClassifier(n_estimators=50 if quick else 200,
@@ -88,17 +134,18 @@ def build_models(seed, n_jobs, gpu, quick):
     }
     try:
         from xgboost import XGBClassifier
-        models["XGB"] = XGBClassifier(
+        models["XGB"] = EarlyStopping(XGBClassifier(
             n_estimators=n_est, max_depth=8, learning_rate=0.1, tree_method="hist",
             device="cuda" if gpu else "cpu", n_jobs=n_jobs, random_state=seed,
-            eval_metric="mlogloss")
+            eval_metric="mlogloss"), balanced=True, random_state=seed)
     except ImportError:
         print("! xgboost yok, XGB atlanıyor")
     try:
         from lightgbm import LGBMClassifier
-        models["LGBM"] = LGBMClassifier(
+        models["LGBM"] = EarlyStopping(LGBMClassifier(
             n_estimators=n_est, learning_rate=0.1, num_leaves=63,
-            class_weight="balanced", n_jobs=n_jobs, random_state=seed, verbose=-1)
+            class_weight="balanced", n_jobs=n_jobs, random_state=seed, verbose=-1),
+            random_state=seed)
     except ImportError:
         print("! lightgbm yok, LGBM atlanıyor")
     return models
@@ -109,11 +156,14 @@ PARAM_SPACE = {
            "criterion": ["gini", "entropy"]},
     "RF": {"n_estimators": [100, 200, 400], "max_depth": [None, 20, 40],
            "min_samples_leaf": [1, 2, 5], "max_features": ["sqrt", 0.5]},
-    "XGB": {"n_estimators": [200, 400, 800], "max_depth": [6, 8, 10],
-            "learning_rate": [0.05, 0.1, 0.2], "subsample": [0.8, 1.0],
-            "colsample_bytree": [0.8, 1.0]},
-    "LGBM": {"n_estimators": [200, 400, 800], "num_leaves": [31, 63, 127],
-             "learning_rate": [0.05, 0.1], "min_child_samples": [10, 20, 50]},
+    # Boosting'te n_estimators aranmaz; early stopping belirler (EarlyStopping sınıfı)
+    "XGB": {"estimator__max_depth": [4, 6, 8, 10], "estimator__learning_rate": [0.05, 0.1, 0.2],
+            "estimator__subsample": [0.8, 1.0], "estimator__colsample_bytree": [0.8, 1.0],
+            "estimator__min_child_weight": [1, 5]},
+    "LGBM": {"estimator__num_leaves": [31, 63, 127, 255],
+             "estimator__learning_rate": [0.05, 0.1, 0.2],
+             "estimator__min_child_samples": [10, 20, 50],
+             "estimator__colsample_bytree": [0.8, 1.0]},
     "LR": {"clf__C": [0.1, 1.0, 10.0]},
 }
 
@@ -201,6 +251,8 @@ def run_model(name, base, Xtr, ytr, strat_tr, Xte, n_classes, args):
     t0 = time.perf_counter()
     test_proba = final.predict_proba(Xte).astype(np.float32)
     pred_s = time.perf_counter() - t0
+    if hasattr(final, "best_iteration_"):   # early stopping'in seçtiği ağaç sayısı
+        params = {**params, "n_estimators (early stopping)": final.best_iteration_}
     return {
         "params": {k: (v if isinstance(v, (int, float, str, type(None))) else str(v))
                    for k, v in params.items()},
@@ -250,6 +302,10 @@ def shap_top_features(model, name, Xte, yte, classes, per_class, seed, top_k=10,
     import shap
     idx = contract.stratified_sample(yte, per_class, seed)
     Xs, ys = Xte.iloc[idx], yte[idx]
+    if isinstance(model, EarlyStopping):     # sarmalayıcıyı aç; XGB'de en iyi tura kadar
+        inner = model.estimator_
+        model = (inner.get_booster()[: model.best_iteration_]
+                 if type(inner).__name__ == "XGBClassifier" else inner)
     sv = shap.TreeExplainer(model).shap_values(Xs)
     if isinstance(sv, list):                 # eski shap: sınıf başına liste
         sv = np.stack(sv, axis=-1)
