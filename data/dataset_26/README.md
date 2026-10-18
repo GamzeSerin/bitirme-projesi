@@ -44,6 +44,31 @@ Verinin yaklaşık %61'i tekrar. Sel saldırıları birbirinin aynısı paketler
 
 **6. Temizlik sonrası nadir sınıflar:** MITM 357, Fingerprinting 181 satır.
 
+## Sonuçlar ve bulgular (18.10.2026, asıl deney)
+
+Ayarlar: `--drop-conflicts --tune --shap`, etiket başına en fazla 40.000 satır, stratified 80/20 (seed=42), 5-fold OOF, Kaggle CPU.
+
+**Veri hazırlama (model_other.py):** ham 2.219.201 → tekrarlar silindikten sonra 688.640 → etiket çakışması 12.965 satır (atıldı) → örneklem 308.396 satır, 34 özellik, 7 kategori. Not: Aşama 0'daki "196.618 çakışan satır" tekrarlar silinmeden önceki sayımdır; tekrarlar önce silindiğinde aynı durum 12.965 satır olarak görünür.
+
+| Model | OOF macro-F1 | Test macro-F1 | Eğitim (s) | Tahmin (ms/1k) |
+| --- | --- | --- | --- | --- |
+| **RF** (birincil) | 0,9951 | 0,9953 | 20,5 | 3,9 |
+| DT | 0,9943 | 0,9942 | 1,1 | 0,1 |
+| XGB | 0,9934 | 0,9930 | 94,6 | 73,7 |
+| LGBM | 0,9923 | 0,9921 | 19,1 | 49,3 |
+| LR | 0,7774 | 0,7757 | 29,8 | 1,4 |
+
+Seçilen hiperparametreler: DT derinlik 20, entropy; RF 100 ağaç, derinlik 40, max_features 0,5; XGB 800 ağaç, derinlik 8, lr 0,05; LGBM 63 yaprak, 200 ağaç, lr 0,05.
+
+**Bulgular:**
+
+1. **Overfit yok:** OOF ve test skorları her modelde binde 1'den az farklı.
+2. **En zayıf kategori WEB** (RF test F1 0,9856). İnce etiket recall'ında DDoS_HTTP 0,953: HTTP sel saldırıları büyük olasılıkla WEB ile karışıyor (karışıklık matrisiyle doğrulanmalı). WEB saldırılarının ayırt edici bilgisi paket içeriğinde; içerik sütunları sızıntı riski nedeniyle atıldığı için model yalnızca başlık alanlarını görüyor.
+3. **En zor alt etiket Fingerprinting** (recall 0,917; temizlik sonrası 181 satır, testte ~36).
+4. **SPOOFING (MITM) F1 = 1,0:** çakışan (normal ARP'den ayırt edilemeyen) satırlar atıldıktan sonra kalan 357 satır kolay ayrılıyor; az örnekle raporlanmalı.
+5. **SHAP kısayol uyarısı:** DSS açıklamalarında en önemli özellikler neredeyse her zaman `tcp.ack`, `tcp.dstport`, `tcp.seq`. Model büyük ölçüde hedef port ve bağlantı içindeki konuma dayanıyor olabilir. Yapılacak ablation: `--drop-features tcp.dstport,udp.port,tcp.seq,tcp.ack`. Görülmemiş saldırı tespiti açısından önemli (aynı portu kullanan yeni bir saldırı bilinen saldırı sanılabilir).
+6. **DSS:** test örnekleminde (12.071 satır) DSS macro-F1 0,9969; oylayanlar DT, RF, XGB, LGBM (LR elendi). ALLOW edilen saldırı: 0; ANALYST_REVIEW: 3.
+
 ## Çalıştırma
 
 ```bash
