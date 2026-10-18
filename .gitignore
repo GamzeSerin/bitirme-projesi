@@ -19,3 +19,6 @@ outputs_ablation/
 
 # Kişisel editör ayarları
 .vscode/
+
+# main.py her çalıştırmada yeniden üretir
+outputs/dss_report.json
