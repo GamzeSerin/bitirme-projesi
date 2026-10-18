@@ -12,3 +12,6 @@ notebooks/
 .ipynb_checkpoints
 .venv
 .vscode
+*.md
+.env
+.env.*

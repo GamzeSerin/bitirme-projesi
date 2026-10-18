@@ -9,7 +9,7 @@ x-dss: &dss
   build:
     context: .
     target: dss
-  image: iot-dss:latest
+  image: iot-dss:local
   volumes:
     - ./outputs:/app/outputs
 
@@ -17,7 +17,7 @@ x-train: &train
   build:
     context: .
     target: train
-  image: iot-train:latest
+  image: iot-train:local
   profiles: ["train"]
   volumes:
     - ./data:/app/data:ro
