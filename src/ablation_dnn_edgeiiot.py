@@ -13,11 +13,11 @@ böylece fark yalnızca özelliklerden gelir. Her senaryo için:
     edilemez hâle geliyor?)
 Ayrıca şüpheli iki sütun için tek-özellik sızıntı testi yapılır.
 
-Çıktı: outputs/dataset_26/ablation/ (ablation.json + 2 grafik). Sözleşme dosyalarına
+Çıktı: outputs/dnn_edgeiiot/ablation/ (ablation.json + 2 grafik). Sözleşme dosyalarına
 dokunmaz; DSS etkilenmez.
 
 Kullanım (Kaggle, CPU yeterli, ~5-10 dk):
-  python src/ablation_26.py --data-file "<.../DNN-EdgeIIoT-dataset.csv>"
+  python src/ablation_dnn_edgeiiot.py --data-file "<.../DNN-EdgeIIoT-dataset.csv>"
 """
 
 import argparse
@@ -37,9 +37,9 @@ from sklearn.model_selection import cross_val_predict, train_test_split
 from sklearn.tree import DecisionTreeClassifier
 
 from common.taxonomy import COMMON_CLASSES
-from model_other import load_data
+from model_dnn_edgeiiot import load_data
 
-OUT_DIR = "outputs/dataset_26/ablation"
+OUT_DIR = "outputs/dnn_edgeiiot/ablation"
 
 PORTS = ["tcp.dstport", "udp.port"]
 SEQ_ACK = ["tcp.seq", "tcp.ack"]
@@ -242,7 +242,7 @@ def main():
                 mr["delta_vs_full"] = round(mr["test_macro_f1"] - base["models"][m]["test_macro_f1"], 4)
 
     out = {
-        "dataset_id": "dataset_26",
+        "dataset_id": "dnn_edgeiiot",
         "dataset_name": "Edge-IIoTset",
         "protocol": "Aynı satırlar ve aynı 80/20 bölme (seed=42); sabit hiperparametreler; "
                     "yalnızca sütunlar çıkarılır. Satırlar tam özellik uzayında tekrar/çakışma "

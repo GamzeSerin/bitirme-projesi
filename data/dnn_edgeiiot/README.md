@@ -1,10 +1,10 @@
-# dataset_26: Edge-IIoTset (Kişi 3)
+# dnn_edgeiiot: Edge-IIoTset (Kişi 3)
 
 - Kaynak (resmî, yazar hesabı): https://www.kaggle.com/datasets/mohamedamineferrag/edgeiiotset-cyber-security-dataset-of-iot-iiot
 - Kullanılan dosya: `Edge-IIoTset dataset/Selected dataset for ML and DL/DNN-EdgeIIoT-dataset.csv` (1,22 GB, 2.219.201 satır, 63 sütun). Arşivin geri kalanı (PCAP'ler, ham CSV'ler, ML dosyası) kullanılmaz.
 - Lisans: CC BY-NC-SA 4.0 (akademik kullanım serbest, atıf zorunlu). Dosya Git'e girmez.
 - Atıf: M. A. Ferrag, O. Friha, D. Hamouda, L. Maglaras, H. Janicke, "Edge-IIoTset: A New Comprehensive Realistic Cyber Security Dataset of IoT and IIoT Applications for Centralized and Federated Learning," *IEEE Access*, 2022. doi:10.1109/ACCESS.2022.3165809
-- Çalışma ortamı: Kaggle Notebooks. Veri not defterine girdi olarak bağlanır, indirilmez (`notebooks/dataset_26_kaggle.ipynb`).
+- Çalışma ortamı: Kaggle Notebooks. Veri not defterine girdi olarak bağlanır, indirilmez (`notebooks/dnn_edgeiiot_kaggle.ipynb`).
 
 Ortam: endüstriyel / edge IoT test düzeneği (7 katman, 10'dan fazla sensör türü, Modbus TCP, MQTT). Satırlar **paket düzeyinde**dir (CICIoT2023 pencere/akış düzeyindedir); bu yüzden özellikler diğer veri setleriyle eşleşmez.
 
@@ -40,7 +40,7 @@ Sayılar işlem sırasına bağlıdır; iki sıra da aynı veri üzerinde doğru
 
 | Sıra | Adım | Kalan satır | Atılan |
 | --- | --- | --- | --- |
-| Asıl deney (`model_other.py`) | Ham | 2.219.201 | |
+| Asıl deney (`model_dnn_edgeiiot.py`) | Ham | 2.219.201 | |
 | | Tekrarlar silindi | 688.640 | 1.530.561 (**%69,0**) |
 | | Çakışan satırlar atıldı | 675.675 | 12.965 (%1,9) |
 | Aşama 0 not defteri | Ham | 2.219.201 | |
@@ -61,7 +61,7 @@ Hangi etiketler çakışıyor, sıraya göre değişir:
 
 Ayarlar: `--drop-conflicts --tune --shap`, etiket başına en fazla 40.000 satır, stratified 80/20 (seed=42), 5-fold OOF, Kaggle CPU.
 
-**Veri hazırlama (model_other.py):** ham 2.219.201 → tekrarlar silindikten sonra 688.640 (%69,0 tekrar) → etiket çakışması 12.965 satır (atıldı) → 675.675 → etiket başına üst sınırla örneklem 308.396 satır, 34 özellik, 7 kategori. Sayıların Aşama 0 ile ilişkisi yukarıdaki satır muhasebesi tablosunda.
+**Veri hazırlama (model_dnn_edgeiiot.py):** ham 2.219.201 → tekrarlar silindikten sonra 688.640 (%69,0 tekrar) → etiket çakışması 12.965 satır (atıldı) → 675.675 → etiket başına üst sınırla örneklem 308.396 satır, 34 özellik, 7 kategori. Sayıların Aşama 0 ile ilişkisi yukarıdaki satır muhasebesi tablosunda.
 
 **Test kümesinin kullanımı:** hiperparametre araması yalnızca eğitim kümesinin alt örnekleminde 3-fold CV ile yapılır, DSS güvenilirlik ağırlıkları eğitim kümesinin 5-fold OOF tahminlerinden gelir. Test kümesi yalnızca son değerlendirmede kullanılır.
 
@@ -88,8 +88,8 @@ Seçilen hiperparametreler: DT derinlik 20, entropy; RF 100 ağaç, derinlik 40,
 
 ```bash
 # Hızlı deneme
-python src/model_other.py --data-file <DNN-EdgeIIoT-dataset.csv> --quick --drop-conflicts \
-    --out-dir outputs_quick/dataset_26 --work-dir work/quick_26
+python src/model_dnn_edgeiiot.py --data-file <DNN-EdgeIIoT-dataset.csv> --quick --drop-conflicts \
+    --out-dir outputs_quick/dnn_edgeiiot --work-dir work/quick_dnn_edgeiiot
 # Asıl deney
-python src/model_other.py --data-file <DNN-EdgeIIoT-dataset.csv> --drop-conflicts --tune --shap --gpu
+python src/model_dnn_edgeiiot.py --data-file <DNN-EdgeIIoT-dataset.csv> --drop-conflicts --tune --shap --gpu
 ```

@@ -1,4 +1,4 @@
-﻿"""Kişi 3 - dataset_26 (Edge-IIoTset) kapalı-küme deneyi.
+﻿"""Kişi 3 - dnn_edgeiiot (Edge-IIoTset) kapalı-küme deneyi.
 
 Eğitim/OOF/test/SHAP akışı Kişi 1'in src/model_ml.py dosyasındakiyle birebir aynıdır
 (oradaki fonksiyonlar yeniden kullanılır); yalnızca veri okuma ve temizlik bu veri
@@ -12,10 +12,10 @@ Akış:
   1-6) model_ml.py ile aynı: stratified 80/20 (seed=42), OOF, test, SHAP, sözleşme çıktısı
 
 Kullanım (Kaggle):
-  python src/model_other.py \
+  python src/model_dnn_edgeiiot.py \
       --data-file "/kaggle/input/.../Selected dataset for ML and DL/DNN-EdgeIIoT-dataset.csv" \
-      --work-dir /kaggle/working/work/dataset_26 --drop-conflicts --shap
-  python src/model_other.py --data-file <csv> --quick --out-dir outputs_quick/dataset_26
+      --work-dir /kaggle/working/work/dnn_edgeiiot --drop-conflicts --shap
+  python src/model_dnn_edgeiiot.py --data-file <csv> --quick --out-dir outputs_quick/dnn_edgeiiot
 """
 
 import argparse
@@ -35,7 +35,7 @@ import model_ml as shared  # Kişi 1'in eğitim/OOF/SHAP fonksiyonları (ortak p
 from common import contract
 from common.taxonomy import COMMON_CLASSES, edgeiiot_category
 
-DATASET_ID = "dataset_26"
+DATASET_ID = "dnn_edgeiiot"
 LABEL = "Attack_type"
 LABEL_COLS = {"Attack_type", "Attack_label"}
 # Aşama 0 denetimi: sayısal görünen ama kayda/bağlantıya özgü kimlik gibi davranan sütunlar.
@@ -119,7 +119,7 @@ def main():
     p.add_argument("--drop-features", default="",
                    help="Atılacak ek özellikler, ör. 'tcp.dstport,udp.port,tcp.seq,tcp.ack' (ablation)")
     p.add_argument("--drop-conflicts", action="store_true",
-                   help="Aynı özellik + farklı etiketli satırları at (dataset_26 için önerilir)")
+                   help="Aynı özellik + farklı etiketli satırları at (dnn_edgeiiot için önerilir)")
     p.add_argument("--gpu", action="store_true")
     p.add_argument("--n-jobs", type=int, default=-1)
     p.add_argument("--seed", type=int, default=42)

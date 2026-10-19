@@ -1,5 +1,5 @@
 {
-  "dataset_id": "dataset_26",
+  "dataset_id": "dnn_edgeiiot",
   "dataset_name": "Edge-IIoTset (DNN-EdgeIIoT-dataset.csv)",
   "environment": "Endüstriyel / edge IoT test ortamı (7 katmanlı, 10+ sensör türü, Modbus, MQTT)",
   "owner": "Kişi 3",

@@ -2,7 +2,7 @@
 # İki hedef (target):
 #   dss   : hafif imaj. main.py yalnızca outputs/ okur (DSS, sözleşme kontrolü, demo). Veri gerekmez.
 #   train : tam imaj. src/model_*.py ile eğitim (requirements.txt). Veri çalışırken bağlanır.
-# Örnek: docker compose run --rm dss    |    docker compose --profile train run --rm train-26
+# Örnek: docker compose run --rm dss    |    docker compose --profile train run --rm train-dnn_edgeiiot
 
 FROM python:3.11.13-slim-bookworm AS dss
 LABEL org.opencontainers.image.source="https://github.com/GamzeSerin/bitirme-projesi" \
@@ -30,4 +30,4 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     pip install -r /tmp/requirements.txt matplotlib
 USER app
 ENTRYPOINT []
-CMD ["python", "-c", "print('Bir eğitim servisi seçin: train-23 / train-26')"]
+CMD ["python", "-c", "print('Bir eğitim servisi seçin: train-23 / train-dnn_edgeiiot')"]
