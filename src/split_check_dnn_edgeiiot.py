@@ -5,15 +5,14 @@ eğitimde hem testte bulunmasından mı geliyor? Model "gelecekteki" trafiğe ge
 
 Yöntem (aynı satırlar, aynı sabit hiperparametreler):
   - Rastgele: ince etikete göre stratified 80/20, 5 farklı seed (bölme + model tohumu).
-  - Zaman: her ince etiketin paketleri zamana göre sıralanır; ilk %80 eğitim, son %20 test.
+  - Zaman: her ince etiketin paketleri kayıt sırasına (CSV satır sırası) göre sıralanır; ilk %80 eğitim, son %20 test.
     Bölme sabittir; 5 seed yalnızca modelin rastgeleliğini değiştirir.
   - Her ikisi iki özellik setiyle: A (34 özellik) ve E (kısayolsuz: port, tcp.seq/ack,
     sayaç, zaman damgası çıkarılmış; bkz. ablation deneyi).
 `frame.time` yalnızca sıralama için kullanılır, hiçbir zaman özellik değildir.
 
 Temizlik asıl deneyle aynıdır (kimlik/metin/sabit sütunlar atılır, tekrarlar silinir,
-çakışan satırlar atılır, etiket başına 40.000 üst sınır). Tekrarlardan zaman olarak en
-erken olan tutulur.
+çakışan satırlar atılır, etiket başına 40.000 üst sınır). Tekrarlardan kayıtta ilk görünen tutulur.
 
 Çıktı: outputs/dnn_edgeiiot/split_check/ (split_check.json + grafik). Sözleşmeye dokunmaz.
 
@@ -89,8 +88,7 @@ def load(data_file, cap, seed):
     df["_row"] = np.arange(len(df))  # dosyadaki sıra: zaman yoksa ya da eşitse
     df[feats] = df[feats].replace([np.inf, -np.inf], np.nan)
     df = df.dropna(subset=feats)
-    # Tekrarlardan en erkeni kalsın
-    df = df.sort_values(["_t", "_row"], na_position="last")
+    # Tekrarlardan dosyada (kayıtta) ilk görüneni kalsın
     df = df.drop_duplicates(subset=feats + [LABEL], keep="first")
     conflict = df.duplicated(subset=feats, keep=False).to_numpy()
     df = df[~conflict]
@@ -106,13 +104,22 @@ def load(data_file, cap, seed):
     return df[feats].astype(np.float32), fine, category, df["_t"].to_numpy(), df["_row"].to_numpy(), stats
 
 
-def temporal_split(fine, t, row, frac=0.8):
-    """Her ince etiket için zamanca ilk %80 eğitim, son %20 test."""
+def temporal_split(fine, t, row, frac=0.8, order_by="row"):
+    """Her ince etiket için kayıt sırasına göre ilk %80 eğitim, son %20 test.
+
+    order_by="row" (varsayılan): CSV'deki satır sırası. Dosya kayıt sırasıyla yazılmış
+    (çoğu etikette zaman~satır sırası Spearman rho = 1,0). frame.time'da tarih olmadığı için
+    gece yarısını geçen kayıtlarda (Ransomware rho=0,11, Normal rho=0,83) saat sırası
+    yanıltıcıdır; satır sırası bu durumda daha güvenilir. order_by="time": saat sırası.
+    """
     tr, te, info = [], [], {}
     for lab in sorted(set(fine)):
         ix = np.where(fine == lab)[0]
-        key = np.where(np.isfinite(t[ix]), t[ix], np.inf)
-        order = ix[np.lexsort((row[ix], key))]
+        if order_by == "time":
+            key = np.where(np.isfinite(t[ix]), t[ix], np.inf)
+            order = ix[np.lexsort((row[ix], key))]
+        else:
+            order = ix[np.argsort(row[ix], kind="stable")]
         cut = int(round(frac * len(order)))
         tr.append(order[:cut]); te.append(order[cut:])
         tt = t[ix][np.isfinite(t[ix])]
@@ -187,6 +194,8 @@ def main():
     p.add_argument("--models", default="RF,DT")
     p.add_argument("--seeds", default="0,1,2,3,4")
     p.add_argument("--n-jobs", type=int, default=-1)
+    p.add_argument("--order-by", choices=["row", "time"], default="row",
+                   help="Zaman bölmesinde sıralama: CSV satır sırası (varsayılan) ya da frame.time saati")
     p.add_argument("--quick", action="store_true")
     args = p.parse_args()
     if args.quick:
@@ -199,7 +208,7 @@ def main():
     y = np.array([classes.index(c) for c in category])
     print(f"Örneklem: {len(y)} satır, {X.shape[1]} özellik")
 
-    tr_time, te_time, time_info = temporal_split(fine, t, row)
+    tr_time, te_time, time_info = temporal_split(fine, t, row, order_by=args.order_by)
     for lab, v in time_info.items():
         print(f"  {lab:22s} n={v['n']:6d}  süre={v['time_span_s']} s  "
               f"zaman~dosya sırası ρ={v['spearman_time_vs_file_order']}")
@@ -225,7 +234,7 @@ def main():
            "protocol": "Aynı satırlar ve sabit hiperparametreler. Rastgele: ince etikete göre "
                        "stratified 80/20, her seed farklı bölme. Zaman: her ince etiketin zamanca ilk "
                        "%80'i eğitim, son %20'si test (sabit bölme). frame.time özellik olarak kullanılmaz.",
-           "seeds": seeds, "cap_per_fine_label": args.cap, "quick": bool(args.quick),
+           "seeds": seeds, "temporal_order_by": args.order_by, "cap_per_fine_label": args.cap, "quick": bool(args.quick),
            "feature_sets": FEATURE_SETS, "classes": classes,
            "data_prep": stats, "time_split_by_label": time_info, "results": res}
     with open(os.path.join(args.out_dir, "split_check.json"), "w", encoding="utf-8") as f:
