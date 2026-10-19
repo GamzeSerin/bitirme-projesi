@@ -28,6 +28,7 @@ import time
 
 import numpy as np
 from sklearn.base import BaseEstimator, ClassifierMixin
+from sklearn.metrics import f1_score
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import QuantileTransformer
 from sklearn.utils.class_weight import compute_class_weight
@@ -144,14 +145,17 @@ class TabMClassifier(ClassifierMixin, BaseEstimator):
             self.model_ = model
             proba_va = torch.softmax(torch.as_tensor(self._logits(Xva)), -1).mean(1).numpy()
             val_loss = float(-np.log(np.clip(proba_va[np.arange(len(yva)), yva], 1e-12, None)).mean())
-            self.history_.append(round(val_loss, 5))
+            # Yalnızca izleme: durma kararı val_loss'a göre; macro-F1 eğrisiyle karşılaştırmak için
+            val_f1 = float(f1_score(yva, proba_va.argmax(1), average="macro"))
+            self.history_.append({"epoch": epoch, "val_loss": round(val_loss, 5),
+                                  "val_macro_f1": round(val_f1, 5)})
             if val_loss < best[0] - 1e-5:
                 best = (val_loss, epoch, copy.deepcopy(model.state_dict()))
                 bad = 0
             else:
                 bad += 1
             if self.verbose:
-                print(f"    TabM epoch {epoch:3d}  val_loss={val_loss:.4f}"
+                print(f"    TabM epoch {epoch:3d}  val_loss={val_loss:.4f}  val_macroF1={val_f1:.4f}"
                       f"{'  *' if bad == 0 else ''}  ({time.perf_counter() - t0:.0f} s)")
             if bad > self.patience:
                 break
@@ -159,6 +163,12 @@ class TabMClassifier(ClassifierMixin, BaseEstimator):
         self.model_ = model
         self.best_epoch_ = best[1]
         self.best_iteration_ = best[1] + 1   # run_model bunu "early stopping" parametresi olarak kaydeder
+        f1s = [h["val_macro_f1"] for h in self.history_]
+        self.best_epoch_by_f1_ = int(np.argmax(f1s))
+        if self.verbose:
+            print(f"    TabM durdu: en iyi epoch val_loss'a göre {self.best_epoch_} "
+                  f"(macro-F1 {f1s[self.best_epoch_]:.4f}), macro-F1'e göre {self.best_epoch_by_f1_} "
+                  f"(macro-F1 {max(f1s):.4f})")
         return self
 
     # ------------------------------------------------------------ tahmin
