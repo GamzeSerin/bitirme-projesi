@@ -1,0 +1,55 @@
+# Kullanım (depo kök klasöründe):
+#   docker compose run --rm validate                     # çıktı sözleşmesi kontrolü (CI ile aynı)
+#   docker compose run --rm dss                          # DSS raporu -> outputs/dss_report.json
+#   DEMO_DATASET=dataset_26 docker compose run --rm demo # örnek kararlar + açıklamalar
+#   docker compose --profile train run --rm train-26     # eğitim (veri: ./data/dataset_26/)
+# Eğitim asıl olarak Kaggle/Colab'da yapılır; buradaki eğitim servisleri yerelde tekrar üretmek içindir.
+
+x-dss: &dss
+  build:
+    context: .
+    target: dss
+  image: iot-dss:local
+  volumes:
+    - ./outputs:/app/outputs
+
+x-train: &train
+  build:
+    context: .
+    target: train
+  image: iot-train:local
+  profiles: ["train"]
+  volumes:
+    - ./data:/app/data:ro
+    - ./outputs:/app/outputs
+    - ./work:/app/work
+
+services:
+  validate:
+    <<: *dss
+    volumes:
+      - ./outputs:/app/outputs:ro
+    command: ["--validate-only"]
+
+  dss:
+    <<: *dss
+    command: []
+
+  demo:
+    <<: *dss
+    volumes:
+      - ./outputs:/app/outputs:ro
+    command: ["--demo", "${DEMO_DATASET:-dataset_23}", "--n", "${DEMO_N:-5}"]
+
+  train-23:
+    <<: *train
+    command: ["python", "src/model_ml.py", "--data-dir", "data/dataset_23",
+              "--work-dir", "work/dataset_23", "--shap", "--drop-features", "Number"]
+
+  train-26:
+    <<: *train
+    command: ["python", "src/model_other.py",
+              "--data-file", "data/dataset_26/DNN-EdgeIIoT-dataset.csv",
+              "--work-dir", "work/dataset_26", "--drop-conflicts", "--shap"]
+
+  # train-25: Kişi 2'nin betiği hazır olunca eklenecek (src/model_dl.py)

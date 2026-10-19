@@ -47,6 +47,25 @@ Veri setlerinin özellikleri farklı olduğu için bir kayıt başka ortamın mo
 2. Ortam içinde modeller sınıf bazında ağırlıklı oylanır: `skor(c) = Σ_m w(m,c)·p_m(c)`. Burada `w(m,c)`, m modelinin c sınıfındaki OOF F1 değeridir ve sınıf başına normalize edilir. Oylamaya yalnızca OOF macro-F1'i en iyi modelin en fazla 0,05 altında kalan modeller girer (`VOTER_MARGIN`). Bu kural deneyden önce sabitlendi; test sonucuna bakılarak değiştirilmez.
 3. Güven ve ciddiyete göre bir aksiyon önerilir: ALLOW, LOG_MONITOR, ALERT, BLOCK veya ANALYST_REVIEW. Her kararın yanında SHAP'tan gelen en önemli 3 özellik de verilir.
 
+## Docker (DSS, doğrulama, demo)
+
+Eğitim Kaggle/Colab'da yapılır. Docker, `outputs/` klasörünü okuyan DSS'i her bilgisayarda aynı şekilde çalıştırmak içindir (veri gerekmez):
+
+```bash
+docker compose run --rm validate                      # sözleşme kontrolü (CI ile aynı)
+docker compose run --rm dss                           # DSS raporu -> outputs/dss_report.json
+DEMO_DATASET=dataset_26 docker compose run --rm demo  # örnek kararlar ve açıklamalar
+```
+
+Yerelde eğitimi tekrar üretmek için (veri `./data/<dataset_id>/` altında olmalı):
+
+```bash
+docker compose --profile train run --rm train-23
+docker compose --profile train run --rm train-26
+```
+
+`Dockerfile` iki hedef içerir: `dss` (yalnızca numpy, pandas, scikit-learn) ve `train` (`requirements.txt`'in tamamı).
+
 ## Çalışma düzeni (GitHub)
 
 - `main` dalı korunur. Herkes kendi dalında çalışır (`dataset_23`, `dataset_25`, `dataset_26`) ve Pull Request ile birleştirir.
