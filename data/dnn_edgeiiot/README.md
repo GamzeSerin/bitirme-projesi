@@ -66,65 +66,90 @@ Kayma yayımlanan **DNN, ML ve ham "Attack traffic" CSV'lerinin hepsinde** aynı
 Sonuç: model bu iki türü saldırının kendisinden değil, "neredeyse tamamı sıfır, düzeni bozuk satır" kalıbından tanıyordu (MITM her koşulda, kısayolsuz modelde bile F1 = 1,0). **Hizasız satırlar `frame.time` biçimine bakılarak bulunur ve atılır** (`misaligned_mask`, ham veride DDoS_UDP 121.568 + MITM 1.214 = 122.782 satır, %5,53). DDOS kategorisi üç alt türle (HTTP, ICMP, TCP) devam eder; **SPOOFING kategorisi bu veri setinde yoktur.** Duyarlılık analizi için `--keep-misaligned`. Düzeltme yolu olarak ileride MITM'in PCAP kaydından yeniden özellik çıkarılabilir.
 
 
-## Sonuçlar ve bulgular (18.10.2026, asıl deney)
+## Sonuçlar (19.10.2026, temiz veri, asıl deney)
 
-> ⚠️ Bu bölümdeki sonuçlar ve ablation sonuçları (19.10.2026) **hizasız DDoS_UDP/MITM satırları veride iken** elde edildi (bulgu 7). Bu satırlar atılarak yeniden çalıştırılacak; SPOOFING sonuçları geçersizdir.
+Ayarlar: `--drop-conflicts --tune --shap --gpu`; hizasız satırlar atıldı; etiket başına en fazla 40.000 satır; stratified 80/20 (seed=42); 5-fold OOF; 30 deneme / 200 bin satırlık ayar araması (Kişi 1 ile aynı protokol); tahminler **tüm test kümesinde** (59.302 satır). Kaggle, GPU (T4). 18.10.2026 sonuçları hizasız satırlar veride iken alınmıştı ve geçersizdir (yerlerini bu bölüm aldı).
 
-Ayarlar: `--drop-conflicts --tune --shap`, etiket başına en fazla 40.000 satır, stratified 80/20 (seed=42), 5-fold OOF, Kaggle CPU.
-
-**Veri hazırlama (model_dnn_edgeiiot.py):** ham 2.219.201 → tekrarlar silindikten sonra 688.640 (%69,0 tekrar) → etiket çakışması 12.965 satır (atıldı) → 675.675 → etiket başına üst sınırla örneklem 308.396 satır, 34 özellik, 7 kategori. Sayıların Aşama 0 ile ilişkisi yukarıdaki satır muhasebesi tablosunda.
+**Veri hazırlama:** ham 2.219.201 → hizasız 122.782 satır atıldı → tekrarlar silindikten sonra 676.748 → çakışan 12.963 satır atıldı → örneklem **296.506 satır**, 34 özellik, **6 kategori** (SPOOFING yok). Eğitim 237.204, test 59.302.
 
 **Test kümesinin kullanımı:** hiperparametre araması yalnızca eğitim kümesinin alt örnekleminde 3-fold CV ile yapılır, DSS güvenilirlik ağırlıkları eğitim kümesinin 5-fold OOF tahminlerinden gelir. Test kümesi yalnızca son değerlendirmede kullanılır.
 
-| Model | OOF macro-F1 | Test macro-F1 | Eğitim (s) | Tahmin (ms/1k) |
-| --- | --- | --- | --- | --- |
-| **RF** (birincil) | 0,9951 | 0,9953 | 20,5 | 3,9 |
-| DT | 0,9943 | 0,9942 | 1,1 | 0,1 |
-| XGB | 0,9934 | 0,9930 | 94,6 | 73,7 |
-| LGBM | 0,9923 | 0,9921 | 19,1 | 49,3 |
-| LR | 0,7774 | 0,7757 | 29,8 | 1,4 |
+| Model | OOF macro-F1 | Test macro-F1 | Eğitim (s) | Tahmin (ms/1k) | Seçilen ayarlar |
+| --- | --- | --- | --- | --- | --- |
+| **RF** (birincil) | 0,9941 | **0,9940** | 24,6 | 5,0 | 200 ağaç, derinlik 40, max_features 0,5, min_samples_leaf 2 |
+| DT | 0,9938 | 0,9938 | 0,7 | 0,1 | sınırsız derinlik, gini, min_samples_leaf 2 |
+| XGB | 0,9919 | 0,9924 | 8,3 (GPU) | 2,7 | derinlik 4, lr 0,2; early stopping 603 ağaç |
+| TabM | 0,9915 | 0,9905 | 465 (GPU) | 20,5 | k=32, PLE gömmeleri, ayar araması yok; early stopping 37 epoch |
+| LGBM | 0,9911 | 0,9902 | 12,8 | 25,9 | 63 yaprak, lr 0,05; early stopping 145 ağaç |
+| LR | 0,7453 | 0,7453 | 43,7 | 0,6 | C = 1 |
 
-Seçilen hiperparametreler: DT derinlik 20, entropy; RF 100 ağaç, derinlik 40, max_features 0,5; XGB 800 ağaç, derinlik 8, lr 0,05; LGBM 63 yaprak, 200 ağaç, lr 0,05.
+RF test F1 (sınıf): BENIGN 0,9996 · RECON 0,9967 · BRUTEFORCE 0,9899 · **WEB 0,9852** · MALWARE 0,9993 · DDOS 0,9930. İnce etiket recall'ı 0,99'un altında olanlar: DDoS_HTTP 0,952, Fingerprinting 0,889.
 
-**Bulgular:**
-
-1. **Overfit yok:** OOF ve test skorları her modelde binde 1'den az farklı.
-2. **En zayıf kategori WEB** (RF test F1 0,9856). İnce etiket recall'ında DDoS_HTTP 0,953: HTTP sel saldırıları büyük olasılıkla WEB ile karışıyor (karışıklık matrisiyle doğrulanmalı). WEB saldırılarının ayırt edici bilgisi paket içeriğinde; içerik sütunları sızıntı riski nedeniyle atıldığı için model yalnızca başlık alanlarını görüyor.
-3. **En zor alt etiket Fingerprinting** (recall 0,917; temizlik sonrası 181 satır, testte ~36).
-4. **SPOOFING (MITM) F1 = 1,0:** çakışan (normal ARP'den ayırt edilemeyen) satırlar atıldıktan sonra kalan 357 satır kolay ayrılıyor; az örnekle raporlanmalı.
-5. **SHAP kısayol uyarısı:** DSS açıklamalarında en önemli özellikler neredeyse her zaman `tcp.ack`, `tcp.dstport`, `tcp.seq`. Model büyük ölçüde hedef port ve bağlantı içindeki konuma dayanıyor olabilir. Yapılacak ablation: `--drop-features tcp.dstport,udp.port,tcp.seq,tcp.ack`. Görülmemiş saldırı tespiti açısından önemli (aynı portu kullanan yeni bir saldırı bilinen saldırı sanılabilir).
-6. **DSS:** test örnekleminde (12.071 satır) DSS macro-F1 0,9969; oylayanlar DT, RF, XGB, LGBM (LR elendi). ALLOW edilen saldırı: 0; ANALYST_REVIEW: 3.
-
-## Kısayol özellik ablation deneyi (19.10.2026)
-
-Kod: `src/ablation_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/ablation/` (`ablation.json`, 2 grafik). Protokol: asıl deneydeki satırlar ve aynı 80/20 bölme (seed=42); RF ve DT asıl deneyde seçilen sabit hiperparametrelerle; yalnızca sütunlar çıkarılır. Güven aralıkları test kümesi üzerinde 300 bootstrap örneklemiyle.
-
-| Senaryo | Çıkarılan | RF test macro-F1 (%95 GA) | Fark | Başka kategoriyle aynı vektöre düşen satır |
-| --- | --- | --- | --- | --- |
-| A: Tam | – | 0,9946 (0,9939–0,9951) | | %0 |
-| B: Portsuz | `tcp.dstport`, `udp.port` | 0,9628 (0,9614–0,9642) | −0,032 | %12,8 |
-| C: Sıra/onay yok | `tcp.seq`, `tcp.ack` | 0,8509 (0,8477–0,8537) | −0,144 | %21,3 |
-| D: Sayaç/zaman yok | `mbtcp.trans_id`, `icmp.transmit_timestamp` | 0,9945 (0,9939–0,9951) | −0,000 | %0 |
-| E: Hepsi | 6 sütun | **0,6753** (0,6718–0,6782) | **−0,319** | **%57,1** |
-
-DT sonuçları aynı örüntüde (A 0,9942 → E 0,6747).
+**DSS (tüm test kümesi):** oylayanlar DT, RF, XGB, LGBM, TabM (LR elendi); macro-F1 **0,9941**. İkili NIDS bakışı: tespit oranı %100,0, yanlış alarm %0,00, kaçırılan saldırı 2 (yaklaşık 51 bin saldırıdan). Aksiyonlar: BLOCK 27.119, ALERT 23.393, ALLOW 7.991, LOG_MONITOR 775, ANALYST_REVIEW 24; **ALLOW edilen saldırı: 1**.
 
 **Bulgular:**
 
-1. **Yüksek skorun büyük kısmı dört alandan geliyor.** Port ve TCP sıra/onay numaraları çıkınca macro-F1 0,995'ten 0,675'e iniyor; satırların %57'si başka bir kategorideki bir satırla birebir aynı hâle geliyor. Tek bir paketin geri kalan başlık alanları saldırıyı normal trafikten çoğu zaman ayırt edemiyor.
-2. **En büyük katkı `tcp.seq`/`tcp.ack`'tan (−0,144), portlardan değil (−0,032).** Bu alanlar Wireshark'ın göreli değerleri, yani bağlantı içindeki konum. Kimlik sızıntısı değil, ama saldırı aracına ve kayıt düzenine bağlı **bağlama özgü kısayol**: başka bir ağda ya da araçta aynı değerler oluşmaz.
-3. **E'de en çok çöken sınıflar:** BRUTEFORCE (F1 0,35), WEB (0,41), MALWARE (0,65) ve BENIGN (0,69; Normal recall 0,57 → çok sayıda yanlış alarm). İnce etiketlerde XSS (recall 0,20), Uploading (0,23), SQL_injection (0,32), DDoS_HTTP (0,37). Bu saldırıların paketleri, aynı HTTP/TCP bağlantılarının sıradan paketleriyle aynı başlığa sahip (DDoS_HTTP %94, SQL_injection %81, Password %84 çakışma).
-4. **SPOOFING (MITM) her senaryoda F1 = 1,0:** ARP paketleri TCP alanlarını kullanmıyor; ayrımı `arp.opcode` gibi alanlar yapıyor.
-5. **Şüpheli iki sütun temiz:** `mbtcp.trans_id` (13 farklı değer) ve `icmp.transmit_timestamp` (84 farklı değer) tek başına şans düzeyinde (macro-F1 0,09); satırların %0,2'sinden azında sıfır dışı. Çıkarmak sonucu değiştirmiyor (D). 34 özellikli temizlikte gizli bir kimlik sızıntısı kalmadığını gösteriyor.
+1. **Aşırı uyum yok:** OOF ve test skorları her modelde çok yakın.
+2. **TabM**, ayar araması olmadan LGBM ile aynı seviyede, RF'nin binde 3,5 gerisinde. Ekibin durma kuralı (ağırlıksız doğrulama kaybı) TabM'de de doğrulandı: kayba ve doğrulama macro-F1'ine göre en iyi epoch'lar arasında macro-F1 farkı en fazla ~0,001.
+3. **En zayıf kategori WEB** (0,985): DDoS_HTTP (recall 0,952) WEB ile karışıyor; içerik sütunları atıldığı için model yalnızca başlık alanlarını görüyor.
+4. **SHAP (RF):** her sınıfta en önemli üç özellik neredeyse aynı: `tcp.ack`, `tcp.dstport`, `tcp.seq` (DDOS'ta `tcp.flags`). Sınıfa özgü bir açıklama yok; bkz. ablation ve zaman bölmesi.
+
+## Kısayol özellik ablation deneyi (19.10.2026, temiz veri)
+
+Kod: `src/ablation_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/ablation/`. Protokol: asıl deneydeki satırlar ve aynı 80/20 bölme (seed=42); RF ve DT sabit hiperparametrelerle; yalnızca sütunlar çıkarılır; %95 güven aralıkları 300 bootstrap.
+
+| Senaryo | Çıkarılan | RF test macro-F1 (%95 GA) | DT | Fark (RF) | Başka kategoriyle aynı vektöre düşen satır |
+| --- | --- | --- | --- | --- | --- |
+| A: Tam | – | 0,9932 (0,9925–0,9939) | 0,9932 | | %0 |
+| B: Portsuz | `tcp.dstport`, `udp.port` | 0,9570 (0,9554–0,9586) | 0,9561 | −0,036 | %13,4 |
+| C: Sıra/onay yok | `tcp.seq`, `tcp.ack` | 0,8239 (0,8206–0,8270) | 0,8533 | −0,169 | %22,2 |
+| D: Sayaç/zaman yok | `mbtcp.trans_id`, `icmp.transmit_timestamp` | 0,9932 (0,9925–0,9938) | 0,9931 | 0,000 | %0 |
+| E: Hepsi | 6 sütun | **0,6175** (0,6133–0,6215) | 0,6169 | **−0,376** | **%59,2** |
+
+**Bulgular:**
+
+1. **Yüksek skorun büyük kısmı dört alandan geliyor.** Port ve TCP sıra/onay numaraları çıkınca macro-F1 0,993'ten 0,618'e iniyor; satırların %59'u başka bir kategorideki bir satırla birebir aynı hâle geliyor.
+2. **En büyük katkı `tcp.seq`/`tcp.ack`'tan (−0,169), sonra portlardan (−0,036).** Bunlar Wireshark'ın göreli değerleri (bağlantı içindeki konum); kimlik sızıntısı değil, saldırı aracına ve kayıt düzenine bağlı **bağlama özgü kısayol**.
+3. **E'de en çok çöken sınıflar:** BRUTEFORCE (F1 0,35), WEB (0,40), MALWARE (0,64), BENIGN (0,70; Normal recall 0,57 → çok sayıda yanlış alarm). İnce etiketlerde XSS (recall 0,20), Uploading (0,22), SQL_injection (0,31), DDoS_HTTP (0,37). Bu saldırıların paketleri aynı HTTP/TCP bağlantılarının sıradan paketleriyle aynı başlığa sahip (Backdoor %98, Ransomware %100, Password %84, Uploading %86 çakışma).
+4. **Şüpheli iki sütun temiz:** `mbtcp.trans_id` (22 farklı değer) ve `icmp.transmit_timestamp` (84) tek başına şans düzeyinde (macro-F1 0,11); çıkarmak sonucu değiştirmiyor (D).
+5. **Temizlik bulguyu güçlendirdi:** hizasız satırlar veride iken E'de RF 0,675 idi; MITM'in her koşulda F1 = 1,0 alması skoru yapay olarak yükseltiyordu.
+
+## Zaman bazlı bölme kontrolü (19.10.2026, temiz veri)
+
+Kod: `src/split_check_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/split_check/`. Aynı satırlar ve sabit hiperparametreler. **Rastgele:** ince etikete göre stratified 80/20, her seed farklı bölme. **Zaman:** her ince etiketin kayıt sırasına (CSV satır sırası) göre ilk %80'i eğitim, son %20'si test. `frame.time`'da tarih yok (yalnızca günün saati); kayıt sırası ile saat sırası 11 etikette tamamen aynı (Spearman ρ = 1,0), Normal (0,88) ve Ransomware (0,11) gece yarısını geçtiği için satır sırası kullanılır. `frame.time` hiçbir zaman özellik değildir. 5 seed.
+
+| Koşul | Model | Rastgele | Zaman | Fark | Yanlış alarm (rastgele → zaman) | Kaçırılan saldırı (zaman) |
+| --- | --- | --- | --- | --- | --- | --- |
+| A (34 özellik) | RF | 0,9937 ± 0,0002 | **0,9237 ± 0,0129** | −0,070 | %0,01 → **%3,9** | %0,00 |
+| A (34 özellik) | DT | 0,9934 ± 0,0002 | **0,8943 ± 0,0008** | −0,099 | %0,03 → **%4,0** | %0,00 |
+| E (kısayolsuz) | RF | 0,6157 ± 0,0014 | 0,6204 ± 0,0001 | +0,005 | %43,1 → %42,0 | %1,2 |
+| E (kısayolsuz) | DT | 0,6149 ± 0,0014 | 0,6191 ± 0,0000 | +0,004 | %43,1 → %42,1 | %1,4 |
+
+**Bulgular:**
+
+1. **Rastgele bölme iyimser.** Geçmişle eğitilip "gelecekteki" trafikte denenince 34 özellikli modelin macro-F1'i 0,07–0,10 düşüyor, yanlış alarm oranı yüzlerce kat artıyor (%0,01 → %3,9).
+2. **Kaybın tamamı kısayol alanlarından.** Kısayolsuz model zaman bölmesinde kaybetmiyor. Port ve TCP sıra/onay değerleri kayıt ilerledikçe değişiyor; model geçmişteki değerleri ezberlemiş. Ablation ile bağımsız iki kanıt aynı sonucu veriyor.
+3. **Güvenlik açısından:** iki koşulda da saldırılar neredeyse hiç kaçırılmıyor; sorun yanlış alarm.
 
 **Karar:** Ana deneyler A (34 özellik) ile yapılır (literatür ve ekip ile karşılaştırılabilirlik); E "kısayolsuz" sağlamlık koşulu olarak bilinmeyen saldırı deneylerinde de raporlanır. Sınırlılık: veri paket düzeyinde; akış düzeyinde özellikler yalnızca arşivdeki ham kayıtlardan çıkarılabilir.
+
+## Sütun hizası ve değer aralığı denetimi (19.10.2026)
+
+Kod: `src/audit_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/audit/audit.json`. Ham verideki 15 etiketin her biri için 6 kontrol (zaman damgası, IP, port 0–65535, 0/1 bayrak, ARP alanları, sayısal sütunlarda metin). İhlal yalnızca DDoS_UDP (zaman %100) ve MITM'de (zaman %100, port %30, bayrak %19); Normal'de %0,11 bayrak ihlali (önemsiz); diğer 12 saldırı türünde %0. Bu iki tür bulgu 7 gereği atıldı.
 
 ## Çalıştırma
 
 ```bash
+pip install tabm rtdl_num_embeddings   # yalnızca TabM için (torch gerekir)
 # Hızlı deneme
 python src/model_dnn_edgeiiot.py --data-file <DNN-EdgeIIoT-dataset.csv> --quick --drop-conflicts \
     --out-dir outputs_quick/dnn_edgeiiot --work-dir work/quick_dnn_edgeiiot
-# Asıl deney
-python src/model_dnn_edgeiiot.py --data-file <DNN-EdgeIIoT-dataset.csv> --drop-conflicts --tune --shap --gpu
+# Asıl deney (6 model, GPU önerilir)
+python src/model_dnn_edgeiiot.py --data-file <csv> --drop-conflicts --tune --shap --gpu
+# Kontroller
+python src/ablation_dnn_edgeiiot.py    --data-file <csv>
+python src/split_check_dnn_edgeiiot.py --data-file <csv>
+python src/audit_dnn_edgeiiot.py       --data-file <csv>
 ```
+
+Çalıştırma kayıtları: `outputs/dnn_edgeiiot/logs/`.
