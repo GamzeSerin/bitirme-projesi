@@ -25,6 +25,7 @@ Kurulum (Kaggle): pip install tabm rtdl_num_embeddings   (torch Kaggle'da hazır
 import copy
 import math
 import time
+import warnings
 
 import numpy as np
 from sklearn.base import BaseEstimator, ClassifierMixin
@@ -128,10 +129,13 @@ class TabMClassifier(ClassifierMixin, BaseEstimator):
                   f"({len(self.std_cols_)} seyrek sütun standartlaştırıldı, "
                   f"{X.shape[1] - self.n_features_used_} sabit sütun atıldı)")
 
-        bins = rtdl_num_embeddings.compute_bins(torch.as_tensor(Xtr),
-                                                n_bins=min(self.n_bins, len(Xtr) - 1))
-        emb = rtdl_num_embeddings.PiecewiseLinearEmbeddings(
-            bins, d_embedding=self.d_embedding, activation=False, version="B")
+        with warnings.catch_warnings():
+            # 0/1 bayraklar gibi iki değerli sütunlarda tek bin oluşur; beklenen durum
+            warnings.filterwarnings("ignore", message=".*just two bin edges.*")
+            bins = rtdl_num_embeddings.compute_bins(torch.as_tensor(Xtr),
+                                                    n_bins=min(self.n_bins, len(Xtr) - 1))
+            emb = rtdl_num_embeddings.PiecewiseLinearEmbeddings(
+                bins, d_embedding=self.d_embedding, activation=False, version="B")
         kwargs = dict(n_num_features=Xtr.shape[1], d_out=n_classes, num_embeddings=emb,
                       k=self.k, d_block=self.d_block, dropout=self.dropout)
         if self.n_blocks is not None:
