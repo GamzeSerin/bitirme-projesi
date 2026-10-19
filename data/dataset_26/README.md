@@ -30,17 +30,30 @@ Eşleme `src/common/taxonomy.py` içindeki `EDGEIIOT_MAP`'tedir. Not: CICIoT2023
 
 **3. Tek-özellik sızıntı testi** (derinlik 8 karar ağacı, sınıf başına 5.000 satır): tek başına en güçlü özellik `tcp.seq` (macro-F1 0,425), ardından `tcp.ack` 0,421, `tcp.dstport` 0,388, `tcp.len` 0,371; tüm özellikler birlikte 0,538. CICIoT2023'teki `IAT` gibi tek başına sınıfı ele veren bir sütun yok. `tcp.dstport`, `udp.port`, `tcp.seq`, `tcp.ack` kısayol adayı: ablation `--drop-features tcp.dstport,udp.port,tcp.seq,tcp.ack`.
 
-**4. Tekrarlar çok yüksek.** 34 özellik üzerinden:
+**4-5. Tekrarlar ve etiket çakışması: satır muhasebesi** (19.10.2026'da netleştirildi)
 
-| | satır |
-|---|---|
-| Ham | 2.219.201 |
-| Etiket çakışması olan satırlar atıldıktan sonra | 2.022.583 (−196.618) |
-| Tekrarlar silindikten sonra | 675.656 (−1.346.927) |
+Tanımlar (hepsi 34 özellik üzerinden):
+- **Tekrar:** özellikleri VE etiketi birebir aynı olan satırın ikinci ve sonraki kopyaları. Bunlar hatalı kayıt olmak zorunda değildir; sel saldırılarında aynı başlığa sahip binlerce meşru paket vardır. Silinme nedeni: aynı vektörün kopyaları hem eğitime hem teste düşüp skoru şişirmesin.
+- **Etiket çakışması:** aynı özellik vektörünün birden fazla farklı ince etiketle görünmesi. Model bu satırları ayırt edemez; etiketler paket bazında değil kayıt dosyası bazında verildiği için saldırı kayıtlarına karışan sıradan paketler saldırı etiketi almıştır. Çakışan grubun tüm satırları atılır (`--drop-conflicts`).
 
-Verinin yaklaşık %61'i tekrar. Sel saldırıları birbirinin aynısı paketlerden oluşuyor (DDoS_UDP 121.568 → 11.533, Normal 1.615.643 → 385.605). Tekrarlar silinmezse aynı paket hem eğitim hem test setine düşer; Edge-IIoTset'te raporlanan %99–100 doğrulukların bir kısmı buradan gelir.
+Sayılar işlem sırasına bağlıdır; iki sıra da aynı veri üzerinde doğrudur:
 
-**5. Etiket çakışması: 196.618 satır** aynı özellik vektörüne farklı etiket taşıyor. Etiketler paket paket değil kayıt dosyası bazında verildiği için saldırı kayıtlarına karışan sıradan paketler saldırı etiketi almış. 4 kimlik sütunu varken çakışma yalnızca 21.486 satırdı: o sütunlar modelin bu paketleri "ezberlemesini" sağlıyordu. En çok etkilenen: MITM (1.214 satırın 821'i çakışıyor; ARP paketleri normal ARP trafiğinden ayırt edilemiyor), Fingerprinting, Port_Scanning. Asıl deney `--drop-conflicts` ile çalıştırılır; makalede sınırlama olarak yazılmalı.
+| Sıra | Adım | Kalan satır | Atılan |
+| --- | --- | --- | --- |
+| Asıl deney (`model_other.py`) | Ham | 2.219.201 | |
+| | Tekrarlar silindi | 688.640 | 1.530.561 (**%69,0**) |
+| | Çakışan satırlar atıldı | 675.675 | 12.965 (%1,9) |
+| Aşama 0 not defteri | Ham | 2.219.201 | |
+| | Çakışan satırlar atıldı (kopyalar dahil sayıldı) | 2.022.583 | 196.618 |
+| | Tekrarlar silindi | 675.656 | 1.346.927 (ham verinin %60,7'si) |
+
+Raporlanacak tekrar oranı asıl deneydeki **%69,0**'dır. Aşama 0'daki "%61", çakışmalar önce atıldığı için daha düşük çıkmıştır. 196.618 ile 12.965 aynı olguyu iki farklı sırada sayar: ilki her kopyayı ayrı sayar, ikincisi tekrarlar silindikten sonraki tekil satırları (iki sıranın sonunda kalan satır sayısı 19 satır farkla aynıdır).
+
+Kimlik gibi davranan 4 sütun (38 özellik) varken çakışma (tekrarlar silinmeden) yalnızca 21.486 satırdı: o sütunlar modelin ayırt edilemeyen paketleri "ezberlemesini" sağlıyordu.
+
+Hangi etiketler çakışıyor, sıraya göre değişir:
+- **Kopyalar dahil sayılınca (Aşama 0)** en çok MITM etkileniyor (1.214 satırın 821'i): ARP paketleri normal ARP trafiğinden ayırt edilemiyor.
+- **Tekil satırlar sayılınca (asıl deney, 12.965 satır):** Password 3.273, Normal 2.751, Uploading 1.990, SQL_injection 1.716, XSS 1.152, DDoS_HTTP 985, Ransomware 579, Vulnerability_scanner 430; MITM yalnızca 1. Yani tekil düzeyde çakışma çoğunlukla HTTP/TCP tabanlı saldırılarla normal trafik arasında: aynı bağlantıdaki el sıkışma ve onay paketleri saldırıya özgü değil.
 
 **6. Temizlik sonrası nadir sınıflar:** MITM 357, Fingerprinting 181 satır.
 
@@ -48,7 +61,9 @@ Verinin yaklaşık %61'i tekrar. Sel saldırıları birbirinin aynısı paketler
 
 Ayarlar: `--drop-conflicts --tune --shap`, etiket başına en fazla 40.000 satır, stratified 80/20 (seed=42), 5-fold OOF, Kaggle CPU.
 
-**Veri hazırlama (model_other.py):** ham 2.219.201 → tekrarlar silindikten sonra 688.640 → etiket çakışması 12.965 satır (atıldı) → örneklem 308.396 satır, 34 özellik, 7 kategori. Not: Aşama 0'daki "196.618 çakışan satır" tekrarlar silinmeden önceki sayımdır; tekrarlar önce silindiğinde aynı durum 12.965 satır olarak görünür.
+**Veri hazırlama (model_other.py):** ham 2.219.201 → tekrarlar silindikten sonra 688.640 (%69,0 tekrar) → etiket çakışması 12.965 satır (atıldı) → 675.675 → etiket başına üst sınırla örneklem 308.396 satır, 34 özellik, 7 kategori. Sayıların Aşama 0 ile ilişkisi yukarıdaki satır muhasebesi tablosunda.
+
+**Test kümesinin kullanımı:** hiperparametre araması yalnızca eğitim kümesinin alt örnekleminde 3-fold CV ile yapılır, DSS güvenilirlik ağırlıkları eğitim kümesinin 5-fold OOF tahminlerinden gelir. Test kümesi yalnızca son değerlendirmede kullanılır.
 
 | Model | OOF macro-F1 | Test macro-F1 | Eğitim (s) | Tahmin (ms/1k) |
 | --- | --- | --- | --- | --- |
