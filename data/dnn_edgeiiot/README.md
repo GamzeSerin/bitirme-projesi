@@ -57,7 +57,18 @@ Hangi etiketler çakışıyor, sıraya göre değişir:
 
 **6. Temizlik sonrası nadir sınıflar:** MITM 357, Fingerprinting 181 satır.
 
+**7. Sütunları kaymış satırlar: DDoS_UDP ve MITM (19.10.2026).** Bu iki saldırının satırlarında sütunlar kaymış:
+- **DDoS_UDP:** `frame.time`'da saldırganın (sahte) IP'si, `ip.src_host`'ta hedef IP, `ip.dst_host`'ta 0 var; UDP flood portu `udp.port` yerine `tcp.srcport`'ta. En azından baştaki sütunlar bir sola kaymış.
+- **MITM (ARP zehirleme):** `frame.time`'da "6.0", ARP alanlarının hepsi sıfır, bazı satırlarda `udp.port`/`tcp.srcport`'ta mDNS metni (`_ipp._tcp.local`).
+
+Kayma yayımlanan **DNN, ML ve ham "Attack traffic" CSV'lerinin hepsinde** aynı, dolayısıyla düzgün bir kaynak yok. Sütun sayısı (63) ve etiketler yerinde olduğu için kaymanın nerede bittiği tek satırdan çıkarılamıyor; tahminle hizalamak güvenilir değil. Diğer 13 türde ve Normal'de `frame.time` her satırda geçerli bir zaman damgası.
+
+Sonuç: model bu iki türü saldırının kendisinden değil, "neredeyse tamamı sıfır, düzeni bozuk satır" kalıbından tanıyordu (MITM her koşulda, kısayolsuz modelde bile F1 = 1,0). **Hizasız satırlar `frame.time` biçimine bakılarak bulunur ve atılır** (`misaligned_mask`, ham veride DDoS_UDP 121.568 + MITM 1.214 = 122.782 satır, %5,53). DDOS kategorisi üç alt türle (HTTP, ICMP, TCP) devam eder; **SPOOFING kategorisi bu veri setinde yoktur.** Duyarlılık analizi için `--keep-misaligned`. Düzeltme yolu olarak ileride MITM'in PCAP kaydından yeniden özellik çıkarılabilir.
+
+
 ## Sonuçlar ve bulgular (18.10.2026, asıl deney)
+
+> ⚠️ Bu bölümdeki sonuçlar ve ablation sonuçları (19.10.2026) **hizasız DDoS_UDP/MITM satırları veride iken** elde edildi (bulgu 7). Bu satırlar atılarak yeniden çalıştırılacak; SPOOFING sonuçları geçersizdir.
 
 Ayarlar: `--drop-conflicts --tune --shap`, etiket başına en fazla 40.000 satır, stratified 80/20 (seed=42), 5-fold OOF, Kaggle CPU.
 

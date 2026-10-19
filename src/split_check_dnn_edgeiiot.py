@@ -37,7 +37,7 @@ from sklearn.model_selection import train_test_split
 
 from ablation_dnn_edgeiiot import PORTS, SEQ_ACK, SUSPECT_IDS, build_models
 from common.taxonomy import COMMON_CLASSES, edgeiiot_category
-from model_dnn_edgeiiot import LABEL, select_features
+from model_dnn_edgeiiot import LABEL, misaligned_mask, select_features
 
 OUT_DIR = "outputs/dnn_edgeiiot/split_check"
 TIME_COL = "frame.time"
@@ -65,7 +65,10 @@ def parse_time(raw):
 
 def load(data_file, cap, seed):
     df = pd.read_csv(data_file, low_memory=False)
-    stats = {"rows_raw": int(len(df)), "time_examples": df[TIME_COL].astype(str).head(5).tolist()}
+    bad = misaligned_mask(df)
+    print(f"Hizasız satır atıldı: {int(bad.sum())} {df.loc[bad, LABEL].value_counts().to_dict()}")
+    df = df[~bad].reset_index(drop=True)
+    stats = {"rows_raw": int(len(df) + bad.sum()), "rows_misaligned_dropped": int(bad.sum()), "time_examples": df[TIME_COL].astype(str).head(5).tolist()}
     secs, method, ok = parse_time(df[TIME_COL])
     stats.update(time_parse_method=method, time_parse_ok=round(ok, 4))
     print(f"frame.time örnekleri: {stats['time_examples']}")

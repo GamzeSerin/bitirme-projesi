@@ -41,6 +41,17 @@ LABEL_COLS = {"Attack_type", "Attack_label"}
 # Aşama 0 denetimi: sayısal görünen ama kayda/bağlantıya özgü kimlik gibi davranan sütunlar.
 # Bunlar atılmadığında 197 bin satırlık etiket çakışması "gizleniyor" (model kimliği ezberliyor).
 ID_LIKE_NUMERIC = ["tcp.ack_raw", "tcp.checksum", "icmp.checksum", "udp.stream"]
+# 19.10.2026 denetimi: DDoS_UDP ve MITM satırlarında sütunlar kaymış (frame.time'da IP adresi
+# ya da sayı var; MITM'de ARP alanları sıfır, udp.port'ta mDNS metni). Kayma yayımlanan
+# DNN, ML ve ham "Attack traffic" CSV'lerinin hepsinde aynı; güvenilir bir hizalama yok.
+# Bu satırlar frame.time biçimine bakılarak bulunur ve atılır.
+TIME_COL = "frame.time"
+TIME_PATTERN = r"^\s*\d{4}\s+\d{1,2}:\d{2}:\d{2}"
+
+
+def misaligned_mask(df):
+    """frame.time bir zaman damgası değilse satır hizasızdır (bkz. README, bulgu 7)."""
+    return ~df[TIME_COL].astype(str).str.match(TIME_PATTERN).to_numpy()
 
 
 # ---------------------------------------------------------------- veri
@@ -57,13 +68,23 @@ def select_features(df, drop_features=()):
                    "id_like_numeric": id_like, "user_dropped": extra}
 
 
-def load_data(data_file, cap, seed, drop_features=(), drop_conflicts=False):
+def load_data(data_file, cap, seed, drop_features=(), drop_conflicts=False, keep_misaligned=False):
     print(f"Okunuyor: {data_file}")
     if data_file.endswith(".parquet"):
         df = pd.read_parquet(data_file)
     else:
         df = pd.read_csv(data_file, low_memory=False)
     stats = {"file": os.path.basename(data_file), "rows_raw": int(len(df))}
+
+    bad = misaligned_mask(df)
+    stats["rows_misaligned"] = int(bad.sum())
+    stats["misaligned_by_label"] = {str(k): int(v) for k, v in
+                                    df.loc[bad, LABEL].value_counts().items()}
+    stats["misaligned_dropped"] = not keep_misaligned
+    print(f"Hizasız satır (frame.time zaman değil): {stats['rows_misaligned']} "
+          f"{stats['misaligned_by_label']} -> {'tutuldu' if keep_misaligned else 'atıldı'}")
+    if not keep_misaligned:
+        df = df[~bad]
 
     feats, dropped = select_features(df, drop_features)
     stats["dropped_columns"] = dropped
@@ -120,6 +141,8 @@ def main():
                    help="Atılacak ek özellikler, ör. 'tcp.dstport,udp.port,tcp.seq,tcp.ack' (ablation)")
     p.add_argument("--drop-conflicts", action="store_true",
                    help="Aynı özellik + farklı etiketli satırları at (dnn_edgeiiot için önerilir)")
+    p.add_argument("--keep-misaligned", action="store_true",
+                   help="Sütunları kaymış DDoS_UDP/MITM satırlarını tut (yalnızca duyarlılık analizi)")
     p.add_argument("--gpu", action="store_true")
     p.add_argument("--n-jobs", type=int, default=-1)
     p.add_argument("--seed", type=int, default=42)
@@ -131,7 +154,7 @@ def main():
 
     drop = [f.strip() for f in args.drop_features.split(",") if f.strip()]
     X, fine, category, data_stats = load_data(args.data_file, args.cap, args.seed,
-                                              drop, args.drop_conflicts)
+                                              drop, args.drop_conflicts, args.keep_misaligned)
     classes = [c for c in COMMON_CLASSES if c in set(category)]
     y = np.array([classes.index(c) for c in category])
     print(f"Örneklem: {len(y)} satır, {X.shape[1]} özellik, {len(classes)} kategori")
@@ -142,7 +165,7 @@ def main():
     ytr, yte = y[idx_tr], y[idx_te]
 
     cfg = {k: getattr(args, k) for k in ("data_file", "cap", "folds", "models", "tune", "n_iter",
-                                         "tune_rows", "drop_features", "drop_conflicts", "seed",
+                                         "tune_rows", "drop_features", "drop_conflicts", "keep_misaligned", "seed",
                                          "quick")}
     cfg["data_file"] = os.path.basename(cfg["data_file"])
     run_dir = os.path.join(args.work_dir, hashlib.md5(
