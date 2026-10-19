@@ -185,7 +185,7 @@ def plot(res, out_dir):
     ax.spines[["top", "right"]].set_visible(False)
     ax.legend(frameon=False, loc="upper right")
     fig.tight_layout()
-    fig.savefig(os.path.join(out_dir, "split_check_macro_f1_RF.png"), dpi=200)
+    fig.savefig(os.path.join(out_dir, "fig_split_check_macro_f1_dnn_edgeiiot_RF.png"), dpi=200)
     plt.close(fig)
 
 
