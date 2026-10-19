@@ -71,6 +71,17 @@ def load(data_file, cap, seed):
     stats.update(time_parse_method=method, time_parse_ok=round(ok, 4))
     print(f"frame.time örnekleri: {stats['time_examples']}")
     print(f"Zaman ayrıştırma: {method}, başarı %{100 * ok:.2f}")
+    bad = ~np.isfinite(secs)
+    if bad.any():
+        raw = df.loc[bad, TIME_COL].astype(str)
+        stats["time_unparsed_examples"] = raw.value_counts().head(8).to_dict()
+        stats["time_unparsed_by_label"] = df.loc[bad, LABEL].astype(str).value_counts().to_dict()
+        print(f"Ayrıştırılamayan örnekler: {stats['time_unparsed_examples']}")
+        print(f"Ayrıştırılamayanların etiketleri: {stats['time_unparsed_by_label']}")
+        # Dosya kayıt sırasıyla yazılmışsa en yakın önceki/sonraki paketin zamanı kullanılır;
+        # böylece bu satırlar topluca test kümesinin sonuna yığılmaz.
+        secs = pd.Series(secs).ffill().bfill().to_numpy()
+        stats["time_unparsed_filled_from_neighbours"] = True
 
     feats, _ = select_features(df)
     df = df[feats + [LABEL]].copy()
