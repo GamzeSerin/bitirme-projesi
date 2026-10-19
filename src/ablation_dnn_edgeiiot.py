@@ -150,7 +150,7 @@ def plot(results, classes, out_dir):
     ax.spines[["top", "right"]].set_visible(False)
     ax.legend(frameon=False, loc="lower right")
     fig.tight_layout()
-    fig.savefig(os.path.join(out_dir, "ablation_macro_f1.png"), dpi=200)
+    fig.savefig(os.path.join(out_dir, f"ablation_macro_f1_{'_'.join(models)}.png"), dpi=200)
     plt.close(fig)
 
     mat = np.array([[results[s]["models"]["RF"]["test_per_class_f1"][c] for c in classes]
@@ -167,7 +167,7 @@ def plot(results, classes, out_dir):
     ax.set_title("RF: senaryo × sınıf F1", fontsize=11)
     fig.colorbar(im, ax=ax, fraction=0.03)
     fig.tight_layout()
-    fig.savefig(os.path.join(out_dir, "ablation_class_f1_rf.png"), dpi=200)
+    fig.savefig(os.path.join(out_dir, "ablation_class_f1_RF.png"), dpi=200)
     plt.close(fig)
 
 
