@@ -7,7 +7,6 @@
   "classes": [
     "BENIGN",
     "RECON",
-    "SPOOFING",
     "BRUTEFORCE",
     "WEB",
     "MALWARE",
@@ -54,20 +53,20 @@
     "RF",
     "XGB",
     "LGBM",
-    "LR"
+    "LR",
+    "TabM"
   ],
   "primary_model": "RF",
   "best_model_per_class": {
     "BENIGN": "RF",
     "RECON": "RF",
-    "SPOOFING": "DT",
     "BRUTEFORCE": "RF",
-    "WEB": "RF",
+    "WEB": "DT",
     "MALWARE": "LGBM",
-    "DDOS": "RF"
+    "DDOS": "DT"
   },
-  "n_train": 246716,
-  "n_test": 61680,
+  "n_train": 237204,
+  "n_test": 59302,
   "cv_folds": 5,
   "tuned": true,
   "seed": 42,
@@ -84,15 +83,21 @@
       "xgboost": "3.4.1",
       "lightgbm": "4.6.0",
       "shap": "0.52.0",
-      "torch": "2.11.0+cpu",
+      "torch": "2.11.0+cu128",
       "tensorflow": "2.20.0"
     },
-    "gpu_used_for_xgb": false,
-    "gpu": null
+    "gpu_used_for_xgb": true,
+    "gpu": "Tesla T4\nTesla T4"
   },
   "data_prep": {
     "file": "DNN-EdgeIIoT-dataset.csv",
     "rows_raw": 2219201,
+    "rows_misaligned": 122782,
+    "misaligned_by_label": {
+      "DDoS_UDP": 121568,
+      "MITM": 1214
+    },
+    "misaligned_dropped": true,
     "dropped_columns": {
       "text_or_identifier": [
         "frame.time",
@@ -129,9 +134,9 @@
       ],
       "user_dropped": []
     },
-    "rows_after_nan_inf": 2219201,
-    "rows_after_dedup": 688640,
-    "rows_conflicting_labels": 12965,
+    "rows_after_nan_inf": 2096419,
+    "rows_after_dedup": 676748,
+    "rows_conflicting_labels": 12963,
     "conflicting_by_label": {
       "Password": 3273,
       "Normal": 2751,
@@ -145,17 +150,15 @@
       "Port_Scanning": 28,
       "Backdoor": 12,
       "DDoS_ICMP": 4,
-      "MITM": 1,
-      "DDoS_TCP": 1,
-      "DDoS_UDP": 1
+      "DDoS_TCP": 1
     },
     "conflicts_dropped": true,
     "cap_per_fine_label": 40000,
-    "rows_after_sampling": 308396,
+    "rows_after_sampling": 296506,
     "fine_label_counts": {
       "Normal": 40000,
-      "DDoS_TCP": 40000,
       "DDoS_ICMP": 40000,
+      "DDoS_TCP": 40000,
       "Vulnerability_scanner": 34389,
       "DDoS_HTTP": 26876,
       "Backdoor": 23121,
@@ -163,22 +166,19 @@
       "Password": 20782,
       "Port_Scanning": 19949,
       "Uploading": 14269,
-      "DDoS_UDP": 11533,
       "Ransomware": 8336,
       "XSS": 5897,
-      "MITM": 357,
       "Fingerprinting": 181
     },
     "category_counts": {
-      "DDOS": 118409,
+      "DDOS": 106876,
       "RECON": 54519,
       "WEB": 42872,
       "BENIGN": 40000,
       "MALWARE": 31457,
-      "BRUTEFORCE": 20782,
-      "SPOOFING": 357
+      "BRUTEFORCE": 20782
     }
   },
   "contract_version": "1.0",
-  "created_at": "2026-10-18T15:15:36+00:00"
+  "created_at": "2026-10-19T16:10:02+00:00"
 }

@@ -1,187 +1,194 @@
 {
   "DT": {
     "BENIGN": {
-      "precision": 0.999812,
-      "recall": 0.99975,
-      "f1": 0.999781
+      "precision": 0.999625,
+      "recall": 0.999687,
+      "f1": 0.999656
     },
     "RECON": {
-      "precision": 0.997749,
-      "recall": 0.996033,
-      "f1": 0.996891
-    },
-    "SPOOFING": {
-      "precision": 1.0,
-      "recall": 1.0,
-      "f1": 1.0
+      "precision": 0.997612,
+      "recall": 0.996332,
+      "f1": 0.996972
     },
     "BRUTEFORCE": {
-      "precision": 0.984744,
-      "recall": 0.993925,
-      "f1": 0.989313
+      "precision": 0.984746,
+      "recall": 0.994105,
+      "f1": 0.989404
     },
     "WEB": {
-      "precision": 0.970342,
-      "recall": 0.994956,
-      "f1": 0.982495
+      "precision": 0.979821,
+      "recall": 0.98962,
+      "f1": 0.984696
     },
     "MALWARE": {
-      "precision": 0.999206,
-      "recall": 0.999523,
-      "f1": 0.999364
+      "precision": 0.998809,
+      "recall": 0.999722,
+      "f1": 0.999265
     },
     "DDOS": {
-      "precision": 0.997622,
-      "recall": 0.987554,
-      "f1": 0.992562
+      "precision": 0.995308,
+      "recall": 0.989836,
+      "f1": 0.992564
     }
   },
   "RF": {
     "BENIGN": {
-      "precision": 0.999844,
-      "recall": 0.99975,
-      "f1": 0.999797
+      "precision": 0.999875,
+      "recall": 0.999781,
+      "f1": 0.999828
     },
     "RECON": {
-      "precision": 0.997705,
-      "recall": 0.996721,
-      "f1": 0.997213
-    },
-    "SPOOFING": {
-      "precision": 1.0,
-      "recall": 1.0,
-      "f1": 1.0
+      "precision": 0.99766,
+      "recall": 0.997042,
+      "f1": 0.997351
     },
     "BRUTEFORCE": {
-      "precision": 0.987057,
-      "recall": 0.995429,
-      "f1": 0.991225
+      "precision": 0.986764,
+      "recall": 0.995549,
+      "f1": 0.991137
     },
     "WEB": {
-      "precision": 0.974347,
-      "recall": 0.994489,
-      "f1": 0.984315
+      "precision": 0.975379,
+      "recall": 0.993352,
+      "f1": 0.984283
     },
     "MALWARE": {
-      "precision": 0.999444,
-      "recall": 0.999404,
-      "f1": 0.999424
+      "precision": 0.999603,
+      "recall": 0.999444,
+      "f1": 0.999523
     },
     "DDOS": {
-      "precision": 0.997764,
-      "recall": 0.989306,
-      "f1": 0.993517
+      "precision": 0.996921,
+      "recall": 0.988222,
+      "f1": 0.992552
     }
   },
   "XGB": {
     "BENIGN": {
-      "precision": 0.996014,
-      "recall": 0.999406,
-      "f1": 0.997707
+      "precision": 0.997972,
+      "recall": 0.999656,
+      "f1": 0.998814
     },
     "RECON": {
-      "precision": 0.998161,
+      "precision": 0.997611,
       "recall": 0.995712,
-      "f1": 0.996935
-    },
-    "SPOOFING": {
-      "precision": 1.0,
-      "recall": 1.0,
-      "f1": 1.0
+      "f1": 0.996661
     },
     "BRUTEFORCE": {
-      "precision": 0.980899,
-      "recall": 0.997714,
-      "f1": 0.989235
+      "precision": 0.981771,
+      "recall": 0.997774,
+      "f1": 0.989708
     },
     "WEB": {
-      "precision": 0.965273,
-      "recall": 0.993615,
-      "f1": 0.979239
+      "precision": 0.96371,
+      "recall": 0.991078,
+      "f1": 0.977202
     },
     "MALWARE": {
-      "precision": 0.999325,
-      "recall": 0.999444,
-      "f1": 0.999384
+      "precision": 0.999523,
+      "recall": 0.999603,
+      "f1": 0.999563
     },
     "DDOS": {
-      "precision": 0.997956,
-      "recall": 0.984292,
-      "f1": 0.991077
+      "precision": 0.996713,
+      "recall": 0.982515,
+      "f1": 0.989563
     }
   },
   "LGBM": {
     "BENIGN": {
-      "precision": 0.999625,
-      "recall": 0.999875,
-      "f1": 0.99975
+      "precision": 0.999688,
+      "recall": 0.999844,
+      "f1": 0.999766
     },
     "RECON": {
-      "precision": 0.997771,
-      "recall": 0.995758,
-      "f1": 0.996764
-    },
-    "SPOOFING": {
-      "precision": 1.0,
-      "recall": 1.0,
-      "f1": 1.0
+      "precision": 0.997725,
+      "recall": 0.995323,
+      "f1": 0.996522
     },
     "BRUTEFORCE": {
-      "precision": 0.96707,
-      "recall": 0.994526,
-      "f1": 0.980606
+      "precision": 0.969906,
+      "recall": 0.996451,
+      "f1": 0.983
     },
     "WEB": {
-      "precision": 0.965241,
-      "recall": 0.993469,
-      "f1": 0.979151
+      "precision": 0.962443,
+      "recall": 0.995247,
+      "f1": 0.97857
     },
     "MALWARE": {
-      "precision": 0.999523,
-      "recall": 0.999483,
-      "f1": 0.999503
+      "precision": 0.999642,
+      "recall": 0.999603,
+      "f1": 0.999622
     },
     "DDOS": {
-      "precision": 0.997546,
-      "recall": 0.982867,
-      "f1": 0.990152
+      "precision": 0.997868,
+      "recall": 0.980094,
+      "f1": 0.988901
     }
   },
   "LR": {
     "BENIGN": {
-      "precision": 0.913966,
-      "recall": 0.724375,
-      "f1": 0.808201
+      "precision": 0.91818,
+      "recall": 0.753625,
+      "f1": 0.827804
     },
     "RECON": {
-      "precision": 0.724252,
-      "recall": 0.879995,
-      "f1": 0.794564
-    },
-    "SPOOFING": {
-      "precision": 0.959732,
-      "recall": 1.0,
-      "f1": 0.979452
+      "precision": 0.779434,
+      "recall": 0.877634,
+      "f1": 0.825624
     },
     "BRUTEFORCE": {
-      "precision": 0.368023,
-      "recall": 0.745564,
-      "f1": 0.492794
+      "precision": 0.375323,
+      "recall": 0.717233,
+      "f1": 0.492778
     },
     "WEB": {
-      "precision": 0.58662,
-      "recall": 0.639181,
-      "f1": 0.611774
+      "precision": 0.57389,
+      "recall": 0.612911,
+      "f1": 0.592759
     },
     "MALWARE": {
-      "precision": 0.875807,
-      "recall": 0.959469,
-      "f1": 0.915731
+      "precision": 0.821926,
+      "recall": 0.959588,
+      "f1": 0.885438
     },
     "DDOS": {
-      "precision": 0.992267,
-      "recall": 0.727406,
-      "f1": 0.83944
+      "precision": 0.98918,
+      "recall": 0.740997,
+      "f1": 0.847289
+    }
+  },
+  "TabM": {
+    "BENIGN": {
+      "precision": 0.999687,
+      "recall": 0.999656,
+      "f1": 0.999672
+    },
+    "RECON": {
+      "precision": 0.997471,
+      "recall": 0.99475,
+      "f1": 0.996108
+    },
+    "BRUTEFORCE": {
+      "precision": 0.979006,
+      "recall": 0.998556,
+      "f1": 0.988684
+    },
+    "WEB": {
+      "precision": 0.960474,
+      "recall": 0.991923,
+      "f1": 0.975946
+    },
+    "MALWARE": {
+      "precision": 0.999166,
+      "recall": 0.999483,
+      "f1": 0.999325
+    },
+    "DDOS": {
+      "precision": 0.996911,
+      "recall": 0.981252,
+      "f1": 0.989019
     }
   }
 }

@@ -1,0 +1,164 @@
+{
+  "dataset_id": "dnn_edgeiiot",
+  "threshold_pct": 0.1,
+  "checks": [
+    "zaman",
+    "ip",
+    "port",
+    "bayrak",
+    "arp",
+    "sayisal"
+  ],
+  "by_label": {
+    "Backdoor": {
+      "n": 24862,
+      "zaman": 0.0,
+      "ip": 0.0,
+      "port": 0.0,
+      "bayrak": 0.0,
+      "arp": 0.0,
+      "sayisal_en_kotu": {},
+      "sayisal": 0.0
+    },
+    "DDoS_HTTP": {
+      "n": 49911,
+      "zaman": 0.0,
+      "ip": 0.0,
+      "port": 0.0,
+      "bayrak": 0.0,
+      "arp": 0.0,
+      "sayisal_en_kotu": {},
+      "sayisal": 0.0
+    },
+    "DDoS_ICMP": {
+      "n": 116436,
+      "zaman": 0.0,
+      "ip": 0.0,
+      "port": 0.0,
+      "bayrak": 0.0,
+      "arp": 0.0,
+      "sayisal_en_kotu": {},
+      "sayisal": 0.0
+    },
+    "DDoS_TCP": {
+      "n": 50062,
+      "zaman": 0.0,
+      "ip": 0.0,
+      "port": 0.0,
+      "bayrak": 0.0,
+      "arp": 0.0,
+      "sayisal_en_kotu": {},
+      "sayisal": 0.0
+    },
+    "DDoS_UDP": {
+      "n": 121568,
+      "zaman": 100.0,
+      "ip": 0.0,
+      "port": 0.0,
+      "bayrak": 0.0,
+      "arp": 0.0,
+      "sayisal_en_kotu": {},
+      "sayisal": 0.0
+    },
+    "Fingerprinting": {
+      "n": 1001,
+      "zaman": 0.0,
+      "ip": 0.0,
+      "port": 0.0,
+      "bayrak": 0.0,
+      "arp": 0.0,
+      "sayisal_en_kotu": {},
+      "sayisal": 0.0
+    },
+    "MITM": {
+      "n": 1214,
+      "zaman": 100.0,
+      "ip": 0.0,
+      "port": 30.231,
+      "bayrak": 18.699,
+      "arp": 0.0,
+      "sayisal_en_kotu": {},
+      "sayisal": 0.0
+    },
+    "Normal": {
+      "n": 1615643,
+      "zaman": 0.0,
+      "ip": 0.0,
+      "port": 0.0,
+      "bayrak": 0.114,
+      "arp": 0.0,
+      "sayisal_en_kotu": {},
+      "sayisal": 0.0
+    },
+    "Password": {
+      "n": 50153,
+      "zaman": 0.0,
+      "ip": 0.0,
+      "port": 0.0,
+      "bayrak": 0.0,
+      "arp": 0.0,
+      "sayisal_en_kotu": {},
+      "sayisal": 0.0
+    },
+    "Port_Scanning": {
+      "n": 22564,
+      "zaman": 0.0,
+      "ip": 0.0,
+      "port": 0.0,
+      "bayrak": 0.0,
+      "arp": 0.0,
+      "sayisal_en_kotu": {},
+      "sayisal": 0.0
+    },
+    "Ransomware": {
+      "n": 10925,
+      "zaman": 0.0,
+      "ip": 0.0,
+      "port": 0.0,
+      "bayrak": 0.0,
+      "arp": 0.0,
+      "sayisal_en_kotu": {},
+      "sayisal": 0.0
+    },
+    "SQL_injection": {
+      "n": 51203,
+      "zaman": 0.0,
+      "ip": 0.0,
+      "port": 0.0,
+      "bayrak": 0.0,
+      "arp": 0.0,
+      "sayisal_en_kotu": {},
+      "sayisal": 0.0
+    },
+    "Uploading": {
+      "n": 37634,
+      "zaman": 0.0,
+      "ip": 0.0,
+      "port": 0.0,
+      "bayrak": 0.0,
+      "arp": 0.0,
+      "sayisal_en_kotu": {},
+      "sayisal": 0.0
+    },
+    "Vulnerability_scanner": {
+      "n": 50110,
+      "zaman": 0.0,
+      "ip": 0.0,
+      "port": 0.0,
+      "bayrak": 0.0,
+      "arp": 0.0,
+      "sayisal_en_kotu": {},
+      "sayisal": 0.0
+    },
+    "XSS": {
+      "n": 15915,
+      "zaman": 0.0,
+      "ip": 0.0,
+      "port": 0.0,
+      "bayrak": 0.0,
+      "arp": 0.0,
+      "sayisal_en_kotu": {},
+      "sayisal": 0.0
+    }
+  }
+}

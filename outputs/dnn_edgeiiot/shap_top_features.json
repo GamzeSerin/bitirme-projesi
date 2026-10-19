@@ -1,342 +1,300 @@
 {
   "model": "RF",
-  "n_rows": 671,
+  "n_rows": 600,
   "per_class": {
     "BENIGN": [
       {
         "feature": "tcp.dstport",
-        "mean_abs_shap": 0.29346
+        "mean_abs_shap": 0.341208
       },
       {
         "feature": "tcp.ack",
-        "mean_abs_shap": 0.209801
+        "mean_abs_shap": 0.207645
       },
       {
         "feature": "tcp.seq",
-        "mean_abs_shap": 0.193879
-      },
-      {
-        "feature": "tcp.len",
-        "mean_abs_shap": 0.057991
+        "mean_abs_shap": 0.206549
       },
       {
         "feature": "tcp.flags",
-        "mean_abs_shap": 0.037991
+        "mean_abs_shap": 0.026867
       },
       {
         "feature": "tcp.connection.rst",
-        "mean_abs_shap": 0.014599
+        "mean_abs_shap": 0.013409
       },
       {
-        "feature": "udp.port",
-        "mean_abs_shap": 0.012333
-      },
-      {
-        "feature": "udp.time_delta",
-        "mean_abs_shap": 0.012
+        "feature": "tcp.len",
+        "mean_abs_shap": 0.012795
       },
       {
         "feature": "http.content_length",
-        "mean_abs_shap": 0.007261
+        "mean_abs_shap": 0.008437
       },
       {
         "feature": "icmp.seq_le",
-        "mean_abs_shap": 0.005912
+        "mean_abs_shap": 0.00656
+      },
+      {
+        "feature": "tcp.flags.ack",
+        "mean_abs_shap": 0.005866
+      },
+      {
+        "feature": "udp.time_delta",
+        "mean_abs_shap": 0.002304
       }
     ],
     "RECON": [
       {
         "feature": "tcp.dstport",
-        "mean_abs_shap": 0.216258
+        "mean_abs_shap": 0.215968
       },
       {
         "feature": "tcp.ack",
-        "mean_abs_shap": 0.179367
+        "mean_abs_shap": 0.191727
       },
       {
         "feature": "tcp.seq",
-        "mean_abs_shap": 0.132661
+        "mean_abs_shap": 0.147771
       },
       {
         "feature": "tcp.len",
-        "mean_abs_shap": 0.130547
+        "mean_abs_shap": 0.092208
       },
       {
         "feature": "tcp.flags",
-        "mean_abs_shap": 0.05935
+        "mean_abs_shap": 0.053534
       },
       {
         "feature": "http.content_length",
-        "mean_abs_shap": 0.041071
+        "mean_abs_shap": 0.045922
       },
       {
         "feature": "icmp.seq_le",
-        "mean_abs_shap": 0.036534
-      },
-      {
-        "feature": "udp.port",
-        "mean_abs_shap": 0.015148
-      },
-      {
-        "feature": "udp.time_delta",
-        "mean_abs_shap": 0.014364
-      },
-      {
-        "feature": "tcp.connection.rst",
-        "mean_abs_shap": 0.01179
-      }
-    ],
-    "SPOOFING": [
-      {
-        "feature": "tcp.len",
-        "mean_abs_shap": 0.34564
-      },
-      {
-        "feature": "udp.port",
-        "mean_abs_shap": 0.11385
-      },
-      {
-        "feature": "udp.time_delta",
-        "mean_abs_shap": 0.109867
-      },
-      {
-        "feature": "tcp.dstport",
-        "mean_abs_shap": 0.099376
-      },
-      {
-        "feature": "tcp.flags",
-        "mean_abs_shap": 0.097021
-      },
-      {
-        "feature": "icmp.seq_le",
-        "mean_abs_shap": 0.041623
-      },
-      {
-        "feature": "tcp.ack",
-        "mean_abs_shap": 0.025137
-      },
-      {
-        "feature": "tcp.seq",
-        "mean_abs_shap": 0.013905
-      },
-      {
-        "feature": "tcp.connection.syn",
-        "mean_abs_shap": 0.00469
+        "mean_abs_shap": 0.036443
       },
       {
         "feature": "tcp.flags.ack",
-        "mean_abs_shap": 0.003838
+        "mean_abs_shap": 0.014345
+      },
+      {
+        "feature": "tcp.connection.rst",
+        "mean_abs_shap": 0.01303
+      },
+      {
+        "feature": "http.response",
+        "mean_abs_shap": 0.009634
       }
     ],
     "BRUTEFORCE": [
       {
         "feature": "tcp.ack",
-        "mean_abs_shap": 0.365626
-      },
-      {
-        "feature": "tcp.dstport",
-        "mean_abs_shap": 0.149427
+        "mean_abs_shap": 0.381294
       },
       {
         "feature": "tcp.seq",
-        "mean_abs_shap": 0.139186
+        "mean_abs_shap": 0.144912
+      },
+      {
+        "feature": "tcp.dstport",
+        "mean_abs_shap": 0.142799
       },
       {
         "feature": "tcp.flags",
-        "mean_abs_shap": 0.069587
-      },
-      {
-        "feature": "tcp.len",
-        "mean_abs_shap": 0.044354
+        "mean_abs_shap": 0.070574
       },
       {
         "feature": "tcp.connection.rst",
-        "mean_abs_shap": 0.031243
+        "mean_abs_shap": 0.031292
       },
       {
-        "feature": "udp.port",
-        "mean_abs_shap": 0.014057
+        "feature": "tcp.len",
+        "mean_abs_shap": 0.009046
       },
       {
-        "feature": "udp.time_delta",
-        "mean_abs_shap": 0.013274
+        "feature": "tcp.flags.ack",
+        "mean_abs_shap": 0.00868
       },
       {
         "feature": "http.content_length",
-        "mean_abs_shap": 0.009694
+        "mean_abs_shap": 0.008263
       },
       {
-        "feature": "icmp.seq_le",
-        "mean_abs_shap": 0.004358
+        "feature": "http.response",
+        "mean_abs_shap": 0.004066
+      },
+      {
+        "feature": "tcp.connection.synack",
+        "mean_abs_shap": 0.003304
       }
     ],
     "WEB": [
       {
         "feature": "tcp.ack",
-        "mean_abs_shap": 0.346994
+        "mean_abs_shap": 0.351879
       },
       {
         "feature": "tcp.dstport",
-        "mean_abs_shap": 0.163962
+        "mean_abs_shap": 0.181035
       },
       {
         "feature": "tcp.seq",
-        "mean_abs_shap": 0.111473
+        "mean_abs_shap": 0.137368
       },
       {
         "feature": "tcp.flags",
-        "mean_abs_shap": 0.069447
-      },
-      {
-        "feature": "tcp.len",
-        "mean_abs_shap": 0.054747
+        "mean_abs_shap": 0.052999
       },
       {
         "feature": "tcp.connection.rst",
-        "mean_abs_shap": 0.042103
+        "mean_abs_shap": 0.033406
+      },
+      {
+        "feature": "tcp.len",
+        "mean_abs_shap": 0.021111
       },
       {
         "feature": "http.content_length",
-        "mean_abs_shap": 0.01345
+        "mean_abs_shap": 0.013081
       },
       {
-        "feature": "udp.port",
-        "mean_abs_shap": 0.013191
+        "feature": "tcp.flags.ack",
+        "mean_abs_shap": 0.007856
       },
       {
-        "feature": "udp.time_delta",
-        "mean_abs_shap": 0.012572
+        "feature": "http.response",
+        "mean_abs_shap": 0.006053
       },
       {
         "feature": "tcp.connection.synack",
-        "mean_abs_shap": 0.008178
+        "mean_abs_shap": 0.005332
       }
     ],
     "MALWARE": [
       {
-        "feature": "tcp.ack",
-        "mean_abs_shap": 0.262396
+        "feature": "tcp.dstport",
+        "mean_abs_shap": 0.283975
       },
       {
-        "feature": "tcp.dstport",
-        "mean_abs_shap": 0.240428
+        "feature": "tcp.ack",
+        "mean_abs_shap": 0.259208
       },
       {
         "feature": "tcp.seq",
-        "mean_abs_shap": 0.166978
-      },
-      {
-        "feature": "tcp.len",
-        "mean_abs_shap": 0.064645
+        "mean_abs_shap": 0.172812
       },
       {
         "feature": "tcp.flags",
-        "mean_abs_shap": 0.051042
+        "mean_abs_shap": 0.041579
+      },
+      {
+        "feature": "tcp.len",
+        "mean_abs_shap": 0.027326
       },
       {
         "feature": "tcp.connection.rst",
-        "mean_abs_shap": 0.014657
-      },
-      {
-        "feature": "udp.port",
-        "mean_abs_shap": 0.01404
-      },
-      {
-        "feature": "udp.time_delta",
-        "mean_abs_shap": 0.013217
+        "mean_abs_shap": 0.014661
       },
       {
         "feature": "http.content_length",
-        "mean_abs_shap": 0.010128
+        "mean_abs_shap": 0.013438
+      },
+      {
+        "feature": "tcp.flags.ack",
+        "mean_abs_shap": 0.010882
+      },
+      {
+        "feature": "http.response",
+        "mean_abs_shap": 0.003555
       },
       {
         "feature": "icmp.seq_le",
-        "mean_abs_shap": 0.004036
+        "mean_abs_shap": 0.002026
       }
     ],
     "DDOS": [
       {
         "feature": "tcp.dstport",
-        "mean_abs_shap": 0.228808
+        "mean_abs_shap": 0.260483
       },
       {
         "feature": "tcp.ack",
-        "mean_abs_shap": 0.162584
+        "mean_abs_shap": 0.150878
       },
       {
         "feature": "tcp.flags",
-        "mean_abs_shap": 0.118388
+        "mean_abs_shap": 0.131428
       },
       {
         "feature": "tcp.seq",
-        "mean_abs_shap": 0.109302
+        "mean_abs_shap": 0.106769
       },
       {
         "feature": "icmp.seq_le",
-        "mean_abs_shap": 0.106406
+        "mean_abs_shap": 0.077213
       },
       {
         "feature": "tcp.len",
-        "mean_abs_shap": 0.085681
+        "mean_abs_shap": 0.07699
+      },
+      {
+        "feature": "tcp.flags.ack",
+        "mean_abs_shap": 0.035649
       },
       {
         "feature": "tcp.connection.rst",
-        "mean_abs_shap": 0.025889
-      },
-      {
-        "feature": "udp.time_delta",
-        "mean_abs_shap": 0.016457
-      },
-      {
-        "feature": "udp.port",
-        "mean_abs_shap": 0.013815
+        "mean_abs_shap": 0.028009
       },
       {
         "feature": "http.content_length",
-        "mean_abs_shap": 0.006946
+        "mean_abs_shap": 0.009504
+      },
+      {
+        "feature": "tcp.connection.syn",
+        "mean_abs_shap": 0.006315
       }
     ]
   },
   "global": [
     {
       "feature": "tcp.ack",
-      "mean_abs_shap": 0.073635
+      "mean_abs_shap": 0.098588
     },
     {
       "feature": "tcp.dstport",
-      "mean_abs_shap": 0.068586
+      "mean_abs_shap": 0.090545
     },
     {
       "feature": "tcp.seq",
-      "mean_abs_shap": 0.045319
-    },
-    {
-      "feature": "tcp.len",
-      "mean_abs_shap": 0.038417
+      "mean_abs_shap": 0.06082
     },
     {
       "feature": "tcp.flags",
-      "mean_abs_shap": 0.026175
+      "mean_abs_shap": 0.026183
+    },
+    {
+      "feature": "tcp.len",
+      "mean_abs_shap": 0.016995
     },
     {
       "feature": "icmp.seq_le",
-      "mean_abs_shap": 0.013434
-    },
-    {
-      "feature": "udp.time_delta",
-      "mean_abs_shap": 0.0101
-    },
-    {
-      "feature": "udp.port",
-      "mean_abs_shap": 0.010016
+      "mean_abs_shap": 0.011307
     },
     {
       "feature": "tcp.connection.rst",
-      "mean_abs_shap": 0.008439
+      "mean_abs_shap": 0.010937
     },
     {
       "feature": "http.content_length",
-      "mean_abs_shap": 0.005664
+      "mean_abs_shap": 0.007836
+    },
+    {
+      "feature": "tcp.flags.ack",
+      "mean_abs_shap": 0.006304
+    },
+    {
+      "feature": "http.response",
+      "mean_abs_shap": 0.002544
     }
   ]
 }

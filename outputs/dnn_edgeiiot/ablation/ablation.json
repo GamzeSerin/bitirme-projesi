@@ -5,12 +5,11 @@
   "seed": 42,
   "cap_per_fine_label": 40000,
   "quick": false,
-  "n_rows": 308396,
-  "n_test": 61680,
+  "n_rows": 296506,
+  "n_test": 59302,
   "classes": [
     "BENIGN",
     "RECON",
-    "SPOOFING",
     "BRUTEFORCE",
     "WEB",
     "MALWARE",
@@ -41,20 +40,19 @@
   },
   "single_feature_leak_test": {
     "mbtcp.trans_id": {
-      "macro_f1_alone": 0.0945,
-      "n_unique": 13,
+      "macro_f1_alone": 0.1112,
+      "n_unique": 22,
       "nonzero_pct_by_category": {
-        "BENIGN": 0.03,
+        "BENIGN": 0.05,
         "BRUTEFORCE": 0.0,
         "DDOS": 0.0,
         "MALWARE": 0.0,
         "RECON": 0.0,
-        "SPOOFING": 0.0,
         "WEB": 0.0
       }
     },
     "icmp.transmit_timestamp": {
-      "macro_f1_alone": 0.0947,
+      "macro_f1_alone": 0.1114,
       "n_unique": 84,
       "nonzero_pct_by_category": {
         "BENIGN": 0.0,
@@ -62,7 +60,6 @@
         "DDOS": 0.0,
         "MALWARE": 0.0,
         "RECON": 0.15,
-        "SPOOFING": 0.0,
         "WEB": 0.0
       }
     }
@@ -79,97 +76,91 @@
       },
       "models": {
         "RF": {
-          "test_macro_f1": 0.9946,
+          "test_macro_f1": 0.9932,
           "test_macro_f1_ci95": [
-            0.9939,
-            0.9951
+            0.9925,
+            0.9939
+          ],
+          "test_per_class_f1": {
+            "BENIGN": 0.9998,
+            "RECON": 0.9968,
+            "BRUTEFORCE": 0.9874,
+            "WEB": 0.9834,
+            "MALWARE": 0.9993,
+            "DDOS": 0.9926
+          },
+          "test_fine_label_recall": {
+            "BACKDOOR": 0.9991,
+            "DDOS_HTTP": 0.963,
+            "DDOS_ICMP": 1.0,
+            "DDOS_TCP": 1.0,
+            "FINGERPRINTING": 0.9167,
+            "NORMAL": 0.9999,
+            "PASSWORD": 0.986,
+            "PORT_SCANNING": 1.0,
+            "RANSOMWARE": 0.9982,
+            "SQL_INJECTION": 0.9802,
+            "UPLOADING": 0.9965,
+            "VULNERABILITY_SCANNER": 0.9969,
+            "XSS": 0.9958
+          },
+          "top10_importance": {
+            "tcp.ack": 0.3198,
+            "tcp.dstport": 0.2903,
+            "tcp.seq": 0.1915,
+            "tcp.len": 0.0787,
+            "tcp.flags": 0.049,
+            "tcp.connection.rst": 0.0186,
+            "icmp.seq_le": 0.0163,
+            "http.content_length": 0.0139,
+            "tcp.flags.ack": 0.0086,
+            "http.response": 0.0043
+          },
+          "fit_seconds": 13.33,
+          "delta_vs_full": 0.0
+        },
+        "DT": {
+          "test_macro_f1": 0.9932,
+          "test_macro_f1_ci95": [
+            0.9925,
+            0.9938
           ],
           "test_per_class_f1": {
             "BENIGN": 0.9999,
             "RECON": 0.997,
-            "SPOOFING": 1.0,
-            "BRUTEFORCE": 0.9875,
-            "WEB": 0.9845,
-            "MALWARE": 0.9995,
-            "DDOS": 0.9936
-          },
-          "test_fine_label_recall": {
-            "BACKDOOR": 0.9991,
-            "DDOS_HTTP": 0.965,
-            "DDOS_ICMP": 1.0,
-            "DDOS_TCP": 1.0,
-            "DDOS_UDP": 1.0,
-            "FINGERPRINTING": 0.9167,
-            "MITM": 1.0,
-            "NORMAL": 0.9999,
-            "PASSWORD": 0.986,
-            "PORT_SCANNING": 1.0,
-            "RANSOMWARE": 0.9994,
-            "SQL_INJECTION": 0.9808,
-            "UPLOADING": 0.9972,
-            "VULNERABILITY_SCANNER": 0.9975,
-            "XSS": 0.9941
-          },
-          "top10_importance": {
-            "tcp.ack": 0.2707,
-            "tcp.dstport": 0.2315,
-            "tcp.seq": 0.1615,
-            "tcp.len": 0.1455,
-            "tcp.flags": 0.0566,
-            "udp.time_delta": 0.0322,
-            "udp.port": 0.032,
-            "icmp.seq_le": 0.0233,
-            "http.content_length": 0.0164,
-            "tcp.connection.rst": 0.0147
-          },
-          "fit_seconds": 27.82,
-          "delta_vs_full": 0.0
-        },
-        "DT": {
-          "test_macro_f1": 0.9942,
-          "test_macro_f1_ci95": [
-            0.9935,
-            0.9948
-          ],
-          "test_per_class_f1": {
-            "BENIGN": 0.9999,
-            "RECON": 0.9968,
-            "SPOOFING": 1.0,
-            "BRUTEFORCE": 0.9885,
-            "WEB": 0.9823,
+            "BRUTEFORCE": 0.9884,
+            "WEB": 0.9826,
             "MALWARE": 0.9994,
-            "DDOS": 0.9921
+            "DDOS": 0.9917
           },
           "test_fine_label_recall": {
-            "BACKDOOR": 0.9991,
-            "DDOS_HTTP": 0.9399,
+            "BACKDOOR": 0.9994,
+            "DDOS_HTTP": 0.9427,
             "DDOS_ICMP": 1.0,
             "DDOS_TCP": 1.0,
-            "DDOS_UDP": 1.0,
             "FINGERPRINTING": 0.9167,
-            "MITM": 1.0,
             "NORMAL": 0.9999,
-            "PASSWORD": 0.9928,
+            "PASSWORD": 0.9916,
             "PORT_SCANNING": 1.0,
-            "RANSOMWARE": 1.0,
+            "RANSOMWARE": 0.9982,
             "SQL_INJECTION": 0.9952,
-            "UPLOADING": 0.9975,
-            "VULNERABILITY_SCANNER": 0.9958,
-            "XSS": 0.9932
+            "UPLOADING": 0.9972,
+            "VULNERABILITY_SCANNER": 0.9965,
+            "XSS": 0.9949
           },
           "top10_importance": {
-            "tcp.dstport": 0.3913,
-            "tcp.ack": 0.2755,
-            "tcp.seq": 0.1305,
-            "tcp.len": 0.1257,
-            "tcp.connection.rst": 0.05,
-            "icmp.seq_le": 0.0164,
-            "tcp.flags": 0.0084,
-            "tcp.flags.ack": 0.0008,
-            "http.content_length": 0.0006,
-            "tcp.connection.synack": 0.0005
+            "tcp.ack": 0.4056,
+            "tcp.dstport": 0.3094,
+            "tcp.seq": 0.2162,
+            "tcp.len": 0.032,
+            "tcp.connection.rst": 0.0233,
+            "tcp.flags": 0.0087,
+            "udp.port": 0.0028,
+            "icmp.transmit_timestamp": 0.0009,
+            "tcp.connection.synack": 0.0005,
+            "http.content_length": 0.0003
           },
-          "fit_seconds": 1.47,
+          "fit_seconds": 0.82,
           "delta_vs_full": 0.0
         }
       }
@@ -181,17 +172,17 @@
       ],
       "n_features": 32,
       "collisions": {
-        "duplicate_rows_pct": 44.59,
-        "cross_category_conflict_rows": 39600,
-        "cross_category_conflict_pct": 12.84,
+        "duplicate_rows_pct": 46.35,
+        "cross_category_conflict_rows": 39614,
+        "cross_category_conflict_pct": 13.36,
         "conflict_pct_by_fine_label": {
           "PORT_SCANNING": 49.94,
           "UPLOADING": 52.58,
           "SQL_INJECTION": 31.55,
           "PASSWORD": 28.92,
-          "DDOS_HTTP": 16.56,
+          "DDOS_HTTP": 16.57,
           "XSS": 25.96,
-          "NORMAL": 3.5,
+          "NORMAL": 3.52,
           "BACKDOOR": 3.59,
           "VULNERABILITY_SCANNER": 1.88,
           "FINGERPRINTING": 54.14,
@@ -200,98 +191,92 @@
       },
       "models": {
         "RF": {
-          "test_macro_f1": 0.9628,
+          "test_macro_f1": 0.957,
           "test_macro_f1_ci95": [
-            0.9614,
-            0.9642
+            0.9554,
+            0.9586
           ],
           "test_per_class_f1": {
-            "BENIGN": 0.9806,
-            "RECON": 0.94,
-            "SPOOFING": 1.0,
-            "BRUTEFORCE": 0.9787,
-            "WEB": 0.873,
-            "MALWARE": 0.9829,
-            "DDOS": 0.9847
+            "BENIGN": 0.9819,
+            "RECON": 0.9404,
+            "BRUTEFORCE": 0.9803,
+            "WEB": 0.874,
+            "MALWARE": 0.9822,
+            "DDOS": 0.9831
           },
           "test_fine_label_recall": {
-            "BACKDOOR": 0.9563,
-            "DDOS_HTTP": 0.8811,
+            "BACKDOOR": 0.9557,
+            "DDOS_HTTP": 0.8791,
             "DDOS_ICMP": 1.0,
             "DDOS_TCP": 1.0,
-            "DDOS_UDP": 1.0,
-            "FINGERPRINTING": 1.0,
-            "MITM": 1.0,
-            "NORMAL": 0.9624,
-            "PASSWORD": 0.9613,
+            "FINGERPRINTING": 0.9722,
+            "NORMAL": 0.9646,
+            "PASSWORD": 0.963,
             "PORT_SCANNING": 1.0,
-            "RANSOMWARE": 0.9982,
-            "SQL_INJECTION": 0.9943,
-            "UPLOADING": 0.6345,
-            "VULNERABILITY_SCANNER": 0.9863,
-            "XSS": 0.9881
+            "RANSOMWARE": 0.994,
+            "SQL_INJECTION": 0.9938,
+            "UPLOADING": 0.6363,
+            "VULNERABILITY_SCANNER": 0.9887,
+            "XSS": 0.9915
           },
           "top10_importance": {
-            "tcp.ack": 0.3439,
-            "tcp.seq": 0.2392,
-            "tcp.len": 0.1746,
-            "tcp.flags": 0.0892,
-            "udp.time_delta": 0.0476,
-            "icmp.seq_le": 0.0275,
-            "http.content_length": 0.0197,
-            "tcp.flags.ack": 0.0178,
-            "tcp.connection.rst": 0.0174,
-            "tcp.connection.syn": 0.0089
+            "tcp.ack": 0.4115,
+            "tcp.seq": 0.2967,
+            "tcp.len": 0.0955,
+            "tcp.flags": 0.0891,
+            "icmp.seq_le": 0.0272,
+            "tcp.flags.ack": 0.0188,
+            "tcp.connection.rst": 0.0184,
+            "http.content_length": 0.0167,
+            "tcp.connection.syn": 0.0083,
+            "http.response": 0.0059
           },
-          "fit_seconds": 22.65,
-          "delta_vs_full": -0.0318
+          "fit_seconds": 10.44,
+          "delta_vs_full": -0.0362
         },
         "DT": {
-          "test_macro_f1": 0.9621,
+          "test_macro_f1": 0.9561,
           "test_macro_f1_ci95": [
-            0.9607,
-            0.9635
+            0.9544,
+            0.9578
           ],
           "test_per_class_f1": {
-            "BENIGN": 0.9806,
-            "RECON": 0.9397,
-            "SPOOFING": 1.0,
-            "BRUTEFORCE": 0.9788,
-            "WEB": 0.8699,
-            "MALWARE": 0.9826,
-            "DDOS": 0.9834
+            "BENIGN": 0.9819,
+            "RECON": 0.9404,
+            "BRUTEFORCE": 0.98,
+            "WEB": 0.8703,
+            "MALWARE": 0.9823,
+            "DDOS": 0.9816
           },
           "test_fine_label_recall": {
             "BACKDOOR": 0.9567,
-            "DDOS_HTTP": 0.8668,
+            "DDOS_HTTP": 0.8659,
             "DDOS_ICMP": 1.0,
             "DDOS_TCP": 1.0,
-            "DDOS_UDP": 1.0,
-            "FINGERPRINTING": 1.0,
-            "MITM": 1.0,
-            "NORMAL": 0.9624,
-            "PASSWORD": 0.9615,
+            "FINGERPRINTING": 0.9722,
+            "NORMAL": 0.9646,
+            "PASSWORD": 0.963,
             "PORT_SCANNING": 1.0,
-            "RANSOMWARE": 0.9982,
-            "SQL_INJECTION": 0.9967,
-            "UPLOADING": 0.6349,
-            "VULNERABILITY_SCANNER": 0.9859,
-            "XSS": 0.9864
+            "RANSOMWARE": 0.9958,
+            "SQL_INJECTION": 0.9954,
+            "UPLOADING": 0.6359,
+            "VULNERABILITY_SCANNER": 0.9866,
+            "XSS": 0.9941
           },
           "top10_importance": {
-            "tcp.ack": 0.3098,
-            "tcp.seq": 0.2764,
-            "tcp.flags": 0.2438,
-            "tcp.len": 0.1196,
-            "tcp.connection.rst": 0.0296,
-            "icmp.seq_le": 0.0161,
-            "http.content_length": 0.0027,
-            "udp.time_delta": 0.0019,
-            "tcp.connection.fin": 0.0001,
-            "mbtcp.len": 0.0001
+            "tcp.ack": 0.5187,
+            "tcp.seq": 0.2661,
+            "tcp.flags": 0.0805,
+            "icmp.seq_le": 0.054,
+            "tcp.connection.rst": 0.0413,
+            "tcp.len": 0.0345,
+            "http.content_length": 0.0036,
+            "udp.time_delta": 0.0007,
+            "tcp.connection.fin": 0.0003,
+            "mbtcp.trans_id": 0.0002
           },
-          "fit_seconds": 1.06,
-          "delta_vs_full": -0.0321
+          "fit_seconds": 0.49,
+          "delta_vs_full": -0.0371
         }
       }
     },
@@ -302,118 +287,112 @@
       ],
       "n_features": 32,
       "collisions": {
-        "duplicate_rows_pct": 63.04,
-        "cross_category_conflict_rows": 65590,
-        "cross_category_conflict_pct": 21.27,
+        "duplicate_rows_pct": 65.47,
+        "cross_category_conflict_rows": 65668,
+        "cross_category_conflict_pct": 22.15,
         "conflict_pct_by_fine_label": {
-          "DDOS_HTTP": 48.16,
+          "DDOS_HTTP": 48.18,
           "BACKDOOR": 48.29,
-          "PASSWORD": 46.91,
+          "PASSWORD": 47.16,
           "SQL_INJECTION": 39.98,
-          "NORMAL": 10.74,
-          "UPLOADING": 27.09,
+          "NORMAL": 10.88,
+          "UPLOADING": 27.21,
           "DDOS_TCP": 9.03,
-          "VULNERABILITY_SCANNER": 9.05,
+          "VULNERABILITY_SCANNER": 8.97,
           "RANSOMWARE": 35.38,
-          "XSS": 45.46,
+          "XSS": 45.14,
           "PORT_SCANNING": 10.63,
           "FINGERPRINTING": 10.5
         }
       },
       "models": {
         "RF": {
-          "test_macro_f1": 0.8509,
+          "test_macro_f1": 0.8239,
           "test_macro_f1_ci95": [
-            0.8477,
-            0.8537
+            0.8206,
+            0.827
           ],
           "test_per_class_f1": {
-            "BENIGN": 0.9155,
-            "RECON": 0.9253,
-            "SPOOFING": 1.0,
-            "BRUTEFORCE": 0.5043,
-            "WEB": 0.7179,
-            "MALWARE": 0.9878,
-            "DDOS": 0.9052
+            "BENIGN": 0.917,
+            "RECON": 0.9251,
+            "BRUTEFORCE": 0.4996,
+            "WEB": 0.7177,
+            "MALWARE": 0.9877,
+            "DDOS": 0.8962
           },
           "test_fine_label_recall": {
             "BACKDOOR": 0.9818,
-            "DDOS_HTTP": 0.6776,
+            "DDOS_HTTP": 0.6934,
             "DDOS_ICMP": 1.0,
             "DDOS_TCP": 0.8805,
-            "DDOS_UDP": 1.0,
             "FINGERPRINTING": 0.5,
-            "MITM": 1.0,
-            "NORMAL": 0.8958,
-            "PASSWORD": 0.5446,
-            "PORT_SCANNING": 0.9123,
-            "RANSOMWARE": 1.0,
-            "SQL_INJECTION": 0.7139,
-            "UPLOADING": 0.7442,
-            "VULNERABILITY_SCANNER": 0.949,
-            "XSS": 0.8127
+            "NORMAL": 0.9016,
+            "PASSWORD": 0.5338,
+            "PORT_SCANNING": 0.9138,
+            "RANSOMWARE": 0.9994,
+            "SQL_INJECTION": 0.7137,
+            "UPLOADING": 0.7344,
+            "VULNERABILITY_SCANNER": 0.9462,
+            "XSS": 0.811
           },
           "top10_importance": {
-            "tcp.dstport": 0.5024,
-            "tcp.len": 0.2095,
-            "tcp.flags": 0.0859,
-            "http.content_length": 0.0516,
-            "udp.time_delta": 0.0373,
-            "udp.port": 0.0271,
-            "icmp.seq_le": 0.0234,
-            "tcp.connection.rst": 0.0191,
-            "http.response": 0.013,
-            "tcp.flags.ack": 0.0126
+            "tcp.dstport": 0.6084,
+            "tcp.len": 0.1392,
+            "tcp.flags": 0.0843,
+            "http.content_length": 0.0737,
+            "tcp.connection.rst": 0.0247,
+            "tcp.flags.ack": 0.0203,
+            "icmp.seq_le": 0.0174,
+            "http.response": 0.0149,
+            "tcp.connection.fin": 0.0047,
+            "tcp.connection.syn": 0.0029
           },
-          "fit_seconds": 27.07,
-          "delta_vs_full": -0.1437
+          "fit_seconds": 14.42,
+          "delta_vs_full": -0.1693
         },
         "DT": {
-          "test_macro_f1": 0.8755,
+          "test_macro_f1": 0.8533,
           "test_macro_f1_ci95": [
-            0.8728,
-            0.8779
+            0.8502,
+            0.8561
           ],
           "test_per_class_f1": {
-            "BENIGN": 0.9212,
+            "BENIGN": 0.9229,
             "RECON": 0.9361,
-            "SPOOFING": 1.0,
-            "BRUTEFORCE": 0.5714,
-            "WEB": 0.7963,
-            "MALWARE": 0.9915,
-            "DDOS": 0.9119
+            "BRUTEFORCE": 0.5673,
+            "WEB": 0.797,
+            "MALWARE": 0.9917,
+            "DDOS": 0.9051
           },
           "test_fine_label_recall": {
-            "BACKDOOR": 0.9924,
-            "DDOS_HTTP": 0.5447,
+            "BACKDOOR": 0.9933,
+            "DDOS_HTTP": 0.5732,
             "DDOS_ICMP": 1.0,
-            "DDOS_TCP": 0.8774,
-            "DDOS_UDP": 1.0,
+            "DDOS_TCP": 0.8779,
             "FINGERPRINTING": 0.5,
-            "MITM": 1.0,
-            "NORMAL": 0.8666,
-            "PASSWORD": 0.6341,
-            "PORT_SCANNING": 0.9742,
-            "RANSOMWARE": 1.0,
-            "SQL_INJECTION": 0.963,
-            "UPLOADING": 0.8844,
-            "VULNERABILITY_SCANNER": 0.9221,
-            "XSS": 0.9051
+            "NORMAL": 0.8774,
+            "PASSWORD": 0.6048,
+            "PORT_SCANNING": 0.9734,
+            "RANSOMWARE": 0.9994,
+            "SQL_INJECTION": 0.9637,
+            "UPLOADING": 0.8798,
+            "VULNERABILITY_SCANNER": 0.9248,
+            "XSS": 0.9093
           },
           "top10_importance": {
-            "tcp.dstport": 0.6774,
-            "tcp.len": 0.2058,
-            "tcp.flags": 0.0313,
-            "http.response": 0.0286,
-            "tcp.connection.rst": 0.0258,
-            "icmp.seq_le": 0.0182,
-            "tcp.connection.synack": 0.0031,
-            "http.content_length": 0.0029,
-            "mqtt.len": 0.0028,
-            "tcp.connection.fin": 0.0022
+            "tcp.dstport": 0.7121,
+            "tcp.len": 0.1384,
+            "http.response": 0.0374,
+            "tcp.flags": 0.0308,
+            "tcp.connection.rst": 0.0272,
+            "icmp.seq_le": 0.025,
+            "mqtt.msgtype": 0.0052,
+            "tcp.connection.syn": 0.0051,
+            "http.content_length": 0.0044,
+            "tcp.flags.ack": 0.0044
           },
-          "fit_seconds": 1.18,
-          "delta_vs_full": -0.1187
+          "fit_seconds": 0.58,
+          "delta_vs_full": -0.1399
         }
       }
     },
@@ -431,97 +410,91 @@
       },
       "models": {
         "RF": {
-          "test_macro_f1": 0.9945,
+          "test_macro_f1": 0.9932,
           "test_macro_f1_ci95": [
-            0.9939,
-            0.9951
+            0.9925,
+            0.9938
+          ],
+          "test_per_class_f1": {
+            "BENIGN": 0.9998,
+            "RECON": 0.9967,
+            "BRUTEFORCE": 0.9874,
+            "WEB": 0.9833,
+            "MALWARE": 0.9994,
+            "DDOS": 0.9925
+          },
+          "test_fine_label_recall": {
+            "BACKDOOR": 0.9991,
+            "DDOS_HTTP": 0.9624,
+            "DDOS_ICMP": 1.0,
+            "DDOS_TCP": 1.0,
+            "FINGERPRINTING": 0.9167,
+            "NORMAL": 0.9999,
+            "PASSWORD": 0.986,
+            "PORT_SCANNING": 1.0,
+            "RANSOMWARE": 0.9982,
+            "SQL_INJECTION": 0.98,
+            "UPLOADING": 0.9968,
+            "VULNERABILITY_SCANNER": 0.9969,
+            "XSS": 0.9949
+          },
+          "top10_importance": {
+            "tcp.ack": 0.3137,
+            "tcp.dstport": 0.2905,
+            "tcp.seq": 0.187,
+            "tcp.len": 0.0759,
+            "tcp.flags": 0.0513,
+            "tcp.connection.rst": 0.0192,
+            "icmp.seq_le": 0.0184,
+            "http.content_length": 0.0175,
+            "tcp.flags.ack": 0.0095,
+            "http.response": 0.0065
+          },
+          "fit_seconds": 12.72,
+          "delta_vs_full": 0.0
+        },
+        "DT": {
+          "test_macro_f1": 0.9931,
+          "test_macro_f1_ci95": [
+            0.9924,
+            0.9938
           ],
           "test_per_class_f1": {
             "BENIGN": 0.9999,
             "RECON": 0.9969,
-            "SPOOFING": 1.0,
-            "BRUTEFORCE": 0.9875,
-            "WEB": 0.9843,
-            "MALWARE": 0.9995,
-            "DDOS": 0.9934
-          },
-          "test_fine_label_recall": {
-            "BACKDOOR": 0.9991,
-            "DDOS_HTTP": 0.9648,
-            "DDOS_ICMP": 1.0,
-            "DDOS_TCP": 1.0,
-            "DDOS_UDP": 1.0,
-            "FINGERPRINTING": 0.9167,
-            "MITM": 1.0,
-            "NORMAL": 0.9999,
-            "PASSWORD": 0.986,
-            "PORT_SCANNING": 1.0,
-            "RANSOMWARE": 0.9994,
-            "SQL_INJECTION": 0.9802,
-            "UPLOADING": 0.9972,
-            "VULNERABILITY_SCANNER": 0.9974,
-            "XSS": 0.9932
-          },
-          "top10_importance": {
-            "tcp.ack": 0.2669,
-            "tcp.dstport": 0.2491,
-            "tcp.len": 0.1533,
-            "tcp.seq": 0.15,
-            "tcp.flags": 0.0473,
-            "udp.port": 0.0321,
-            "udp.time_delta": 0.0304,
-            "icmp.seq_le": 0.024,
-            "tcp.connection.rst": 0.0166,
-            "http.content_length": 0.0131
-          },
-          "fit_seconds": 30.05,
-          "delta_vs_full": -0.0001
-        },
-        "DT": {
-          "test_macro_f1": 0.9941,
-          "test_macro_f1_ci95": [
-            0.9935,
-            0.9947
-          ],
-          "test_per_class_f1": {
-            "BENIGN": 0.9999,
-            "RECON": 0.9967,
-            "SPOOFING": 1.0,
-            "BRUTEFORCE": 0.9885,
-            "WEB": 0.9823,
+            "BRUTEFORCE": 0.9884,
+            "WEB": 0.9826,
             "MALWARE": 0.9994,
-            "DDOS": 0.992
+            "DDOS": 0.9918
           },
           "test_fine_label_recall": {
-            "BACKDOOR": 0.9991,
-            "DDOS_HTTP": 0.9395,
+            "BACKDOOR": 0.9994,
+            "DDOS_HTTP": 0.9427,
             "DDOS_ICMP": 1.0,
             "DDOS_TCP": 1.0,
-            "DDOS_UDP": 1.0,
             "FINGERPRINTING": 0.9167,
-            "MITM": 1.0,
             "NORMAL": 0.9999,
-            "PASSWORD": 0.9928,
+            "PASSWORD": 0.9916,
             "PORT_SCANNING": 1.0,
-            "RANSOMWARE": 1.0,
+            "RANSOMWARE": 0.9982,
             "SQL_INJECTION": 0.9952,
-            "UPLOADING": 0.9975,
-            "VULNERABILITY_SCANNER": 0.9956,
-            "XSS": 0.9932
+            "UPLOADING": 0.9972,
+            "VULNERABILITY_SCANNER": 0.9964,
+            "XSS": 0.9949
           },
           "top10_importance": {
-            "tcp.dstport": 0.3912,
-            "tcp.ack": 0.2756,
-            "tcp.seq": 0.1304,
-            "tcp.len": 0.126,
-            "tcp.connection.rst": 0.05,
-            "icmp.seq_le": 0.0164,
-            "tcp.flags": 0.008,
-            "tcp.flags.ack": 0.0013,
-            "tcp.connection.synack": 0.0006,
-            "http.content_length": 0.0003
+            "tcp.ack": 0.4055,
+            "tcp.dstport": 0.3095,
+            "tcp.seq": 0.2162,
+            "tcp.len": 0.0322,
+            "tcp.connection.rst": 0.0233,
+            "tcp.flags": 0.0091,
+            "udp.port": 0.0028,
+            "tcp.flags.ack": 0.0007,
+            "http.content_length": 0.0003,
+            "icmp.seq_le": 0.0002
           },
-          "fit_seconds": 1.79,
+          "fit_seconds": 0.79,
           "delta_vs_full": -0.0001
         }
       }
@@ -537,118 +510,112 @@
       ],
       "n_features": 28,
       "collisions": {
-        "duplicate_rows_pct": 82.96,
-        "cross_category_conflict_rows": 176003,
-        "cross_category_conflict_pct": 57.07,
+        "duplicate_rows_pct": 86.18,
+        "cross_category_conflict_rows": 175441,
+        "cross_category_conflict_pct": 59.17,
         "conflict_pct_by_fine_label": {
-          "NORMAL": 64.62,
-          "DDOS_HTTP": 94.04,
-          "BACKDOOR": 96.78,
+          "NORMAL": 64.65,
+          "DDOS_HTTP": 89.53,
+          "BACKDOOR": 98.06,
           "PORT_SCANNING": 100.0,
-          "SQL_INJECTION": 80.6,
+          "SQL_INJECTION": 80.69,
           "PASSWORD": 83.95,
           "DDOS_TCP": 38.07,
-          "UPLOADING": 85.93,
-          "RANSOMWARE": 99.9,
-          "VULNERABILITY_SCANNER": 17.88,
-          "XSS": 80.48,
+          "UPLOADING": 86.47,
+          "RANSOMWARE": 99.89,
+          "VULNERABILITY_SCANNER": 18.6,
+          "XSS": 80.46,
           "FINGERPRINTING": 54.14
         }
       },
       "models": {
         "RF": {
-          "test_macro_f1": 0.6753,
+          "test_macro_f1": 0.6175,
           "test_macro_f1_ci95": [
-            0.6718,
-            0.6782
+            0.6133,
+            0.6215
           ],
           "test_per_class_f1": {
-            "BENIGN": 0.693,
-            "RECON": 0.7914,
-            "SPOOFING": 1.0,
+            "BENIGN": 0.6952,
+            "RECON": 0.7925,
             "BRUTEFORCE": 0.3459,
-            "WEB": 0.4052,
-            "MALWARE": 0.6486,
-            "DDOS": 0.843
+            "WEB": 0.4042,
+            "MALWARE": 0.644,
+            "DDOS": 0.823
           },
           "test_fine_label_recall": {
-            "BACKDOOR": 0.476,
-            "DDOS_HTTP": 0.3654,
+            "BACKDOOR": 0.4766,
+            "DDOS_HTTP": 0.3656,
             "DDOS_ICMP": 1.0,
             "DDOS_TCP": 0.6252,
-            "DDOS_UDP": 1.0,
             "FINGERPRINTING": 1.0,
-            "MITM": 1.0,
-            "NORMAL": 0.569,
-            "PASSWORD": 0.961,
+            "NORMAL": 0.5727,
+            "PASSWORD": 0.9622,
             "PORT_SCANNING": 1.0,
-            "RANSOMWARE": 0.5057,
-            "SQL_INJECTION": 0.3158,
-            "UPLOADING": 0.2278,
-            "VULNERABILITY_SCANNER": 0.862,
-            "XSS": 0.2017
+            "RANSOMWARE": 0.4847,
+            "SQL_INJECTION": 0.3145,
+            "UPLOADING": 0.2239,
+            "VULNERABILITY_SCANNER": 0.8638,
+            "XSS": 0.2034
           },
           "top10_importance": {
-            "tcp.len": 0.4689,
-            "tcp.flags": 0.1572,
-            "http.content_length": 0.1154,
-            "udp.time_delta": 0.0598,
-            "http.response": 0.0493,
-            "icmp.seq_le": 0.0484,
-            "tcp.flags.ack": 0.0344,
-            "tcp.connection.rst": 0.0196,
-            "tcp.connection.syn": 0.0192,
-            "tcp.connection.fin": 0.0096
+            "tcp.len": 0.4405,
+            "tcp.flags": 0.188,
+            "http.content_length": 0.1608,
+            "http.response": 0.0685,
+            "tcp.flags.ack": 0.0438,
+            "tcp.connection.rst": 0.0284,
+            "icmp.seq_le": 0.0277,
+            "tcp.connection.syn": 0.0138,
+            "tcp.connection.fin": 0.013,
+            "mqtt.msgtype": 0.0038
           },
-          "fit_seconds": 17.82,
-          "delta_vs_full": -0.3193
+          "fit_seconds": 6.59,
+          "delta_vs_full": -0.3757
         },
         "DT": {
-          "test_macro_f1": 0.6747,
+          "test_macro_f1": 0.6169,
           "test_macro_f1_ci95": [
-            0.6711,
-            0.6775
+            0.6129,
+            0.6211
           ],
           "test_per_class_f1": {
-            "BENIGN": 0.6916,
-            "RECON": 0.7913,
-            "SPOOFING": 1.0,
+            "BENIGN": 0.6945,
+            "RECON": 0.7924,
             "BRUTEFORCE": 0.3459,
-            "WEB": 0.4054,
-            "MALWARE": 0.6455,
-            "DDOS": 0.8428
+            "WEB": 0.4043,
+            "MALWARE": 0.6415,
+            "DDOS": 0.823
           },
           "test_fine_label_recall": {
-            "BACKDOOR": 0.473,
-            "DDOS_HTTP": 0.3647,
+            "BACKDOOR": 0.4732,
+            "DDOS_HTTP": 0.3652,
             "DDOS_ICMP": 1.0,
             "DDOS_TCP": 0.6252,
-            "DDOS_UDP": 1.0,
             "FINGERPRINTING": 1.0,
-            "MITM": 1.0,
-            "NORMAL": 0.5689,
-            "PASSWORD": 0.961,
+            "NORMAL": 0.5733,
+            "PASSWORD": 0.9622,
             "PORT_SCANNING": 1.0,
-            "RANSOMWARE": 0.5057,
-            "SQL_INJECTION": 0.3151,
-            "UPLOADING": 0.2278,
-            "VULNERABILITY_SCANNER": 0.8616,
-            "XSS": 0.2017
+            "RANSOMWARE": 0.4847,
+            "SQL_INJECTION": 0.3145,
+            "UPLOADING": 0.2239,
+            "VULNERABILITY_SCANNER": 0.8633,
+            "XSS": 0.2034
           },
           "top10_importance": {
-            "tcp.len": 0.3851,
-            "tcp.flags": 0.3558,
-            "http.content_length": 0.138,
-            "tcp.connection.rst": 0.0535,
-            "http.response": 0.0392,
-            "icmp.seq_le": 0.0233,
-            "udp.time_delta": 0.0028,
-            "tcp.connection.fin": 0.002,
-            "mqtt.len": 0.0002,
-            "mbtcp.len": 0.0001
+            "tcp.len": 0.337,
+            "tcp.flags": 0.26,
+            "http.content_length": 0.2028,
+            "tcp.connection.rst": 0.0797,
+            "http.response": 0.0623,
+            "tcp.connection.fin": 0.0291,
+            "icmp.seq_le": 0.0242,
+            "udp.time_delta": 0.0043,
+            "mqtt.len": 0.0003,
+            "mbtcp.len": 0.0002
           },
-          "fit_seconds": 0.54,
-          "delta_vs_full": -0.3195
+          "fit_seconds": 0.21,
+          "delta_vs_full": -0.3763
         }
       }
     }
@@ -656,6 +623,12 @@
   "data_prep": {
     "file": "DNN-EdgeIIoT-dataset.csv",
     "rows_raw": 2219201,
+    "rows_misaligned": 122782,
+    "misaligned_by_label": {
+      "DDoS_UDP": 121568,
+      "MITM": 1214
+    },
+    "misaligned_dropped": true,
     "dropped_columns": {
       "text_or_identifier": [
         "frame.time",
@@ -692,9 +665,9 @@
       ],
       "user_dropped": []
     },
-    "rows_after_nan_inf": 2219201,
-    "rows_after_dedup": 688640,
-    "rows_conflicting_labels": 12965,
+    "rows_after_nan_inf": 2096419,
+    "rows_after_dedup": 676748,
+    "rows_conflicting_labels": 12963,
     "conflicting_by_label": {
       "Password": 3273,
       "Normal": 2751,
@@ -708,17 +681,15 @@
       "Port_Scanning": 28,
       "Backdoor": 12,
       "DDoS_ICMP": 4,
-      "MITM": 1,
-      "DDoS_TCP": 1,
-      "DDoS_UDP": 1
+      "DDoS_TCP": 1
     },
     "conflicts_dropped": true,
     "cap_per_fine_label": 40000,
-    "rows_after_sampling": 308396,
+    "rows_after_sampling": 296506,
     "fine_label_counts": {
       "Normal": 40000,
-      "DDoS_TCP": 40000,
       "DDoS_ICMP": 40000,
+      "DDoS_TCP": 40000,
       "Vulnerability_scanner": 34389,
       "DDoS_HTTP": 26876,
       "Backdoor": 23121,
@@ -726,20 +697,17 @@
       "Password": 20782,
       "Port_Scanning": 19949,
       "Uploading": 14269,
-      "DDoS_UDP": 11533,
       "Ransomware": 8336,
       "XSS": 5897,
-      "MITM": 357,
       "Fingerprinting": 181
     },
     "category_counts": {
-      "DDOS": 118409,
+      "DDOS": 106876,
       "RECON": 54519,
       "WEB": 42872,
       "BENIGN": 40000,
       "MALWARE": 31457,
-      "BRUTEFORCE": 20782,
-      "SPOOFING": 357
+      "BRUTEFORCE": 20782
     }
   }
 }

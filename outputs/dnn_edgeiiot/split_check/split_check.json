@@ -1,0 +1,482 @@
+{
+  "dataset_id": "dnn_edgeiiot",
+  "dataset_name": "Edge-IIoTset",
+  "protocol": "Aynı satırlar ve sabit hiperparametreler. Rastgele: ince etikete göre stratified 80/20, her seed farklı bölme. Zaman: her ince etiketin zamanca ilk %80'i eğitim, son %20'si test (sabit bölme). frame.time özellik olarak kullanılmaz.",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "temporal_order_by": "row",
+  "cap_per_fine_label": 40000,
+  "quick": false,
+  "feature_sets": {
+    "A_tam": [],
+    "E_kisayolsuz": [
+      "tcp.dstport",
+      "udp.port",
+      "tcp.seq",
+      "tcp.ack",
+      "mbtcp.trans_id",
+      "icmp.transmit_timestamp"
+    ]
+  },
+  "classes": [
+    "BENIGN",
+    "RECON",
+    "BRUTEFORCE",
+    "WEB",
+    "MALWARE",
+    "DDOS"
+  ],
+  "data_prep": {
+    "rows_raw": 2219201,
+    "rows_misaligned_dropped": 122782,
+    "time_examples": [
+      " 2021 11:44:10.081753000 ",
+      " 2021 11:44:10.162218000 ",
+      " 2021 11:44:10.162271000 ",
+      " 2021 11:44:10.162641000 ",
+      " 2021 11:44:10.166132000 "
+    ],
+    "time_parse_method": "günün saati (tarih yok)",
+    "time_parse_ok": 1.0,
+    "rows_after_dedup_and_conflicts": 663785,
+    "rows_after_sampling": 296506
+  },
+  "time_split_by_label": {
+    "BACKDOOR": {
+      "n": 23121,
+      "time_span_s": 11318.0,
+      "spearman_time_vs_file_order": 1.0
+    },
+    "DDOS_HTTP": {
+      "n": 26876,
+      "time_span_s": 267.3,
+      "spearman_time_vs_file_order": 1.0
+    },
+    "DDOS_ICMP": {
+      "n": 40000,
+      "time_span_s": 403.7,
+      "spearman_time_vs_file_order": 1.0
+    },
+    "DDOS_TCP": {
+      "n": 40000,
+      "time_span_s": 528.0,
+      "spearman_time_vs_file_order": 1.0
+    },
+    "FINGERPRINTING": {
+      "n": 181,
+      "time_span_s": 820.6,
+      "spearman_time_vs_file_order": 1.0
+    },
+    "NORMAL": {
+      "n": 40000,
+      "time_span_s": 78191.7,
+      "spearman_time_vs_file_order": 0.879
+    },
+    "PASSWORD": {
+      "n": 20782,
+      "time_span_s": 68504.7,
+      "spearman_time_vs_file_order": 1.0
+    },
+    "PORT_SCANNING": {
+      "n": 19949,
+      "time_span_s": 9999.7,
+      "spearman_time_vs_file_order": 1.0
+    },
+    "RANSOMWARE": {
+      "n": 8336,
+      "time_span_s": 86398.1,
+      "spearman_time_vs_file_order": 0.109
+    },
+    "SQL_INJECTION": {
+      "n": 22706,
+      "time_span_s": 505.1,
+      "spearman_time_vs_file_order": 1.0
+    },
+    "UPLOADING": {
+      "n": 14269,
+      "time_span_s": 487.8,
+      "spearman_time_vs_file_order": 1.0
+    },
+    "VULNERABILITY_SCANNER": {
+      "n": 34389,
+      "time_span_s": 1217.4,
+      "spearman_time_vs_file_order": 1.0
+    },
+    "XSS": {
+      "n": 5897,
+      "time_span_s": 7703.7,
+      "spearman_time_vs_file_order": 1.0
+    }
+  },
+  "results": {
+    "A_tam": {
+      "rastgele": {
+        "RF": {
+          "macro_f1": {
+            "mean": 0.9937,
+            "std": 0.0002
+          },
+          "missed_attack_rate": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "false_alarm_rate": {
+            "mean": 0.0001,
+            "std": 0.0002
+          },
+          "per_class_f1_mean": {
+            "BENIGN": 0.9999,
+            "RECON": 0.9976,
+            "BRUTEFORCE": 0.9892,
+            "WEB": 0.9839,
+            "MALWARE": 0.9995,
+            "DDOS": 0.9925
+          },
+          "fine_recall_mean": {
+            "BACKDOOR": 0.9994,
+            "DDOS_HTTP": 0.9652,
+            "DDOS_ICMP": 1.0,
+            "DDOS_TCP": 1.0,
+            "FINGERPRINTING": 0.9056,
+            "NORMAL": 0.9999,
+            "PASSWORD": 0.9895,
+            "PORT_SCANNING": 1.0,
+            "RANSOMWARE": 0.9993,
+            "SQL_INJECTION": 0.978,
+            "UPLOADING": 0.9973,
+            "VULNERABILITY_SCANNER": 0.9963,
+            "XSS": 0.9971
+          },
+          "macro_f1_per_seed": [
+            0.9936,
+            0.9935,
+            0.9938,
+            0.9937,
+            0.994
+          ]
+        },
+        "DT": {
+          "macro_f1": {
+            "mean": 0.9934,
+            "std": 0.0002
+          },
+          "missed_attack_rate": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "false_alarm_rate": {
+            "mean": 0.0003,
+            "std": 0.0003
+          },
+          "per_class_f1_mean": {
+            "BENIGN": 0.9998,
+            "RECON": 0.9972,
+            "BRUTEFORCE": 0.9895,
+            "WEB": 0.9828,
+            "MALWARE": 0.9993,
+            "DDOS": 0.9918
+          },
+          "fine_recall_mean": {
+            "BACKDOOR": 0.9994,
+            "DDOS_HTTP": 0.9447,
+            "DDOS_ICMP": 1.0,
+            "DDOS_TCP": 1.0,
+            "FINGERPRINTING": 0.9,
+            "NORMAL": 0.9997,
+            "PASSWORD": 0.9943,
+            "PORT_SCANNING": 1.0,
+            "RANSOMWARE": 0.999,
+            "SQL_INJECTION": 0.9937,
+            "UPLOADING": 0.9978,
+            "VULNERABILITY_SCANNER": 0.995,
+            "XSS": 0.9969
+          },
+          "macro_f1_per_seed": [
+            0.9935,
+            0.993,
+            0.9934,
+            0.9934,
+            0.9937
+          ]
+        }
+      },
+      "zaman": {
+        "RF": {
+          "macro_f1": {
+            "mean": 0.9237,
+            "std": 0.0129
+          },
+          "missed_attack_rate": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "false_alarm_rate": {
+            "mean": 0.0394,
+            "std": 0.0007
+          },
+          "per_class_f1_mean": {
+            "BENIGN": 0.9799,
+            "RECON": 0.9239,
+            "BRUTEFORCE": 0.9367,
+            "WEB": 0.7825,
+            "MALWARE": 0.9838,
+            "DDOS": 0.9353
+          },
+          "fine_recall_mean": {
+            "BACKDOOR": 0.9617,
+            "DDOS_HTTP": 0.7877,
+            "DDOS_ICMP": 1.0,
+            "DDOS_TCP": 1.0,
+            "FINGERPRINTING": 0.8611,
+            "NORMAL": 0.9606,
+            "PASSWORD": 0.9895,
+            "PORT_SCANNING": 1.0,
+            "RANSOMWARE": 1.0,
+            "SQL_INJECTION": 0.6276,
+            "UPLOADING": 0.6536,
+            "VULNERABILITY_SCANNER": 0.9986,
+            "XSS": 0.9466
+          },
+          "macro_f1_per_seed": [
+            0.9319,
+            0.9179,
+            0.9319,
+            0.9333,
+            0.9036
+          ]
+        },
+        "DT": {
+          "macro_f1": {
+            "mean": 0.8943,
+            "std": 0.0008
+          },
+          "missed_attack_rate": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "false_alarm_rate": {
+            "mean": 0.0401,
+            "std": 0.0002
+          },
+          "per_class_f1_mean": {
+            "BENIGN": 0.9795,
+            "RECON": 0.9193,
+            "BRUTEFORCE": 0.8457,
+            "WEB": 0.706,
+            "MALWARE": 0.9733,
+            "DDOS": 0.9418
+          },
+          "fine_recall_mean": {
+            "BACKDOOR": 0.9617,
+            "DDOS_HTTP": 0.7919,
+            "DDOS_ICMP": 1.0,
+            "DDOS_TCP": 0.9999,
+            "FINGERPRINTING": 0.8611,
+            "NORMAL": 0.9599,
+            "PASSWORD": 0.9954,
+            "PORT_SCANNING": 1.0,
+            "RANSOMWARE": 1.0,
+            "SQL_INJECTION": 0.8005,
+            "UPLOADING": 0.09,
+            "VULNERABILITY_SCANNER": 0.991,
+            "XSS": 0.8863
+          },
+          "macro_f1_per_seed": [
+            0.8939,
+            0.8935,
+            0.8948,
+            0.8953,
+            0.8939
+          ]
+        }
+      }
+    },
+    "E_kisayolsuz": {
+      "rastgele": {
+        "RF": {
+          "macro_f1": {
+            "mean": 0.6157,
+            "std": 0.0014
+          },
+          "missed_attack_rate": {
+            "mean": 0.0116,
+            "std": 0.0003
+          },
+          "false_alarm_rate": {
+            "mean": 0.4305,
+            "std": 0.0027
+          },
+          "per_class_f1_mean": {
+            "BENIGN": 0.6928,
+            "RECON": 0.792,
+            "BRUTEFORCE": 0.3451,
+            "WEB": 0.4046,
+            "MALWARE": 0.6376,
+            "DDOS": 0.8219
+          },
+          "fine_recall_mean": {
+            "BACKDOOR": 0.4659,
+            "DDOS_HTTP": 0.3693,
+            "DDOS_ICMP": 1.0,
+            "DDOS_TCP": 0.6179,
+            "FINGERPRINTING": 1.0,
+            "NORMAL": 0.5695,
+            "PASSWORD": 0.9647,
+            "PORT_SCANNING": 1.0,
+            "RANSOMWARE": 0.4903,
+            "SQL_INJECTION": 0.3177,
+            "UPLOADING": 0.2198,
+            "VULNERABILITY_SCANNER": 0.8648,
+            "XSS": 0.1961
+          },
+          "macro_f1_per_seed": [
+            0.6151,
+            0.6136,
+            0.6169,
+            0.6167,
+            0.6159
+          ]
+        },
+        "DT": {
+          "macro_f1": {
+            "mean": 0.6149,
+            "std": 0.0014
+          },
+          "missed_attack_rate": {
+            "mean": 0.0119,
+            "std": 0.0002
+          },
+          "false_alarm_rate": {
+            "mean": 0.4311,
+            "std": 0.0032
+          },
+          "per_class_f1_mean": {
+            "BENIGN": 0.6915,
+            "RECON": 0.792,
+            "BRUTEFORCE": 0.3451,
+            "WEB": 0.4051,
+            "MALWARE": 0.634,
+            "DDOS": 0.8219
+          },
+          "fine_recall_mean": {
+            "BACKDOOR": 0.4622,
+            "DDOS_HTTP": 0.3691,
+            "DDOS_ICMP": 1.0,
+            "DDOS_TCP": 0.6179,
+            "FINGERPRINTING": 1.0,
+            "NORMAL": 0.5689,
+            "PASSWORD": 0.9647,
+            "PORT_SCANNING": 1.0,
+            "RANSOMWARE": 0.4903,
+            "SQL_INJECTION": 0.3176,
+            "UPLOADING": 0.2207,
+            "VULNERABILITY_SCANNER": 0.8645,
+            "XSS": 0.1963
+          },
+          "macro_f1_per_seed": [
+            0.6141,
+            0.6131,
+            0.6162,
+            0.6163,
+            0.615
+          ]
+        }
+      },
+      "zaman": {
+        "RF": {
+          "macro_f1": {
+            "mean": 0.6204,
+            "std": 0.0001
+          },
+          "missed_attack_rate": {
+            "mean": 0.0123,
+            "std": 0.0
+          },
+          "false_alarm_rate": {
+            "mean": 0.4198,
+            "std": 0.0003
+          },
+          "per_class_f1_mean": {
+            "BENIGN": 0.6995,
+            "RECON": 0.7872,
+            "BRUTEFORCE": 0.3556,
+            "WEB": 0.4353,
+            "MALWARE": 0.6406,
+            "DDOS": 0.8042
+          },
+          "fine_recall_mean": {
+            "BACKDOOR": 0.4678,
+            "DDOS_HTTP": 0.2916,
+            "DDOS_ICMP": 1.0,
+            "DDOS_TCP": 0.6454,
+            "FINGERPRINTING": 1.0,
+            "NORMAL": 0.5803,
+            "PASSWORD": 0.9666,
+            "PORT_SCANNING": 1.0,
+            "RANSOMWARE": 0.4997,
+            "SQL_INJECTION": 0.3242,
+            "UPLOADING": 0.2663,
+            "VULNERABILITY_SCANNER": 0.8672,
+            "XSS": 0.2044
+          },
+          "macro_f1_per_seed": [
+            0.6204,
+            0.6202,
+            0.6205,
+            0.6204,
+            0.6204
+          ]
+        },
+        "DT": {
+          "macro_f1": {
+            "mean": 0.6191,
+            "std": 0.0
+          },
+          "missed_attack_rate": {
+            "mean": 0.0135,
+            "std": 0.0
+          },
+          "false_alarm_rate": {
+            "mean": 0.4205,
+            "std": 0.0
+          },
+          "per_class_f1_mean": {
+            "BENIGN": 0.6957,
+            "RECON": 0.7867,
+            "BRUTEFORCE": 0.3557,
+            "WEB": 0.4373,
+            "MALWARE": 0.636,
+            "DDOS": 0.8034
+          },
+          "fine_recall_mean": {
+            "BACKDOOR": 0.4643,
+            "DDOS_HTTP": 0.2871,
+            "DDOS_ICMP": 1.0,
+            "DDOS_TCP": 0.6454,
+            "FINGERPRINTING": 1.0,
+            "NORMAL": 0.5795,
+            "PASSWORD": 0.9666,
+            "PORT_SCANNING": 1.0,
+            "RANSOMWARE": 0.4997,
+            "SQL_INJECTION": 0.3242,
+            "UPLOADING": 0.2663,
+            "VULNERABILITY_SCANNER": 0.8671,
+            "XSS": 0.2044
+          },
+          "macro_f1_per_seed": [
+            0.6191,
+            0.6191,
+            0.6191,
+            0.6191,
+            0.6191
+          ]
+        }
+      }
+    }
+  }
+}
