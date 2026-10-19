@@ -30,7 +30,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import joblib
 import numpy as np
 import pandas as pd
-from sklearn.base import clone
+from sklearn.base import BaseEstimator, ClassifierMixin, clone
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import (RandomizedSearchCV, StratifiedKFold,
                                      train_test_split)
@@ -48,7 +48,7 @@ LABEL = "Label"
 # Veride doğrulandı: Tot size == AVG (satırların %100'ü), Variance == Std^2 (~%100)
 REDUNDANT = ["Tot size", "Variance"]
 TREE_MODELS = {"DT", "RF", "XGB", "LGBM"}
-NEEDS_SAMPLE_WEIGHT = {"XGB"}  # diğerleri class_weight ile dengeleniyor
+NEEDS_SAMPLE_WEIGHT = set()  # XGB dengelemesini EarlyStopping sarmalayıcısı yapıyor
 
 
 def signed_log1p(x):
@@ -66,8 +66,68 @@ def gpu_name():
         return None
 
 
+def model_key(name, model):
+    """Model tanımı + arama uzayının kısa parmak izi (bellek adresleri temizlenir)."""
+    import re
+    text = re.sub(r" at 0x[0-9A-Fa-f]+", "", repr(model)) + repr(PARAM_SPACE.get(name))
+    if hasattr(model, "VERSION"):           # yalnızca sürümlü sınıflarda (EarlyStopping)
+        text += f"v{model.VERSION}"
+    return hashlib.md5(text.encode()).hexdigest()[:6]
+
+
+class EarlyStopping(ClassifierMixin, BaseEstimator):
+    """Boosting modelleri için early stopping sarmalayıcısı.
+
+    Ağaç sayısı tuning'de sabitlenmez: her eğitimde, VERİLEN eğitim verisinin %10'u
+    (stratified) doğrulama olarak ayrılır ve doğrulama kaybı `rounds` tur boyunca
+    iyileşmeyince eğitim durur. Alt örneklemde seçilen az ağacın tam veride yetersiz
+    kalması (underfitting) böylece önlenir. Test seti hiç kullanılmaz.
+
+    Durma kriteri AĞIRLIKSIZ doğrulama kaybıdır. Eğitimde sınıf ağırlıkları kullanılır,
+    ama ağırlıklı doğrulama kaybı nadir sınıfların birkaç düzine örneği ezberlenince
+    erken yükselir (teşhis: ağırlıklı kayıp 64. turda, macro-F1 ve ağırlıksız kayıp
+    ~400. turda en iyi). Bu yüzden durma kararı ağırlıksız kayba göre verilir.
+    """
+    VERSION = 2  # davranış değişince önbelleği geçersiz kılar (model_key'e girer)
+
+    def __init__(self, estimator=None, val_size=0.1, rounds=50, balanced=False, random_state=42):
+        self.estimator = estimator
+        self.val_size = val_size
+        self.rounds = rounds
+        self.balanced = balanced
+        self.random_state = random_state
+
+    def fit(self, X, y, sample_weight=None):
+        Xt, Xv, yt, yv = train_test_split(X, y, test_size=self.val_size, stratify=y,
+                                          random_state=self.random_state)
+        est = clone(self.estimator)
+        kind = type(est).__name__
+        if kind == "XGBClassifier":
+            est.set_params(early_stopping_rounds=self.rounds)
+            est.fit(Xt, yt, sample_weight=compute_sample_weight("balanced", yt) if self.balanced else None,
+                    eval_set=[(Xv, yv)], verbose=False)
+            self.best_iteration_ = int(est.best_iteration) + 1
+        elif kind == "LGBMClassifier":
+            import lightgbm as lgb
+            est.fit(Xt, yt, eval_set=[(Xv, yv)],
+                    callbacks=[lgb.early_stopping(self.rounds, verbose=False)])
+            self.best_iteration_ = int(est.best_iteration_)
+        else:
+            raise ValueError(f"EarlyStopping desteklemiyor: {kind}")
+        self.estimator_ = est
+        self.classes_ = est.classes_
+        return self
+
+    def predict_proba(self, X):
+        return self.estimator_.predict_proba(X)
+
+    def predict(self, X):
+        return self.classes_[self.predict_proba(X).argmax(axis=1)]
+
+
 def build_models(seed, n_jobs, gpu, quick):
-    n_est = 100 if quick else 400
+    # Boosting: üst sınır geniş, gerçek ağaç sayısını early stopping belirler
+    n_est = 300 if quick else 3000
     models = {
         "DT": DecisionTreeClassifier(class_weight="balanced", random_state=seed),
         "RF": RandomForestClassifier(n_estimators=50 if quick else 200,
@@ -76,22 +136,23 @@ def build_models(seed, n_jobs, gpu, quick):
         "LR": Pipeline([
             ("log", FunctionTransformer(signed_log1p)),
             ("scale", StandardScaler()),
-            ("clf", LogisticRegression(max_iter=1000, class_weight="balanced")),
+            ("clf", LogisticRegression(max_iter=5000, class_weight="balanced")),  # 1000 adım yakınsamıyordu
         ]),
     }
     try:
         from xgboost import XGBClassifier
-        models["XGB"] = XGBClassifier(
+        models["XGB"] = EarlyStopping(XGBClassifier(
             n_estimators=n_est, max_depth=8, learning_rate=0.1, tree_method="hist",
             device="cuda" if gpu else "cpu", n_jobs=n_jobs, random_state=seed,
-            eval_metric="mlogloss")
+            eval_metric="mlogloss"), balanced=True, random_state=seed)
     except ImportError:
         print("! xgboost yok, XGB atlanıyor")
     try:
         from lightgbm import LGBMClassifier
-        models["LGBM"] = LGBMClassifier(
+        models["LGBM"] = EarlyStopping(LGBMClassifier(
             n_estimators=n_est, learning_rate=0.1, num_leaves=63,
-            class_weight="balanced", n_jobs=n_jobs, random_state=seed, verbose=-1)
+            class_weight="balanced", n_jobs=n_jobs, random_state=seed, verbose=-1),
+            random_state=seed)
     except ImportError:
         print("! lightgbm yok, LGBM atlanıyor")
     return models
@@ -102,11 +163,14 @@ PARAM_SPACE = {
            "criterion": ["gini", "entropy"]},
     "RF": {"n_estimators": [100, 200, 400], "max_depth": [None, 20, 40],
            "min_samples_leaf": [1, 2, 5], "max_features": ["sqrt", 0.5]},
-    "XGB": {"n_estimators": [200, 400, 800], "max_depth": [6, 8, 10],
-            "learning_rate": [0.05, 0.1, 0.2], "subsample": [0.8, 1.0],
-            "colsample_bytree": [0.8, 1.0]},
-    "LGBM": {"n_estimators": [200, 400, 800], "num_leaves": [31, 63, 127],
-             "learning_rate": [0.05, 0.1], "min_child_samples": [10, 20, 50]},
+    # Boosting'te n_estimators aranmaz; early stopping belirler (EarlyStopping sınıfı)
+    "XGB": {"estimator__max_depth": [4, 6, 8, 10], "estimator__learning_rate": [0.05, 0.1, 0.2],
+            "estimator__subsample": [0.8, 1.0], "estimator__colsample_bytree": [0.8, 1.0],
+            "estimator__min_child_weight": [1, 5]},
+    "LGBM": {"estimator__num_leaves": [31, 63, 127, 255],
+             "estimator__learning_rate": [0.05, 0.1, 0.2],
+             "estimator__min_child_samples": [10, 20, 50],
+             "estimator__colsample_bytree": [0.8, 1.0]},
     "LR": {"clf__C": [0.1, 1.0, 10.0]},
 }
 
@@ -194,6 +258,8 @@ def run_model(name, base, Xtr, ytr, strat_tr, Xte, n_classes, args):
     t0 = time.perf_counter()
     test_proba = final.predict_proba(Xte).astype(np.float32)
     pred_s = time.perf_counter() - t0
+    if hasattr(final, "best_iteration_"):   # early stopping'in seçtiği ağaç sayısı
+        params = {**params, "n_estimators (early stopping)": final.best_iteration_}
     return {
         "params": {k: (v if isinstance(v, (int, float, str, type(None))) else str(v))
                    for k, v in params.items()},
@@ -243,6 +309,10 @@ def shap_top_features(model, name, Xte, yte, classes, per_class, seed, top_k=10,
     import shap
     idx = contract.stratified_sample(yte, per_class, seed)
     Xs, ys = Xte.iloc[idx], yte[idx]
+    if isinstance(model, EarlyStopping):     # sarmalayıcıyı aç; XGB'de en iyi tura kadar
+        inner = model.estimator_
+        model = (inner.get_booster()[: model.best_iteration_]
+                 if type(inner).__name__ == "XGBClassifier" else inner)
     sv = shap.TreeExplainer(model).shap_values(Xs)
     if isinstance(sv, list):                 # eski shap: sınıf başına liste
         sv = np.stack(sv, axis=-1)
@@ -275,22 +345,29 @@ def main():
     p.add_argument("--folds", type=int, default=5)
     p.add_argument("--models", default="DT,RF,XGB,LGBM,LR")
     p.add_argument("--tune", action="store_true")
-    p.add_argument("--n-iter", type=int, default=10)
-    p.add_argument("--tune-rows", type=int, default=100000)
+    # 10 deneme / 100 bin satır kararsızdı (XGB çalıştırmalar arasında 0,661 <-> 0,704)
+    p.add_argument("--n-iter", type=int, default=30)
+    p.add_argument("--tune-rows", type=int, default=200000)
     p.add_argument("--shap", action="store_true")
     p.add_argument("--shap-per-class", type=int, default=100)
-    p.add_argument("--pred-per-class", type=int, default=2000,
-                   help="test_predictions dosyasına sınıf başına kaç satır yazılsın")
-    p.add_argument("--drop-features", default="",
-                   help="Atılacak ek özellikler, ör. 'Number' (ablation için)")
+    p.add_argument("--pred-per-class", type=int, default=0,
+                   help="test_predictions'a sınıf başına en fazla kaç satır (0 = tüm test seti; DSS de "
+                        "modellerle aynı satırlarda değerlendirilsin diye varsayılan)")
+    # Resmi protokol (18.10.2026): Number atılır (veri toplama izi), çakışan etiketli
+    # satırlar atılır (ekip kuralı). Duyarlılık analizi için ikisi de kapatılabilir.
+    p.add_argument("--drop-features", default="Number",
+                   help="Atılacak ek özellikler (virgülle). Hiçbirini atmamak için: --drop-features \"\"")
+    p.add_argument("--keep-conflicts", action="store_true",
+                   help="Aynı özellik + farklı etiketli satırları ATMA (duyarlılık analizi)")
     p.add_argument("--drop-conflicts", action="store_true",
-                   help="Aynı özellik + farklı etiketli satırları at")
+                   help="Eski sürümlerle uyumluluk için; artık varsayılan")
     p.add_argument("--gpu", action="store_true", help="XGBoost'u GPU'da eğit")
     p.add_argument("--n-jobs", type=int, default=-1)
     p.add_argument("--seed", type=int, default=42)
     p.add_argument("--quick", action="store_true", help="Küçük örneklem, 3 fold: hızlı deneme")
     p.add_argument("--force", action="store_true", help="Kaydedilmiş model sonuçlarını yok say")
     args = p.parse_args()
+    args.drop_conflicts = not args.keep_conflicts
     if args.quick:
         args.cap, args.folds = min(args.cap, 3000), 3
 
@@ -319,7 +396,9 @@ def main():
     names = [m for m in args.models.split(",") if m in all_models]
     results = {}
     for name in names:
-        cache = os.path.join(run_dir, f"result_{name}.joblib")
+        # Model tanımı (ör. LR max_iter) değişirse yalnızca o model yeniden eğitilir
+        key = model_key(name, all_models[name])
+        cache = os.path.join(run_dir, f"result_{name}_{key}.joblib")
         if os.path.exists(cache) and not args.force:
             print(f"{name}: kayıtlı sonuç kullanılıyor ({cache})")
             results[name] = joblib.load(cache)
@@ -327,9 +406,11 @@ def main():
         print(f"{name} eğitiliyor...")
         res = run_model(name, all_models[name], Xtr, ytr, fine[idx_tr], Xte,
                         len(classes), args)
-        joblib.dump(res.pop("model"), os.path.join(run_dir, "models", f"{name}.joblib"))
+        joblib.dump(res.pop("model"), os.path.join(run_dir, "models", f"{name}_{key}.joblib"))
         joblib.dump(res, cache)
         results[name] = res
+    model_files = {n: os.path.join(run_dir, "models", f"{n}_{model_key(n, all_models[n])}.joblib")
+                   for n in names}
 
     metrics, oof_metrics = {}, {}
     for name, r in results.items():
@@ -350,7 +431,8 @@ def main():
     best_per_class = {c: max(oof_metrics, key=lambda m: oof_metrics[m]["per_class"][c]["f1"])
                       for c in classes}
 
-    sample = contract.stratified_sample(yte, args.pred_per_class, args.seed)
+    sample = (contract.stratified_sample(yte, args.pred_per_class, args.seed)
+              if args.pred_per_class > 0 else np.arange(len(yte)))
     preds = pd.DataFrame({"y_true": [classes[i] for i in yte[sample]],
                           "fine_label": fine[idx_te][sample]})
     for name, r in results.items():
@@ -363,7 +445,7 @@ def main():
             (m for m in names if m in TREE_MODELS), None)
         if shap_model:
             print(f"SHAP hesaplanıyor ({shap_model})...")
-            model = joblib.load(os.path.join(run_dir, "models", f"{shap_model}.joblib"))
+            model = joblib.load(model_files[shap_model])
             shap_top = shap_top_features(model, shap_model, Xte, yte, classes,
                                          args.shap_per_class, args.seed,
                                          fig_dir=os.path.join(args.out_dir, "figures"))

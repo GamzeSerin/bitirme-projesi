@@ -1,0 +1,6 @@
+dataset,model,OOF macro-F1,Test macro-F1,Test accuracy,Test weighted-F1,Eğitim (s),Tahmin (ms/1k),Birincil,DSS'te oy
+dataset_23,DT,0.652216,0.643633,0.820205,0.82613,4.55,0.182,False,False
+dataset_23,RF,0.711975,0.705555,0.84732,0.852341,47.94,3.568,False,True
+dataset_23,XGB,0.713999,0.707384,0.84077,0.847375,63.03,6.151,True,True
+dataset_23,LGBM,0.709753,0.693458,0.836265,0.84407,11.22,5.528,False,True
+dataset_23,LR,0.554826,0.552174,0.74081,0.760833,72.45,0.447,False,False
