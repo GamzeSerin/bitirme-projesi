@@ -9,7 +9,7 @@ iot-security-project/
 ├── data/                      # Ham veri: Git'e GİRMEZ (yerelde ya da Drive'da durur)
 │   ├── dataset_23/            # Kişi 1: CICIoT2023
 │   ├── dataset_25/            # Kişi 2
-│   └── dataset_26/            # Kişi 3
+│   └── dataset_26/            # Kişi 3: Edge-IIoTset
 ├── src/
 │   ├── common/
 │   │   ├── taxonomy.py        # Ortak saldırı kategorileri + ciddiyet (herkes aynısını kullanır)
@@ -17,7 +17,7 @@ iot-security-project/
 │   │   └── report.py          # Analiz tabloları ve makale grafikleri
 │   ├── model_ml.py            # Kişi 1: dataset_23, DT/RF/XGB/LGBM/LR + SHAP
 │   ├── model_dl.py            # Kişi 2: dataset_25 (şablon)
-│   └── model_other.py         # Kişi 3: dataset_26 (şablon)
+│   └── model_other.py         # Kişi 3: dataset_26 (Edge-IIoTset), model_ml.py akışını yeniden kullanır
 ├── notebooks/
 │   ├── analysis.ipynb         # ⭐ Tablolar + grafikler (yalnızca outputs/ okur, veri gerekmez)
 │   └── dataset_23_colab.ipynb # Colab'da eğitim şablonu (güçlü bilgisayarı olmayanlar için)
