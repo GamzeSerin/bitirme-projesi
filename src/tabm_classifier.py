@@ -65,9 +65,15 @@ class TabMClassifier(ClassifierMixin, BaseEstimator):
             return torch.device("cuda" if torch.cuda.is_available() else "cpu")
         return torch.device(self.device)
 
+    def _transform(self, X):
+        """Sütun bazında: QuantileTransformer; QT'nin sabite sıkıştırdığı (neredeyse hep 0
+        olan) sütunlarda standartlaştırılmış ham değer. Yalnızca eğitime uydurulmuş parametreler."""
+        Z = self.qt_.transform(X).astype(np.float32)
+        Z[:, self.std_cols_] = (X[:, self.std_cols_] - self.mu_) / self.sd_
+        return Z[:, self.final_cols_]
+
     def _prep(self, X):
-        X = np.asarray(X, dtype=np.float32)[:, self.keep_cols_]
-        return self.qt_.transform(X).astype(np.float32)
+        return self._transform(np.asarray(X, dtype=np.float32)[:, self.keep_cols_])
 
     def _logits(self, Xt, batch=8192):
         """(n, k, C) logit; değerlendirme modunda, batch batch."""
@@ -105,12 +111,25 @@ class TabMClassifier(ClassifierMixin, BaseEstimator):
         self.qt_ = QuantileTransformer(n_quantiles=max(min(len(Xtr) // 30, 1000), 10),
                                        output_distribution="normal", subsample=10**9,
                                        random_state=self.random_state).fit(Xtr + noise)
-        Xtr = self.qt_.transform(Xtr).astype(np.float32)
-        Xva = self.qt_.transform(Xva).astype(np.float32)
+        # Satırların çok küçük bir kısmında dolu sütunlar (ör. icmp.transmit_timestamp, %0,15)
+        # QT'de sabite sıkışır; bunlar için standartlaştırılmış ham değer kullanılır.
+        Zq = self.qt_.transform(Xtr)
+        self.std_cols_ = np.where(np.ptp(Zq, axis=0) <= 1e-6)[0]
+        self.mu_ = Xtr[:, self.std_cols_].mean(axis=0)
+        self.sd_ = Xtr[:, self.std_cols_].std(axis=0) + 1e-6
+        self.final_cols_ = np.arange(Xtr.shape[1])
+        Z = self._transform(Xtr)
+        # Eğitim bölümünde hâlâ sabit kalan sütun (dolu satırların hepsi doğrulamaya düştüyse) atılır
+        self.final_cols_ = np.where(np.ptp(Z, axis=0) > 1e-6)[0]
+        Xtr, Xva = Z[:, self.final_cols_], self._transform(Xva)
+        self.n_features_used_ = int(len(self.final_cols_))
+        if self.verbose:
+            print(f"    TabM: {self.n_features_used_} özellik "
+                  f"({len(self.std_cols_)} seyrek sütun standartlaştırıldı, "
+                  f"{X.shape[1] - self.n_features_used_} sabit sütun atıldı)")
 
-        sub = rng.choice(len(Xtr), size=min(len(Xtr), 200_000), replace=False)
-        bins = rtdl_num_embeddings.compute_bins(torch.as_tensor(Xtr[sub]),
-                                                n_bins=min(self.n_bins, len(sub) - 1))
+        bins = rtdl_num_embeddings.compute_bins(torch.as_tensor(Xtr),
+                                                n_bins=min(self.n_bins, len(Xtr) - 1))
         emb = rtdl_num_embeddings.PiecewiseLinearEmbeddings(
             bins, d_embedding=self.d_embedding, activation=False, version="B")
         kwargs = dict(n_num_features=Xtr.shape[1], d_out=n_classes, num_embeddings=emb,
