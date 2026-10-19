@@ -84,6 +84,30 @@ Seçilen hiperparametreler: DT derinlik 20, entropy; RF 100 ağaç, derinlik 40,
 5. **SHAP kısayol uyarısı:** DSS açıklamalarında en önemli özellikler neredeyse her zaman `tcp.ack`, `tcp.dstport`, `tcp.seq`. Model büyük ölçüde hedef port ve bağlantı içindeki konuma dayanıyor olabilir. Yapılacak ablation: `--drop-features tcp.dstport,udp.port,tcp.seq,tcp.ack`. Görülmemiş saldırı tespiti açısından önemli (aynı portu kullanan yeni bir saldırı bilinen saldırı sanılabilir).
 6. **DSS:** test örnekleminde (12.071 satır) DSS macro-F1 0,9969; oylayanlar DT, RF, XGB, LGBM (LR elendi). ALLOW edilen saldırı: 0; ANALYST_REVIEW: 3.
 
+## Kısayol özellik ablation deneyi (19.10.2026)
+
+Kod: `src/ablation_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/ablation/` (`ablation.json`, 2 grafik). Protokol: asıl deneydeki satırlar ve aynı 80/20 bölme (seed=42); RF ve DT asıl deneyde seçilen sabit hiperparametrelerle; yalnızca sütunlar çıkarılır. Güven aralıkları test kümesi üzerinde 300 bootstrap örneklemiyle.
+
+| Senaryo | Çıkarılan | RF test macro-F1 (%95 GA) | Fark | Başka kategoriyle aynı vektöre düşen satır |
+| --- | --- | --- | --- | --- |
+| A: Tam | – | 0,9946 (0,9939–0,9951) | | %0 |
+| B: Portsuz | `tcp.dstport`, `udp.port` | 0,9628 (0,9614–0,9642) | −0,032 | %12,8 |
+| C: Sıra/onay yok | `tcp.seq`, `tcp.ack` | 0,8509 (0,8477–0,8537) | −0,144 | %21,3 |
+| D: Sayaç/zaman yok | `mbtcp.trans_id`, `icmp.transmit_timestamp` | 0,9945 (0,9939–0,9951) | −0,000 | %0 |
+| E: Hepsi | 6 sütun | **0,6753** (0,6718–0,6782) | **−0,319** | **%57,1** |
+
+DT sonuçları aynı örüntüde (A 0,9942 → E 0,6747).
+
+**Bulgular:**
+
+1. **Yüksek skorun büyük kısmı dört alandan geliyor.** Port ve TCP sıra/onay numaraları çıkınca macro-F1 0,995'ten 0,675'e iniyor; satırların %57'si başka bir kategorideki bir satırla birebir aynı hâle geliyor. Tek bir paketin geri kalan başlık alanları saldırıyı normal trafikten çoğu zaman ayırt edemiyor.
+2. **En büyük katkı `tcp.seq`/`tcp.ack`'tan (−0,144), portlardan değil (−0,032).** Bu alanlar Wireshark'ın göreli değerleri, yani bağlantı içindeki konum. Kimlik sızıntısı değil, ama saldırı aracına ve kayıt düzenine bağlı **bağlama özgü kısayol**: başka bir ağda ya da araçta aynı değerler oluşmaz.
+3. **E'de en çok çöken sınıflar:** BRUTEFORCE (F1 0,35), WEB (0,41), MALWARE (0,65) ve BENIGN (0,69; Normal recall 0,57 → çok sayıda yanlış alarm). İnce etiketlerde XSS (recall 0,20), Uploading (0,23), SQL_injection (0,32), DDoS_HTTP (0,37). Bu saldırıların paketleri, aynı HTTP/TCP bağlantılarının sıradan paketleriyle aynı başlığa sahip (DDoS_HTTP %94, SQL_injection %81, Password %84 çakışma).
+4. **SPOOFING (MITM) her senaryoda F1 = 1,0:** ARP paketleri TCP alanlarını kullanmıyor; ayrımı `arp.opcode` gibi alanlar yapıyor.
+5. **Şüpheli iki sütun temiz:** `mbtcp.trans_id` (13 farklı değer) ve `icmp.transmit_timestamp` (84 farklı değer) tek başına şans düzeyinde (macro-F1 0,09); satırların %0,2'sinden azında sıfır dışı. Çıkarmak sonucu değiştirmiyor (D). 34 özellikli temizlikte gizli bir kimlik sızıntısı kalmadığını gösteriyor.
+
+**Karar:** Ana deneyler A (34 özellik) ile yapılır (literatür ve ekip ile karşılaştırılabilirlik); E "kısayolsuz" sağlamlık koşulu olarak bilinmeyen saldırı deneylerinde de raporlanır. Sınırlılık: veri paket düzeyinde; akış düzeyinde özellikler yalnızca arşivdeki ham kayıtlardan çıkarılabilir.
+
 ## Çalıştırma
 
 ```bash
