@@ -10,6 +10,8 @@ Akış:
      -> inf/NaN temizle -> tekrarları sil -> (opsiyonel) çakışan satırları at
      -> ince etiket başına üst sınırla örnekle -> 15 etiketi ortak kategorilere eşle
   1-6) model_ml.py ile aynı: stratified 80/20 (seed=42), OOF, test, SHAP, sözleşme çıktısı
+  Modeller: DT, RF, XGB, LGBM, LR (model_ml.build_models) + TabM (src/tabm_classifier.py;
+  hiperparametre araması yok, resmi varsayılanlar ve early stopping; GPU önerilir)
 
 Kullanım (Kaggle):
   python src/model_dnn_edgeiiot.py \
@@ -130,13 +132,14 @@ def main():
     p.add_argument("--work-dir", default=f"work/{DATASET_ID}")
     p.add_argument("--cap", type=int, default=40000, help="İnce etiket başına en fazla satır")
     p.add_argument("--folds", type=int, default=5)
-    p.add_argument("--models", default="DT,RF,XGB,LGBM,LR")
+    p.add_argument("--models", default="DT,RF,XGB,LGBM,LR,TabM")
     p.add_argument("--tune", action="store_true")
-    p.add_argument("--n-iter", type=int, default=10)
-    p.add_argument("--tune-rows", type=int, default=100000)
+    p.add_argument("--n-iter", type=int, default=30)  # ekip protokolü (Kişi 1, 19.10.2026)
+    p.add_argument("--tune-rows", type=int, default=200000)
     p.add_argument("--shap", action="store_true")
     p.add_argument("--shap-per-class", type=int, default=100)
-    p.add_argument("--pred-per-class", type=int, default=2000)
+    p.add_argument("--pred-per-class", type=int, default=0,
+                   help="0 = tüm test seti (ekip protokolü; DSS modellerle aynı satırlarda değerlendirilir)")
     p.add_argument("--drop-features", default="",
                    help="Atılacak ek özellikler, ör. 'tcp.dstport,udp.port,tcp.seq,tcp.ack' (ablation)")
     p.add_argument("--drop-conflicts", action="store_true",
@@ -175,6 +178,16 @@ def main():
         json.dump(cfg, f, indent=2)
 
     all_models = shared.build_models(args.seed, args.n_jobs, args.gpu, args.quick)
+    if "TabM" in args.models.split(","):
+        try:
+            import rtdl_num_embeddings, tabm, torch  # noqa: F401
+            from tabm_classifier import TabMClassifier
+            all_models["TabM"] = TabMClassifier(max_epochs=3 if args.quick else 60,
+                                                random_state=args.seed)
+            print(f"TabM: torch {torch.__version__}, cihaz "
+                  f"{'cuda' if torch.cuda.is_available() else 'cpu'}")
+        except ImportError as e:
+            print(f"! TabM atlanıyor ({e}); kurulum: pip install tabm rtdl_num_embeddings")
     names = [m for m in args.models.split(",") if m in all_models]
     results = {}
     for name in names:
@@ -184,8 +197,10 @@ def main():
             results[name] = joblib.load(cache)
             continue
         print(f"{name} eğitiliyor...")
+        # TabM için hiperparametre araması yok (resmi varsayılanlar + early stopping)
+        run_args = argparse.Namespace(**{**vars(args), "tune": args.tune and name in shared.PARAM_SPACE})
         res = shared.run_model(name, all_models[name], Xtr, ytr, fine[idx_tr], Xte,
-                               len(classes), args)
+                               len(classes), run_args)
         joblib.dump(res.pop("model"), os.path.join(run_dir, "models", f"{name}.joblib"))
         joblib.dump(res, cache)
         results[name] = res
@@ -208,7 +223,8 @@ def main():
     best_per_class = {c: max(oof_metrics, key=lambda m: oof_metrics[m]["per_class"][c]["f1"])
                       for c in classes}
 
-    sample = contract.stratified_sample(yte, args.pred_per_class, args.seed)
+    sample = (contract.stratified_sample(yte, args.pred_per_class, args.seed)
+              if args.pred_per_class > 0 else np.arange(len(yte)))
     preds = pd.DataFrame({"y_true": [classes[i] for i in yte[sample]],
                           "fine_label": fine[idx_te][sample]})
     for name, r in results.items():
