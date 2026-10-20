@@ -253,7 +253,7 @@ def main():
                              pred, y_te_names, "BENIGN", args.target)
                 row = {"family": fam, "model": "bağımsız" if sname == "knn" else name, "score": sname, **m}
                 rows.append(row)
-                print(f"    {row["model"]:8s} {sname:9s} AUROC {m['auroc']:.3f}  FPR95 {m['fpr95']:.3f}  "
+                print(f"    {row['model']:8s} {sname:9s} AUROC {m['auroc']:.3f}  FPR95 {m['fpr95']:.3f}  "
                       f"yakalanan {m['detect@cal']:.3f}  BENIGN'e kaçan {m['silent_benign@cal']:.3f}  "
                       f"open-F1 {m['open_f1@cal']:.3f}")
         print(f"  ({time.perf_counter() - t0:.0f} s)")
