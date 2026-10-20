@@ -55,8 +55,13 @@ def main():
     cf1 = pd.DataFrame(closed).groupby(["condition", "model"])["closed_f1"].mean()
 
     conds = [c for c in CONDITIONS if c[0] in set(mean["condition"])]
-    methods = sorted(mean["yöntem"].unique(), key=lambda s: (s.split(" · ")[0] == "bağımsız", s))
-    fig, axes = plt.subplots(1, 2, figsize=(12, 4.8))
+    # Okunabilirlik için entropi gösterilmez (her iki modelde msp ile neredeyse aynı); tablo JSON/CSV'de
+    order = ["RF · msp", "RF · disagree", "TabM · msp", "TabM · energy", "TabM · disagree",
+             "CP-TabM · signature", "bağımsız · knn"]
+    present = set(mean["yöntem"])
+    methods = [m for m in order if m in present] + sorted(
+        m for m in present if m not in order and not m.endswith("entropy"))
+    fig, axes = plt.subplots(1, 2, figsize=(13, 5.2))
     w = 0.8 / len(methods)
     for ax, col, lab in [(axes[0], "auroc", "AUROC (0,5 = rastgele)"),
                          (axes[1], "silent_benign@cal", "Sessizce BENIGN'e kaçan bilinmeyen oranı")]:
@@ -69,19 +74,23 @@ def main():
                    edgecolor="white", label=m)
             for x, v in zip(xs, vals):
                 if not np.isnan(v):
-                    ax.text(x, v + 0.005, f"{v:.2f}", ha="center", va="bottom", fontsize=7)
+                    ax.text(x, v + 0.004, f"{v:.2f}", ha="center", va="bottom", fontsize=6.5,
+                            rotation=90 if len(methods) > 5 else 0)
         labels = []
         for c, name in conds:
-            f1s = ", ".join(f"{m} {v:.2f}" for (cc, m), v in cf1.items() if cc == c)
-            labels.append(f"{name}\n(bilinen F1: {f1s})")
+            f1s = "\n".join(f"bilinen F1 {m}: {v:.2f}" for (cc, m), v in cf1.items() if cc == c)
+            labels.append(f"{name}\n{f1s}")
         ax.set_xticks(range(len(conds)), labels, fontsize=8)
         ax.set_ylabel(lab)
         ax.spines[["top", "right"]].set_visible(False)
-    axes[0].set_ylim(0.3, 1.05)
+    axes[0].set_ylim(0.3, 1.1)
+    axes[1].set_ylim(0, axes[1].get_ylim()[1] * 1.12)
     axes[0].axhline(0.5, color="#14202b", lw=0.8, ls="--")
-    axes[0].legend(frameon=False, fontsize=8, ncol=2, loc="lower left")
+    h, l = axes[0].get_legend_handles_labels()
+    fig.legend(h, l, frameon=False, fontsize=8.5, ncol=len(methods), loc="upper center",
+               bbox_to_anchor=(0.5, 0.94))
     fig.suptitle("Edge-IIoTset: görülmemiş saldırı ailesi tespiti, 5 ailenin ortalaması", fontsize=11)
-    fig.tight_layout()
+    fig.tight_layout(rect=(0, 0, 1, 0.9))
     models = "_".join(sorted(set(m for m in df["model"] if m != "bağımsız")))
     out = os.path.join(args.dir, f"fig_open_set_summary_dnn_edgeiiot_{models}.png")
     fig.savefig(out, dpi=200)

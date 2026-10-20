@@ -192,30 +192,34 @@ Kod: `src/open_set_lofo_dnn_edgeiiot.py` (özet grafik: `src/open_set_summary_dn
 
 **Protokol (leave-one-family-out).** Ekip bölmesi (80/20, ince etikete göre katmanlı, seed 42) aynen kullanılır. Her turda bir saldırı ailesi (DDOS, RECON, WEB, BRUTEFORCE, MALWARE) eğitimden tamamen çıkarılır; kalan eğitim verisi %90 eğitim / %10 kalibrasyon. Test kümesi asıl deneyle aynıdır; çıkarılan ailenin satırları "bilinmeyen" sayılır. **Eşik yalnızca kalibrasyondaki bilinen satırlarla seçilir** (bilinenlerin %95'i kabul); bilinmeyen aileden hiçbir bilgi kullanılmaz. Koşullar ablation'daki gibidir ve satırlar her koşulda aynıdır (yalnızca sütunlar değişir): **A** tüm 34 özellik, **C** `tcp.seq`/`tcp.ack` çıkarılmış, **E** port, seq/ack ve şüpheli kimlik alanları çıkarılmış.
 
-**Skorlar** (büyük = bilinmeyen): `msp` (1 − en yüksek olasılık), `entropy`, `disagree` (topluluk üyeleri arası karşılıklı bilgi; RF'de ağaçlar), `knn` (bilinen eğitim verisinde 5 en yakın komşuya uzaklık, modelden bağımsız). TabM'de ayrıca `energy` ve 32 üyenin anlaşmazlığı (sonraki çalıştırma).
+**Skorlar** (büyük = bilinmeyen): `msp` (1 − en yüksek olasılık), `entropy`, `disagree` (topluluk üyeleri arası karşılıklı bilgi; RF'de 100 ağaç, TabM'de 32 üye), `energy` (TabM, −logsumexp(logit)), `knn` (bilinen eğitim verisinde 5 en yakın komşuya uzaklık, modelden bağımsız).
 
-![Görülmemiş saldırı özeti](../../outputs/dnn_edgeiiot/open_set/fig_open_set_summary_dnn_edgeiiot_RF.png)
+![Görülmemiş saldırı özeti](../../outputs/dnn_edgeiiot/open_set/fig_open_set_summary_dnn_edgeiiot_RF_TabM.png)
 
-| 5 ailenin ortalaması | A: tüm özellikler | C: seq/ack yok | E: kısayolsuz |
+| 5 ailenin ortalaması, AUROC | A: tüm özellikler | **C: seq/ack yok (ana)** | E: kısayolsuz |
 | --- | --- | --- | --- |
-| Bilinen sınıflarda macro-F1 (RF) | 0,99 | 0,86 | 0,64 |
-| AUROC: RF msp / entropy / disagree | 0,96 / 0,96 / 0,96 | 0,69 / 0,70 / 0,73 | 0,61 / 0,61 / **0,71** |
-| AUROC: kNN | **0,98** | **0,88** | 0,67 |
-| Yakalanan bilinmeyen (kalibrasyon eşiği, en iyi skor) | %97 | %54 (kNN) | %43 (kNN) |
-| Sessizce BENIGN'e kaçan (msp / en iyi) | %0 / %0 | %7 / %6 | %13 / %4 |
+| Bilinen sınıflarda macro-F1: RF / TabM | 0,99 / 0,99 | 0,86 / 0,88 | 0,64 / 0,64 |
+| RF msp / disagree | 0,96 / 0,96 | 0,69 / 0,73 | 0,61 / 0,71 |
+| TabM msp / energy | 0,87 / 0,79 | 0,75 / 0,75 | 0,62 / 0,60 |
+| **TabM disagree** | 0,90 | 0,86 | **0,73** |
+| kNN | **0,98** | **0,88** | 0,67 |
+| Sessizce BENIGN'e kaçan: TabM msp / TabM disagree | %14 / %11 | %6 / **%3** | %12 / **%2** |
+
+Aile bazında C (AUROC, TabM disagree / kNN): DDOS 0,78 / **0,91**, RECON **0,90** / 0,89, WEB **0,88** / 0,87, BRUTEFORCE 0,86 / 0,86, MALWARE **0,89** / 0,88.
 
 **Bulgular:**
 
-1. **Tam veride görülmemiş aileler kolayca yakalanıyor** (AUROC 0,96–0,98) ama bu da kısayol alanlarından: seq/ack çıkınca standart skorlar 0,69–0,73'e, tüm kısayollar çıkınca 0,61'e (neredeyse rastgele) düşüyor. E'de görülmemiş DDOS'a model bilinenlerden daha emin (AUROC 0,36).
-2. **En tehlikeli hata, bilinmeyen saldırının BENIGN sanılması**, kısayollar çıkınca ortaya çıkıyor: E'de görülmemiş MALWARE'in %32'si sessizce "normal trafik" olarak geçiyor (msp).
-3. **Topluluk anlaşmazlığı RF'nin en iyi skoru** (C'de 0,73, E'de 0,71; msp 0,69 / 0,61) ve BENIGN kaçışını en çok azaltan model skoru. CP-TabM'in dayandığı varsayım (üyelerin anlaşmazlığı bilinmeyeni gösterir) için ön kanıt.
-4. **Modelden bağımsız kNN uzaklığı A ve C'de en güçlü temel çizgi** (C'de 0,88); E'de zayıflıyor. CP-TabM'in geçmesi gereken çıta bu.
-5. **Ana değerlendirme koşulu olarak C öneriliyor.** `tcp.seq`/`tcp.ack` Wireshark'ın göreli sayaçlarıdır (ezber), hedef port ise gerçek ağlarda anlamlı bir bilgidir. A iyimser üst sınır, E en sert dayanıklılık testi olarak raporlanır. E'de bilinen sınıflar bile ayrılamadığı (F1 0,64) için orada bilinmeyen tespitinin tavanı düşüktür.
-6. Not: msp ile E'de "yakalanan %0" görünmesi hata değil; bilinenlerin kendisi çok belirsiz olduğundan %95 eşiği en yüksek belirsizlik değerine oturuyor ve hiçbir bilinmeyen onu aşamıyor.
+1. **Standart güven skorları (msp, entropi, enerji) görülmemiş saldırıda aşırı özgüven yüzünden başarısız.** Kısayollar azaldıkça rastgeleye iniyor; E'de görülmemiş DDOS'ta rastgeleden kötü (TabM energy 0,38): model bilinmeyene bilinenlerden daha emin.
+2. **En güçlü model içi sinyal topluluk üyelerinin anlaşmazlığı.** İki modelde, üç koşulda ve hemen her ailede msp/enerjiden iyi; sessiz BENIGN kaçışını belirgin azaltıyor (C'de %6 → %3, E'de %12 → %2; E'de görülmemiş MALWARE'de %40 → %0,1). CP-TabM'in dayandığı varsayım için güçlü kanıt.
+3. **kNN'nin üstünlüğü kısayollardan geliyor.** A'da görülmemiş ailelerin sayaç/port değerleri eğitim aralığının dışında, uzaklık hemen büyüyor (0,98). C'de TabM anlaşmazlığı 5 ailenin 4'ünde kNN'ye eşit veya iyi; ortalama farkın tamamı DDOS'tan. E'de kNN WEB ve BRUTEFORCE'ta rastgele (0,51 / 0,50) ve ortalamada TabM anlaşmazlığının gerisinde (0,67 / 0,73). Ayrıca kNN eğitim verisini saklamayı ve her pakette uzaklık hesabını gerektirir.
+4. **"Bilinende en iyi model, bilinmeyende en güvenli model değildir."** A'da TabM bilinen sınıflarda 0,99 F1'e rağmen görülmemiş MALWARE'in %86'sını BENIGN sanıyor; en iyi skorla bile %53'ü sessizce kaçıyor, energy AUROC 0,41. Aynı aile RF'de %100 yakalanıyor. Olası neden (hipotez): sinir ağlarının veri dışı bölgede aşırı özgüveni ve QuantileTransformer'ın aralık dışı değerleri sınıra sıkıştırması. C'de aynı TabM bu aileyi sessiz kaçış %0 ile yakalıyor.
+5. **Ana koşul C.** `tcp.seq`/`tcp.ack` göreli sayaçtır (ezber); hedef port gerçek ağlarda anlamlıdır. A iyimser üst sınır, E en sert dayanıklılık testi; E'de bilinen sınıflar bile ayrılamıyor (F1 0,64).
+6. **CP-TabM için hedefler:** (i) bilinen bir sınıfa güçlü benzeyen bilinmeyenler (C'de görülmemiş DDOS'un %76'sı güvenle RECON sanılıyor; TabM 0,78, kNN 0,91), (ii) BRUTEFORCE'taki kalıcı sessiz BENIGN kaçışı (C'de hangi skorla olursa olsun ~%12), (iii) A'daki MALWARE → BENIGN türü aşırı özgüven, (iv) "bilinmeyen" kararının açıklanabilmesi.
+7. Notlar: "BENIGN'e kaçan" sınıf tahminini veren modele bağlıdır (kNN yalnız bilinmeyen kararı verir; satırı yanındaki modelin tahminiyle hesaplanır). msp'de E'de "yakalanan %0" hata değildir: bilinenlerin kendisi çok belirsiz olduğundan %95 eşiği en yüksek belirsizlik değerine oturur. RF'de saf yapraklı turlarda `disagree` entropiyle aynıdır.
 
 ### Başarı ölçütleri (sonuçlardan ÖNCE belirlendi, 20.10.2026)
 
-CP-TabM, ana koşul **C**'de, 5 ailenin ortalamasıyla, **en iyi temel skorla** (RF ve TabM skorları ile kNN dahil; şu an kNN, AUROC 0,88) karşılaştırılır. Tüm ayarlar yalnızca kalibrasyon verisiyle seçilir; beş ailenin hepsi raporlanır; sonuçlar en az 3 tohumla verilir.
+CP-TabM, ana koşul **C**'de, 5 ailenin ortalamasıyla, **en iyi temel skorla** (RF ve TabM skorları ile kNN dahil; şu an kNN 0,88, ardından TabM disagree 0,86) karşılaştırılır. Tüm ayarlar yalnızca kalibrasyon verisiyle seçilir; beş ailenin hepsi raporlanır; sonuçlar en az 3 tohumla verilir.
 
 | Sonuç | Ölçüt |
 | --- | --- |
