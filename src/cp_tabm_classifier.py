@@ -22,6 +22,14 @@ Açıklanabilirlik. U(x) hangi sınıfın imzasına ne kadar yakın olunduğunu 
 ve hangi uzman grubunun reddettiğini doğrudan verir; explain() bunu döndürür. Özellik düzeyinde
 açıklama (SHAP) U(x) üzerinde ayrıca hesaplanabilir.
 
+2. sürüm skorları (20.10.2026; ilk sonuçlarda imza skoru, bilinen bir sınıfa çok benzeyen
+bilinmeyenlerde (DDOS ~ RECON) o sınıfın imzasını taşıdığı için zayıf kaldı):
+   expert_disagree   tahmin edilen sınıfı GÖREN üyeler arası anlaşmazlık; kör üyelerin tasarım gereği
+                     farklı oyu dışarıda kalır, sade TabM'in doğal anlaşmazlık sinyali geri gelir
+   expert_energy_z   o uzmanların enerjisinin, aynı sınıfın gerçek örneklerindeki (iç doğrulama)
+                     seviyesine göre sapması: "uzmanlar her zamankinden ne kadar az emin"
+   İkisi de eğitimi değiştirmez; yalnızca iç doğrulama verisiyle ölçeklenir.
+
 Bileşen testleri (open_set_lofo_dnn_edgeiiot.py):
   TabM          körleme yok, enerji kaybı yok (sade TabM; anlaşmazlık skoru)
   CPTabM-noE    körleme var, enerji kaybı yok (lam_energy = 0)
@@ -138,10 +146,32 @@ class CPTabMClassifier(TabMClassifier):
                                 for m in range(k)])
         gap = self.e_rej_ - self.e_acc_
         self.energy_gap_ = float(np.median(gap))
+        # Sınıfa özgü "emin olma" seviyesi: gerçek c örneklerinde, c'yi gören uzmanların ort. enerjisi
+        Eexp = self._expert_energy(E, yva)
+        C = self.A_.shape[1]
+        self.cls_mu_ = np.array([np.median(Eexp[yva == c]) if (yva == c).any() else 0.0 for c in range(C)])
+        self.cls_sd_ = np.array([max(np.subtract(*np.percentile(Eexp[yva == c], [75, 25])) / 1.349, 1e-3)
+                                 if (yva == c).sum() > 3 else 1.0 for c in range(C)])
         if self.verbose:
             print(f"    CP-TabM doğrulama enerjisi: kabul medyanı {np.median(self.e_acc_):.2f}, "
                   f"red medyanı {np.median(self.e_rej_):.2f}, üye ayrımı (medyan) {self.energy_gap_:.2f}"
                   f"{'  ! bazı üyeler reddi öğrenmedi' if (gap <= 0.1).any() else ''}")
+
+    def _expert_energy(self, E, cls):
+        """Her örnek için, verilen sınıfı gören üyelerin (uzmanların) ortalama enerjisi."""
+        S = self.A_[:, cls].T                                        # (n, k)
+        return (E * S).sum(1) / S.sum(1)
+
+    def _expert_disagreement(self, Pm, cls):
+        """Yalnızca verilen sınıfı gören üyeler arasında karşılıklı bilgi (kör üyelerin yapay
+        anlaşmazlığı dışarıda kalır; sade TabM'deki doğal anlaşmazlık sinyalini geri kazanır)."""
+        S = self.A_[:, cls].T.astype(float)[:, :, None]             # (n, k, 1)
+        n_exp = S.sum(1)                                             # (n, 1)
+        Pbar = (Pm * S).sum(1) / n_exp                               # (n, C)
+
+        def H(p):
+            return -(p * np.log(np.clip(p, 1e-12, None))).sum(-1)
+        return H(Pbar) - (H(Pm) * S[:, :, 0]).sum(1) / n_exp[:, 0]
 
     def _rejection(self, E):
         span = np.maximum(self.e_rej_ - self.e_acc_, 1e-3)
@@ -165,11 +195,17 @@ class CPTabMClassifier(TabMClassifier):
         def H(p):
             return -(p * np.log(np.clip(p, 1e-12, None))).sum(-1)
         seen_pred = self.A_[:, pred].T                               # tahmin edilen sınıfı gören üyeler
+        e_exp = self._expert_energy(E, pred)
+        z = (e_exp - self.cls_mu_[pred]) / self.cls_sd_[pred]   # uzmanlar her zamankinden ne kadar az emin
+        dis = self._expert_disagreement(Pm, pred)
         scores = {
             "signature": D.min(axis=1),
             "msp": 1.0 - P.max(axis=1),
             "disagree": H(Pm.mean(1)) - H(Pm).mean(1),
             "energy": (E * seen_pred).sum(1) / seen_pred.sum(1),
+            # 2. sürüm skorları (aynı eğitim; yalnızca karar kuralı)
+            "expert_disagree": dis,
+            "expert_energy_z": z,
         }
         return P, scores
 
