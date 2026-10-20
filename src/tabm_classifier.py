@@ -35,13 +35,48 @@ from sklearn.preprocessing import QuantileTransformer
 from sklearn.utils.class_weight import compute_class_weight
 
 
+try:  # torch yalnızca eğitimde gerekir; yoksa modül yine içe aktarılabilsin (testler, CPU analizleri)
+    import torch.nn as _nn
+
+    class MaskedEnsembleView(_nn.Module):
+        """TabM'in EnsembleView katmanının yerine: girdiyi k üyeye kopyalar ve her üyeye yalnızca
+        kendi özellik alt kümesini gösterir (maskelenen özelliklerin gömmeleri 0'lanır)."""
+
+        def __init__(self, mask):
+            super().__init__()
+            self.register_buffer("mask", mask)       # (k, D) float, D = özellik sayısı x d_embedding
+
+        def forward(self, x):
+            if x.ndim == 2:
+                x = x.unsqueeze(1).expand(-1, self.mask.shape[0], -1)
+            return x * self.mask
+except ImportError:  # pragma: no cover
+    MaskedEnsembleView = None
+
+
+def feature_mask(k, n_features, frac, seed):
+    """(k, n) bool: her üye round(frac * n) özellik görür; özellikler üyelere dengeli dağıtılır
+    (her özelliği yaklaşık aynı sayıda üye görür, hiçbir özellik dışarıda kalmaz)."""
+    rng = np.random.default_rng(seed)
+    m = max(1, min(n_features, int(round(frac * n_features))))
+    sees = np.zeros((k, n_features), dtype=bool)
+    load = np.zeros(n_features)
+    for i in range(k):
+        order = rng.permutation(n_features)
+        order = order[np.argsort(load[order], kind="stable")]  # en az görülen özellikler önce
+        sees[i, order[:m]] = True
+        load[order[:m]] += 1
+    return sees
+
+
 class TabMClassifier(ClassifierMixin, BaseEstimator):
     VERSION = 1  # davranış değişince önbelleği geçersiz kılar (model_ml.model_key)
 
     def __init__(self, k=32, n_blocks=None, d_block=512, dropout=0.1, lr=2e-3,
                  weight_decay=3e-4, batch_size=512, max_epochs=60, patience=8,
                  n_bins=48, d_embedding=16, val_size=0.1, balanced=True,
-                 device="auto", random_state=42, verbose=True):
+                 device="auto", random_state=42, verbose=True, feature_frac=None):
+        self.feature_frac = feature_frac  # None: sade TabM; <1: özellik-bölümlü üyeler (FP-TabM)
         self.k = k
         self.n_blocks = n_blocks
         self.d_block = d_block
@@ -141,6 +176,14 @@ class TabMClassifier(ClassifierMixin, BaseEstimator):
         if self.n_blocks is not None:
             kwargs["n_blocks"] = self.n_blocks
         model = tabm.TabM.make(**kwargs).to(dev)
+        if self.feature_frac is not None and self.feature_frac < 1:
+            self.feat_mask_ = feature_mask(model.backbone.k, Xtr.shape[1], self.feature_frac,
+                                           self.random_state)
+            full = np.repeat(self.feat_mask_, self.d_embedding, axis=1).astype(np.float32)
+            model.ensemble_view = MaskedEnsembleView(torch.as_tensor(full)).to(dev)
+            if self.verbose:
+                print(f"    FP-TabM: her üye {self.feat_mask_.sum(1).min()} / {Xtr.shape[1]} özellik görüyor; "
+                      f"her özelliği {self.feat_mask_.sum(0).min()}-{self.feat_mask_.sum(0).max()} üye görüyor")
         self._setup(n_classes, model.backbone.k, dev, ytr)
         opt = torch.optim.AdamW(model.parameters(), lr=self.lr, weight_decay=self.weight_decay)
 

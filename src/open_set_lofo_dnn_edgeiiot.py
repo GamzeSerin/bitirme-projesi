@@ -56,7 +56,7 @@ from sklearn.neighbors import NearestNeighbors
 from sklearn.preprocessing import QuantileTransformer
 
 from ablation_dnn_edgeiiot import SCENARIOS, build_models
-from common.taxonomy import COMMON_CLASSES
+from common.taxonomy import COMMON_CLASSES, edgeiiot_category
 from model_dnn_edgeiiot import load_data
 
 OUT_DIR = "outputs/dnn_edgeiiot/open_set"
@@ -93,7 +93,7 @@ def rf_members(model, X, batch=20000):
 def model_scores(name, model, X):
     if name.startswith("CPTabM"):
         return model.unknown_scores(X)
-    if name == "TabM":
+    if name in ("TabM", "FPTabM"):
         Xt = model._prep(X)
         logits = model._logits(Xt)
         z = logits - logits.max(-1, keepdims=True)
@@ -182,7 +182,8 @@ def main():
     p.add_argument("--seed", type=int, default=42)
     p.add_argument("--condition", default="A_tam", choices=list(SCENARIOS))
     p.add_argument("--models", default="RF",
-                   help="Virgülle: RF, TabM, CPTabM (önerilen), CPTabM-noE (enerji kaybı kapalı bileşen testi)")
+                   help="Virgülle: RF, TabM, FPTabM (özellik-bölümlü), CPTabM (önerilen), "
+                        "CPTabM-noE (enerji kaybı kapalı bileşen testi)")
     p.add_argument("--families", default=",".join(FAMILIES))
     p.add_argument("--cal-size", type=float, default=0.1)
     p.add_argument("--target", type=float, default=0.95, help="Kabul edilecek bilinen oranı")
@@ -191,6 +192,12 @@ def main():
     p.add_argument("--cp-lam", type=float, default=0.1, help="CP-TabM: enerji sınırı kaybının ağırlığı")
     p.add_argument("--cp-m-in", type=float, default=-6.0)
     p.add_argument("--cp-m-out", type=float, default=-1.0)
+    p.add_argument("--cp-feature-frac", type=float, default=None,
+                   help="CP-TabM üyelerine ayrıca özellik alt kümesi (None: kapalı)")
+    p.add_argument("--fp-frac", type=float, default=0.5, help="FPTabM: her üyenin gördüğü özellik oranı")
+    p.add_argument("--label-level", default="category", choices=["category", "fine"],
+                   help="fine: alt türlerle eğit, tahmini kategoriye topla")
+    p.add_argument("--tag-suffix", default="", help="Çıktı adına ek (ör. _fp05)")
     p.add_argument("--quick", action="store_true")
     args = p.parse_args()
     if args.quick:
@@ -220,7 +227,15 @@ def main():
         tr_fit, tr_cal = train_test_split(tr, test_size=args.cal_size, stratify=fine[tr],
                                           random_state=args.seed)
         Xfit, Xcal, Xte = X.iloc[tr_fit], X.iloc[tr_cal], X.iloc[idx_te]
-        yfit = np.array([known.index(c) for c in category[tr_fit]])
+        if args.label_level == "fine":
+            # Alt türlerle eğitim: model bilinen ailelerin ince etiketlerini öğrenir; tahmin kategoriye toplanır
+            labels = sorted(set(fine[tr_fit]))
+            yfit = np.array([labels.index(c) for c in fine[tr_fit]])
+            label_cat = np.array([edgeiiot_category(c) for c in labels])
+        else:
+            labels = known
+            yfit = np.array([known.index(c) for c in category[tr_fit]])
+            label_cat = np.array(known)
         is_unk = category[idx_te] == fam
         y_te_names = category[idx_te]
         print(f"\n=== Bilinmeyen aile: {fam}  (eğitim {len(tr_fit)}, kalibrasyon {len(tr_cal)}, "
@@ -233,17 +248,17 @@ def main():
         knn_cal, knn_te = knn.score(Xcal), knn.score(Xte)
 
         for name in models:
-            if name == "TabM":
+            if name in ("TabM", "FPTabM"):
                 from tabm_classifier import TabMClassifier
                 model = TabMClassifier(max_epochs=3 if args.quick else 60, random_state=args.seed,
-                                       verbose=False)
+                                       verbose=False, feature_frac=args.fp_frac if name == "FPTabM" else None)
             elif name.startswith("CPTabM"):
                 from cp_tabm_classifier import CPTabMClassifier
                 model = CPTabMClassifier(blind_frac=args.cp_blind_frac,
                                          lam_energy=0.0 if name == "CPTabM-noE" else args.cp_lam,
                                          m_in=args.cp_m_in, m_out=args.cp_m_out,
                                          max_epochs=3 if args.quick else 60, random_state=args.seed,
-                                         verbose=False)
+                                         verbose=False, feature_frac=args.cp_feature_frac)
             else:
                 model = clone(build_models(args.seed, args.n_jobs)[name])
             tm = time.perf_counter()
@@ -251,13 +266,13 @@ def main():
             fit_s = time.perf_counter() - tm
             P_cal, S_cal = model_scores(name, model, Xcal)
             P_te, S_te = model_scores(name, model, Xte)
-            pred = np.array(known)[P_te.argmax(1)]
+            pred = label_cat[P_te.argmax(1)]
             closed_f1 = f1_score(y_te_names[~is_unk], pred[~is_unk], average="macro")
             assigned = pd.Series(pred[is_unk]).value_counts(normalize=True).round(4).to_dict()
             details[fam]["models"][name] = {"closed_f1_known": round(float(closed_f1), 4),
                                             "fit_seconds": round(fit_s, 1),
                                             "unknown_assigned_to": assigned}
-            if name == "TabM" or name.startswith("CPTabM"):
+            if name in ("TabM", "FPTabM") or name.startswith("CPTabM"):
                 details[fam]["models"][name]["best_epoch"] = int(model.best_epoch_)
             if name.startswith("CPTabM"):
                 info = details[fam]["models"][name]
@@ -267,7 +282,7 @@ def main():
                 info["energy_gap_median"] = round(model.energy_gap_, 3)
                 # Açıklama örnekleri: görülmemiş aileden 5 satır (XAI bölümü için)
                 ex_idx = np.flatnonzero(is_unk)[:5]
-                info["explain_unknown_examples"] = model.explain(Xte.iloc[ex_idx], known)
+                info["explain_unknown_examples"] = model.explain(Xte.iloc[ex_idx], labels)
                 print(f"    enerji kabul/red medyanı {info['energy_accept_median']} / "
                       f"{info['energy_reject_median']} (ayrım {info['energy_gap_median']})")
             print(f"  {name}: bilinen testte macro-F1 {closed_f1:.4f} ({fit_s:.0f} s); "
@@ -287,7 +302,7 @@ def main():
         print(f"  ({time.perf_counter() - t0:.0f} s)")
 
     df = pd.DataFrame(rows)
-    tag = f"{'_'.join(models)}_{args.condition}"
+    tag = f"{'_'.join(models)}_{args.condition}" + ("_fine" if args.label_level == "fine" else "") + args.tag_suffix
     df.to_csv(os.path.join(args.out_dir, f"open_set_lofo_{tag}.csv"), index=False)
     summary = (df.groupby(["model", "score"])[["auroc", "fpr95", "detect@cal", "silent_benign@cal",
                                                "open_f1@cal"]].mean().round(4)
