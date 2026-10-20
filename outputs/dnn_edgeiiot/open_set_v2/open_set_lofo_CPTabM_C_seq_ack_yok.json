@@ -1,0 +1,2476 @@
+{
+  "dataset_id": "dnn_edgeiiot",
+  "condition": "C_seq_ack_yok",
+  "dropped_features": [
+    "tcp.seq",
+    "tcp.ack"
+  ],
+  "protocol": "LOFO; ekip 80/20 bölmesi (seed 42); eşik yalnızca bilinen kalibrasyon verisiyle",
+  "settings": {
+    "out_dir": "outputs/dnn_edgeiiot/open_set_v2",
+    "cap": 40000,
+    "seed": 42,
+    "condition": "C_seq_ack_yok",
+    "models": "CPTabM",
+    "families": "DDOS,RECON,WEB,BRUTEFORCE,MALWARE",
+    "cal_size": 0.1,
+    "target": 0.95,
+    "n_jobs": -1,
+    "cp_blind_frac": 0.25,
+    "cp_lam": 0.1,
+    "cp_m_in": -6.0,
+    "cp_m_out": -1.0,
+    "quick": false
+  },
+  "families": {
+    "DDOS": {
+      "known_classes": [
+        "BENIGN",
+        "RECON",
+        "BRUTEFORCE",
+        "WEB",
+        "MALWARE"
+      ],
+      "n_fit": 136532,
+      "n_cal": 15171,
+      "n_test_known": 37927,
+      "n_test_unknown": 21375,
+      "unknown_fine_labels": [
+        "DDOS_HTTP",
+        "DDOS_ICMP",
+        "DDOS_TCP"
+      ],
+      "models": {
+        "CPTabM": {
+          "closed_f1_known": 0.8878,
+          "fit_seconds": 156.7,
+          "unknown_assigned_to": {
+            "RECON": 0.8022,
+            "WEB": 0.1203,
+            "BRUTEFORCE": 0.0646,
+            "MALWARE": 0.012,
+            "BENIGN": 0.0009
+          },
+          "best_epoch": 21,
+          "blind_matrix": [
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              0,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              0,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              0,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              0,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              0,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              0,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              0,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              0,
+              1,
+              1,
+              1,
+              0
+            ]
+          ],
+          "energy_accept_median": -11.79,
+          "energy_reject_median": 1.638,
+          "energy_gap_median": 12.234,
+          "explain_unknown_examples": [
+            {
+              "pred": "RECON",
+              "prob": 0.608,
+              "signature_score": 0.333,
+              "nearest_signatures": [
+                [
+                  "WEB",
+                  0.333
+                ],
+                [
+                  "RECON",
+                  0.452
+                ],
+                [
+                  "BRUTEFORCE",
+                  0.493
+                ]
+              ],
+              "expert_acceptance": {
+                "BENIGN": 0.428,
+                "RECON": 0.551,
+                "BRUTEFORCE": 0.524,
+                "WEB": 0.63,
+                "MALWARE": 0.407
+              }
+            },
+            {
+              "pred": "RECON",
+              "prob": 0.659,
+              "signature_score": 0.301,
+              "nearest_signatures": [
+                [
+                  "WEB",
+                  0.301
+                ],
+                [
+                  "RECON",
+                  0.329
+                ],
+                [
+                  "BRUTEFORCE",
+                  0.466
+                ]
+              ],
+              "expert_acceptance": {
+                "BENIGN": 0.566,
+                "RECON": 0.717,
+                "BRUTEFORCE": 0.626,
+                "WEB": 0.736,
+                "MALWARE": 0.539
+              }
+            },
+            {
+              "pred": "RECON",
+              "prob": 0.659,
+              "signature_score": 0.301,
+              "nearest_signatures": [
+                [
+                  "WEB",
+                  0.301
+                ],
+                [
+                  "RECON",
+                  0.329
+                ],
+                [
+                  "BRUTEFORCE",
+                  0.466
+                ]
+              ],
+              "expert_acceptance": {
+                "BENIGN": 0.566,
+                "RECON": 0.717,
+                "BRUTEFORCE": 0.626,
+                "WEB": 0.736,
+                "MALWARE": 0.539
+              }
+            },
+            {
+              "pred": "RECON",
+              "prob": 0.659,
+              "signature_score": 0.301,
+              "nearest_signatures": [
+                [
+                  "WEB",
+                  0.301
+                ],
+                [
+                  "RECON",
+                  0.329
+                ],
+                [
+                  "BRUTEFORCE",
+                  0.466
+                ]
+              ],
+              "expert_acceptance": {
+                "BENIGN": 0.566,
+                "RECON": 0.717,
+                "BRUTEFORCE": 0.626,
+                "WEB": 0.736,
+                "MALWARE": 0.539
+              }
+            },
+            {
+              "pred": "RECON",
+              "prob": 0.75,
+              "signature_score": 0.016,
+              "nearest_signatures": [
+                [
+                  "RECON",
+                  0.016
+                ],
+                [
+                  "BENIGN",
+                  0.45
+                ],
+                [
+                  "BRUTEFORCE",
+                  0.484
+                ]
+              ],
+              "expert_acceptance": {
+                "BENIGN": 0.698,
+                "RECON": 0.987,
+                "BRUTEFORCE": 0.675,
+                "WEB": 0.661,
+                "MALWARE": 0.661
+              }
+            }
+          ]
+        }
+      }
+    },
+    "RECON": {
+      "known_classes": [
+        "BENIGN",
+        "BRUTEFORCE",
+        "WEB",
+        "MALWARE",
+        "DDOS"
+      ],
+      "n_fit": 174230,
+      "n_cal": 19359,
+      "n_test_known": 48398,
+      "n_test_unknown": 10904,
+      "unknown_fine_labels": [
+        "FINGERPRINTING",
+        "PORT_SCANNING",
+        "VULNERABILITY_SCANNER"
+      ],
+      "models": {
+        "CPTabM": {
+          "closed_f1_known": 0.842,
+          "fit_seconds": 179.2,
+          "unknown_assigned_to": {
+            "DDOS": 0.7486,
+            "BRUTEFORCE": 0.1877,
+            "WEB": 0.0631,
+            "BENIGN": 0.0006
+          },
+          "best_epoch": 18,
+          "blind_matrix": [
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              0,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              0,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              0,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              0,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              0,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              0,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              0,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              0,
+              1,
+              1,
+              1,
+              0
+            ]
+          ],
+          "energy_accept_median": -12.656,
+          "energy_reject_median": 0.799,
+          "energy_gap_median": 11.637,
+          "explain_unknown_examples": [
+            {
+              "pred": "DDOS",
+              "prob": 0.673,
+              "signature_score": 0.341,
+              "nearest_signatures": [
+                [
+                  "DDOS",
+                  0.341
+                ],
+                [
+                  "BRUTEFORCE",
+                  0.425
+                ],
+                [
+                  "BENIGN",
+                  0.436
+                ]
+              ],
+              "expert_acceptance": {
+                "BENIGN": 0.531,
+                "BRUTEFORCE": 0.538,
+                "WEB": 0.466,
+                "MALWARE": 0.33,
+                "DDOS": 0.594
+              }
+            },
+            {
+              "pred": "DDOS",
+              "prob": 0.739,
+              "signature_score": 0.271,
+              "nearest_signatures": [
+                [
+                  "DDOS",
+                  0.271
+                ],
+                [
+                  "BENIGN",
+                  0.39
+                ],
+                [
+                  "BRUTEFORCE",
+                  0.447
+                ]
+              ],
+              "expert_acceptance": {
+                "BENIGN": 0.59,
+                "BRUTEFORCE": 0.552,
+                "WEB": 0.492,
+                "MALWARE": 0.387,
+                "DDOS": 0.67
+              }
+            },
+            {
+              "pred": "DDOS",
+              "prob": 0.748,
+              "signature_score": 0.171,
+              "nearest_signatures": [
+                [
+                  "DDOS",
+                  0.171
+                ],
+                [
+                  "BENIGN",
+                  0.274
+                ],
+                [
+                  "WEB",
+                  0.442
+                ]
+              ],
+              "expert_acceptance": {
+                "BENIGN": 0.754,
+                "BRUTEFORCE": 0.597,
+                "WEB": 0.642,
+                "MALWARE": 0.558,
+                "DDOS": 0.823
+              }
+            },
+            {
+              "pred": "DDOS",
+              "prob": 0.749,
+              "signature_score": 0.205,
+              "nearest_signatures": [
+                [
+                  "DDOS",
+                  0.205
+                ],
+                [
+                  "BENIGN",
+                  0.336
+                ],
+                [
+                  "BRUTEFORCE",
+                  0.476
+                ]
+              ],
+              "expert_acceptance": {
+                "BENIGN": 0.664,
+                "BRUTEFORCE": 0.571,
+                "WEB": 0.545,
+                "MALWARE": 0.46,
+                "DDOS": 0.751
+              }
+            },
+            {
+              "pred": "DDOS",
+              "prob": 0.75,
+              "signature_score": 0.101,
+              "nearest_signatures": [
+                [
+                  "DDOS",
+                  0.101
+                ],
+                [
+                  "BENIGN",
+                  0.228
+                ],
+                [
+                  "WEB",
+                  0.418
+                ]
+              ],
+              "expert_acceptance": {
+                "BENIGN": 0.816,
+                "BRUTEFORCE": 0.602,
+                "WEB": 0.689,
+                "MALWARE": 0.615,
+                "DDOS": 0.9
+              }
+            }
+          ]
+        }
+      }
+    },
+    "WEB": {
+      "known_classes": [
+        "BENIGN",
+        "RECON",
+        "BRUTEFORCE",
+        "MALWARE",
+        "DDOS"
+      ],
+      "n_fit": 182616,
+      "n_cal": 20291,
+      "n_test_known": 50727,
+      "n_test_unknown": 8575,
+      "unknown_fine_labels": [
+        "SQL_INJECTION",
+        "UPLOADING",
+        "XSS"
+      ],
+      "models": {
+        "CPTabM": {
+          "closed_f1_known": 0.8866,
+          "fit_seconds": 112.8,
+          "unknown_assigned_to": {
+            "DDOS": 0.4654,
+            "BRUTEFORCE": 0.3845,
+            "RECON": 0.115,
+            "BENIGN": 0.0231,
+            "MALWARE": 0.012
+          },
+          "best_epoch": 6,
+          "blind_matrix": [
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              0,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              0,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              0,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              0,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              0,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              0,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              0,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              0,
+              1,
+              1,
+              1,
+              0
+            ]
+          ],
+          "energy_accept_median": -10.836,
+          "energy_reject_median": 1.087,
+          "energy_gap_median": 12.225,
+          "explain_unknown_examples": [
+            {
+              "pred": "BENIGN",
+              "prob": 0.737,
+              "signature_score": 0.298,
+              "nearest_signatures": [
+                [
+                  "BENIGN",
+                  0.298
+                ],
+                [
+                  "DDOS",
+                  0.402
+                ],
+                [
+                  "BRUTEFORCE",
+                  0.422
+                ]
+              ],
+              "expert_acceptance": {
+                "BENIGN": 0.683,
+                "RECON": 0.509,
+                "BRUTEFORCE": 0.601,
+                "MALWARE": 0.569,
+                "DDOS": 0.614
+              }
+            },
+            {
+              "pred": "BRUTEFORCE",
+              "prob": 0.535,
+              "signature_score": 0.311,
+              "nearest_signatures": [
+                [
+                  "BRUTEFORCE",
+                  0.311
+                ],
+                [
+                  "BENIGN",
+                  0.515
+                ],
+                [
+                  "DDOS",
+                  0.524
+                ]
+              ],
+              "expert_acceptance": {
+                "BENIGN": 0.473,
+                "RECON": 0.431,
+                "BRUTEFORCE": 0.609,
+                "MALWARE": 0.392,
+                "DDOS": 0.467
+              }
+            },
+            {
+              "pred": "DDOS",
+              "prob": 0.728,
+              "signature_score": 0.38,
+              "nearest_signatures": [
+                [
+                  "DDOS",
+                  0.38
+                ],
+                [
+                  "MALWARE",
+                  0.422
+                ],
+                [
+                  "BENIGN",
+                  0.466
+                ]
+              ],
+              "expert_acceptance": {
+                "BENIGN": 0.543,
+                "RECON": 0.46,
+                "BRUTEFORCE": 0.488,
+                "MALWARE": 0.572,
+                "DDOS": 0.6
+              }
+            },
+            {
+              "pred": "BRUTEFORCE",
+              "prob": 0.633,
+              "signature_score": 0.32,
+              "nearest_signatures": [
+                [
+                  "BRUTEFORCE",
+                  0.32
+                ],
+                [
+                  "BENIGN",
+                  0.541
+                ],
+                [
+                  "DDOS",
+                  0.564
+                ]
+              ],
+              "expert_acceptance": {
+                "BENIGN": 0.446,
+                "RECON": 0.413,
+                "BRUTEFORCE": 0.593,
+                "MALWARE": 0.403,
+                "DDOS": 0.431
+              }
+            },
+            {
+              "pred": "BRUTEFORCE",
+              "prob": 0.644,
+              "signature_score": 0.307,
+              "nearest_signatures": [
+                [
+                  "BRUTEFORCE",
+                  0.307
+                ],
+                [
+                  "BENIGN",
+                  0.533
+                ],
+                [
+                  "DDOS",
+                  0.556
+                ]
+              ],
+              "expert_acceptance": {
+                "BENIGN": 0.46,
+                "RECON": 0.413,
+                "BRUTEFORCE": 0.611,
+                "MALWARE": 0.424,
+                "DDOS": 0.445
+              }
+            }
+          ]
+        }
+      }
+    },
+    "BRUTEFORCE": {
+      "known_classes": [
+        "BENIGN",
+        "RECON",
+        "WEB",
+        "MALWARE",
+        "DDOS"
+      ],
+      "n_fit": 198521,
+      "n_cal": 22058,
+      "n_test_known": 55145,
+      "n_test_unknown": 4157,
+      "unknown_fine_labels": [
+        "PASSWORD"
+      ],
+      "models": {
+        "CPTabM": {
+          "closed_f1_known": 0.9356,
+          "fit_seconds": 196.7,
+          "unknown_assigned_to": {
+            "WEB": 0.4489,
+            "DDOS": 0.2617,
+            "BENIGN": 0.1508,
+            "RECON": 0.1383,
+            "MALWARE": 0.0002
+          },
+          "best_epoch": 16,
+          "blind_matrix": [
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              0,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              0,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              0,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              0,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              0,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              0,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              0,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              0,
+              1,
+              1,
+              1,
+              0
+            ]
+          ],
+          "energy_accept_median": -12.722,
+          "energy_reject_median": 1.065,
+          "energy_gap_median": 15.57,
+          "explain_unknown_examples": [
+            {
+              "pred": "WEB",
+              "prob": 0.642,
+              "signature_score": 0.254,
+              "nearest_signatures": [
+                [
+                  "WEB",
+                  0.254
+                ],
+                [
+                  "BENIGN",
+                  0.442
+                ],
+                [
+                  "DDOS",
+                  0.481
+                ]
+              ],
+              "expert_acceptance": {
+                "BENIGN": 0.56,
+                "RECON": 0.49,
+                "WEB": 0.686,
+                "MALWARE": 0.419,
+                "DDOS": 0.534
+              }
+            },
+            {
+              "pred": "RECON",
+              "prob": 0.748,
+              "signature_score": 0.218,
+              "nearest_signatures": [
+                [
+                  "RECON",
+                  0.218
+                ],
+                [
+                  "WEB",
+                  0.429
+                ],
+                [
+                  "BENIGN",
+                  0.523
+                ]
+              ],
+              "expert_acceptance": {
+                "BENIGN": 0.533,
+                "RECON": 0.736,
+                "WEB": 0.595,
+                "MALWARE": 0.487,
+                "DDOS": 0.469
+              }
+            },
+            {
+              "pred": "WEB",
+              "prob": 0.623,
+              "signature_score": 0.259,
+              "nearest_signatures": [
+                [
+                  "WEB",
+                  0.259
+                ],
+                [
+                  "BENIGN",
+                  0.402
+                ],
+                [
+                  "DDOS",
+                  0.422
+                ]
+              ],
+              "expert_acceptance": {
+                "BENIGN": 0.628,
+                "RECON": 0.53,
+                "WEB": 0.724,
+                "MALWARE": 0.509,
+                "DDOS": 0.615
+              }
+            },
+            {
+              "pred": "WEB",
+              "prob": 0.678,
+              "signature_score": 0.343,
+              "nearest_signatures": [
+                [
+                  "WEB",
+                  0.343
+                ],
+                [
+                  "MALWARE",
+                  0.562
+                ],
+                [
+                  "BENIGN",
+                  0.563
+                ]
+              ],
+              "expert_acceptance": {
+                "BENIGN": 0.409,
+                "RECON": 0.364,
+                "WEB": 0.556,
+                "MALWARE": 0.41,
+                "DDOS": 0.376
+              }
+            },
+            {
+              "pred": "WEB",
+              "prob": 0.75,
+              "signature_score": 0.015,
+              "nearest_signatures": [
+                [
+                  "WEB",
+                  0.015
+                ],
+                [
+                  "BENIGN",
+                  0.384
+                ],
+                [
+                  "DDOS",
+                  0.495
+                ]
+              ],
+              "expert_acceptance": {
+                "BENIGN": 0.734,
+                "RECON": 0.654,
+                "WEB": 0.98,
+                "MALWARE": 0.647,
+                "DDOS": 0.66
+              }
+            }
+          ]
+        }
+      }
+    },
+    "MALWARE": {
+      "known_classes": [
+        "BENIGN",
+        "RECON",
+        "BRUTEFORCE",
+        "WEB",
+        "DDOS"
+      ],
+      "n_fit": 190834,
+      "n_cal": 21204,
+      "n_test_known": 53011,
+      "n_test_unknown": 6291,
+      "unknown_fine_labels": [
+        "BACKDOOR",
+        "RANSOMWARE"
+      ],
+      "models": {
+        "CPTabM": {
+          "closed_f1_known": 0.8222,
+          "fit_seconds": 124.9,
+          "unknown_assigned_to": {
+            "WEB": 0.4373,
+            "DDOS": 0.1749,
+            "BENIGN": 0.1596,
+            "BRUTEFORCE": 0.1505,
+            "RECON": 0.0777
+          },
+          "best_epoch": 7,
+          "blind_matrix": [
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              0,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              0,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              0,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              0,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              0,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              0,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              0,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              0,
+              1,
+              1,
+              1,
+              0
+            ]
+          ],
+          "energy_accept_median": -10.125,
+          "energy_reject_median": -0.024,
+          "energy_gap_median": 9.818,
+          "explain_unknown_examples": [
+            {
+              "pred": "DDOS",
+              "prob": 0.43,
+              "signature_score": 0.355,
+              "nearest_signatures": [
+                [
+                  "BRUTEFORCE",
+                  0.355
+                ],
+                [
+                  "BENIGN",
+                  0.472
+                ],
+                [
+                  "DDOS",
+                  0.497
+                ]
+              ],
+              "expert_acceptance": {
+                "BENIGN": 0.509,
+                "RECON": 0.388,
+                "BRUTEFORCE": 0.587,
+                "WEB": 0.474,
+                "DDOS": 0.493
+              }
+            },
+            {
+              "pred": "WEB",
+              "prob": 0.709,
+              "signature_score": 0.186,
+              "nearest_signatures": [
+                [
+                  "WEB",
+                  0.186
+                ],
+                [
+                  "RECON",
+                  0.47
+                ],
+                [
+                  "BENIGN",
+                  0.565
+                ]
+              ],
+              "expert_acceptance": {
+                "BENIGN": 0.499,
+                "RECON": 0.563,
+                "BRUTEFORCE": 0.461,
+                "WEB": 0.752,
+                "DDOS": 0.479
+              }
+            },
+            {
+              "pred": "BENIGN",
+              "prob": 0.527,
+              "signature_score": 0.482,
+              "nearest_signatures": [
+                [
+                  "WEB",
+                  0.482
+                ],
+                [
+                  "BRUTEFORCE",
+                  0.49
+                ],
+                [
+                  "BENIGN",
+                  0.496
+                ]
+              ],
+              "expert_acceptance": {
+                "BENIGN": 0.454,
+                "RECON": 0.382,
+                "BRUTEFORCE": 0.458,
+                "WEB": 0.464,
+                "DDOS": 0.405
+              }
+            },
+            {
+              "pred": "DDOS",
+              "prob": 0.43,
+              "signature_score": 0.355,
+              "nearest_signatures": [
+                [
+                  "BRUTEFORCE",
+                  0.355
+                ],
+                [
+                  "BENIGN",
+                  0.472
+                ],
+                [
+                  "DDOS",
+                  0.497
+                ]
+              ],
+              "expert_acceptance": {
+                "BENIGN": 0.509,
+                "RECON": 0.388,
+                "BRUTEFORCE": 0.587,
+                "WEB": 0.474,
+                "DDOS": 0.493
+              }
+            },
+            {
+              "pred": "DDOS",
+              "prob": 0.43,
+              "signature_score": 0.355,
+              "nearest_signatures": [
+                [
+                  "BRUTEFORCE",
+                  0.355
+                ],
+                [
+                  "BENIGN",
+                  0.472
+                ],
+                [
+                  "DDOS",
+                  0.497
+                ]
+              ],
+              "expert_acceptance": {
+                "BENIGN": 0.509,
+                "RECON": 0.388,
+                "BRUTEFORCE": 0.587,
+                "WEB": 0.474,
+                "DDOS": 0.493
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "results": [
+    {
+      "family": "DDOS",
+      "model": "CPTabM",
+      "score": "signature",
+      "auroc": 0.6745,
+      "aupr": 0.4872,
+      "fpr95": 0.9528,
+      "detect@cal": 0.047,
+      "known_reject@cal": 0.0483,
+      "silent_benign@cal": 0.0007,
+      "open_f1@cal": 0.6418
+    },
+    {
+      "family": "DDOS",
+      "model": "CPTabM",
+      "score": "msp",
+      "auroc": 0.6173,
+      "aupr": 0.4637,
+      "fpr95": 0.9626,
+      "detect@cal": 0.0349,
+      "known_reject@cal": 0.0477,
+      "silent_benign@cal": 0.0008,
+      "open_f1@cal": 0.6396
+    },
+    {
+      "family": "DDOS",
+      "model": "CPTabM",
+      "score": "disagree",
+      "auroc": 0.4071,
+      "aupr": 0.4104,
+      "fpr95": 0.9994,
+      "detect@cal": 0.0006,
+      "known_reject@cal": 0.0206,
+      "silent_benign@cal": 0.0007,
+      "open_f1@cal": 0.6205
+    },
+    {
+      "family": "DDOS",
+      "model": "CPTabM",
+      "score": "energy",
+      "auroc": 0.6018,
+      "aupr": 0.4413,
+      "fpr95": 0.9502,
+      "detect@cal": 0.0461,
+      "known_reject@cal": 0.047,
+      "silent_benign@cal": 0.0009,
+      "open_f1@cal": 0.6418
+    },
+    {
+      "family": "DDOS",
+      "model": "CPTabM",
+      "score": "expert_disagree",
+      "auroc": 0.6416,
+      "aupr": 0.4833,
+      "fpr95": 0.9549,
+      "detect@cal": 0.0427,
+      "known_reject@cal": 0.047,
+      "silent_benign@cal": 0.0007,
+      "open_f1@cal": 0.6419
+    },
+    {
+      "family": "DDOS",
+      "model": "CPTabM",
+      "score": "expert_energy_z",
+      "auroc": 0.7788,
+      "aupr": 0.6388,
+      "fpr95": 0.8404,
+      "detect@cal": 0.1596,
+      "known_reject@cal": 0.0454,
+      "silent_benign@cal": 0.0003,
+      "open_f1@cal": 0.6736
+    },
+    {
+      "family": "DDOS",
+      "model": "bağımsız",
+      "score": "knn",
+      "auroc": 0.9145,
+      "aupr": 0.9009,
+      "fpr95": 0.2435,
+      "detect@cal": 0.7564,
+      "known_reject@cal": 0.0486,
+      "silent_benign@cal": 0.0005,
+      "open_f1@cal": 0.8019
+    },
+    {
+      "family": "RECON",
+      "model": "CPTabM",
+      "score": "signature",
+      "auroc": 0.635,
+      "aupr": 0.217,
+      "fpr95": 0.9991,
+      "detect@cal": 0.0009,
+      "known_reject@cal": 0.0484,
+      "silent_benign@cal": 0.0005,
+      "open_f1@cal": 0.6551
+    },
+    {
+      "family": "RECON",
+      "model": "CPTabM",
+      "score": "msp",
+      "auroc": 0.6571,
+      "aupr": 0.2283,
+      "fpr95": 0.9991,
+      "detect@cal": 0.0009,
+      "known_reject@cal": 0.05,
+      "silent_benign@cal": 0.0006,
+      "open_f1@cal": 0.6552
+    },
+    {
+      "family": "RECON",
+      "model": "CPTabM",
+      "score": "disagree",
+      "auroc": 0.6286,
+      "aupr": 0.3544,
+      "fpr95": 0.792,
+      "detect@cal": 0.208,
+      "known_reject@cal": 0.0471,
+      "silent_benign@cal": 0.0006,
+      "open_f1@cal": 0.682
+    },
+    {
+      "family": "RECON",
+      "model": "CPTabM",
+      "score": "energy",
+      "auroc": 0.5834,
+      "aupr": 0.1962,
+      "fpr95": 0.9995,
+      "detect@cal": 0.0005,
+      "known_reject@cal": 0.047,
+      "silent_benign@cal": 0.0006,
+      "open_f1@cal": 0.6533
+    },
+    {
+      "family": "RECON",
+      "model": "CPTabM",
+      "score": "expert_disagree",
+      "auroc": 0.7,
+      "aupr": 0.2985,
+      "fpr95": 0.8933,
+      "detect@cal": 0.1067,
+      "known_reject@cal": 0.0499,
+      "silent_benign@cal": 0.0005,
+      "open_f1@cal": 0.6855
+    },
+    {
+      "family": "RECON",
+      "model": "CPTabM",
+      "score": "expert_energy_z",
+      "auroc": 0.6558,
+      "aupr": 0.2688,
+      "fpr95": 0.9884,
+      "detect@cal": 0.0116,
+      "known_reject@cal": 0.0495,
+      "silent_benign@cal": 0.0001,
+      "open_f1@cal": 0.6374
+    },
+    {
+      "family": "RECON",
+      "model": "bağımsız",
+      "score": "knn",
+      "auroc": 0.8885,
+      "aupr": 0.8133,
+      "fpr95": 0.2649,
+      "detect@cal": 0.7351,
+      "known_reject@cal": 0.0494,
+      "silent_benign@cal": 0.0003,
+      "open_f1@cal": 0.7748
+    },
+    {
+      "family": "WEB",
+      "model": "CPTabM",
+      "score": "signature",
+      "auroc": 0.8331,
+      "aupr": 0.3371,
+      "fpr95": 0.8889,
+      "detect@cal": 0.1059,
+      "known_reject@cal": 0.0472,
+      "silent_benign@cal": 0.0231,
+      "open_f1@cal": 0.7104
+    },
+    {
+      "family": "WEB",
+      "model": "CPTabM",
+      "score": "msp",
+      "auroc": 0.854,
+      "aupr": 0.3468,
+      "fpr95": 0.8876,
+      "detect@cal": 0.1054,
+      "known_reject@cal": 0.0474,
+      "silent_benign@cal": 0.0231,
+      "open_f1@cal": 0.7098
+    },
+    {
+      "family": "WEB",
+      "model": "CPTabM",
+      "score": "disagree",
+      "auroc": 0.2409,
+      "aupr": 0.0916,
+      "fpr95": 0.991,
+      "detect@cal": 0.009,
+      "known_reject@cal": 0.0484,
+      "silent_benign@cal": 0.0229,
+      "open_f1@cal": 0.6536
+    },
+    {
+      "family": "WEB",
+      "model": "CPTabM",
+      "score": "energy",
+      "auroc": 0.8472,
+      "aupr": 0.3752,
+      "fpr95": 0.8314,
+      "detect@cal": 0.169,
+      "known_reject@cal": 0.0507,
+      "silent_benign@cal": 0.0231,
+      "open_f1@cal": 0.7151
+    },
+    {
+      "family": "WEB",
+      "model": "CPTabM",
+      "score": "expert_disagree",
+      "auroc": 0.8788,
+      "aupr": 0.4885,
+      "fpr95": 0.7425,
+      "detect@cal": 0.2497,
+      "known_reject@cal": 0.0492,
+      "silent_benign@cal": 0.0231,
+      "open_f1@cal": 0.7489
+    },
+    {
+      "family": "WEB",
+      "model": "CPTabM",
+      "score": "expert_energy_z",
+      "auroc": 0.6313,
+      "aupr": 0.2124,
+      "fpr95": 0.9431,
+      "detect@cal": 0.0568,
+      "known_reject@cal": 0.0488,
+      "silent_benign@cal": 0.0048,
+      "open_f1@cal": 0.6921
+    },
+    {
+      "family": "WEB",
+      "model": "bağımsız",
+      "score": "knn",
+      "auroc": 0.8674,
+      "aupr": 0.5637,
+      "fpr95": 0.6623,
+      "detect@cal": 0.3308,
+      "known_reject@cal": 0.0467,
+      "silent_benign@cal": 0.0166,
+      "open_f1@cal": 0.7403
+    },
+    {
+      "family": "BRUTEFORCE",
+      "model": "CPTabM",
+      "score": "signature",
+      "auroc": 0.8298,
+      "aupr": 0.2209,
+      "fpr95": 0.7753,
+      "detect@cal": 0.2148,
+      "known_reject@cal": 0.0464,
+      "silent_benign@cal": 0.1181,
+      "open_f1@cal": 0.7896
+    },
+    {
+      "family": "BRUTEFORCE",
+      "model": "CPTabM",
+      "score": "msp",
+      "auroc": 0.8347,
+      "aupr": 0.194,
+      "fpr95": 0.795,
+      "detect@cal": 0.1936,
+      "known_reject@cal": 0.0476,
+      "silent_benign@cal": 0.1099,
+      "open_f1@cal": 0.7879
+    },
+    {
+      "family": "BRUTEFORCE",
+      "model": "CPTabM",
+      "score": "disagree",
+      "auroc": 0.2661,
+      "aupr": 0.0459,
+      "fpr95": 0.9933,
+      "detect@cal": 0.0067,
+      "known_reject@cal": 0.0473,
+      "silent_benign@cal": 0.1508,
+      "open_f1@cal": 0.7202
+    },
+    {
+      "family": "BRUTEFORCE",
+      "model": "CPTabM",
+      "score": "energy",
+      "auroc": 0.8086,
+      "aupr": 0.1695,
+      "fpr95": 0.8622,
+      "detect@cal": 0.1313,
+      "known_reject@cal": 0.0462,
+      "silent_benign@cal": 0.1491,
+      "open_f1@cal": 0.7738
+    },
+    {
+      "family": "BRUTEFORCE",
+      "model": "CPTabM",
+      "score": "expert_disagree",
+      "auroc": 0.8455,
+      "aupr": 0.2939,
+      "fpr95": 0.7498,
+      "detect@cal": 0.2475,
+      "known_reject@cal": 0.048,
+      "silent_benign@cal": 0.147,
+      "open_f1@cal": 0.7969
+    },
+    {
+      "family": "BRUTEFORCE",
+      "model": "CPTabM",
+      "score": "expert_energy_z",
+      "auroc": 0.7318,
+      "aupr": 0.1653,
+      "fpr95": 0.8362,
+      "detect@cal": 0.1552,
+      "known_reject@cal": 0.0316,
+      "silent_benign@cal": 0.0007,
+      "open_f1@cal": 0.7834
+    },
+    {
+      "family": "BRUTEFORCE",
+      "model": "bağımsız",
+      "score": "knn",
+      "auroc": 0.8589,
+      "aupr": 0.3988,
+      "fpr95": 0.6223,
+      "detect@cal": 0.3762,
+      "known_reject@cal": 0.0491,
+      "silent_benign@cal": 0.1222,
+      "open_f1@cal": 0.8028
+    },
+    {
+      "family": "MALWARE",
+      "model": "CPTabM",
+      "score": "signature",
+      "auroc": 0.8439,
+      "aupr": 0.4379,
+      "fpr95": 0.749,
+      "detect@cal": 0.251,
+      "known_reject@cal": 0.049,
+      "silent_benign@cal": 0.0062,
+      "open_f1@cal": 0.6968
+    },
+    {
+      "family": "MALWARE",
+      "model": "CPTabM",
+      "score": "msp",
+      "auroc": 0.8127,
+      "aupr": 0.3428,
+      "fpr95": 0.7601,
+      "detect@cal": 0.2399,
+      "known_reject@cal": 0.0456,
+      "silent_benign@cal": 0.1563,
+      "open_f1@cal": 0.7015
+    },
+    {
+      "family": "MALWARE",
+      "model": "CPTabM",
+      "score": "disagree",
+      "auroc": 0.3229,
+      "aupr": 0.0805,
+      "fpr95": 1.0,
+      "detect@cal": 0.0,
+      "known_reject@cal": 0.0473,
+      "silent_benign@cal": 0.1596,
+      "open_f1@cal": 0.6266
+    },
+    {
+      "family": "MALWARE",
+      "model": "CPTabM",
+      "score": "energy",
+      "auroc": 0.8188,
+      "aupr": 0.3494,
+      "fpr95": 0.7996,
+      "detect@cal": 0.2004,
+      "known_reject@cal": 0.0487,
+      "silent_benign@cal": 0.1536,
+      "open_f1@cal": 0.6928
+    },
+    {
+      "family": "MALWARE",
+      "model": "CPTabM",
+      "score": "expert_disagree",
+      "auroc": 0.859,
+      "aupr": 0.4471,
+      "fpr95": 0.8228,
+      "detect@cal": 0.1772,
+      "known_reject@cal": 0.0476,
+      "silent_benign@cal": 0.0955,
+      "open_f1@cal": 0.6911
+    },
+    {
+      "family": "MALWARE",
+      "model": "CPTabM",
+      "score": "expert_energy_z",
+      "auroc": 0.7001,
+      "aupr": 0.3441,
+      "fpr95": 0.7487,
+      "detect@cal": 0.2513,
+      "known_reject@cal": 0.0477,
+      "silent_benign@cal": 0.0,
+      "open_f1@cal": 0.6905
+    },
+    {
+      "family": "MALWARE",
+      "model": "bağımsız",
+      "score": "knn",
+      "auroc": 0.8765,
+      "aupr": 0.63,
+      "fpr95": 0.4909,
+      "detect@cal": 0.5083,
+      "known_reject@cal": 0.0483,
+      "silent_benign@cal": 0.0,
+      "open_f1@cal": 0.7194
+    }
+  ],
+  "mean_over_families": [
+    {
+      "model": "bağımsız",
+      "score": "knn",
+      "auroc": 0.8812,
+      "fpr95": 0.4568,
+      "detect@cal": 0.5414,
+      "silent_benign@cal": 0.0279,
+      "open_f1@cal": 0.7678
+    },
+    {
+      "model": "CPTabM",
+      "score": "expert_disagree",
+      "auroc": 0.785,
+      "fpr95": 0.8327,
+      "detect@cal": 0.1648,
+      "silent_benign@cal": 0.0534,
+      "open_f1@cal": 0.7129
+    },
+    {
+      "model": "CPTabM",
+      "score": "signature",
+      "auroc": 0.7633,
+      "fpr95": 0.873,
+      "detect@cal": 0.1239,
+      "silent_benign@cal": 0.0297,
+      "open_f1@cal": 0.6987
+    },
+    {
+      "model": "CPTabM",
+      "score": "msp",
+      "auroc": 0.7552,
+      "fpr95": 0.8809,
+      "detect@cal": 0.1149,
+      "silent_benign@cal": 0.0581,
+      "open_f1@cal": 0.6988
+    },
+    {
+      "model": "CPTabM",
+      "score": "energy",
+      "auroc": 0.732,
+      "fpr95": 0.8886,
+      "detect@cal": 0.1095,
+      "silent_benign@cal": 0.0655,
+      "open_f1@cal": 0.6954
+    },
+    {
+      "model": "CPTabM",
+      "score": "expert_energy_z",
+      "auroc": 0.6996,
+      "fpr95": 0.8714,
+      "detect@cal": 0.1269,
+      "silent_benign@cal": 0.0012,
+      "open_f1@cal": 0.6954
+    },
+    {
+      "model": "CPTabM",
+      "score": "disagree",
+      "auroc": 0.3731,
+      "fpr95": 0.9551,
+      "detect@cal": 0.0449,
+      "silent_benign@cal": 0.0669,
+      "open_f1@cal": 0.6606
+    }
+  ],
+  "runtime_seconds": 890.5
+}
