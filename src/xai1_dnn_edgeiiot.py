@@ -145,7 +145,7 @@ def lime_stability(model, Xtr_bg, Xs, classes, seeds, num_samples, k=5):
 
 
 # ---------------------------------------------------------------- grafik
-def plot(methods, out_path, top=12):
+def plot(methods, out_path, top=12, title="Edge-IIoTset: açıklama yöntemleri ve gerçek etki"):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -160,7 +160,7 @@ def plot(methods, out_path, top=12):
     ax.set_yticks(range(len(order)), order)
     ax.invert_yaxis()
     ax.set_xlabel("Normalize önem (yöntem içinde toplam = 1)")
-    ax.set_title("Edge-IIoTset, RF: açıklama yöntemleri ve gerçek etki", fontsize=11)
+    ax.set_title(title, fontsize=11)
     ax.spines[["top", "right"]].set_visible(False)
     ax.legend(frameon=False, loc="lower right")
     fig.tight_layout()
@@ -177,6 +177,8 @@ def main():
     p.add_argument("--seed", type=int, default=42)
     p.add_argument("--drop-features", default="", help="Ör. kısayolsuz koşul için 6 sütun")
     p.add_argument("--tag", default="A_tam", help="Çıktı adındaki koşul etiketi")
+    p.add_argument("--model", default="RF", choices=["RF", "DT"],
+                   help="RF: birincil model (DSS açıklamaları ondan); DT: DSS üçlüsünde, kendi başına okunabilir")
     p.add_argument("--shap-per-class", type=int, default=100)
     p.add_argument("--lime-per-class", type=int, default=50)
     p.add_argument("--lime-samples", type=int, default=1000)
@@ -202,10 +204,10 @@ def main():
     feats = list(X.columns)
     print(f"Örneklem: {len(y)} satır, {len(feats)} özellik, {len(classes)} kategori ({args.tag})")
 
-    base = build_models(args.seed, args.n_jobs)["RF"]
+    base = build_models(args.seed, args.n_jobs)[args.model]
     model = clone(base).fit(Xtr, ytr)
     f1_full = macro_f1(model, Xte, yte)
-    print(f"RF test macro-F1 = {f1_full:.4f}")
+    print(f"{args.model} test macro-F1 = {f1_full:.4f}")
 
     methods = {}
     # 1a. drop-one (yeniden eğitim)
@@ -252,15 +254,16 @@ def main():
              for m, d in methods.items()}
 
     out = {"dataset_id": "dnn_edgeiiot", "condition": args.tag, "dropped_features": drop,
-           "model": "RF (ablation sabit ayarları)", "test_macro_f1": round(f1_full, 4),
+           "model": f"{args.model} (ablation sabit ayarları)", "test_macro_f1": round(f1_full, 4),
            "classes": classes, "settings": {k: v for k, v in vars(args).items() if k != "data_file"},
            "top10_by_method": top10, "rank_agreement": comparisons,
            "per_class_shap_vs_lime_top3": per_class_top3, "lime_stability": stability,
            "importances": {m: {f: round(v, 6) for f, v in d.items()} for m, d in methods.items()},
            "runtime_seconds": round(time.perf_counter() - t_start, 1)}
-    with open(os.path.join(args.out_dir, f"xai1_{args.tag}.json"), "w", encoding="utf-8") as f:
+    with open(os.path.join(args.out_dir, f"xai1_{args.model}_{args.tag}.json"), "w", encoding="utf-8") as f:
         json.dump(out, f, indent=2, ensure_ascii=False)
-    plot(methods, os.path.join(args.out_dir, f"fig_xai1_importance_dnn_edgeiiot_RF_{args.tag}.png"))
+    plot(methods, os.path.join(args.out_dir, f"fig_xai1_importance_dnn_edgeiiot_{args.model}_{args.tag}.png"),
+         title=f"Edge-IIoTset, {args.model}: açıklama yöntemleri ve gerçek etki")
 
     print("\nİlk 5 özellik:")
     for m, lst in top10.items():
