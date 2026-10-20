@@ -30,6 +30,12 @@ bilinmeyenlerde (DDOS ~ RECON) o sınıfın imzasını taşıdığı için zayı
                      seviyesine göre sapması: "uzmanlar her zamankinden ne kadar az emin"
    İkisi de eğitimi değiştirmez; yalnızca iç doğrulama verisiyle ölçeklenir.
 
+3. sürüm (20.10.2026; 2. sürümde iki skor farklı ailelerde güçlü çıktı: anlaşmazlık genel tespitte,
+emin olma derecesi sessiz BENIGN kaçışını önlemede):
+   comb_max / comb_mean  her iki skor, iç doğrulamadaki bilinenlere göre yüzdeliğe çevrilip en
+                         büyüğü / ortalaması alınır. Hangisinin ve kaç kör üyenin kullanılacağı
+                         cp_tune_dnn_edgeiiot.py ile (iç içe LOFO, test ailesi kullanılmadan) seçilir.
+
 Bileşen testleri (open_set_lofo_dnn_edgeiiot.py):
   TabM          körleme yok, enerji kaybı yok (sade TabM; anlaşmazlık skoru)
   CPTabM-noE    körleme var, enerji kaybı yok (lam_energy = 0)
@@ -45,6 +51,7 @@ import numpy as np
 
 from tabm_classifier import TabMClassifier
 
+COMBINE = ("expert_disagree", "expert_energy_z")  # birleştirilen iki tamamlayıcı skor
 NEG = -1e4  # maskeli logit (float32'de güvenli; -inf logsumexp'te NaN üretebilir)
 
 
@@ -141,7 +148,8 @@ class CPTabMClassifier(TabMClassifier):
         E = self._energy_np(self._logits(Xva))
         sees = self.A_[:, yva].T                                     # (n, k)
         k = E.shape[1]
-        self.e_acc_ = np.array([np.median(E[sees[:, m], m]) for m in range(k)])
+        self.e_acc_ = np.array([np.median(E[sees[:, m], m]) if sees[:, m].any() else self.m_in
+                                for m in range(k)])
         self.e_rej_ = np.array([np.median(E[~sees[:, m], m]) if (~sees[:, m]).any() else self.m_out
                                 for m in range(k)])
         gap = self.e_rej_ - self.e_acc_
@@ -152,6 +160,9 @@ class CPTabMClassifier(TabMClassifier):
         self.cls_mu_ = np.array([np.median(Eexp[yva == c]) if (yva == c).any() else 0.0 for c in range(C)])
         self.cls_sd_ = np.array([max(np.subtract(*np.percentile(Eexp[yva == c], [75, 25])) / 1.349, 1e-3)
                                  if (yva == c).sum() > 3 else 1.0 for c in range(C)])
+        # Birleştirme için referans: iç doğrulamadaki (yalnızca bilinen) örneklerin skor dağılımı
+        _, raw = self._scores_from_logits(self._logits(Xva))
+        self.ref_ = {k: np.sort(raw[k]) for k in COMBINE}
         if self.verbose:
             print(f"    CP-TabM doğrulama enerjisi: kabul medyanı {np.median(self.e_acc_):.2f}, "
                   f"red medyanı {np.median(self.e_rej_):.2f}, üye ayrımı (medyan) {self.energy_gap_:.2f}"
@@ -183,9 +194,21 @@ class CPTabMClassifier(TabMClassifier):
         return np.abs(R[:, :, None] - S[None]).mean(axis=1)
 
     # ------------------------------------------------------------ bilinmeyen skorları
+    def _pct(self, name, x):
+        """Skoru, iç doğrulamadaki bilinenlerin yüzde kaçından daha şüpheli olduğuna çevirir (0-1)."""
+        ref = self.ref_[name]
+        return np.searchsorted(ref, x, side="right") / len(ref)
+
     def unknown_scores(self, X):
         """Dönen: P (n, C) sınıf olasılıkları, skor sözlüğü (büyük = bilinmeyen)."""
-        logits = self.predict_logits(X)
+        P, scores = self._scores_from_logits(self.predict_logits(X))
+        pct = np.stack([self._pct(k, scores[k]) for k in COMBINE])  # (2, n)
+        # 3. sürüm: iki tamamlayıcı skorun birleşimi (uzmanlar anlaşamıyor YA DA her zamankinden az emin)
+        scores["comb_max"] = pct.max(axis=0)
+        scores["comb_mean"] = pct.mean(axis=0)
+        return P, scores
+
+    def _scores_from_logits(self, logits):
         Pm = self._member_proba_np(logits)
         P = self._proba_np(logits)
         E = self._energy_np(logits)
@@ -216,6 +239,9 @@ class CPTabMClassifier(TabMClassifier):
         P = self._proba_np(logits)
         R = self._rejection(self._energy_np(logits))
         D = self._signature_dist(R)
+        _, raw = self._scores_from_logits(logits)
+        pd_ = self._pct("expert_disagree", raw["expert_disagree"])
+        pz = self._pct("expert_energy_z", raw["expert_energy_z"])
         out = []
         for i in range(len(P)):
             order = np.argsort(D[i])[:top]
@@ -225,5 +251,9 @@ class CPTabMClassifier(TabMClassifier):
                 "signature_score": round(float(D[i].min()), 3),
                 "nearest_signatures": [(names[c], round(float(D[i, c]), 3)) for c in order],
                 "expert_acceptance": experts,   # sınıf c'yi gören üyelerin ortalama kabul oranı
+                # Tahmin edilen sınıfın uzmanları: bilinenlerin yüzde kaçından daha çok anlaşamıyor /
+                # yüzde kaçından daha az emin (1'e yakın = bilinenlerde nadir görülen şüphe)
+                "experts_disagree_pct": round(float(pd_[i]), 3),
+                "experts_unsure_pct": round(float(pz[i]), 3),
             })
         return out
