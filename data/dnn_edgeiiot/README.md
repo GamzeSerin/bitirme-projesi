@@ -160,6 +160,32 @@ Kod: `src/cost_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/cost/`. Asıl d
 3. **DSS için öneri: DT+RF+XGB.** OOF ve testte en iyi, şu anki kuraldan 13 kat ucuz; farklar binde 1'in altında olduğu için doğru ifade "başarı ve güvenlik değişmeden maliyet 13 kat düşüyor". TabM'in rolü sınıflandırma oylaması değil, görülmemiş saldırı tespiti. Ortak DSS kuralını değiştirdiği için ekip kararı gerekiyor.
 4. Sınırlılık: ölçümler Kaggle'da; gerçek bir edge cihazında ölçülmedi.
 
+## Açıklama Doğrulama: SHAP ve LIME (20.10.2026)
+
+Kod: `src/xai_faithfulness_dnn_edgeiiot.py` (özet grafik: `src/xai_faithfulness_summary_dnn_edgeiiot.py`), çıktı: `outputs/dnn_edgeiiot/xai_faithfulness/`. Soru: SHAP ve LIME'ın "önemli" dediği özellikler, modelden gerçekten çıkarıldığında başarıyı düşürenlerle aynı mı? Açıklamalar her alarmda analiste gösterileceği için doğru olmaları gerekir.
+
+**Yöntem.** Temiz veri, tam koşul (A), RF ve DT (ablation ayarları, test macro-F1 0,9932 / 0,9932). Gerçek etki iki şekilde ölçüldü: **drop-one** (her özellik çıkarılıp model yeniden eğitilir, macro-F1 kaybı) ve **permütasyon** (özellik karıştırılır, kayıp). Açıklama yöntemleri: **SHAP** TreeExplainer (sınıf başına 100 test satırı, |değer| ortalaması) ve **LIME** (sınıf başına 50 satır, tahmin edilen sınıf için |ağırlık|). Uyum Spearman/Kendall ve ilk-k Jaccard ile; LIME kararlılığı 30 satırın 3 farklı tohumla yeniden açıklanmasıyla ölçüldü. LIME'ın ayara bağlı olup olmadığını görmek için RF'de iki ek koşu yapıldı (5000 örnek; ayrıklaştırma kapalı; drop-one değerleri ilk koşudan alındı).
+
+![Açıklama doğrulama özeti](../../outputs/dnn_edgeiiot/xai_faithfulness/fig_xai_faithfulness_summary_dnn_edgeiiot_RF_DT.png)
+
+| Spearman (ilk-5 Jaccard) | DT | RF | RF, LIME 5000 | RF, LIME ayrıklaştırmasız |
+| --- | --- | --- | --- | --- |
+| SHAP ~ permütasyon | **0,89 (1,00)** | **0,63 (0,67)** | – | – |
+| SHAP ~ drop-one | 0,57 (0,67) | 0,37 (0,67) | – | – |
+| LIME ~ permütasyon | 0,40 (0,43) | 0,44 (0,67) | 0,37 (0,43) | 0,60 (0,43) |
+| LIME ~ drop-one | 0,13 (0,43) | 0,17 (0,43) | 0,02 (0,43) | 0,37 (0,67) |
+| SHAP ~ LIME | 0,40 | 0,75 | 0,55 | 0,88 |
+| LIME kararlılığı: ilk-5 Jaccard ort. (en kötü) | 0,33 (0,00) | 0,33 (0,00) | 0,38 (0,11) | 0,67 (0,11) |
+
+**Bulgular:**
+
+1. **SHAP iki modelde de gerçek etkiyle en uyumlu yöntem** ve deterministik (aynı satır her zaman aynı açıklamayı alır). DSS'de analiste gösterilecek açıklamalar için SHAP seçildi.
+2. **LIME yapılandırmaya duyarlı.** Varsayılan (ayrıklaştırmalı) LIME bu veride kararsız (tekrarlarda ilk 5 özelliğin ancak üçte biri korunuyor) ve modelin kullanmadığı alanları (`mqtt.*`, `dns.*`) öne çıkarabiliyor. Örnek sayısını 5000'e çıkarmak düzeltmiyor; **ayrıklaştırmayı kapatmak** düzeltiyor (kararlılık 0,67, SHAP ile uyum 0,88). Olası sebep: çoğu sütun neredeyse hep 0, çeyrek sınırları anlamsızlaşıyor.
+3. **İyi ayarlı LIME bile satır bazında kararsız** (en kötü satırda ilk 5'ten yalnızca 1 ortak; ağırlık sıralaması uyumu 0,40). Bu yüzden LIME tamamlayıcı olarak raporlanır, birincil açıklama SHAP'tır.
+4. **Drop-one, birbirinin yerini tutan özellikleri küçük gösterir** (`tcp.seq`/`tcp.ack`; RF'de başka ağaçlar telafi ediyor). Bu yüzden permütasyon ikinci referans olarak kullanıldı; SHAP'ın drop-one uyumunun daha düşük olması bu kör noktadan.
+5. **Kısayol bulgusu dört yöntemde de aynı:** ilk üç özellik `tcp.ack`, `tcp.dstport`, `tcp.seq` (ablation ve zaman bölmesi bulgularıyla tutarlı).
+6. Sınırlılık: yalnızca tam koşulda (A) ve ağaç modelleriyle yapıldı; kısayolsuz koşul (E) ve TabM açıklamaları sonraki adım.
+
 ## Sütun hizası ve değer aralığı denetimi (19.10.2026)
 
 Kod: `src/audit_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/audit/audit.json`. Ham verideki 15 etiketin her biri için 6 kontrol (zaman damgası, IP, port 0–65535, 0/1 bayrak, ARP alanları, sayısal sütunlarda metin). İhlal yalnızca DDoS_UDP (zaman %100) ve MITM'de (zaman %100, port %30, bayrak %19); Normal'de %0,11 bayrak ihlali (önemsiz); diğer 12 saldırı türünde %0. Bu iki tür bulgu 7 gereği atıldı.
@@ -178,6 +204,11 @@ python src/ablation_dnn_edgeiiot.py    --data-file <csv>
 python src/split_check_dnn_edgeiiot.py --data-file <csv>
 python src/audit_dnn_edgeiiot.py       --data-file <csv>
 python src/cost_dnn_edgeiiot.py        --data-file <csv> --work-dir <asıl deneyin work dizini>
+pip install lime shap
+python src/xai_faithfulness_dnn_edgeiiot.py --data-file <csv> --model RF   # ve --model DT
+python src/xai_faithfulness_dnn_edgeiiot.py --data-file <csv> --model RF --tag A_tam_nodisc --lime-no-discretize \
+    --drop-one-from outputs/dnn_edgeiiot/xai_faithfulness/faithfulness_RF_A_tam.json
+python src/xai_faithfulness_summary_dnn_edgeiiot.py
 ```
 
 Çalıştırma kayıtları: `outputs/dnn_edgeiiot/logs/`.
