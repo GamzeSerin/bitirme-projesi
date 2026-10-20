@@ -99,8 +99,11 @@ def lime_explainer(Xtr, classes, seed):
         return LimeTabularExplainer(Xtr.to_numpy(), discretize_continuous=False, **kw)
 
 
-def lime_weights(explainer, model, row, label, num_samples):
-    exp = explainer.explain_instance(row, model.predict_proba, labels=(label,),
+def lime_weights(explainer, model, row, label, num_samples, columns=None):
+    # LIME numpy dizisi gönderir; özellik adlarıyla DataFrame'e çevirmek sklearn uyarılarını önler
+    predict = (lambda Z: model.predict_proba(pd.DataFrame(Z, columns=columns))) if columns is not None \
+        else model.predict_proba
+    exp = explainer.explain_instance(row, predict, labels=(label,),
                                      num_features=len(row), num_samples=num_samples)
     w = np.zeros(len(row))
     for j, val in exp.as_map()[label]:
@@ -114,7 +117,7 @@ def lime_importance(model, Xtr_bg, Xs, ys, classes, seed, num_samples):
     pred = model.predict(Xs)
     W = np.zeros((len(Xs), len(feats)))
     for i in range(len(Xs)):
-        W[i] = lime_weights(expl, model, Xs.iloc[i].to_numpy(), int(pred[i]), num_samples)
+        W[i] = lime_weights(expl, model, Xs.iloc[i].to_numpy(), int(pred[i]), num_samples, feats)
     A = np.abs(W)
     per_class = {}
     for i, c in enumerate(classes):
@@ -128,7 +131,8 @@ def lime_stability(model, Xtr_bg, Xs, classes, seeds, num_samples, k=5):
     runs = []
     for s in seeds:
         expl = lime_explainer(Xtr_bg, classes, s)
-        runs.append(np.array([lime_weights(expl, model, Xs.iloc[i].to_numpy(), int(pred[i]), num_samples)
+        runs.append(np.array([lime_weights(expl, model, Xs.iloc[i].to_numpy(), int(pred[i]), num_samples,
+                                           list(Xs.columns))
                               for i in range(len(Xs))]))
     jac, rho = [], []
     for i in range(len(Xs)):
