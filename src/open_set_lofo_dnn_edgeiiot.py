@@ -91,6 +91,8 @@ def rf_members(model, X, batch=20000):
 
 
 def model_scores(name, model, X):
+    if name.startswith("CPTabM"):
+        return model.unknown_scores(X)
     if name == "TabM":
         Xt = model._prep(X)
         logits = model._logits(Xt)
@@ -179,11 +181,16 @@ def main():
     p.add_argument("--cap", type=int, default=40000)
     p.add_argument("--seed", type=int, default=42)
     p.add_argument("--condition", default="A_tam", choices=list(SCENARIOS))
-    p.add_argument("--models", default="RF", help="RF ve/veya TabM, virgülle")
+    p.add_argument("--models", default="RF",
+                   help="Virgülle: RF, TabM, CPTabM (önerilen), CPTabM-noE (enerji kaybı kapalı bileşen testi)")
     p.add_argument("--families", default=",".join(FAMILIES))
     p.add_argument("--cal-size", type=float, default=0.1)
     p.add_argument("--target", type=float, default=0.95, help="Kabul edilecek bilinen oranı")
     p.add_argument("--n-jobs", type=int, default=-1)
+    p.add_argument("--cp-blind-frac", type=float, default=0.25, help="CP-TabM: sınıf başına kör üye oranı")
+    p.add_argument("--cp-lam", type=float, default=0.1, help="CP-TabM: enerji sınırı kaybının ağırlığı")
+    p.add_argument("--cp-m-in", type=float, default=-6.0)
+    p.add_argument("--cp-m-out", type=float, default=-1.0)
     p.add_argument("--quick", action="store_true")
     args = p.parse_args()
     if args.quick:
@@ -230,6 +237,13 @@ def main():
                 from tabm_classifier import TabMClassifier
                 model = TabMClassifier(max_epochs=3 if args.quick else 60, random_state=args.seed,
                                        verbose=False)
+            elif name.startswith("CPTabM"):
+                from cp_tabm_classifier import CPTabMClassifier
+                model = CPTabMClassifier(blind_frac=args.cp_blind_frac,
+                                         lam_energy=0.0 if name == "CPTabM-noE" else args.cp_lam,
+                                         m_in=args.cp_m_in, m_out=args.cp_m_out,
+                                         max_epochs=3 if args.quick else 60, random_state=args.seed,
+                                         verbose=False)
             else:
                 model = clone(build_models(args.seed, args.n_jobs)[name])
             tm = time.perf_counter()
@@ -243,8 +257,19 @@ def main():
             details[fam]["models"][name] = {"closed_f1_known": round(float(closed_f1), 4),
                                             "fit_seconds": round(fit_s, 1),
                                             "unknown_assigned_to": assigned}
-            if name == "TabM":
+            if name == "TabM" or name.startswith("CPTabM"):
                 details[fam]["models"][name]["best_epoch"] = int(model.best_epoch_)
+            if name.startswith("CPTabM"):
+                info = details[fam]["models"][name]
+                info["blind_matrix"] = model.A_.astype(int).tolist()
+                info["energy_accept_median"] = round(float(np.median(model.e_acc_)), 3)
+                info["energy_reject_median"] = round(float(np.median(model.e_rej_)), 3)
+                info["energy_gap_median"] = round(model.energy_gap_, 3)
+                # Açıklama örnekleri: görülmemiş aileden 5 satır (XAI bölümü için)
+                ex_idx = np.flatnonzero(is_unk)[:5]
+                info["explain_unknown_examples"] = model.explain(Xte.iloc[ex_idx], known)
+                print(f"    enerji kabul/red medyanı {info['energy_accept_median']} / "
+                      f"{info['energy_reject_median']} (ayrım {info['energy_gap_median']})")
             print(f"  {name}: bilinen testte macro-F1 {closed_f1:.4f} ({fit_s:.0f} s); "
                   f"bilinmeyenler şuna atandı: {assigned}")
             S_cal = dict(S_cal, knn=knn_cal)

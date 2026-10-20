@@ -20,7 +20,7 @@ OUT_DIR = "outputs/dnn_edgeiiot/open_set"
 CONDITIONS = [("A_tam", "A: tüm özellikler"), ("C_seq_ack_yok", "C: seq/ack yok"),
               ("E_hepsi_cikarildi", "E: kısayolsuz")]
 COLORS = {"msp": "#9aa5b1", "entropy": "#5f6b7a", "disagree": "#2a78d6", "energy": "#7b4fd6",
-          "knn": "#d9822b"}
+          "knn": "#d9822b", "signature": "#1f9e6e"}
 
 
 def main():
@@ -57,10 +57,10 @@ def main():
     conds = [c for c in CONDITIONS if c[0] in set(mean["condition"])]
     # Okunabilirlik için entropi gösterilmez (her iki modelde msp ile neredeyse aynı); tablo JSON/CSV'de
     order = ["RF · msp", "RF · disagree", "TabM · msp", "TabM · energy", "TabM · disagree",
-             "CP-TabM · signature", "bağımsız · knn"]
+             "CPTabM-noE · signature", "CPTabM · signature", "bağımsız · knn"]
     present = set(mean["yöntem"])
     methods = [m for m in order if m in present] + sorted(
-        m for m in present if m not in order and not m.endswith("entropy"))
+        m for m in present if m not in order and not m.endswith("entropy") and not m.startswith("CPTabM"))
     fig, axes = plt.subplots(1, 2, figsize=(13, 5.2))
     w = 0.8 / len(methods)
     for ax, col, lab in [(axes[0], "auroc", "AUROC (0,5 = rastgele)"),
@@ -69,7 +69,7 @@ def main():
             sc = m.split(" · ")[1]
             vals = [mean.query("condition == @c and yöntem == @m")[col].mean() for c, _ in conds]
             xs = np.arange(len(conds)) + (j - (len(methods) - 1) / 2) * w
-            hatch = "//" if m.startswith("TabM") else None
+            hatch = "//" if m.startswith("TabM") else ("xx" if m.startswith("CPTabM") else None)
             ax.bar(xs, vals, width=w * 0.92, color=COLORS.get(sc, "#555"), hatch=hatch,
                    edgecolor="white", label=m)
             for x, v in zip(xs, vals):

@@ -141,6 +141,7 @@ class TabMClassifier(ClassifierMixin, BaseEstimator):
         if self.n_blocks is not None:
             kwargs["n_blocks"] = self.n_blocks
         model = tabm.TabM.make(**kwargs).to(dev)
+        self._setup(n_classes, model.backbone.k, dev, ytr)
         opt = torch.optim.AdamW(model.parameters(), lr=self.lr, weight_decay=self.weight_decay)
 
         w = (compute_class_weight("balanced", classes=np.arange(n_classes), y=ytr)
@@ -160,13 +161,12 @@ class TabMClassifier(ClassifierMixin, BaseEstimator):
             for idx in perm.split(self.batch_size):
                 opt.zero_grad()
                 logits = model(Xtr_t[idx])                       # (b, k, C)
-                loss = F.cross_entropy(logits.flatten(0, 1), ytr_t[idx].repeat_interleave(k),
-                                       weight=w_t)
+                loss = self._train_loss(logits, ytr_t[idx], w_t)
                 loss.backward()
                 torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
                 opt.step()
             self.model_ = model
-            proba_va = torch.softmax(torch.as_tensor(self._logits(Xva)), -1).mean(1).numpy()
+            proba_va = self._proba_np(self._logits(Xva))
             val_loss = float(-np.log(np.clip(proba_va[np.arange(len(yva)), yva], 1e-12, None)).mean())
             # Yalnızca izleme: durma kararı val_loss'a göre; macro-F1 eğrisiyle karşılaştırmak için
             val_f1 = float(f1_score(yva, proba_va.argmax(1), average="macro"))
@@ -184,6 +184,7 @@ class TabMClassifier(ClassifierMixin, BaseEstimator):
                 break
         model.load_state_dict(best[2])
         self.model_ = model
+        self._post_fit(Xva, yva)
         self.best_epoch_ = best[1]
         self.best_iteration_ = best[1] + 1   # run_model bunu "early stopping" parametresi olarak kaydeder
         f1s = [h["val_macro_f1"] for h in self.history_]
@@ -194,14 +195,42 @@ class TabMClassifier(ClassifierMixin, BaseEstimator):
                   f"(macro-F1 {max(f1s):.4f})")
         return self
 
+    # ------------------------------------------------------------ alt sınıf kancaları
+    # CP-TabM (cp_tabm_classifier.py) bunları değiştirir; TabM davranışı aynen korunur.
+    def _setup(self, n_classes, k, device, y_train):
+        pass
+
+    def _train_loss(self, logits, y, w):
+        import torch.nn.functional as F
+        k = logits.shape[1]
+        return F.cross_entropy(logits.flatten(0, 1), y.repeat_interleave(k), weight=w)
+
+    @staticmethod
+    def _softmax_np(z):
+        z = z - z.max(-1, keepdims=True)
+        e = np.exp(z)
+        return e / e.sum(-1, keepdims=True)
+
+    def _member_proba_np(self, logits):
+        return self._softmax_np(logits)
+
+    def _proba_np(self, logits):
+        return self._member_proba_np(logits).mean(axis=1)
+
+    def _post_fit(self, Xva, yva):
+        pass
+
     # ------------------------------------------------------------ tahmin
+    def predict_logits(self, X):
+        """(n, k, C) ham logit."""
+        return self._logits(self._prep(X))
+
     def predict_member_proba(self, X):
         """(n, k, C): her TabM üyesinin sınıf olasılıkları (bilinmeyen skorları için)."""
-        import torch
-        return torch.softmax(torch.as_tensor(self._logits(self._prep(X))), -1).numpy()
+        return self._member_proba_np(self.predict_logits(X))
 
     def predict_proba(self, X):
-        return self.predict_member_proba(X).mean(axis=1)
+        return self._proba_np(self.predict_logits(X))
 
     def predict(self, X):
         return self.classes_[self.predict_proba(X).argmax(axis=1)]
