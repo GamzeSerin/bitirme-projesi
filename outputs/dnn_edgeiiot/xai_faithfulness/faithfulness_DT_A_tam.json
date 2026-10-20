@@ -1,0 +1,478 @@
+{
+  "dataset_id": "dnn_edgeiiot",
+  "condition": "A_tam",
+  "dropped_features": [],
+  "model": "DT (ablation sabit ayarları)",
+  "test_macro_f1": 0.9932,
+  "classes": [
+    "BENIGN",
+    "RECON",
+    "BRUTEFORCE",
+    "WEB",
+    "MALWARE",
+    "DDOS"
+  ],
+  "settings": {
+    "out_dir": "outputs/dnn_edgeiiot/xai",
+    "cap": 40000,
+    "seed": 42,
+    "drop_features": "",
+    "tag": "A_tam",
+    "model": "DT",
+    "shap_per_class": 100,
+    "lime_per_class": 50,
+    "lime_samples": 1000,
+    "stability_rows": 30,
+    "perm_rows": 20000,
+    "skip_drop_one": false,
+    "n_jobs": -1,
+    "quick": false
+  },
+  "top10_by_method": {
+    "Drop-one": [
+      [
+        "tcp.ack",
+        0.05384
+      ],
+      [
+        "tcp.dstport",
+        0.03703
+      ],
+      [
+        "tcp.len",
+        0.02508
+      ],
+      [
+        "tcp.seq",
+        0.00279
+      ],
+      [
+        "http.content_length",
+        0.00036
+      ],
+      [
+        "tcp.flags",
+        0.00018
+      ],
+      [
+        "tcp.connection.rst",
+        4e-05
+      ],
+      [
+        "mbtcp.trans_id",
+        4e-05
+      ],
+      [
+        "mbtcp.unit_id",
+        4e-05
+      ],
+      [
+        "tcp.connection.synack",
+        3e-05
+      ]
+    ],
+    "Permütasyon": [
+      [
+        "tcp.ack",
+        0.57461
+      ],
+      [
+        "tcp.dstport",
+        0.45399
+      ],
+      [
+        "tcp.seq",
+        0.36584
+      ],
+      [
+        "tcp.len",
+        0.06828
+      ],
+      [
+        "tcp.connection.rst",
+        0.03985
+      ],
+      [
+        "tcp.flags",
+        0.03804
+      ],
+      [
+        "tcp.flags.ack",
+        0.03452
+      ],
+      [
+        "tcp.connection.synack",
+        0.00578
+      ],
+      [
+        "udp.port",
+        0.00078
+      ],
+      [
+        "http.content_length",
+        0.0005
+      ]
+    ],
+    "SHAP": [
+      [
+        "tcp.ack",
+        0.13758
+      ],
+      [
+        "tcp.dstport",
+        0.11013
+      ],
+      [
+        "tcp.seq",
+        0.09107
+      ],
+      [
+        "tcp.len",
+        0.01331
+      ],
+      [
+        "tcp.connection.rst",
+        0.0124
+      ],
+      [
+        "tcp.flags",
+        0.00903
+      ],
+      [
+        "tcp.connection.synack",
+        0.00222
+      ],
+      [
+        "tcp.flags.ack",
+        0.00104
+      ],
+      [
+        "http.content_length",
+        0.00086
+      ],
+      [
+        "udp.port",
+        0.00057
+      ]
+    ],
+    "LIME": [
+      [
+        "tcp.seq",
+        0.16674
+      ],
+      [
+        "mqtt.msgtype",
+        0.09012
+      ],
+      [
+        "mqtt.hdrflags",
+        0.08629
+      ],
+      [
+        "tcp.ack",
+        0.08041
+      ],
+      [
+        "mqtt.len",
+        0.07476
+      ],
+      [
+        "tcp.dstport",
+        0.07309
+      ],
+      [
+        "udp.port",
+        0.0572
+      ],
+      [
+        "tcp.connection.synack",
+        0.05692
+      ],
+      [
+        "dns.retransmission",
+        0.05474
+      ],
+      [
+        "udp.time_delta",
+        0.05453
+      ]
+    ]
+  },
+  "rank_agreement": {
+    "Drop-one ~ Permütasyon": {
+      "spearman": 0.654,
+      "kendall": 0.55,
+      "top5_jaccard": 0.667,
+      "top10_jaccard": 0.667
+    },
+    "Drop-one ~ SHAP": {
+      "spearman": 0.568,
+      "kendall": 0.463,
+      "top5_jaccard": 0.667,
+      "top10_jaccard": 0.667
+    },
+    "Drop-one ~ LIME": {
+      "spearman": 0.133,
+      "kendall": 0.119,
+      "top5_jaccard": 0.25,
+      "top10_jaccard": 0.25
+    },
+    "Permütasyon ~ SHAP": {
+      "spearman": 0.888,
+      "kendall": 0.84,
+      "top5_jaccard": 1.0,
+      "top10_jaccard": 1.0
+    },
+    "Permütasyon ~ LIME": {
+      "spearman": 0.395,
+      "kendall": 0.32,
+      "top5_jaccard": 0.25,
+      "top10_jaccard": 0.333
+    },
+    "SHAP ~ LIME": {
+      "spearman": 0.404,
+      "kendall": 0.334,
+      "top5_jaccard": 0.25,
+      "top10_jaccard": 0.333
+    }
+  },
+  "per_class_shap_vs_lime_top3": {
+    "BENIGN": {
+      "SHAP": [
+        "tcp.seq",
+        "tcp.ack",
+        "tcp.dstport"
+      ],
+      "LIME": [
+        "tcp.seq",
+        "tcp.ack",
+        "mqtt.len"
+      ],
+      "top3_jaccard": 0.5
+    },
+    "RECON": {
+      "SHAP": [
+        "tcp.seq",
+        "tcp.ack",
+        "tcp.dstport"
+      ],
+      "LIME": [
+        "tcp.ack",
+        "tcp.seq",
+        "mqtt.msgtype"
+      ],
+      "top3_jaccard": 0.5
+    },
+    "BRUTEFORCE": {
+      "SHAP": [
+        "tcp.ack",
+        "tcp.dstport",
+        "tcp.seq"
+      ],
+      "LIME": [
+        "tcp.ack",
+        "mqtt.len",
+        "mqtt.hdrflags"
+      ],
+      "top3_jaccard": 0.2
+    },
+    "WEB": {
+      "SHAP": [
+        "tcp.ack",
+        "tcp.dstport",
+        "tcp.seq"
+      ],
+      "LIME": [
+        "mqtt.msgtype",
+        "tcp.seq",
+        "mqtt.hdrflags"
+      ],
+      "top3_jaccard": 0.2
+    },
+    "MALWARE": {
+      "SHAP": [
+        "tcp.dstport",
+        "tcp.seq",
+        "tcp.ack"
+      ],
+      "LIME": [
+        "tcp.seq",
+        "tcp.dstport",
+        "mqtt.msgtype"
+      ],
+      "top3_jaccard": 0.5
+    },
+    "DDOS": {
+      "SHAP": [
+        "tcp.dstport",
+        "tcp.ack",
+        "tcp.seq"
+      ],
+      "LIME": [
+        "tcp.dstport",
+        "mqtt.msgtype",
+        "mqtt.hdrflags"
+      ],
+      "top3_jaccard": 0.2
+    }
+  },
+  "lime_stability": {
+    "rows": 30,
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "num_samples": 1000,
+    "top5_jaccard_mean": 0.329,
+    "top5_jaccard_min": 0.0,
+    "weight_spearman_mean": 0.684
+  },
+  "importances": {
+    "Drop-one": {
+      "arp.opcode": -1e-05,
+      "arp.hw.size": -1e-05,
+      "icmp.seq_le": -1e-05,
+      "icmp.transmit_timestamp": -1.9e-05,
+      "http.content_length": 0.000357,
+      "http.response": -3.1e-05,
+      "tcp.ack": 0.053845,
+      "tcp.connection.fin": 8e-06,
+      "tcp.connection.rst": 4.1e-05,
+      "tcp.connection.syn": 5e-06,
+      "tcp.connection.synack": 2.6e-05,
+      "tcp.dstport": 0.037032,
+      "tcp.flags": 0.000176,
+      "tcp.flags.ack": 1.4e-05,
+      "tcp.len": 0.025085,
+      "tcp.seq": 0.002789,
+      "udp.port": -1.5e-05,
+      "udp.time_delta": -1e-05,
+      "dns.qry.name": -1e-05,
+      "dns.qry.qu": -1e-05,
+      "dns.retransmission": -1e-05,
+      "dns.retransmit_request": -1e-05,
+      "dns.retransmit_request_in": -1.5e-05,
+      "mqtt.conflag.cleansess": 7e-06,
+      "mqtt.conflags": 7e-06,
+      "mqtt.hdrflags": 4e-06,
+      "mqtt.len": 4e-06,
+      "mqtt.msgtype": 4e-06,
+      "mqtt.proto_len": 5e-06,
+      "mqtt.topic_len": 5e-06,
+      "mqtt.ver": 5e-06,
+      "mbtcp.len": 6e-06,
+      "mbtcp.trans_id": 3.5e-05,
+      "mbtcp.unit_id": 3.5e-05
+    },
+    "Permütasyon": {
+      "arp.opcode": 0.0,
+      "arp.hw.size": 0.0,
+      "icmp.seq_le": 0.0,
+      "icmp.transmit_timestamp": 0.000216,
+      "http.content_length": 0.000499,
+      "http.response": -1.7e-05,
+      "tcp.ack": 0.57461,
+      "tcp.connection.fin": 0.0001,
+      "tcp.connection.rst": 0.039847,
+      "tcp.connection.syn": 0.0,
+      "tcp.connection.synack": 0.005785,
+      "tcp.dstport": 0.453987,
+      "tcp.flags": 0.038041,
+      "tcp.flags.ack": 0.034524,
+      "tcp.len": 0.068282,
+      "tcp.seq": 0.365842,
+      "udp.port": 0.000781,
+      "udp.time_delta": 0.0,
+      "dns.qry.name": 0.0,
+      "dns.qry.qu": 0.0,
+      "dns.retransmission": 0.0,
+      "dns.retransmit_request": 0.0,
+      "dns.retransmit_request_in": 0.0,
+      "mqtt.conflag.cleansess": 0.0,
+      "mqtt.conflags": 0.0,
+      "mqtt.hdrflags": 0.0,
+      "mqtt.len": 0.0,
+      "mqtt.msgtype": 0.0,
+      "mqtt.proto_len": 0.0,
+      "mqtt.topic_len": 0.0,
+      "mqtt.ver": 0.0,
+      "mbtcp.len": 0.0,
+      "mbtcp.trans_id": 0.0,
+      "mbtcp.unit_id": 0.0
+    },
+    "SHAP": {
+      "arp.opcode": 0.0,
+      "arp.hw.size": 0.0,
+      "icmp.seq_le": 0.0,
+      "icmp.transmit_timestamp": 7.2e-05,
+      "http.content_length": 0.000857,
+      "http.response": 5e-06,
+      "tcp.ack": 0.137581,
+      "tcp.connection.fin": 0.000114,
+      "tcp.connection.rst": 0.012401,
+      "tcp.connection.syn": 0.0,
+      "tcp.connection.synack": 0.002223,
+      "tcp.dstport": 0.110129,
+      "tcp.flags": 0.009034,
+      "tcp.flags.ack": 0.001042,
+      "tcp.len": 0.01331,
+      "tcp.seq": 0.091067,
+      "udp.port": 0.000575,
+      "udp.time_delta": 0.0,
+      "dns.qry.name": 0.0,
+      "dns.qry.qu": 0.0,
+      "dns.retransmission": 0.0,
+      "dns.retransmit_request": 0.0,
+      "dns.retransmit_request_in": 0.0,
+      "mqtt.conflag.cleansess": 0.0,
+      "mqtt.conflags": 0.0,
+      "mqtt.hdrflags": 0.0,
+      "mqtt.len": 0.0,
+      "mqtt.msgtype": 0.0,
+      "mqtt.proto_len": 0.0,
+      "mqtt.topic_len": 0.0,
+      "mqtt.ver": 0.0,
+      "mbtcp.len": 0.0,
+      "mbtcp.trans_id": 0.0,
+      "mbtcp.unit_id": 0.0
+    },
+    "LIME": {
+      "arp.opcode": 0.0,
+      "arp.hw.size": 0.0,
+      "icmp.seq_le": 0.036139,
+      "icmp.transmit_timestamp": 0.030708,
+      "http.content_length": 0.027144,
+      "http.response": 0.025615,
+      "tcp.ack": 0.08041,
+      "tcp.connection.fin": 0.030532,
+      "tcp.connection.rst": 0.043478,
+      "tcp.connection.syn": 0.03245,
+      "tcp.connection.synack": 0.056923,
+      "tcp.dstport": 0.073085,
+      "tcp.flags": 0.029532,
+      "tcp.flags.ack": 0.0,
+      "tcp.len": 0.030776,
+      "tcp.seq": 0.166743,
+      "udp.port": 0.057198,
+      "udp.time_delta": 0.054528,
+      "dns.qry.name": 0.030494,
+      "dns.qry.qu": 0.04942,
+      "dns.retransmission": 0.054737,
+      "dns.retransmit_request": 0.0,
+      "dns.retransmit_request_in": 0.0,
+      "mqtt.conflag.cleansess": 0.0,
+      "mqtt.conflags": 0.0,
+      "mqtt.hdrflags": 0.086289,
+      "mqtt.len": 0.074762,
+      "mqtt.msgtype": 0.090123,
+      "mqtt.proto_len": 0.0,
+      "mqtt.topic_len": 0.0,
+      "mqtt.ver": 0.0,
+      "mbtcp.len": 0.01875,
+      "mbtcp.trans_id": 0.019076,
+      "mbtcp.unit_id": 0.018335
+    }
+  },
+  "runtime_seconds": 124.0
+}
