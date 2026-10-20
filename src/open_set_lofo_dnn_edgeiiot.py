@@ -13,8 +13,8 @@ Protokol (leave-one-family-out, LOFO):
 Bilinmeyen skorları (büyük = daha "bilinmeyen"):
   msp       1 - en yüksek olasılık                         (RF, TabM)
   entropy   tahmin dağılımının entropisi                    (RF, TabM)
-  disagree  topluluk üyeleri arası anlaşmazlık              (TabM: k üye; RF'de saf yapraklar
-            yüzünden entropiyle aynı olduğundan atlanır)
+  disagree  topluluk üyeleri arası anlaşmazlık              (RF: ağaçlar, TabM: k üye; yapraklar saf
+            olduğunda entropiyle aynıdır)
             = karşılıklı bilgi H(ort. p) - ort. H(p_m)
   energy    -logsumexp(ort. logit)                          (yalnızca TabM)
   knn       eğitimdeki en yakın 5 komşuya ortalama uzaklık  (modelden bağımsız, QuantileTransformer uzayı)
@@ -72,11 +72,10 @@ def entropy(p, axis=-1):
 def scores_from_members(P_members, logits=None):
     """P_members: (n, m, C) üye olasılıkları. Dönen skorlar: büyük = bilinmeyen."""
     P = P_members.mean(axis=1)
-    member_h = entropy(P_members).mean(axis=1)
     out = {"msp": 1.0 - P.max(axis=1), "entropy": entropy(P)}
-    # Saf yapraklı ağaçlarda üye entropisi 0 olur ve anlaşmazlık entropiyle aynılaşır; o zaman atlanır
-    if member_h.max() > 1e-9:
-        out["disagree"] = out["entropy"] - member_h
+    # Saf yapraklı ağaçlarda üye entropisi 0 olur ve anlaşmazlık entropiyle birebir aynıdır;
+    # aileler arası ortalamaların karşılaştırılabilir kalması için yine de her zaman raporlanır.
+    out["disagree"] = out["entropy"] - entropy(P_members).mean(axis=1)
     if logits is not None:
         out["energy"] = -logsumexp(logits.mean(axis=1), axis=-1)
     return P, out

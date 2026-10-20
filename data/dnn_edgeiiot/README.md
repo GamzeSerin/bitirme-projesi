@@ -186,6 +186,45 @@ Kod: `src/xai_faithfulness_dnn_edgeiiot.py` (özet grafik: `src/xai_faithfulness
 5. **Kısayol bulgusu dört yöntemde de aynı:** ilk üç özellik `tcp.ack`, `tcp.dstport`, `tcp.seq` (ablation ve zaman bölmesi bulgularıyla tutarlı).
 6. Sınırlılık: yalnızca tam koşulda (A) ve ağaç modelleriyle yapıldı; kısayolsuz koşul (E) ve TabM açıklamaları sonraki adım.
 
+## Görülmemiş saldırı deneyi: temel skorlar (20.10.2026)
+
+Kod: `src/open_set_lofo_dnn_edgeiiot.py` (özet grafik: `src/open_set_summary_dnn_edgeiiot.py`), çıktı: `outputs/dnn_edgeiiot/open_set/`. Toplantı kararıyla deney her kişinin kendi dalında yürütülüyor.
+
+**Protokol (leave-one-family-out).** Ekip bölmesi (80/20, ince etikete göre katmanlı, seed 42) aynen kullanılır. Her turda bir saldırı ailesi (DDOS, RECON, WEB, BRUTEFORCE, MALWARE) eğitimden tamamen çıkarılır; kalan eğitim verisi %90 eğitim / %10 kalibrasyon. Test kümesi asıl deneyle aynıdır; çıkarılan ailenin satırları "bilinmeyen" sayılır. **Eşik yalnızca kalibrasyondaki bilinen satırlarla seçilir** (bilinenlerin %95'i kabul); bilinmeyen aileden hiçbir bilgi kullanılmaz. Koşullar ablation'daki gibidir ve satırlar her koşulda aynıdır (yalnızca sütunlar değişir): **A** tüm 34 özellik, **C** `tcp.seq`/`tcp.ack` çıkarılmış, **E** port, seq/ack ve şüpheli kimlik alanları çıkarılmış.
+
+**Skorlar** (büyük = bilinmeyen): `msp` (1 − en yüksek olasılık), `entropy`, `disagree` (topluluk üyeleri arası karşılıklı bilgi; RF'de ağaçlar), `knn` (bilinen eğitim verisinde 5 en yakın komşuya uzaklık, modelden bağımsız). TabM'de ayrıca `energy` ve 32 üyenin anlaşmazlığı (sonraki çalıştırma).
+
+![Görülmemiş saldırı özeti](../../outputs/dnn_edgeiiot/open_set/fig_open_set_summary_dnn_edgeiiot_RF.png)
+
+| 5 ailenin ortalaması | A: tüm özellikler | C: seq/ack yok | E: kısayolsuz |
+| --- | --- | --- | --- |
+| Bilinen sınıflarda macro-F1 (RF) | 0,99 | 0,86 | 0,64 |
+| AUROC: RF msp / entropy / disagree | 0,96 / 0,96 / 0,96 | 0,69 / 0,70 / 0,73 | 0,61 / 0,61 / **0,71** |
+| AUROC: kNN | **0,98** | **0,88** | 0,67 |
+| Yakalanan bilinmeyen (kalibrasyon eşiği, en iyi skor) | %97 | %54 (kNN) | %43 (kNN) |
+| Sessizce BENIGN'e kaçan (msp / en iyi) | %0 / %0 | %7 / %6 | %13 / %4 |
+
+**Bulgular:**
+
+1. **Tam veride görülmemiş aileler kolayca yakalanıyor** (AUROC 0,96–0,98) ama bu da kısayol alanlarından: seq/ack çıkınca standart skorlar 0,69–0,73'e, tüm kısayollar çıkınca 0,61'e (neredeyse rastgele) düşüyor. E'de görülmemiş DDOS'a model bilinenlerden daha emin (AUROC 0,36).
+2. **En tehlikeli hata, bilinmeyen saldırının BENIGN sanılması**, kısayollar çıkınca ortaya çıkıyor: E'de görülmemiş MALWARE'in %32'si sessizce "normal trafik" olarak geçiyor (msp).
+3. **Topluluk anlaşmazlığı RF'nin en iyi skoru** (C'de 0,73, E'de 0,71; msp 0,69 / 0,61) ve BENIGN kaçışını en çok azaltan model skoru. CP-TabM'in dayandığı varsayım (üyelerin anlaşmazlığı bilinmeyeni gösterir) için ön kanıt.
+4. **Modelden bağımsız kNN uzaklığı A ve C'de en güçlü temel çizgi** (C'de 0,88); E'de zayıflıyor. CP-TabM'in geçmesi gereken çıta bu.
+5. **Ana değerlendirme koşulu olarak C öneriliyor.** `tcp.seq`/`tcp.ack` Wireshark'ın göreli sayaçlarıdır (ezber), hedef port ise gerçek ağlarda anlamlı bir bilgidir. A iyimser üst sınır, E en sert dayanıklılık testi olarak raporlanır. E'de bilinen sınıflar bile ayrılamadığı (F1 0,64) için orada bilinmeyen tespitinin tavanı düşüktür.
+6. Not: msp ile E'de "yakalanan %0" görünmesi hata değil; bilinenlerin kendisi çok belirsiz olduğundan %95 eşiği en yüksek belirsizlik değerine oturuyor ve hiçbir bilinmeyen onu aşamıyor.
+
+### Başarı ölçütleri (sonuçlardan ÖNCE belirlendi, 20.10.2026)
+
+CP-TabM, ana koşul **C**'de, 5 ailenin ortalamasıyla, **en iyi temel skorla** (RF ve TabM skorları ile kNN dahil; şu an kNN, AUROC 0,88) karşılaştırılır. Tüm ayarlar yalnızca kalibrasyon verisiyle seçilir; beş ailenin hepsi raporlanır; sonuçlar en az 3 tohumla verilir.
+
+| Sonuç | Ölçüt |
+| --- | --- |
+| **Açık başarı** | AUROC'ta en iyi temel skordan **en az +0,05**, sessiz BENIGN kaçışında belirgin düşüş (yaklaşık yarıya), bilinen sınıflarda macro-F1 kaybı sade TabM'e göre **en fazla 0,01**; fark tohumlar arası sapmadan büyük |
+| **Kısmi başarı** | Ortalamada küçük fark (+0,01–0,05) ama en zor ailelerde (WEB, MALWARE, BRUTEFORCE) ya da sessiz BENIGN kaçışında belirgin iyileşme |
+| **Başarısız** | Temel skorlarla aynı veya daha kötü; ya da tespit artarken bilinen başarı belirgin düşüyor. Bu durumda sonuç ve olası nedenleri olduğu gibi raporlanır |
+
+Bileşen testleri: sınıflara bölünmüş üyeler, enerji farkı kaybı ve imza tutarlılığı skoru teker teker çıkarılır; ölçülebilir katkısı olmayan bileşen raporda belirtilir.
+
 ## Sütun hizası ve değer aralığı denetimi (19.10.2026)
 
 Kod: `src/audit_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/audit/audit.json`. Ham verideki 15 etiketin her biri için 6 kontrol (zaman damgası, IP, port 0–65535, 0/1 bayrak, ARP alanları, sayısal sütunlarda metin). İhlal yalnızca DDoS_UDP (zaman %100) ve MITM'de (zaman %100, port %30, bayrak %19); Normal'de %0,11 bayrak ihlali (önemsiz); diğer 12 saldırı türünde %0. Bu iki tür bulgu 7 gereği atıldı.
@@ -209,6 +248,9 @@ python src/xai_faithfulness_dnn_edgeiiot.py --data-file <csv> --model RF   # ve 
 python src/xai_faithfulness_dnn_edgeiiot.py --data-file <csv> --model RF --tag A_tam_nodisc --lime-no-discretize \
     --drop-one-from outputs/dnn_edgeiiot/xai_faithfulness/faithfulness_RF_A_tam.json
 python src/xai_faithfulness_summary_dnn_edgeiiot.py
+# Görülmemiş saldırı deneyi (koşullar: A_tam, C_seq_ack_yok, E_hepsi_cikarildi)
+python src/open_set_lofo_dnn_edgeiiot.py --data-file <csv> --models RF,TabM --condition C_seq_ack_yok
+python src/open_set_summary_dnn_edgeiiot.py
 ```
 
 Çalıştırma kayıtları: `outputs/dnn_edgeiiot/logs/`.
