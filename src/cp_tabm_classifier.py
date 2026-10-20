@@ -87,8 +87,8 @@ class CPTabMClassifier(TabMClassifier):
     def __init__(self, blind_frac=0.25, lam_energy=0.1, m_in=-6.0, m_out=-1.0, k=32, n_blocks=None,
                  d_block=512, dropout=0.1, lr=2e-3, weight_decay=3e-4, batch_size=512, max_epochs=60,
                  patience=8, n_bins=48, d_embedding=16, val_size=0.1, balanced=True, device="auto",
-                 random_state=42, verbose=True):
-        super().__init__(k=k, n_blocks=n_blocks, d_block=d_block, dropout=dropout, lr=lr,
+                 random_state=42, verbose=True, feature_frac=None):
+        super().__init__(feature_frac=feature_frac, k=k, n_blocks=n_blocks, d_block=d_block, dropout=dropout, lr=lr,
                          weight_decay=weight_decay, batch_size=batch_size, max_epochs=max_epochs,
                          patience=patience, n_bins=n_bins, d_embedding=d_embedding, val_size=val_size,
                          balanced=balanced, device=device, random_state=random_state, verbose=verbose)

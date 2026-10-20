@@ -1,4 +1,4 @@
-"""CP-TabM ayar seçimi: iç içe LOFO ("iç prova"), Edge-IIoTset / dnn_edgeiiot.
+"""CP-TabM / FP-TabM ayar seçimi: iç içe LOFO ("iç prova"), Edge-IIoTset / dnn_edgeiiot.
 
 Amaç: kör üye oranını ve bilinmeyen skorunu TEST AİLESİNE HİÇ BAKMADAN seçmek, sonra seçilen ayarı
 dış testte bir kez çalıştırmak. Böylece "sonuca bakıp ayar yapma" (test sızıntısı) olmaz.
@@ -17,6 +17,8 @@ Protokol (her dış aile U için):
 Çalıştırma (GPU önerilir, ~1 saat):
   python src/cp_tune_dnn_edgeiiot.py --data-file <csv>                 # koşul C, 3 kör oranı
   python src/cp_tune_dnn_edgeiiot.py --data-file <csv> --quick         # tesisat denemesi (~2 dk)
+  python src/cp_tune_dnn_edgeiiot.py --data-file <csv> --model FPTabM  # özellik-bölümlü üyeler
+  ... --label-level fine                                                # alt türlerle eğitim
 """
 
 import argparse
@@ -34,11 +36,16 @@ from sklearn.model_selection import train_test_split
 
 from ablation_dnn_edgeiiot import SCENARIOS
 from common.taxonomy import COMMON_CLASSES
+from common.taxonomy import edgeiiot_category
 from model_dnn_edgeiiot import load_data
-from open_set_lofo_dnn_edgeiiot import FAMILIES, evaluate
+from open_set_lofo_dnn_edgeiiot import FAMILIES, evaluate, model_scores
 
 OUT_DIR = "outputs/dnn_edgeiiot/cp_tune"
-SCORES = ["signature", "expert_disagree", "expert_energy_z", "comb_max", "comb_mean"]
+SCORES_BY_MODEL = {
+    "CPTabM": ["signature", "expert_disagree", "expert_energy_z", "comb_max", "comb_mean"],
+    "FPTabM": ["msp", "entropy", "disagree", "energy"],
+}
+SCORES = SCORES_BY_MODEL["CPTabM"]
 
 
 def cap_per_category(idx, category, cap, seed):
@@ -50,28 +57,41 @@ def cap_per_category(idx, category, cap, seed):
     return np.sort(np.concatenate(keep))
 
 
-def run_once(X, fine, category, fit_pool, test_idx, unknown_fam, blind_frac, args, epochs):
-    """fit_pool'dan (unknown_fam hariç) eğit, test_idx'te unknown_fam'i ayırmayı ölç."""
-    from cp_tabm_classifier import CPTabMClassifier
+def run_once(X, fine, category, fit_pool, test_idx, unknown_fam, value, args, epochs):
+    """fit_pool'dan (unknown_fam hariç) eğit, test_idx'te unknown_fam'i ayırmayı ölç.
+    value: CPTabM için kör üye oranı, FPTabM için üye başına özellik oranı."""
     present = [c for c in COMMON_CLASSES if c in set(category[fit_pool])]
     known = [c for c in present if c != unknown_fam]
     tr = fit_pool[category[fit_pool] != unknown_fam]
     tr_fit, tr_cal = train_test_split(tr, test_size=0.1, stratify=fine[tr], random_state=args.seed)
-    yfit = np.array([known.index(c) for c in category[tr_fit]])
-    model = CPTabMClassifier(blind_frac=blind_frac, lam_energy=args.cp_lam, m_in=args.cp_m_in,
-                             m_out=args.cp_m_out, max_epochs=epochs, random_state=args.seed,
-                             verbose=False)
+    if args.label_level == "fine":
+        labels = sorted(set(fine[tr_fit]))
+        yfit = np.array([labels.index(c) for c in fine[tr_fit]])
+        label_cat = np.array([edgeiiot_category(c) for c in labels])
+    else:
+        labels = known
+        yfit = np.array([known.index(c) for c in category[tr_fit]])
+        label_cat = np.array(known)
+    if args.model == "CPTabM":
+        from cp_tabm_classifier import CPTabMClassifier
+        model = CPTabMClassifier(blind_frac=value, lam_energy=args.cp_lam, m_in=args.cp_m_in,
+                                 m_out=args.cp_m_out, max_epochs=epochs, random_state=args.seed,
+                                 verbose=False, feature_frac=args.cp_feature_frac)
+    else:
+        from tabm_classifier import TabMClassifier
+        model = TabMClassifier(max_epochs=epochs, random_state=args.seed, verbose=False,
+                               feature_frac=value)
     t0 = time.perf_counter()
     model.fit(X.iloc[tr_fit], yfit)
     fit_s = time.perf_counter() - t0
-    _, S_cal = model.unknown_scores(X.iloc[tr_cal])
-    P, S_te = model.unknown_scores(X.iloc[test_idx])
-    pred = np.array(known)[P.argmax(1)]
+    _, S_cal = model_scores(args.model, model, X.iloc[tr_cal])
+    P, S_te = model_scores(args.model, model, X.iloc[test_idx])
+    pred = label_cat[P.argmax(1)]
     is_unk = category[test_idx] == unknown_fam
     names = category[test_idx]
     closed = float(f1_score(names[~is_unk], pred[~is_unk], average="macro"))
     res = {s: evaluate(S_cal[s], S_te[s], is_unk, pred, names, "BENIGN", args.target) for s in SCORES}
-    return model, known, res, closed, fit_s, is_unk
+    return model, labels, res, closed, fit_s, is_unk
 
 
 def choose(inner_rows):
@@ -89,7 +109,11 @@ def main():
     p.add_argument("--out-dir", default=OUT_DIR)
     p.add_argument("--condition", default="C_seq_ack_yok", choices=list(SCENARIOS))
     p.add_argument("--families", default=",".join(FAMILIES))
-    p.add_argument("--blind-fracs", default="0.25,0.125,0.0625")
+    p.add_argument("--model", default="CPTabM", choices=list(SCORES_BY_MODEL),
+                   help="CPTabM: sınıf-bölümlü (ızgara = kör oranı); FPTabM: özellik-bölümlü (ızgara = özellik oranı)")
+    p.add_argument("--blind-fracs", default=None, help="Izgara; varsayılan CPTabM 0.25,0.125,0.0625 / FPTabM 0.3,0.5,0.7")
+    p.add_argument("--label-level", default="category", choices=["category", "fine"])
+    p.add_argument("--cp-feature-frac", type=float, default=None)
     p.add_argument("--cap", type=int, default=40000)
     p.add_argument("--inner-cap", type=int, default=12000, help="İç provada kategori başına eğitim satırı")
     p.add_argument("--inner-epochs", type=int, default=40)
@@ -105,6 +129,10 @@ def main():
         args.cap, args.inner_cap, args.inner_epochs, args.epochs = 3000, 800, 2, 2
     os.makedirs(args.out_dir, exist_ok=True)
     t_start = time.perf_counter()
+    global SCORES
+    SCORES = SCORES_BY_MODEL[args.model]
+    if args.blind_fracs is None:
+        args.blind_fracs = "0.25,0.125,0.0625" if args.model == "CPTabM" else "0.3,0.5,0.7"
     fracs = [float(f) for f in args.blind_fracs.split(",")]
 
     X, fine, category, _ = load_data(args.data_file, args.cap, args.seed, drop_conflicts=True)
@@ -137,10 +165,10 @@ def main():
                 for s, m in res.items():
                     inner_rows.append({"blind_frac": bf, "inner_unknown": V, "score": s,
                                        "closed_f1": round(closed, 4), **m})
-                print(f"  kör {bf:<6} sahte bilinmeyen {V:10s} ({fit_s:.0f} s)  "
+                print(f"  {'kör' if args.model == 'CPTabM' else 'özellik'} {bf:<6} sahte bilinmeyen {V:10s} ({fit_s:.0f} s)  "
                       + "  ".join(f"{s} {res[s]['auroc']:.3f}" for s in SCORES))
         bf, sc, table = choose(inner_rows)
-        print(f"  → SEÇİLEN: kör oranı {bf}, skor {sc}  (iç ort. AUROC "
+        print(f"  → SEÇİLEN: {'kör' if args.model == 'CPTabM' else 'özellik'} oranı {bf}, skor {sc}  (iç ort. AUROC "
               f"{table.query('blind_frac == @bf and score == @sc')['auroc'].iloc[0]:.3f})")
 
         model, known, res, closed, fit_s, is_unk = run_once(X, fine, category, idx_tr, idx_te, U, bf, args,
@@ -157,7 +185,8 @@ def main():
             "inner_runs": inner_rows,
             "outer_selected": {**sel, "closed_f1_known": round(closed, 4)},
             "outer_all_scores_not_used_for_selection": res,
-            "explain_unknown_examples": model.explain(X.iloc[ex_idx], known),
+            "explain_unknown_examples": (model.explain(X.iloc[ex_idx], known)
+                                         if args.model == "CPTabM" else None),
         }
 
     df = pd.DataFrame(final_rows)
@@ -165,9 +194,10 @@ def main():
     out["final_mean"] = df[["auroc", "fpr95", "detect@cal", "silent_benign@cal", "open_f1@cal",
                             "closed_f1"]].mean().round(4).to_dict()
     out["runtime_seconds"] = round(time.perf_counter() - t_start, 1)
-    with open(os.path.join(args.out_dir, f"cp_tune_{args.condition}.json"), "w", encoding="utf-8") as f:
+    tag = f"{args.model}_{args.condition}" + ("_fine" if args.label_level == "fine" else "")
+    with open(os.path.join(args.out_dir, f"tune_{tag}.json"), "w", encoding="utf-8") as f:
         json.dump(out, f, indent=2, ensure_ascii=False)
-    print("\nSeçilen ayarlarla dış test (CP-TabM, iç provayla seçildi):")
+    print(f"\nSeçilen ayarlarla dış test ({args.model}, iç provayla seçildi):")
     print(df[["family", "blind_frac", "score", "auroc", "fpr95", "detect@cal", "silent_benign@cal",
               "closed_f1"]].to_string(index=False))
     print("Ortalama:", out["final_mean"])
