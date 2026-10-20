@@ -1,0 +1,53 @@
+Okunuyor: /kaggle/input/datasets/mohamedamineferrag/edgeiiotset-cyber-security-dataset-of-iot-iiot/Edge-IIoTset dataset/Selected dataset for ML and DL/DNN-EdgeIIoT-dataset.csv
+Hizasız satır (frame.time zaman değil): 122782 {'DDoS_UDP': 121568, 'MITM': 1214} -> atıldı
+Örneklem: 296506 satır, 28 özellik, kategoriler ['BENIGN', 'RECON', 'BRUTEFORCE', 'WEB', 'MALWARE', 'DDOS'] (koşul E_hepsi_cikarildi)
+
+=== Bilinmeyen aile: DDOS  (eğitim 136532, kalibrasyon 15171, test bilinen 37927, bilinmeyen 21375) ===
+  RF: bilinen testte macro-F1 0.6118 (4 s); bilinmeyenler şuna atandı: {'RECON': 0.7553, 'BRUTEFORCE': 0.1434, 'BENIGN': 0.0854, 'WEB': 0.0133, 'MALWARE': 0.0026}
+    RF       msp       AUROC 0.360  FPR95 1.000  yakalanan 0.000  BENIGN'e kaçan 0.085  open-F1 0.421
+    RF       entropy   AUROC 0.359  FPR95 1.000  yakalanan 0.000  BENIGN'e kaçan 0.085  open-F1 0.421
+    RF       disagree  AUROC 0.443  FPR95 0.957  yakalanan 0.043  BENIGN'e kaçan 0.060  open-F1 0.417
+    bağımsız knn       AUROC 0.843  FPR95 0.297  yakalanan 0.703  BENIGN'e kaçan 0.011  open-F1 0.587
+  (18 s)
+
+=== Bilinmeyen aile: RECON  (eğitim 174230, kalibrasyon 19359, test bilinen 48398, bilinmeyen 10904) ===
+  RF: bilinen testte macro-F1 0.5986 (5 s); bilinmeyenler şuna atandı: {'DDOS': 0.5594, 'WEB': 0.2104, 'BENIGN': 0.1299, 'BRUTEFORCE': 0.0812, 'MALWARE': 0.0192}
+    RF       msp       AUROC 0.546  FPR95 1.000  yakalanan 0.000  BENIGN'e kaçan 0.130  open-F1 0.452
+    RF       entropy   AUROC 0.536  FPR95 1.000  yakalanan 0.000  BENIGN'e kaçan 0.130  open-F1 0.452
+    RF       disagree  AUROC 0.873  FPR95 0.321  yakalanan 0.679  BENIGN'e kaçan 0.038  open-F1 0.577
+    bağımsız knn       AUROC 0.836  FPR95 0.273  yakalanan 0.727  BENIGN'e kaçan 0.002  open-F1 0.599
+  (20 s)
+
+=== Bilinmeyen aile: WEB  (eğitim 182616, kalibrasyon 20291, test bilinen 50727, bilinmeyen 8575) ===
+  RF: bilinen testte macro-F1 0.6922 (5 s); bilinmeyenler şuna atandı: {'BRUTEFORCE': 0.576, 'RECON': 0.2982, 'BENIGN': 0.1144, 'DDOS': 0.0096, 'MALWARE': 0.0019}
+    RF       msp       AUROC 0.740  FPR95 1.000  yakalanan 0.000  BENIGN'e kaçan 0.114  open-F1 0.539
+    RF       entropy   AUROC 0.741  FPR95 1.000  yakalanan 0.000  BENIGN'e kaçan 0.114  open-F1 0.539
+    RF       disagree  AUROC 0.791  FPR95 0.807  yakalanan 0.193  BENIGN'e kaçan 0.112  open-F1 0.565
+    bağımsız knn       AUROC 0.506  FPR95 0.820  yakalanan 0.180  BENIGN'e kaçan 0.111  open-F1 0.568
+  (21 s)
+
+=== Bilinmeyen aile: BRUTEFORCE  (eğitim 198521, kalibrasyon 22058, test bilinen 55145, bilinmeyen 4157) ===
+  RF: bilinen testte macro-F1 0.6885 (6 s); bilinmeyenler şuna atandı: {'MALWARE': 0.4977, 'WEB': 0.3936, 'RECON': 0.1073, 'BENIGN': 0.0014}
+    RF       msp       AUROC 0.728  FPR95 1.000  yakalanan 0.000  BENIGN'e kaçan 0.001  open-F1 0.553
+    RF       entropy   AUROC 0.731  FPR95 1.000  yakalanan 0.000  BENIGN'e kaçan 0.001  open-F1 0.553
+    RF       disagree  AUROC 0.699  FPR95 0.896  yakalanan 0.104  BENIGN'e kaçan 0.001  open-F1 0.555
+    bağımsız knn       AUROC 0.500  FPR95 0.846  yakalanan 0.154  BENIGN'e kaçan 0.001  open-F1 0.566
+  (22 s)
+
+=== Bilinmeyen aile: MALWARE  (eğitim 190834, kalibrasyon 21204, test bilinen 53011, bilinmeyen 6291) ===
+  RF: bilinen testte macro-F1 0.6246 (5 s); bilinmeyenler şuna atandı: {'BRUTEFORCE': 0.4872, 'BENIGN': 0.3186, 'WEB': 0.1232, 'RECON': 0.0704, 'DDOS': 0.0006}
+    RF       msp       AUROC 0.696  FPR95 1.000  yakalanan 0.000  BENIGN'e kaçan 0.319  open-F1 0.490
+    RF       entropy   AUROC 0.694  FPR95 1.000  yakalanan 0.000  BENIGN'e kaçan 0.319  open-F1 0.490
+    RF       disagree  AUROC 0.728  FPR95 0.603  yakalanan 0.397  BENIGN'e kaçan 0.086  open-F1 0.564
+    bağımsız knn       AUROC 0.652  FPR95 0.615  yakalanan 0.385  BENIGN'e kaçan 0.054  open-F1 0.560
+  (21 s)
+
+Ailelerin ortalaması:
+                    auroc   fpr95  detect@cal  silent_benign@cal  open_f1@cal
+model    score                                                               
+RF       disagree  0.7070  0.7167      0.2833             0.0597       0.5355
+bağımsız knn       0.6675  0.5699      0.4301             0.0358       0.5761
+RF       msp       0.6140  1.0000      0.0000             0.1299       0.4911
+         entropy   0.6121  1.0000      0.0000             0.1299       0.4911
+
+Çıktılar: outputs/dnn_edgeiiot/open_set  (142 s)
