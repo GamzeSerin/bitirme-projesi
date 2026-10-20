@@ -193,7 +193,11 @@ def main():
     t_start = time.perf_counter()
 
     drop = list(SCENARIOS[args.condition])
-    X, fine, category, _ = load_data(args.data_file, args.cap, args.seed, drop, drop_conflicts=True)
+    # Ablation'daki gibi: satırlar tam koşulda seçilir, sütunlar sonra çıkarılır. Böylece E koşulunda da
+    # eğitim/test satırları A ile birebir aynı kalır (yalnızca modelin gördüğü sütunlar değişir).
+    X, fine, category, _ = load_data(args.data_file, args.cap, args.seed, drop_conflicts=True)
+    drop = [c for c in drop if c in X.columns]
+    X = X.drop(columns=drop)
     present = [c for c in COMMON_CLASSES if c in set(category)]
     idx_tr, idx_te = train_test_split(np.arange(len(category)), test_size=0.2, stratify=fine,
                                       random_state=args.seed)
