@@ -1,4 +1,4 @@
-"""Kişi 3 - XAI-1: Açıklama yöntemleri kısayolları doğru gösteriyor mu?
+"""Kişi 3 - Açıklama Doğrulama (XAI faithfulness): açıklama yöntemleri modelin gerçek davranışını doğru gösteriyor mu?
 
 Soru: SHAP ve LIME'ın özellik önem sıralamaları, bir özellik modelden gerçekten
 çıkarıldığında kaybedilen performansla (ve permütasyon önemiyle) ne kadar örtüşüyor?
@@ -18,11 +18,11 @@ Yöntem (RF, asıl deneydeki satırlar ve 80/20 bölme, ablation'daki sabit ayar
 Not: drop-one, birbirinin yerini tutabilen (korelasyonlu) özelliklerin etkisini küçük gösterir;
 bu yüzden permütasyon ve ablation'daki grup sonuçlarıyla birlikte yorumlanır.
 
-Çıktı: outputs/dnn_edgeiiot/xai/ (xai1.json + karşılaştırma grafiği)
+Çıktı: outputs/dnn_edgeiiot/xai_faithfulness/ (faithfulness_<model>_<koşul>.json + grafik)
 
 Kullanım (Kaggle CPU, ~25-35 dk; GPU gerekmez):
   pip install lime shap
-  python src/xai1_dnn_edgeiiot.py --data-file "<.../DNN-EdgeIIoT-dataset.csv>"
+  python src/xai_faithfulness_dnn_edgeiiot.py --data-file "<.../DNN-EdgeIIoT-dataset.csv>"
 """
 
 import argparse
@@ -46,7 +46,7 @@ from common import contract
 from common.taxonomy import COMMON_CLASSES
 from model_dnn_edgeiiot import load_data
 
-OUT_DIR = "outputs/dnn_edgeiiot/xai"
+OUT_DIR = "outputs/dnn_edgeiiot/xai_faithfulness"
 
 
 def macro_f1(model, X, y):
@@ -264,9 +264,9 @@ def main():
            "per_class_shap_vs_lime_top3": per_class_top3, "lime_stability": stability,
            "importances": {m: {f: round(v, 6) for f, v in d.items()} for m, d in methods.items()},
            "runtime_seconds": round(time.perf_counter() - t_start, 1)}
-    with open(os.path.join(args.out_dir, f"xai1_{args.model}_{args.tag}.json"), "w", encoding="utf-8") as f:
+    with open(os.path.join(args.out_dir, f"faithfulness_{args.model}_{args.tag}.json"), "w", encoding="utf-8") as f:
         json.dump(out, f, indent=2, ensure_ascii=False)
-    plot(methods, os.path.join(args.out_dir, f"fig_xai1_importance_dnn_edgeiiot_{args.model}_{args.tag}.png"),
+    plot(methods, os.path.join(args.out_dir, f"fig_xai_faithfulness_dnn_edgeiiot_{args.model}_{args.tag}.png"),
          title=f"Edge-IIoTset, {args.model}: açıklama yöntemleri ve gerçek etki")
 
     print("\nİlk 5 özellik:")
