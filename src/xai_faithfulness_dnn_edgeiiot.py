@@ -88,10 +88,15 @@ def shap_importance(model, Xs, ys, classes):
     return dict(zip(feats, map(float, glob))), per_class
 
 
+LIME_DISCRETIZE = True  # --lime-no-discretize ile kapatılır (duyarlılık denemesi)
+
+
 def lime_explainer(Xtr, classes, seed):
     from lime.lime_tabular import LimeTabularExplainer
     kw = dict(feature_names=list(Xtr.columns), class_names=classes, mode="classification",
               random_state=seed)
+    if not LIME_DISCRETIZE:
+        return LimeTabularExplainer(Xtr.to_numpy(), discretize_continuous=False, **kw)
     try:
         return LimeTabularExplainer(Xtr.to_numpy(), discretize_continuous=True, **kw)
     except Exception as e:  # çoğu satırı 0 olan sütunlarda çeyrek sınırları çakışabilir
@@ -189,12 +194,18 @@ def main():
     p.add_argument("--stability-rows", type=int, default=30)
     p.add_argument("--perm-rows", type=int, default=20000)
     p.add_argument("--skip-drop-one", action="store_true")
+    p.add_argument("--drop-one-from", default="",
+                   help="Drop-one değerlerini önceki bir faithfulness_*.json dosyasından al (yeniden eğitmeden)")
+    p.add_argument("--lime-no-discretize", action="store_true",
+                   help="LIME'ı discretize_continuous=False ile çalıştır (duyarlılık denemesi)")
     p.add_argument("--n-jobs", type=int, default=-1)
     p.add_argument("--quick", action="store_true")
     args = p.parse_args()
     if args.quick:
         args.cap, args.shap_per_class, args.lime_per_class = 3000, 20, 5
         args.lime_samples, args.stability_rows, args.perm_rows = 300, 5, 2000
+    global LIME_DISCRETIZE
+    LIME_DISCRETIZE = not args.lime_no_discretize
     os.makedirs(args.out_dir, exist_ok=True)
     t_start = time.perf_counter()
 
@@ -215,7 +226,12 @@ def main():
 
     methods = {}
     # 1a. drop-one (yeniden eğitim)
-    if not args.skip_drop_one:
+    if args.drop_one_from:
+        with open(args.drop_one_from, encoding="utf-8") as f:
+            prev = json.load(f)
+        methods["Drop-one"] = {k: float(v) for k, v in prev["importances"]["Drop-one"].items() if k in feats}
+        print(f"Drop-one önceki çalıştırmadan alındı: {args.drop_one_from}")
+    elif not args.skip_drop_one:
         drop_one = {}
         for i, f in enumerate(feats, 1):
             m = clone(base).fit(Xtr.drop(columns=[f]), ytr)
