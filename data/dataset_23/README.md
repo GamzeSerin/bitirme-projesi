@@ -71,3 +71,79 @@ Test macro-F1 (147.629 satır), %95 bootstrap güven aralığı:
 - **NIDS:** saldırı tespit oranı %98,5; yanlış alarm oranı XGB %17,5, DSS %17,7, RF %19,2.
 - **DSS kararları:** Ciddiyet grubuna göre karar sayesinde DoS, DDoS ve Mirai'nin %100'ü BLOCK alıyor (önceden DDoS'un ~üçte biri LOG_MONITOR'a düşüyordu).
 - **En zayıf sınıflar** hâlâ BRUTEFORCE (0,31; aralık 0,24–0,38) ve WEB (0,28; 0,25–0,33). İkisi de çoğunlukla RECON sanılıyor; az örnek yüzünden aralıklar geniş.
+
+## Görülmemiş saldırı deneyi: protokol ve başarı ölçütleri (sonuçlardan ÖNCE belirlendi, 21.10.2026)
+
+> Aile tanımları, Backdoor kategorisi ve yöntem sırası ekip olarak kararlaştırıldı (21.10.2026, aşağıda). Kısayol koşulları (A/C/E) görülmemiş saldırı sonuçlarından ÖNCE, aşağıdaki gerekçelerle seçildi. Sonuçlar görüldükten sonra bu bölüm değiştirilmez; değişiklik gerekirse tarihli bir not olarak eklenir ve gerekçesi yazılır.
+
+**Protokol** (Edge-IIoTset deneyiyle aynı; `data/dnn_edgeiiot/README.md`):
+
+- Ekip bölmesi aynen kullanılır: 80/20, ince etikete göre katmanlı, seed 42; test kümesi asıl deneyle aynı (147.629 satır).
+- **Aileler (6):** FLOOD (DoS + DDoS), MIRAI, RECON, SPOOFING, WEB, BRUTEFORCE. DoS ve DDoS tek aile sayılır, çünkü pencere özellikleri saldırgan sayısını göremiyor: çakışan satır gruplarının %82'si bu ikisi arasında ve birleşik F1 1,000. Ayrı tutulsaydı "görülmemiş DDoS"un DoS sanılması bir tespit başarısızlığı gibi görünürdü.
+- Her turda bir aile eğitimden tamamen çıkarılır; kalan eğitim verisi %90 eğitim / %10 kalibrasyon. Eşik yalnızca kalibrasyondaki **bilinen** satırlarla seçilir (bilinenlerin %95'i kabul). Çıkarılan aileden hiçbir bilgi kullanılmaz.
+- **Koşullar (A/C/E):** Bütün koşullarda `Number` (veri toplama izi) ve çakışan etiketli satırlar atılmıştır; satırlar her koşulda aynıdır, yalnızca sütunlar değişir. A: tüm 36 özellik. **C (ana koşul):** `Time_To_Live` çıkarılmış. E: ayrıca `IAT`, `Rate` ve `Header_Length` çıkarılmış. Seçimin gerekçesi aşağıda ("Kısayol adayları"). Duyarlılık kontrolü olarak bir kez `--keep-conflicts`.
+- **Skorlar:** msp, entropi, topluluk anlaşmazlığı (RF: ağaçlar; TabM: k üye), enerji (TabM), kNN (5 komşu, QuantileTransformer uzayı). XGB ve LGBM'in ağaçları sırayla eğitildiği için bağımsız üye sayılmaz; anlaşmazlık skoru onlarda kullanılmaz.
+- **Metrikler:** AUROC, AUPR, FPR95, kalibrasyon eşiğinde yakalama ve yanlış red oranı, open-set macro-F1, bilinen sınıflarda macro-F1 ve:
+  - **Sessiz BENIGN kaçışı:** görülmemiş saldırının kabul edilip BENIGN sanılması (en tehlikeli hata).
+  - **Güvenli hata oranı** (bu veri setine eklenen): görülmemiş saldırının bilinmeyen diye işaretlenmeden **başka bir saldırı** sanılıp DSS'te yine BLOCK ya da ALERT alması.
+- Sonuçlar 3 eğitim tohumuyla (42, 1, 2), ortalama ± standart sapma olarak; her ailenin sonucu ayrı raporlanır.
+
+**Kısayol adayları ve koşulların seçimi** (Edge-IIoTset'teki üç adım: tek özellik testi, SHAP, ablation):
+
+1. **Tek özellik sızıntı testi** (her sütun tek başına, derinlik 8 karar ağacı, kategori başına en fazla 5.000 satır, 3-fold): tek başına sınıfı ele veren sütun yok. En güçlüler `Tot sum` 0,46, `Max` 0,46, `AVG` 0,42, `Header_Length` 0,39; tüm özellikler birlikte 0,63. `IAT` tek başına 0,30: Kaggle'daki "CICIoT2026" kopyasında görülen IAT sızıntısı bu Merged sürümde yok; değerler gerçekçi (flood'larda mikrosaniye, normal trafikte milisaniye). Çıktı: `outputs/dataset_23/ablation/single_feature_leakage.csv`.
+2. **Kayda özgü olabilecek sütunlar** (değer dağılımları ve SHAP):
+   - **`Time_To_Live`** (C ve E): flood saldırılarında (DDoS, DoS, Mirai) satırların yarısından fazlasında TTL tam 64, normal trafikte 59–217 arasına yayılıyor. TTL gönderen makinenin işletim sistemini ve ağdaki konumunu gösterir; saldırıyı değil, laboratuvardaki saldırgan makineyi tanıtır. SHAP'ta BENIGN, BRUTEFORCE ve WEB'in en önemli dört özelliğinden biri. Edge-IIoTset'teki `tcp.seq`/`tcp.ack`'ın karşılığı olarak C'de çıkarılır.
+   - **`Header_Length`** (E): Mirai'de neredeyse hep 0 (medyan 0,24); büyük olasılıkla özellik çıkarma aracının GRE paketlerini ayrıştıramamasından kaynaklanan bir ölçüm izi.
+   - **`IAT` ve `Rate`** (E): neredeyse aynı bilgi (Spearman −0,996). Gerçek zamanlama davranışı taşıyorlar, ama değerleri laboratuvarın bant genişliğine bağlı ve IAT veri setinin başka sürümlerinde sızıntı yapmıştı. Gerçek ağda anlamlı oldukları için C'de kalır, en sert koşulda çıkarılır.
+   - Paket boyutu istatistikleri (`Tot sum`, `AVG`, `Max`, `Min`, `Std`), protokol göstergeleri ve bayrak sayıları saldırı davranışının kendisidir; hiçbir koşulda çıkarılmaz.
+3. **Ablation** (kapalı küme, aynı satırlar ve aynı bölme, sabit ayarlar; RF 200 ağaç, DT derinlik 30; çıktı `outputs/dataset_23/ablation/ablation_macro_f1.csv`):
+
+| Koşul | Çıkarılan | RF test macro-F1 | DT | Edge-IIoTset RF (karşılaştırma) |
+| --- | --- | --- | --- | --- |
+| A: tam | – | 0,706 | 0,644 | 0,993 |
+| C: ana | `Time_To_Live` | 0,701 (−0,005) | 0,644 | 0,824 (−0,169) |
+| E: en sert | + `IAT`, `Rate`, `Header_Length` | 0,681 (−0,025) | 0,635 | 0,618 (−0,376) |
+
+**Bulgu:** CICIoT2023'te kapalı küme başarısı kısayol adaylarına neredeyse hiç dayanmıyor; en sert koşulda bile kayıp 0,025. E'de en çok etkilenen sınıflar WEB (0,28 → 0,23) ve BRUTEFORCE (0,31 → 0,26). Edge-IIoTset'te aynı işlem başarıyı 0,99'dan 0,62'ye düşürüyordu. Bu nedenle CICIoT2023, ekibin yönteminin kısayol olmadan nasıl çalıştığını gösteren veri setidir.
+
+**Hipotezler** (yönleri önceden yazılır; sonuç ne çıkarsa raporlanır):
+
+| | Hipotez | Dayanak |
+| --- | --- | --- |
+| H1 | Topluluk anlaşmazlığı, msp ve enerjiden yüksek AUROC verir (6 ailenin en az 4'ünde). | Edge-IIoTset'te kısayolsuz koşullarda msp ve enerji rastgeleye yaklaştı. |
+| H2 | En zor aileler WEB ve BRUTEFORCE olur: en iyi skorla bile AUROC < 0,75 ve sessiz BENIGN kaçışı diğer ailelerden yüksek. | Bu iki sınıf bilinen haldeyken bile çoğunlukla RECON sanılıyor (F1 0,28 ve 0,31). |
+| H3 | Görülmemiş MIRAI çoğunlukla FLOOD'a atanır; sessiz BENIGN kaçışı %5'in altında kalır (güvenli hata). | MIRAI de bir flood; ciddiyeti aynı. |
+| H4 | Görülmemiş FLOOD için AUROC düşük olabilir (MIRAI'ye benzerlik), ama sessiz BENIGN kaçışı %1'in altında kalır. | Flood trafiği normal trafikten çok farklı. |
+| H5 | Bilinmeyen tespiti A'dan E'ye Edge-IIoTset'tekinden çok daha az düşer (en iyi skorun ortalama AUROC'u A ile E arasında en fazla 0,05 fark). | Kapalı küme ablation'ında A → E kaybı 0,025; Edge-IIoTset'te 0,376. |
+
+**Başarı ölçütleri:**
+
+Sıra (ekip kararı): önce temel skorlar A/C/E'de (TabM ve en iyi ağaç modeli: msp, entropi, enerji, anlaşmazlık, kNN); sonra CP-TabM v3 iç provayla (`cp_tune`); ekibin iki sinyalli karar kuralı (anlaşmazlık alarm verir, emin olma derecesi BENIGN kararlarını denetler) netleşince o da eklenir. FP-TabM Edge-IIoTset'te durduruldu, çalıştırılmaz.
+
+1. **Önerilen yöntem** (CP-TabM v3), ana koşul C'de 6 ailenin ortalamasıyla en iyi temel skorla (RF ve TabM skorları ile kNN dahil) karşılaştırılır. Ayarlar Edge-IIoTset'teki gibi yalnızca iç provayla seçilir: her dış aile için, eğitimdeki diğer ailelerden biri geçici olarak "bilinmeyen" yapılır; seçilen ayar dış aile üzerinde bir kez çalıştırılır. Test ailesine bakılarak ayar yapılmaz.
+
+| Sonuç | Ölçüt |
+| --- | --- |
+| **Açık başarı** | AUROC'ta en iyi temel skordan en az +0,05; sessiz BENIGN kaçışı yaklaşık yarıya; bilinen sınıflarda macro-F1 kaybı sade TabM'e göre en fazla 0,01; fark tohumlar arası sapmadan büyük |
+| **Kısmi başarı** | Ortalamada +0,01–0,05, ama WEB ve BRUTEFORCE'ta ya da sessiz BENIGN kaçışında belirgin iyileşme |
+| **Başarısız** | Temel skorlarla aynı veya daha kötü; ya da tespit artarken bilinen başarı belirgin düşüyor. Sonuç ve olası nedenleri olduğu gibi raporlanır. |
+
+2. **DSS'e bilinmeyen katmanı** ("bilinmeyen → ANALYST_REVIEW, asla ALLOW"):
+
+| Sonuç | Ölçüt |
+| --- | --- |
+| **Başarı** | ALLOW edilen görülmemiş saldırı oranı katmansız DSS'e göre en az yarıya iner; normal trafikte ANALYST_REVIEW'a giden oran en fazla 10 puan artar |
+| **Kısmi başarı** | ALLOW edilen görülmemiş saldırı azalır ama yarıya inmez, ya da analist yükü 10 puandan fazla artar |
+| **Başarısız** | ALLOW edilen görülmemiş saldırı belirgin şekilde azalmaz |
+
+**Not (21.10.2026):** Koşullar ve ölçütler yazıldıktan sonra ortak araç (PR #6) `--quick` ile (etiket başına 3.000 satır, RF) üç koşulda tesisat denemesinden geçirildi: sütun adları doğrulandı, FLOOD ailesi iki kategoriyle çalışıyor. Bu deneme küçük örneklemli olduğu için sonuçları yorumlanmadı; koşullar ve ölçütler değiştirilmedi.
+
+**Ekip kararları (21.10.2026, Gamze Serin ile):**
+
+- **FLOOD tek aile.** Edge-IIoTset'te DoS kategorisi yok; oradaki DDOS ailesi buradaki FLOOD ile karşılaştırılır.
+- **Doğrudan karşılaştırma ortak ailelerde:** FLOOD/DDOS, RECON, WEB, BRUTEFORCE. Yalnız bu veri setinde olan MIRAI ve SPOOFING (Edge-IIoTset'te MITM satırları sütun kayması yüzünden atıldı) ile yalnız Edge-IIoTset'te olan MALWARE veri setine özel raporlanır.
+- **Karşılaştırmada dikkat:** Bilinen sınıf sayısı farklı (burada 8 kategori ve 6 aile, FLOOD iki kategori; Edge-IIoTset'te 6 kategori ve 5 aile). Veri setlerinin zorluğu da çok farklı (kapalı küme macro-F1 0,71 ve 0,99). Bu yüzden ham AUROC'lar değil göreli bulgular karşılaştırılır: kısayollar çıkınca ne kadar düşüyor, anlaşmazlık msp'den iyi mi, CP-TabM sade TabM'e göre nerede. Küçük ailelerde (testte BRUTEFORCE 202, WEB 378 satır) her sonuç tohumlar arası sapma ya da güven aralığıyla verilir.
+- **Backdoor her veri setinde kendi yazarlarının gruplamasında kalır:** burada WEB (CICIoT2023'te web üzerinden taşınıyor), Edge-IIoTset'te MALWARE. WEB karşılaştırmasında bu fark not edilir.
+- **Yöntem:** FP-TabM önerilmiyor. 3 tohumla sade TabM'in üye anlaşmazlığı (ort. AUROC 0,862 ± 0,001, Edge-IIoTset koşul C) CP-TabM v3'ten (0,805 ± 0,004) iyi; CP-TabM'in emin olma derecesi skoru ise sessiz BENIGN kaçışını %2,5'ten %0,2'ye indiriyor.
+- **Ortak LOFO aracı:** `src/open_set_lofo.py` ve `src/common/open_set_registry.py` (PR #6, birleşti). Bu veri setinin kaydı orada: yükleyici `model_ml.load_data`'yı sarmalar, `Number` ve çakışmaları atar; `Number` veride kalırsa deney durur. Aileler ve A/C/E koşulları bu README'deki tanımlarla aynı.
+- **Sıra (ekip kararı, Gamze Serin'in 21.10.2026 önerisi):** (1) TabM'in kapalı küme deneyine 6. model olarak eklenmesi, (2) görülmemiş saldırı deneyi RF + TabM, A / C / E, (3) tohum 1 ve 2, (4) ablation'ın ortak formatta (sabit RF/DT ayarları, bootstrap aralıkları) raporlanması, (5) CP-TabM iç provası ve iki sinyalli karar kuralı.
