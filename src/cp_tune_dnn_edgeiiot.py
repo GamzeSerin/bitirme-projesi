@@ -34,13 +34,12 @@ import pandas as pd
 from sklearn.metrics import f1_score
 from sklearn.model_selection import train_test_split
 
-from ablation_dnn_edgeiiot import SCENARIOS
+from common import open_set_registry as registry
 from common.taxonomy import COMMON_CLASSES
-from common.taxonomy import edgeiiot_category
-from model_dnn_edgeiiot import load_data
-from open_set_lofo_dnn_edgeiiot import FAMILIES, evaluate, model_scores
+from open_set_lofo import evaluate, model_scores
 
-OUT_DIR = "outputs/dnn_edgeiiot/cp_tune"
+OUT_DIR = "outputs/dnn_edgeiiot/cp_tune"  # Edge-IIoTset varsayılanı; diğer veri setlerinde outputs/<dataset>/cp_tune
+SPEC = registry.get("dnn_edgeiiot")       # main() --dataset ile değiştirir
 SCORES_BY_MODEL = {
     "CPTabM": ["signature", "expert_disagree", "expert_energy_z", "comb_max", "comb_mean"],
     "FPTabM": ["msp", "entropy", "disagree", "energy"],
@@ -60,14 +59,16 @@ def cap_per_category(idx, category, cap, seed):
 def run_once(X, fine, category, fit_pool, test_idx, unknown_fam, value, args, epochs):
     """fit_pool'dan (unknown_fam hariç) eğit, test_idx'te unknown_fam'i ayırmayı ölç.
     value: CPTabM için kör üye oranı, FPTabM için üye başına özellik oranı."""
-    present = [c for c in COMMON_CLASSES if c in set(category[fit_pool])]
-    known = [c for c in present if c != unknown_fam]
-    tr = fit_pool[category[fit_pool] != unknown_fam]
+    unk_cats = SPEC["families"][unknown_fam]   # bir aile birden fazla kategori kapsayabilir
+    cats = set(category[fit_pool])
+    present = [c for c in COMMON_CLASSES if c in cats] + sorted(cats - set(COMMON_CLASSES))
+    known = [c for c in present if c not in unk_cats]
+    tr = fit_pool[~np.isin(category[fit_pool], unk_cats)]
     tr_fit, tr_cal = train_test_split(tr, test_size=0.1, stratify=fine[tr], random_state=args.seed)
     if args.label_level == "fine":
         labels = sorted(set(fine[tr_fit]))
         yfit = np.array([labels.index(c) for c in fine[tr_fit]])
-        label_cat = np.array([edgeiiot_category(c) for c in labels])
+        label_cat = np.array([SPEC["category_of"](c) for c in labels])
     else:
         labels = known
         yfit = np.array([known.index(c) for c in category[tr_fit]])
@@ -87,10 +88,10 @@ def run_once(X, fine, category, fit_pool, test_idx, unknown_fam, value, args, ep
     _, S_cal = model_scores(args.model, model, X.iloc[tr_cal])
     P, S_te = model_scores(args.model, model, X.iloc[test_idx])
     pred = label_cat[P.argmax(1)]
-    is_unk = category[test_idx] == unknown_fam
+    is_unk = np.isin(category[test_idx], unk_cats)
     names = category[test_idx]
     closed = float(f1_score(names[~is_unk], pred[~is_unk], average="macro"))
-    res = {s: evaluate(S_cal[s], S_te[s], is_unk, pred, names, "BENIGN", args.target) for s in SCORES}
+    res = {s: evaluate(S_cal[s], S_te[s], is_unk, pred, names, SPEC["benign"], args.target) for s in SCORES}
     return model, labels, res, closed, fit_s, is_unk
 
 
@@ -106,9 +107,10 @@ def choose(inner_rows):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--data-file", required=True)
-    p.add_argument("--out-dir", default=OUT_DIR)
-    p.add_argument("--condition", default="C_seq_ack_yok", choices=list(SCENARIOS))
-    p.add_argument("--families", default=",".join(FAMILIES))
+    p.add_argument("--dataset", default="dnn_edgeiiot", choices=list(registry.DATASETS))
+    p.add_argument("--out-dir", default=None, help="Varsayılan outputs/<dataset>/cp_tune")
+    p.add_argument("--condition", default=None, help="Varsayılan: veri setinin ana koşulu (kayıt)")
+    p.add_argument("--families", default="", help="Virgülle; boş = kayıttaki tüm aileler")
     p.add_argument("--model", default="CPTabM", choices=list(SCORES_BY_MODEL),
                    help="CPTabM: sınıf-bölümlü (ızgara = kör oranı); FPTabM: özellik-bölümlü (ızgara = özellik oranı)")
     p.add_argument("--blind-fracs", default=None, help="Izgara; varsayılan CPTabM 0.25,0.125,0.0625 / FPTabM 0.3,0.5,0.7")
@@ -127,6 +129,10 @@ def main():
     args = p.parse_args()
     if args.quick:
         args.cap, args.inner_cap, args.inner_epochs, args.epochs = 3000, 800, 2, 2
+    global SPEC
+    SPEC = registry.get(args.dataset)
+    args.condition = args.condition or SPEC["default_condition"]
+    args.out_dir = args.out_dir or f"outputs/{args.dataset}/cp_tune"
     os.makedirs(args.out_dir, exist_ok=True)
     t_start = time.perf_counter()
     global SCORES
@@ -135,24 +141,27 @@ def main():
         args.blind_fracs = "0.25,0.125,0.0625" if args.model == "CPTabM" else "0.3,0.5,0.7"
     fracs = [float(f) for f in args.blind_fracs.split(",")]
 
-    X, fine, category, _ = load_data(args.data_file, args.cap, args.seed, drop_conflicts=True)
-    drop = [c for c in SCENARIOS[args.condition] if c in X.columns]
-    X = X.drop(columns=drop)
-    present = [c for c in COMMON_CLASSES if c in set(category)]
-    families = [f for f in args.families.split(",") if f in present and f != "BENIGN"]
+    X, fine, category, _ = SPEC["loader"](args.data_file, args.cap, args.seed)
+    X, drop = registry.apply_condition(X, SPEC, args.condition)
+    wanted = [f for f in args.families.split(",") if f] or list(SPEC["families"])
+    bad = [f for f in wanted if f not in SPEC["families"]]
+    if bad:
+        raise SystemExit(f"Kayıtta olmayan aile: {bad} (kayıtlı: {list(SPEC['families'])})")
+    families = [f for f in wanted if set(SPEC["families"][f]) & set(category)]
     idx_tr, idx_te = train_test_split(np.arange(len(category)), test_size=0.2, stratify=fine,
                                       random_state=args.seed)
     print(f"Örneklem: {len(category)} satır, {X.shape[1]} özellik, koşul {args.condition}; "
           f"kör oranları {fracs}; skorlar {SCORES}")
 
-    out = {"dataset_id": "dnn_edgeiiot", "condition": args.condition, "dropped_features": drop,
+    out = {"dataset_id": args.dataset, "condition": args.condition, "dropped_features": drop,
+           "family_definition": {f: SPEC["families"][f] for f in families},
            "protocol": "iç içe LOFO; seçim yalnızca iç provayla (dış test ailesi kullanılmadı)",
            "selection_rule": "iç ailelerin ort. AUROC'u en yüksek; 0,005 içindekilerden sessiz BENIGN kaçışı en düşük",
            "settings": {k: v for k, v in vars(args).items() if k != "data_file"}, "families": {}}
     final_rows = []
     for U in families:
         tU = time.perf_counter()
-        pool = idx_tr[category[idx_tr] != U]
+        pool = idx_tr[~np.isin(category[idx_tr], SPEC["families"][U])]
         in_tr, in_te = train_test_split(pool, test_size=0.2, stratify=fine[pool], random_state=args.seed)
         in_tr = cap_per_category(in_tr, category, args.inner_cap, args.seed)
         inner_fams = [f for f in families if f != U]

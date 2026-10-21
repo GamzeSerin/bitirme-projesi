@@ -75,6 +75,33 @@ docker compose --profile train run --rm train-dnn_edgeiiot
 - Ham veri ve modeller Git'e girmez (`.gitignore`). Herkes veriyi kendi `data/<dataset_id>/` klasöründe tutar; Colab kullanan Drive'a koyar.
 - GitHub Actions her PR'da `python main.py --validate-only` çalıştırır. Format bozuksa PR kırmızı olur.
 
+## Görülmemiş saldırı deneyi: ortak araç (LOFO)
+
+Herkes kendi dalında aynı protokolü çalıştırır; sonuçlar böylece veri setleri arasında karşılaştırılabilir.
+
+- **Betik:** `src/open_set_lofo.py --dataset <dataset_id>` (veri setinden bağımsız). İç provayla yöntem ayarı: `src/cp_tune_dnn_edgeiiot.py --dataset <dataset_id>` (adı tarihsel; her veri setinde çalışır).
+- **Veri setine özel her şey tek yerde:** `src/common/open_set_registry.py`. Her kayıt şunları içerir:
+  - yükleyici: `(data_file, cap, seed) -> X, fine, category, stats`,
+  - aileler: `{aile: [kategoriler]}`; bir aile birden fazla kategori kapsayabilir (CICIoT2023'te FLOOD = DOS + DDOS),
+  - koşullar: A tam, C ana koşul, E en sert; her koşulda çıkarılacak sütunlar.
+
+  Kayıtta olup veride olmayan bir sütun deneyi açık bir hatayla durdurur.
+- **Protokol (değişmez):**
+  - ekip bölmesi 80/20, ince etikete göre katmanlı, seed 42,
+  - eğitimin %10'u kalibrasyon,
+  - eşik yalnızca bilinen kalibrasyon verisinden seçilir (bilinenlerin %95'i kabul),
+  - koşul sütunları veri yüklendikten sonra çıkarılır (her koşulda satırlar aynı).
+- **Ölçütler:** AUROC, AUPR, FPR95, yakalanan, yanlış reddedilen bilinen, sessiz BENIGN kaçışı, open-F1, bilinen F1.
+- **Doğrudan karşılaştırılan aileler** (`COMPARABLE`): FLOOD~DDOS, RECON, WEB, BRUTEFORCE. MIRAI, SPOOFING ve MALWARE veri setine özeldir.
+- **Backdoor:** her veri seti kendi yazarlarının gruplamasını korur (CICIoT2023: WEB, Edge-IIoTset: MALWARE).
+
+```bash
+python src/open_set_lofo.py --dataset dataset_23   --data-file <Merged*.csv klasörü> --models RF,TabM --condition C_ttl_yok
+python src/open_set_lofo.py --dataset dnn_edgeiiot --data-file <DNN-EdgeIIoT-dataset.csv> --models RF,TabM --condition C_seq_ack_yok
+python src/cp_tune_dnn_edgeiiot.py --dataset dataset_23 --data-file <klasör>     # CP-TabM, iç provayla
+# önce her komutu --quick ile deneyin (~1 dk)
+```
+
 ## Nasıl çalıştırılır?
 
 **1. Kurulum (bir kez):**
