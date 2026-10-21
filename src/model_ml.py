@@ -421,7 +421,9 @@ def main():
         json.dumps(cfg, sort_keys=True).encode()).hexdigest()[:8])
     os.makedirs(os.path.join(run_dir, "models"), exist_ok=True)
     with open(os.path.join(run_dir, "config.json"), "w", encoding="utf-8") as f:
-        json.dump(cfg, f, indent=2)
+        # "models" önbellek anahtarıdır, çalışan model listesi değil (o: models_run)
+        json.dump({**cfg, "models_note": "önbellek anahtarı; çalışan model listesi değil",
+                   "models_run": args.models}, f, indent=2, ensure_ascii=False)
     all_models = build_models(args.seed, args.n_jobs, args.gpu, args.quick,
                               tabm="TabM" in args.models.split(","))
     names = [m for m in args.models.split(",") if m in all_models]
