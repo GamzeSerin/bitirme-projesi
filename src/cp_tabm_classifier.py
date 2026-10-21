@@ -232,6 +232,14 @@ class CPTabMClassifier(TabMClassifier):
         }
         return P, scores
 
+    def class_energy_z(self, X, cls):
+        """Belirli bir sınıfın uzmanlarının, o sınıfın gerçek örneklerine göre ne kadar az emin olduğu
+        (z; büyük = her zamankinden az emin). İki sinyalli karar kuralında BENIGN kararlarının
+        kontrolü için: tahmin hangi modelden gelirse gelsin, BENIGN uzmanlarına sorulur."""
+        E = self._energy_np(self.predict_logits(X))
+        cls_arr = np.full(len(E), int(cls))
+        return (self._expert_energy(E, cls_arr) - self.cls_mu_[cls]) / self.cls_sd_[cls]
+
     def explain(self, X, class_names=None, top=3):
         """Her örnek için: tahmin, imza skoru, en yakın sınıf imzaları ve reddeden uzman grupları."""
         names = list(class_names) if class_names is not None else [str(c) for c in self.classes_]
