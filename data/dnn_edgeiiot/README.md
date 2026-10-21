@@ -229,6 +229,20 @@ CP-TabM, ana koşul **C**'de, 5 ailenin ortalamasıyla, **en iyi temel skorla** 
 
 Bileşen testleri: sınıflara bölünmüş üyeler, enerji farkı kaybı ve imza tutarlılığı skoru teker teker çıkarılır; ölçülebilir katkısı olmayan bileşen raporda belirtilir.
 
+## İki sinyalli karar kuralı: başarı ölçütleri (sonuçlardan ÖNCE belirlendi, 21.10.2026 18:51)
+
+Kod: `src/two_signal.py`. Akış: TabM sınıflandırır, üye anlaşmazlığı alarm verir; alarm yoksa ve tahmin BENIGN ise bir kontrol skoru trafiği analiste gönderebilir (DSS'te ALLOW yerine ANALYST_REVIEW). Kontrol eşiği, kalibrasyondaki gerçek BENIGN trafiğin yalnızca q kadarını işaretleyecek şekilde seçilir (analist bütçesi). Karşılaştırılan kontroller aynı q'da: CP-TabM BENIGN uzmanları (`cp_benign_z`), TabM anlaşmazlık / MSP / enerji, kNN.
+
+İki soru: (1) BENIGN kontrolü fikri işe yarıyor mu? (2) Bunun için CP-TabM gerekli mi? Ölçüt q = %1'de sessiz BENIGN kaçışı; kaçışın gerçekten görüldüğü ailelerde (özellikle BRUTEFORCE) ve ailelerin ortalamasında.
+
+| Sonuç | Ölçüt |
+| --- | --- |
+| **Açık başarı** | q = %1'de CP-TabM kontrolü kaçışı kontrolsüz duruma göre en az yarıya indirir VE TabM'in en iyi kontrol skorundan en az %30 daha düşük kaçış verir |
+| **Kısmi başarı** | Kontrol fikri işe yarar (kaçış yarıya iner) ama CP-TabM TabM'in kendi skorlarıyla aşağı yukarı aynıdır: kural tezin katkısı olur, CP-TabM'in değil |
+| **Başarısız** | Hiçbir kontrol q ≤ %2'de kaçışı belirgin azaltamaz |
+
+Uyarılar: ilk ölçüm tek tohumludur; sınırdaki bir sonuç 3 tohumla doğrulanmadan başarı sayılmaz. Kaçışın olmadığı ailelerde (ör. DDOS) kontrol yalnızca maliyeti (analist yükü) gösterir.
+
 ## Sütun hizası ve değer aralığı denetimi (19.10.2026)
 
 Kod: `src/audit_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/audit/audit.json`. Ham verideki 15 etiketin her biri için 6 kontrol (zaman damgası, IP, port 0–65535, 0/1 bayrak, ARP alanları, sayısal sütunlarda metin). İhlal yalnızca DDoS_UDP (zaman %100) ve MITM'de (zaman %100, port %30, bayrak %19); Normal'de %0,11 bayrak ihlali (önemsiz); diğer 12 saldırı türünde %0. Bu iki tür bulgu 7 gereği atıldı.
