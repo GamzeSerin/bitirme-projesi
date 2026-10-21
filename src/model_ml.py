@@ -66,6 +66,9 @@ def gpu_name():
         return None
 
 
+CACHE_MODELS_KEY = "DT,RF,XGB,LGBM,LR"  # önbellek klasörü için sabit (bkz. main)
+
+
 def model_key(name, model):
     """Model tanımı + arama uzayının kısa parmak izi (bellek adresleri temizlenir)."""
     import re
@@ -125,7 +128,24 @@ class EarlyStopping(ClassifierMixin, BaseEstimator):
         return self.classes_[self.predict_proba(X).argmax(axis=1)]
 
 
-def build_models(seed, n_jobs, gpu, quick):
+def tabm_model(seed, quick):
+    """TabM (Gorishniy vd., ICLR 2025): resmi varsayılanlar + early stopping, arama YOK.
+
+    Kurulu değilse None döner ve açık bir uyarı basılır (diğer modeller etkilenmez).
+    Kurulum: pip install tabm rtdl_num_embeddings (+ GPU için CUDA'lı torch).
+    """
+    try:
+        import rtdl_num_embeddings, tabm, torch  # noqa: F401
+        from tabm_classifier import TabMClassifier
+    except ImportError as e:
+        print(f"! TabM atlanıyor ({e}); kurulum: pip install tabm rtdl_num_embeddings")
+        return None
+    print(f"TabM: torch {torch.__version__}, cihaz "
+          f"{'cuda' if torch.cuda.is_available() else 'cpu'}")
+    return TabMClassifier(max_epochs=3 if quick else 60, random_state=seed)
+
+
+def build_models(seed, n_jobs, gpu, quick, tabm=False):
     # Boosting: üst sınır geniş, gerçek ağaç sayısını early stopping belirler
     n_est = 300 if quick else 3000
     models = {
@@ -155,6 +175,10 @@ def build_models(seed, n_jobs, gpu, quick):
             random_state=seed)
     except ImportError:
         print("! lightgbm yok, LGBM atlanıyor")
+    if tabm:  # yalnızca istenirse: torch'u gereksiz yere yüklemesin
+        model = tabm_model(seed, quick)
+        if model is not None:
+            models["TabM"] = model
     return models
 
 
@@ -241,8 +265,9 @@ def tune(name, model, X, y, seed, n_iter, max_rows):
 
 
 def run_model(name, base, Xtr, ytr, strat_tr, Xte, n_classes, args):
+    # Arama uzayı olmayan modellerde (TabM) arama atlanır: resmi varsayılanlar kullanılır
     params = tune(name, base, Xtr, ytr, args.seed, args.n_iter, args.tune_rows) \
-        if args.tune else {}
+        if args.tune and name in PARAM_SPACE else {}
     model = clone(base).set_params(**params)
 
     oof = np.zeros((len(ytr), n_classes), dtype=np.float32)
@@ -343,7 +368,8 @@ def main():
                    help="Ara sonuçlar ve modeller (Colab'da Drive'a verin, git'e girmez)")
     p.add_argument("--cap", type=int, default=40000, help="İnce etiket başına en fazla satır")
     p.add_argument("--folds", type=int, default=5)
-    p.add_argument("--models", default="DT,RF,XGB,LGBM,LR")
+    p.add_argument("--models", default="DT,RF,XGB,LGBM,LR",
+                   help="Virgülle ayrılmış; TabM eklemek için ör. DT,RF,XGB,LGBM,LR,TabM")
     p.add_argument("--tune", action="store_true")
     # 10 deneme / 100 bin satır kararsızdı (XGB çalıştırmalar arasında 0,661 <-> 0,704)
     p.add_argument("--n-iter", type=int, default=30)
@@ -387,12 +413,19 @@ def main():
     # Ayarlar değişince eski önbellek kullanılmasın: her ayar seti kendi klasörüne
     cfg = {k: getattr(args, k) for k in ("cap", "folds", "models", "tune", "n_iter", "tune_rows",
                                          "drop_features", "drop_conflicts", "seed", "quick")}
+    # Model listesi klasörü belirlemez: her modelin sonucu kendi anahtarıyla (model_key) saklanır.
+    # Liste değişince (ör. TabM eklenince) diğer modeller yeniden eğitilmesin. Sabit değer, eski
+    # varsayılanla aynı tutuldu ki daha önce kaydedilmiş klasörler geçerli kalsın.
+    cfg["models"] = CACHE_MODELS_KEY
     run_dir = os.path.join(args.work_dir, hashlib.md5(
         json.dumps(cfg, sort_keys=True).encode()).hexdigest()[:8])
     os.makedirs(os.path.join(run_dir, "models"), exist_ok=True)
     with open(os.path.join(run_dir, "config.json"), "w", encoding="utf-8") as f:
-        json.dump(cfg, f, indent=2)
-    all_models = build_models(args.seed, args.n_jobs, args.gpu, args.quick)
+        # "models" önbellek anahtarıdır, çalışan model listesi değil (o: models_run)
+        json.dump({**cfg, "models_note": "önbellek anahtarı; çalışan model listesi değil",
+                   "models_run": args.models}, f, indent=2, ensure_ascii=False)
+    all_models = build_models(args.seed, args.n_jobs, args.gpu, args.quick,
+                              tabm="TabM" in args.models.split(","))
     names = [m for m in args.models.split(",") if m in all_models]
     results = {}
     for name in names:

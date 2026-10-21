@@ -229,6 +229,28 @@ CP-TabM, ana koşul **C**'de, 5 ailenin ortalamasıyla, **en iyi temel skorla** 
 
 Bileşen testleri: sınıflara bölünmüş üyeler, enerji farkı kaybı ve imza tutarlılığı skoru teker teker çıkarılır; ölçülebilir katkısı olmayan bileşen raporda belirtilir.
 
+### Sonuç ve 3 tohum doğrulaması (21.10.2026, koşul C)
+
+Kod: `src/cp_tune_dnn_edgeiiot.py` (iç prova, ayar seçimi), `src/open_set_lofo.py --model-seed 1|2 --cp-config ...` (ek tohumlar), `src/seed_check_dnn_edgeiiot.py` (özet). Çıktı: `outputs/dnn_edgeiiot/cp_tune/`, `outputs/dnn_edgeiiot/seeds/` (s1, s2 ve özet). Veri bölmesi sabit (seed 42); yalnızca model eğitim tohumu değişir (42, 1, 2).
+
+![Tohum kontrolü](../../outputs/dnn_edgeiiot/seeds/fig_seed_check_dnn_edgeiiot_C_seq_ack_yok.png)
+
+| 5 ailenin ortalaması, 3 tohum | AUROC | Sessiz BENIGN kaçışı | Yakalanan (kal. eşiği) | Bilinen macro-F1 |
+| --- | --- | --- | --- | --- |
+| **TabM · üye anlaşmazlığı** | **0,862 ± 0,001** | %2,5 ± 0,3 | %48,9 | 0,875 |
+| TabM (alt tür etiketleriyle) · anlaşmazlık | 0,826 ± 0,009 | %1,2 ± 0,7 | %42,4 | 0,877 |
+| CP-TabM v3 · iç provayla seçilen | 0,805 ± 0,004 | %2,8 ± 0,4 | %29,7 | 0,875 |
+| CP-TabM · emin olma derecesi | 0,644 ± 0,023 | %0,2 ± 0,3 | %13,1 | 0,875 |
+| kNN (model bağımsız, tek koşu) | 0,881 | %2,7 | %54,1 | – |
+
+**Önceden yazılan ölçütlere göre değerlendirme: başarısız.** CP-TabM, en iyi temel skorun (kNN 0,88; TabM anlaşmazlığı 0,86) gerisinde kaldı; "+0,05 AUROC" çıtasının çok altında. En zor ailelerde de belirgin bir üstünlüğü yok. "Emin olma derecesi" skorunun düşük sessiz kaçışı (%0,2) bir iyileşme sayılmaz: bu skor bilinmeyeni zayıf ayırt ediyor (AUROC 0,64) ve kaçışı daha az şeyi "bilinen" kabul ederek düşürüyor. Aynı analist bütçesinde karşılaştırma iki sinyalli kuralda yapıldı (aşağıda) ve orada da TabM'in kendi skorlarından farkı çıkmadı. Bilinen sınıflarda kayıp yok (0,875; ölçüt en fazla 0,01).
+
+**Tohum kararlılığı:** sonuçlar tohumdan neredeyse bağımsız (TabM anlaşmazlığı ±0,001; CP-TabM ±0,004). Sıralama üç tohumda da aynı; fark tesadüf değil.
+
+**Bileşen testleri yapılmadı:** yöntem bütün hâliyle temel skorları geçemediği için bileşenlerin teker teker çıkarılması anlamını yitirdi. Bunun yerine bir varyant denendi (FP-TabM: üyelere farklı özellik maskeleri); ilk iki ailede (DDOS 0,54, RECON 0,71) sade TabM'in gerisinde kaldığı için durduruldu.
+
+**Sonuç:** Edge-IIoTset'te sade TabM'in üye anlaşmazlığı en iyi ve en kararlı model tabanlı skor. Ekip kararıyla (21.10.2026) ana yöntem TabM + iki sinyalli kural oldu; CP-TabM CICIoT2023'e ayar aktarımıyla, tanımlayıcı karşılaştırma olarak taşınıyor.
+
 ## İki sinyalli karar kuralı: başarı ölçütleri (sonuçlardan ÖNCE belirlendi, 21.10.2026 18:51)
 
 Kod: `src/two_signal.py`. Akış: TabM sınıflandırır, üye anlaşmazlığı alarm verir; alarm yoksa ve tahmin BENIGN ise bir kontrol skoru trafiği analiste gönderebilir (DSS'te ALLOW yerine ANALYST_REVIEW). Kontrol eşiği, kalibrasyondaki gerçek BENIGN trafiğin yalnızca q kadarını işaretleyecek şekilde seçilir (analist bütçesi). Karşılaştırılan kontroller aynı q'da: CP-TabM BENIGN uzmanları (`cp_benign_z`), TabM anlaşmazlık / MSP / enerji, kNN.

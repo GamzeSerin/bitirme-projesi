@@ -13,10 +13,11 @@ Karar akışı (her test satırı için):
      (q = analist yükü bütçesi; test ve bilinmeyen aile kullanılmaz).
 
 Karşılaştırılan kontrol skorları (aynı q bütçesinde):
-  cp_benign_z     CP-TabM: BENIGN uzmanlarının gerçek BENIGN'e göre ne kadar az emin olduğu (önerilen)
+  cp_benign_z     CP-TabM: BENIGN uzmanlarının gerçek BENIGN'e göre ne kadar az emin olduğu (ayar aktarımı,
+                  tanımlayıcı karşılaştırma)
   tabm_disagree   TabM üye anlaşmazlığı (alarmla aynı skor, BENIGN için daha sıkı eşik)
   tabm_msp        TabM 1 - en yüksek olasılık
-  tabm_energy     TabM enerjisi
+  tabm_energy     TabM enerjisi  <- ANA KONTROL SKORU (ekip kararı 21.10.2026, sonuçlardan önce)
   knn             modelden bağımsız uzaklık
 
 Ölçütler (aile başına, sonra ortalama):
@@ -28,7 +29,9 @@ Satır bazında skorlar da kaydedilir (XAI-2 ve sonraki analizler için).
 
 Çalıştırma:
   python src/two_signal.py --dataset dnn_edgeiiot --data-file <csv> --cp-config outputs/dnn_edgeiiot/cp_tune/cp_tune_C_seq_ack_yok.json
-  python src/two_signal.py --dataset dataset_23 --data-file <klasör>        # CP-TabM kör oranı sabit (0.0625)
+  python src/two_signal.py --dataset dataset_23 --data-file <klasör>        # ayar aktarımı: kör oranı 0.0625
+      (Edge-IIoTset iç provasında 5 ailenin 4'ünde seçilen değer; hedef veride ayar YAPILMAZ.
+       JSON'da her aile için blind_frac_source alanı bunu kaydeder.)
   ... --quick
 """
 
@@ -50,6 +53,7 @@ from open_set_lofo import KNNScore, model_scores
 
 QS = [0.005, 0.01, 0.02, 0.05, 0.10]
 GUARDS = ["cp_benign_z", "tabm_disagree", "tabm_msp", "tabm_energy", "knn"]
+PRIMARY_GUARD = "tabm_energy"  # önceden tek seçildi (data/dataset_23/README.md, 21.10.2026)
 
 
 def main():
@@ -73,9 +77,16 @@ def main():
         args.cap = 3000
     spec = registry.get(args.dataset)
     args.condition = args.condition or spec["default_condition"]
-    args.out_dir = args.out_dir or f"outputs/{args.dataset}/two_signal"
-    os.makedirs(args.out_dir, exist_ok=True)
     mseed = args.seed if args.model_seed is None else args.model_seed
+    # Tohumlar birbirinin üzerine yazmasın: bölme tohumundan farklı her model tohumu kendi klasörüne
+    # (open_set_lofo ve seed_check ile aynı düzen: .../two_signal/s1, s2)
+    if args.out_dir is None:
+        args.out_dir = f"outputs/{args.dataset}/two_signal"
+        if mseed != args.seed:
+            args.out_dir = os.path.join(args.out_dir, f"s{mseed}")
+    os.makedirs(args.out_dir, exist_ok=True)
+    # Dosya adı da tohumu taşır: --out-dir elle verilse bile tohumlar birbirini silmez
+    tag = args.condition if mseed == args.seed else f"{args.condition}_seed{mseed}"
     epochs = 3 if args.quick else 60
     t_start = time.perf_counter()
 
@@ -133,7 +144,8 @@ def main():
         base_caught = float((alarm & is_unk).sum() / is_unk.sum())
         print(f"\n=== {fam} {fam_cats} (kör oranı {bf}) — yalnız alarm: yakalanan {base_caught:.3f}, "
               f"sessiz BENIGN kaçışı {base_silent:.3f} ===")
-        details[fam] = {"categories": fam_cats, "blind_frac": bf, "tau_alarm": tau1,
+        details[fam] = {"categories": fam_cats, "blind_frac": bf,
+                        "blind_frac_source": "cp_tune (iç prova)" if fam in cp_cfg else "ayar aktarımı (sabit, --cp-blind-frac)", "tau_alarm": tau1,
                         "alarm_only": {"unknown_caught": round(base_caught, 4), "silent_benign": round(base_silent, 4)},
                         "n_unknown": int(is_unk.sum()), "n_benign_test": int(is_ben.sum())}
         # kontrol eşiği: kalibrasyonda alarm almamış ve BENIGN denmiş GERÇEK BENIGN satırlarına göre
@@ -152,7 +164,7 @@ def main():
             print(f"  {g:14s} " + "  ".join(f"q={x['q']:.3f}: kaçış {x['silent_benign']:.4f} / "
                                             f"inceleme {x['benign_review']:.4f}" for x in r if x["q"] in (0.01, 0.05)))
         if args.save_rows:
-            np.savez_compressed(os.path.join(args.out_dir, f"rows_{fam}_{args.condition}.npz"),
+            np.savez_compressed(os.path.join(args.out_dir, f"rows_{fam}_{tag}.npz"),
                                 test_index=idx_te, category=category[idx_te], is_unknown=is_unk,
                                 tabm_pred=np.array(known)[pred_te], alarm=alarm, tau_alarm=tau1,
                                 **{f"score_{k}": v for k, v in G_te.items()})
@@ -164,37 +176,38 @@ def main():
     out = {"dataset_id": args.dataset, "condition": args.condition, "dropped_features": drop,
            "classifier": "TabM (alarm: üye anlaşmazlığı, %95 bilinen kalibrasyon eşiği)",
            "guard_threshold": "kalibrasyonda alarm almamış ve BENIGN denmiş gerçek BENIGN satırlarının (1-q) yüzdeliği",
-           "settings": {k: v for k, v in vars(args).items() if k != "data_file"},
+           "settings": {**{k: v for k, v in vars(args).items() if k != "data_file"}, "model_seed": mseed},
+           "primary_guard": PRIMARY_GUARD,
            "families": details, "results": rows, "mean_over_families": mean.to_dict(orient="records"),
            "runtime_seconds": round(time.perf_counter() - t_start, 1)}
-    with open(os.path.join(args.out_dir, f"two_signal_{args.condition}.json"), "w", encoding="utf-8") as f:
+    with open(os.path.join(args.out_dir, f"two_signal_{tag}.json"), "w", encoding="utf-8") as f:
         json.dump(out, f, indent=2, ensure_ascii=False)
     plot(mean, df, spec["name"], args.condition,
-         os.path.join(args.out_dir, f"fig_two_signal_{args.dataset}_{args.condition}.png"))
+         os.path.join(args.out_dir, f"fig_two_signal_{args.dataset}_{tag}.png"), len(families))
     print("\nAilelerin ortalaması (q = analist bütçesi):")
     print(mean.pivot_table(index="guard", columns="q", values=["silent_benign", "benign_review"]).round(4).to_string())
     print(f"\nÇıktılar: {args.out_dir}  ({time.perf_counter() - t_start:.0f} s)")
 
 
-def plot(mean, df, name, condition, out_path):
+def plot(mean, df, name, condition, out_path, n_families):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     colors = {"cp_benign_z": "#1f9e6e", "tabm_disagree": "#2a78d6", "tabm_msp": "#9aa5b1",
               "tabm_energy": "#7b4fd6", "knn": "#d9822b"}
-    labels = {"cp_benign_z": "CP-TabM · BENIGN uzmanları (önerilen)", "tabm_disagree": "TabM · anlaşmazlık",
-              "tabm_msp": "TabM · MSP", "tabm_energy": "TabM · enerji", "knn": "kNN"}
+    labels = {"cp_benign_z": "CP-TabM · BENIGN uzmanları", "tabm_disagree": "TabM · anlaşmazlık",
+              "tabm_msp": "TabM · MSP", "tabm_energy": "TabM · enerji (ana)", "knn": "kNN"}
     fig, ax = plt.subplots(figsize=(7.5, 4.8))
     base = mean["silent_benign_alarm_only"].iloc[0]
     for g in GUARDS:
         m = mean[mean.guard == g].sort_values("q")
         ax.plot(m["benign_review"] * 100, m["silent_benign"] * 100, marker="o", color=colors[g], label=labels[g],
-                lw=2.2 if g == "cp_benign_z" else 1.4)
+                lw=2.2 if g == PRIMARY_GUARD else 1.4)
     ax.axhline(base * 100, color="#14202b", ls="--", lw=0.9)
     ax.text(ax.get_xlim()[1] * 0.98, base * 100, "  kontrol yok (yalnız alarm)", ha="right", va="bottom", fontsize=8)
     ax.set_xlabel("Analiste gönderilen gerçek BENIGN trafik (%)")
     ax.set_ylabel("Sessizce BENIGN'e kaçan görülmemiş saldırı (%)")
-    ax.set_title(f"{name}, koşul {condition}: BENIGN güvenlik kontrolü (5 ailenin ortalaması)", fontsize=10)
+    ax.set_title(f"{name}, koşul {condition}: BENIGN güvenlik kontrolü ({n_families} ailenin ortalaması)", fontsize=10)
     ax.spines[["top", "right"]].set_visible(False)
     ax.legend(frameon=False, fontsize=8)
     fig.tight_layout()
