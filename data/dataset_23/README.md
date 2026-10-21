@@ -116,25 +116,25 @@ Test macro-F1 (147.629 satır), %95 bootstrap güven aralığı:
 | H4 | Görülmemiş FLOOD için AUROC düşük olabilir (MIRAI'ye benzerlik), ama sessiz BENIGN kaçışı %1'in altında kalır. | Flood trafiği normal trafikten çok farklı. |
 | H5 | Bilinmeyen tespiti A'dan E'ye Edge-IIoTset'tekinden çok daha az düşer (en iyi skorun ortalama AUROC'u A ile E arasında en fazla 0,05 fark). | Kapalı küme ablation'ında A → E kaybı 0,025; Edge-IIoTset'te 0,376. |
 
-**Başarı ölçütleri:**
+**Başarı ölçütleri** (güncellendi 21.10.2026, görülmemiş saldırı sonuçlarından ÖNCE; aşağıdaki nota bakın):
 
-Sıra (ekip kararı): önce temel skorlar A/C/E'de (TabM ve en iyi ağaç modeli: msp, entropi, enerji, anlaşmazlık, kNN); sonra CP-TabM v3 iç provayla (`cp_tune`); ekibin iki sinyalli karar kuralı (anlaşmazlık alarm verir, emin olma derecesi BENIGN kararlarını denetler) netleşince o da eklenir. FP-TabM Edge-IIoTset'te durduruldu, çalıştırılmaz.
+Sıra: (1) ablation'ın ortak formatta raporlanması, (2) LOFO RF, A / C / E, (3) TabM'in kapalı küme deneyine eklenmesi (PR #7), (4) LOFO TabM, A / C / E, (5) tohum 1 ve 2, (6) iki sinyalli kural (PR #8) ve CP-TabM ayar aktarımı, (7) DSS ortak ölçütü.
 
-1. **Önerilen yöntem** (CP-TabM v3), ana koşul C'de 6 ailenin ortalamasıyla en iyi temel skorla (RF ve TabM skorları ile kNN dahil) karşılaştırılır. Ayarlar Edge-IIoTset'teki gibi yalnızca iç provayla seçilir: her dış aile için, eğitimdeki diğer ailelerden biri geçici olarak "bilinmeyen" yapılır; seçilen ayar dış aile üzerinde bir kez çalıştırılır. Test ailesine bakılarak ayar yapılmaz.
+1. **Temel skorlar** (msp, entropi, enerji, anlaşmazlık, kNN; RF ve TabM): başarı iddiası yoktur; H1–H5 hipotezleriyle değerlendirilir.
 
-| Sonuç | Ölçüt |
-| --- | --- |
-| **Açık başarı** | AUROC'ta en iyi temel skordan en az +0,05; sessiz BENIGN kaçışı yaklaşık yarıya; bilinen sınıflarda macro-F1 kaybı sade TabM'e göre en fazla 0,01; fark tohumlar arası sapmadan büyük |
-| **Kısmi başarı** | Ortalamada +0,01–0,05, ama WEB ve BRUTEFORCE'ta ya da sessiz BENIGN kaçışında belirgin iyileşme |
-| **Başarısız** | Temel skorlarla aynı veya daha kötü; ya da tespit artarken bilinen başarı belirgin düşüyor. Sonuç ve olası nedenleri olduğu gibi raporlanır. |
-
-2. **DSS'e bilinmeyen katmanı** ("bilinmeyen → ANALYST_REVIEW, asla ALLOW"):
+2. **Ana yöntem: iki sinyalli kural** (TabM). TabM üyelerinin anlaşmazlığı alarm verir; alarm vermeyen ve BENIGN denen kararlar ikinci bir skorla (TabM enerji ya da msp) denetlenir ve normal trafiğin önceden belirlenen bir **analist bütçesi** kadarı (q ∈ {%0,5, %1, %2, %5, %10}) incelemeye ayrılır. Eşikler yalnızca kalibrasyondaki bilinen satırlarla seçilir. **Ortak ölçüt (Edge-IIoTset ile aynı): ALLOW edilen görülmemiş saldırı oranı** (sessiz BENIGN kaçışı), ana koşul C'de, 6 ailenin ortalaması, 3 tohum.
 
 | Sonuç | Ölçüt |
 | --- | --- |
-| **Başarı** | ALLOW edilen görülmemiş saldırı oranı katmansız DSS'e göre en az yarıya iner; normal trafikte ANALYST_REVIEW'a giden oran en fazla 10 puan artar |
-| **Kısmi başarı** | ALLOW edilen görülmemiş saldırı azalır ama yarıya inmez, ya da analist yükü 10 puandan fazla artar |
-| **Başarısız** | ALLOW edilen görülmemiş saldırı belirgin şekilde azalmaz |
+| **Başarı** | q = %5'te ALLOW edilen görülmemiş saldırı oranı, yalnız alarm kuralına göre en az yarıya iner ve fark tohumlar arası sapmadan büyüktür; gerçekleşen inceleme oranı bütçeye yakın kalır (en fazla 1 puan fark) |
+| **Kısmi başarı** | Oran azalır ama yarıya inmez; ya da yarıya iniş yalnızca q = %10'da görülür |
+| **Başarısız** | Oran belirgin şekilde azalmaz; ya da gerçekleşen inceleme oranı bütçeyi belirgin şekilde aşar |
+
+BRUTEFORCE ve WEB ayrıca raporlanır (H2). Kural sınıf tahminini değiştirmez; bilinen sınıflardaki macro-F1 aynı kalır.
+
+3. **CP-TabM: ayar aktarımı.** Edge-IIoTset'in iç provasında seçilen kör oranı (0,0625) bu veri setinde yeniden ayarlanmadan, C koşulunda bir kez çalıştırılır. Sonuç dosyasında `blind_frac_source: ayar aktarımı` yazar. Başarı iddiası yoktur; sade TabM ile karşılaştırma tanımlayıcı olarak raporlanır. (Gerekçe: Edge-IIoTset'te CP-TabM sade TabM'i geçmedi ve iki sinyalli kuralda TabM'in kendi skorları aynı işi gördü; aktarılmış ayar, yöntemin başka bir veri setine genellenmesinin de temiz bir testidir.)
+
+**Güncelleme notu (21.10.2026, sonuçlardan önce):** İlk sürümde 1. ölçüt "CP-TabM v3, iç provayla seçilen ayarla, en iyi temel skordan en az +0,05 AUROC" idi; 2. ölçüt "DSS'e bilinmeyen katmanı: ALLOW edilen görülmemiş saldırı en az yarıya, analist yükü en fazla 10 puan artış" idi. Edge-IIoTset'te iki sinyalli kuralın sonucu (CP-TabM'e gerek olmadığı) üzerine ekip kararıyla ana yöntem iki sinyalli kural, CP-TabM ayar aktarımı oldu; DSS ölçütü iki sinyalli kuralın ortak ölçütüyle birleştirildi ve analist yükü sabit bütçe olarak tanımlandı. Bu değişiklik CICIoT2023'te hiçbir görülmemiş saldırı sonucu (tesisat denemesi dışında) görülmeden yapıldı.
 
 **Not (21.10.2026):** Koşullar ve ölçütler yazıldıktan sonra ortak araç (PR #6) `--quick` ile (etiket başına 3.000 satır, RF) üç koşulda tesisat denemesinden geçirildi: sütun adları doğrulandı, FLOOD ailesi iki kategoriyle çalışıyor. Bu deneme küçük örneklemli olduğu için sonuçları yorumlanmadı; koşullar ve ölçütler değiştirilmedi.
 
@@ -144,6 +144,6 @@ Sıra (ekip kararı): önce temel skorlar A/C/E'de (TabM ve en iyi ağaç modeli
 - **Doğrudan karşılaştırma ortak ailelerde:** FLOOD/DDOS, RECON, WEB, BRUTEFORCE. Yalnız bu veri setinde olan MIRAI ve SPOOFING (Edge-IIoTset'te MITM satırları sütun kayması yüzünden atıldı) ile yalnız Edge-IIoTset'te olan MALWARE veri setine özel raporlanır.
 - **Karşılaştırmada dikkat:** Bilinen sınıf sayısı farklı (burada 8 kategori ve 6 aile, FLOOD iki kategori; Edge-IIoTset'te 6 kategori ve 5 aile). Veri setlerinin zorluğu da çok farklı (kapalı küme macro-F1 0,71 ve 0,99). Bu yüzden ham AUROC'lar değil göreli bulgular karşılaştırılır: kısayollar çıkınca ne kadar düşüyor, anlaşmazlık msp'den iyi mi, CP-TabM sade TabM'e göre nerede. Küçük ailelerde (testte BRUTEFORCE 202, WEB 378 satır) her sonuç tohumlar arası sapma ya da güven aralığıyla verilir.
 - **Backdoor her veri setinde kendi yazarlarının gruplamasında kalır:** burada WEB (CICIoT2023'te web üzerinden taşınıyor), Edge-IIoTset'te MALWARE. WEB karşılaştırmasında bu fark not edilir.
-- **Yöntem:** FP-TabM önerilmiyor. 3 tohumla sade TabM'in üye anlaşmazlığı (ort. AUROC 0,862 ± 0,001, Edge-IIoTset koşul C) CP-TabM v3'ten (0,805 ± 0,004) iyi; CP-TabM'in emin olma derecesi skoru ise sessiz BENIGN kaçışını %2,5'ten %0,2'ye indiriyor.
+- **Yöntem:** FP-TabM önerilmiyor; ana yöntem TabM + iki sinyalli kural. 3 tohumla sade TabM'in üye anlaşmazlığı (ort. AUROC 0,862 ± 0,001, Edge-IIoTset koşul C) CP-TabM v3'ten (0,805 ± 0,004) iyi; CP-TabM'in emin olma derecesi skoru ise sessiz BENIGN kaçışını %2,5'ten %0,2'ye indiriyor.
 - **Ortak LOFO aracı:** `src/open_set_lofo.py` ve `src/common/open_set_registry.py` (PR #6, birleşti). Bu veri setinin kaydı orada: yükleyici `model_ml.load_data`'yı sarmalar, `Number` ve çakışmaları atar; `Number` veride kalırsa deney durur. Aileler ve A/C/E koşulları bu README'deki tanımlarla aynı.
-- **Sıra (ekip kararı, Gamze Serin'in 21.10.2026 önerisi):** (1) TabM'in kapalı küme deneyine 6. model olarak eklenmesi, (2) görülmemiş saldırı deneyi RF + TabM, A / C / E, (3) tohum 1 ve 2, (4) ablation'ın ortak formatta (sabit RF/DT ayarları, bootstrap aralıkları) raporlanması, (5) CP-TabM iç provası ve iki sinyalli karar kuralı.
+- **Sıra:** yukarıdaki "Başarı ölçütleri" bölümünde. CP-TabM'in tam iç provası yerine ayar aktarımı (Gamze Serin'in önerisi, 21.10.2026).
