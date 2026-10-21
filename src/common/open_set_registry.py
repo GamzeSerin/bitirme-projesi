@@ -14,6 +14,7 @@ veri setine özel hiçbir şey bilmez. Yeni bir veri seti eklemek için gereken 
   conditions  : {koşul adı: [çıkarılacak sütunlar]}  A tam, C ana koşul, E en sert
   benign      : zararsız kategorinin adı (sessiz kaçış ölçütü için)
   default_condition : ana koşul
+  leak_test_columns : (isteğe bağlı) ablation'daki tek-özellik testi için sütunlar; yoksa hepsi
 
 Koşul sütunları veri yüklendikten SONRA çıkarılır; böylece her koşulda satırlar birebir aynıdır.
 Kayıtta adı geçen ama veride olmayan bir sütun deneyi DURDURUR (yazım hatası sessizce geçmesin).
@@ -72,6 +73,8 @@ DATASETS = {
                        "D_sayac_zaman_yok": _EDGE_COUNTERS,
                        "E_hepsi_cikarildi": _EDGE_PORTS + _EDGE_SEQ_ACK + _EDGE_COUNTERS},
         "default_condition": "C_seq_ack_yok",
+        # ablation tek-özellik testi: yalnızca şüpheli kimlik alanları (yoksa bütün sütunlar)
+        "leak_test_columns": _EDGE_COUNTERS,
         "notes": "SPOOFING yok (MITM satırları sütun kayması nedeniyle atıldı); Backdoor MALWARE'de "
                  "(Edge-IIoTset makalesinin gruplaması).",
     },
