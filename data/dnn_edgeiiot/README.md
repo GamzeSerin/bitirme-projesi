@@ -243,6 +243,29 @@ Kod: `src/two_signal.py`. Akış: TabM sınıflandırır, üye anlaşmazlığı 
 
 Uyarılar: ilk ölçüm tek tohumludur; sınırdaki bir sonuç 3 tohumla doğrulanmadan başarı sayılmaz. Kaçışın olmadığı ailelerde (ör. DDOS) kontrol yalnızca maliyeti (analist yükü) gösterir.
 
+### Sonuç (21.10.2026, tek tohum, koşul C)
+
+![İki sinyalli kural](../../outputs/dnn_edgeiiot/two_signal/fig_two_signal_dnn_edgeiiot_C_seq_ack_yok.png)
+
+Kontrolsüz (yalnız alarm) sessiz BENIGN kaçışı ortalama %2,8; kaçış yalnızca WEB (%2,3) ve BRUTEFORCE (%11,6) ailelerinde var, DDOS, RECON ve MALWARE'de ~%0.
+
+| 5 ailenin ortalaması, sessiz kaçış | q = %1 | q = %2 | q = %5 | q = %10 |
+| --- | --- | --- | --- | --- |
+| CP-TabM BENIGN uzmanları | %2,43 | %1,90 | **%0,65** | %0,09 |
+| TabM MSP | %2,23 | **%1,54** | %0,90 | %0,03 |
+| TabM enerji | %2,23 | %1,71 | %0,75 | %0,09 |
+| TabM anlaşmazlık | **%2,22** | %1,75 | %1,04 | %0,06 |
+| kNN | %2,78 | %2,78 | %2,59 | %1,91 |
+
+**Önceden yazılan ölçütlere göre değerlendirme:**
+
+1. **Ana ölçüt (q = %1) sağlanmadı:** hiçbir kontrol kaçışı yarıya indiremedi (en iyisi %2,8 → %2,2). Bu nedenle sonuç "açık başarı" ya da ölçütteki tanımıyla "kısmi başarı" değildir.
+2. **"Başarısız" da değildir:** q = %2'de kaçış belirgin azalıyor (en iyi TabM MSP ile %45). q = %5'te 4 kat (CP-TabM %0,65, TabM enerji %0,75), q = %10'da neredeyse sıfır. Yani BENIGN kontrolü işe yarıyor ama etkili olması için %1'den büyük bir analist bütçesi gerekiyor.
+3. **CP-TabM'in ek katkısı yok:** q ≤ %2'de TabM'in kendi skorlarının gerisinde. q = %5'te en iyi (BRUTEFORCE'ta %2,9'a karşı TabM enerji %3,4), ama fark ölçütteki %30 çıtasının altında ve tek tohumlu. Sessiz kaçışı azaltmak için ayrı bir CP-TabM modeli gerekmiyor; sade TabM'in kendi enerji/MSP skoru aynı işi görüyor.
+4. **kNN bu iş için uygun değil:** normale benzeyen saldırıyı uzaklıkla ayıramıyor.
+5. **Pratik sonuç (DSS için):** "alarm yoksa ve tahmin BENIGN ise TabM'in emin olma skoruyla ikinci kontrol" kuralı, normal trafiğin %3–4'ünü incelemeye göndererek görülmemiş saldırıların sessiz geçişini yaklaşık 3–4 kat azaltıyor. Bu, CP-TabM'den bağımsız, DSS'e doğrudan eklenebilecek bir kural.
+
+
 ## Sütun hizası ve değer aralığı denetimi (19.10.2026)
 
 Kod: `src/audit_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/audit/audit.json`. Ham verideki 15 etiketin her biri için 6 kontrol (zaman damgası, IP, port 0–65535, 0/1 bayrak, ARP alanları, sayısal sütunlarda metin). İhlal yalnızca DDoS_UDP (zaman %100) ve MITM'de (zaman %100, port %30, bayrak %19); Normal'de %0,11 bayrak ihlali (önemsiz); diğer 12 saldırı türünde %0. Bu iki tür bulgu 7 gereği atıldı.
