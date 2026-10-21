@@ -179,7 +179,11 @@ def main():
     p.add_argument("--data-file", required=True)
     p.add_argument("--out-dir", default=OUT_DIR)
     p.add_argument("--cap", type=int, default=40000)
-    p.add_argument("--seed", type=int, default=42)
+    p.add_argument("--seed", type=int, default=42, help="Veri bölmesi ve örneklem (ekip protokolü: 42)")
+    p.add_argument("--model-seed", type=int, default=None,
+                   help="Yalnızca modelin eğitim rastgeleliği (tohum kontrolü); varsayılan --seed")
+    p.add_argument("--cp-config", default="",
+                   help="cp_tune JSON'u: CP-TabM her aile için iç provanın seçtiği kör oranıyla eğitilir")
     p.add_argument("--condition", default="A_tam", choices=list(SCENARIOS))
     p.add_argument("--models", default="RF",
                    help="Virgülle: RF, TabM, FPTabM (özellik-bölümlü), CPTabM (önerilen), "
@@ -220,6 +224,12 @@ def main():
     families = [f for f in args.families.split(",") if f in present and f != "BENIGN"]
 
     rows, details = [], {}
+    mseed = args.seed if args.model_seed is None else args.model_seed
+    cp_cfg = {}
+    if args.cp_config:
+        with open(args.cp_config, encoding="utf-8") as f:
+            cp_cfg = {fam: v["chosen"] for fam, v in json.load(f)["families"].items()}
+        print(f"CP-TabM ayarları iç provadan: { {k: v['blind_frac'] for k, v in cp_cfg.items()} }")
     for fam in families:
         t0 = time.perf_counter()
         known = [c for c in present if c != fam]
@@ -250,17 +260,17 @@ def main():
         for name in models:
             if name in ("TabM", "FPTabM"):
                 from tabm_classifier import TabMClassifier
-                model = TabMClassifier(max_epochs=3 if args.quick else 60, random_state=args.seed,
+                model = TabMClassifier(max_epochs=3 if args.quick else 60, random_state=mseed,
                                        verbose=False, feature_frac=args.fp_frac if name == "FPTabM" else None)
             elif name.startswith("CPTabM"):
                 from cp_tabm_classifier import CPTabMClassifier
-                model = CPTabMClassifier(blind_frac=args.cp_blind_frac,
+                model = CPTabMClassifier(blind_frac=cp_cfg.get(fam, {}).get("blind_frac", args.cp_blind_frac),
                                          lam_energy=0.0 if name == "CPTabM-noE" else args.cp_lam,
                                          m_in=args.cp_m_in, m_out=args.cp_m_out,
-                                         max_epochs=3 if args.quick else 60, random_state=args.seed,
+                                         max_epochs=3 if args.quick else 60, random_state=mseed,
                                          verbose=False, feature_frac=args.cp_feature_frac)
             else:
-                model = clone(build_models(args.seed, args.n_jobs)[name])
+                model = clone(build_models(mseed, args.n_jobs)[name])
             tm = time.perf_counter()
             model.fit(Xfit, yfit)
             fit_s = time.perf_counter() - tm
@@ -272,6 +282,9 @@ def main():
             details[fam]["models"][name] = {"closed_f1_known": round(float(closed_f1), 4),
                                             "fit_seconds": round(fit_s, 1),
                                             "unknown_assigned_to": assigned}
+            details[fam]["models"][name]["model_seed"] = mseed
+            if name.startswith("CPTabM") and fam in cp_cfg:
+                details[fam]["models"][name]["chosen_by_inner"] = cp_cfg[fam]
             if name in ("TabM", "FPTabM") or name.startswith("CPTabM"):
                 details[fam]["models"][name]["best_epoch"] = int(model.best_epoch_)
             if name.startswith("CPTabM"):
