@@ -90,7 +90,8 @@ Herkes kendi dalında aynı protokolü çalıştırır; sonuçlar böylece veri 
   - ekip bölmesi 80/20, ince etikete göre katmanlı, seed 42,
   - eğitimin %10'u kalibrasyon,
   - eşik yalnızca bilinen kalibrasyon verisinden seçilir (bilinenlerin %95'i kabul),
-  - koşul sütunları veri yüklendikten sonra çıkarılır (her koşulda satırlar aynı).
+  - koşul sütunları veri yüklendikten sonra çıkarılır (her koşulda satırlar aynı),
+  - RF ve DT **bütün veri setlerinde aynı sabit ayarlarla** eğitilir (`ablation_dnn_edgeiiot.build_models`: RF 100 ağaç, derinlik 40, max_features 0,5; DT derinlik 20, entropy). Ayarlar Edge-IIoTset'in asıl deneyinde seçildi; her veri setinde yeniden aranmaz ki skor farkı ayardan değil veriden gelsin.
 - **Ölçütler:** AUROC, AUPR, FPR95, yakalanan, yanlış reddedilen bilinen, sessiz BENIGN kaçışı, open-F1, bilinen F1.
 - **Doğrudan karşılaştırılan aileler** (`COMPARABLE`): FLOOD~DDOS, RECON, WEB, BRUTEFORCE. MIRAI, SPOOFING ve MALWARE veri setine özeldir.
 - **Backdoor:** her veri seti kendi yazarlarının gruplamasını korur (CICIoT2023: WEB, Edge-IIoTset: MALWARE).
