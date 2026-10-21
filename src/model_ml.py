@@ -66,6 +66,9 @@ def gpu_name():
         return None
 
 
+CACHE_MODELS_KEY = "DT,RF,XGB,LGBM,LR"  # önbellek klasörü için sabit (bkz. main)
+
+
 def model_key(name, model):
     """Model tanımı + arama uzayının kısa parmak izi (bellek adresleri temizlenir)."""
     import re
@@ -410,6 +413,10 @@ def main():
     # Ayarlar değişince eski önbellek kullanılmasın: her ayar seti kendi klasörüne
     cfg = {k: getattr(args, k) for k in ("cap", "folds", "models", "tune", "n_iter", "tune_rows",
                                          "drop_features", "drop_conflicts", "seed", "quick")}
+    # Model listesi klasörü belirlemez: her modelin sonucu kendi anahtarıyla (model_key) saklanır.
+    # Liste değişince (ör. TabM eklenince) diğer modeller yeniden eğitilmesin. Sabit değer, eski
+    # varsayılanla aynı tutuldu ki daha önce kaydedilmiş klasörler geçerli kalsın.
+    cfg["models"] = CACHE_MODELS_KEY
     run_dir = os.path.join(args.work_dir, hashlib.md5(
         json.dumps(cfg, sort_keys=True).encode()).hexdigest()[:8])
     os.makedirs(os.path.join(run_dir, "models"), exist_ok=True)
