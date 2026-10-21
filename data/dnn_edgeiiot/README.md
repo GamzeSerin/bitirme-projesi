@@ -288,6 +288,28 @@ Kontrolsüz (yalnız alarm) sessiz BENIGN kaçışı ortalama %2,8; kaçış yal
 5. **Pratik sonuç (DSS için):** "alarm yoksa ve tahmin BENIGN ise TabM'in emin olma skoruyla ikinci kontrol" kuralı, normal trafiğin %3–4'ünü incelemeye göndererek görülmemiş saldırıların sessiz geçişini yaklaşık 3–4 kat azaltıyor. Bu, CP-TabM'den bağımsız, DSS'e doğrudan eklenebilecek bir kural.
 
 
+### 3 tohum doğrulaması (21.10.2026, koşul C)
+
+Model eğitim tohumları 42, 1, 2 (veri bölmesi sabit). Çıktı: `outputs/dnn_edgeiiot/two_signal/` (42), `s1/`, `s2/`. Sayılar 5 ailenin ortalaması, tohumlar arası ortalama ± standart sapma. Kontrolsüz (yalnız alarm) sessiz kaçış **%2,52 ± 0,25**.
+
+| Sessiz kaçış (gerçekleşen inceleme) | q = %1 | q = %2 | q = %5 | q = %10 |
+| --- | --- | --- | --- | --- |
+| **TabM enerji** (ekipte ana skor, 21.10 kararı) | %1,95 ± 0,26 (%0,8) | %1,60 ± 0,12 (%1,5) | **%0,53 ± 0,25** (%3,3) | %0,08 ± 0,01 (%6,3) |
+| TabM MSP | %1,98 ± 0,22 (%0,8) | %1,51 ± 0,10 (%1,5) | %0,68 ± 0,34 (%3,2) | %0,05 ± 0,02 (%6,6) |
+| TabM anlaşmazlık | %2,06 ± 0,15 (%0,8) | %1,70 ± 0,14 (%1,5) | %0,89 ± 0,36 (%3,6) | %0,10 ± 0,08 (%7,3) |
+| CP-TabM BENIGN uzmanları | %2,02 ± 0,36 (%0,8) | %1,63 ± 0,25 (%1,7) | %0,45 ± 0,18 (%4,0) | %0,06 ± 0,03 (%5,6) |
+| kNN | %2,48 ± 0,26 (%1,0) | %2,48 ± 0,26 (%1,6) | %2,31 ± 0,24 (%3,9) | %1,73 ± 0,16 (%8,0) |
+
+En zor aileler (TabM enerji): **BRUTEFORCE** kontrolsüz %10,7 ± 0,8 → q = %1'de %9,0 ± 0,9 → q = %5'te **%2,3 ± 1,3**; **WEB** %1,75 ± 0,49 → %0,60 → %0,23.
+
+**Tek tohumlu değerlendirme üç tohumla doğrulandı:**
+
+1. **Ana ölçüt (q = %1'de yarıya iniş) sağlanmadı:** en iyi skorla kaçış %2,52'den %1,95'e iniyor (yaklaşık %23 azalma).
+2. **BENIGN kontrolü q = %5'te sağlam şekilde çalışıyor:** kaçış %2,52 ± 0,25'ten %0,53 ± 0,25'e (yaklaşık %79 azalma). Fark tohum sapmasının çok üstünde; üç tohumda da yön ve büyüklük aynı.
+3. **CP-TabM'in ek katkısı yok:** q = %5'te %0,45 ± 0,18 ile TabM enerjisi (%0,53 ± 0,25) arasındaki fark tohum sapmasının içinde. Tek tohumda görülen küçük üstünlük tesadüftü (tohum 1'de TabM enerjisi daha iyi).
+4. **Gerçekleşen inceleme bütçenin altında:** q = %5'te normal trafiğin %3,2–4,0'ı incelemeye gidiyor. Eşik kalibrasyondaki "alarm almamış ve BENIGN denmiş" BENIGN satırlarıyla seçiliyor; testte bu kümenin dağılımı biraz farklı. Kural bu veride beklenenden ucuz; CICIoT2023'teki "bütçeye en fazla 1 puan uzak" ölçütü burada sağlanmazdı (fark ~1,7 puan). Bu, bütçenin kalibrasyonla ayarlanmasının yaklaşık olduğunu gösteriyor ve raporlanır.
+5. **Pratik sonuç:** "alarm yoksa ve tahmin BENIGN ise TabM'in enerji skoruyla ikinci kontrol" kuralı, normal trafiğin yaklaşık %3'ünü analiste göndererek görülmemiş saldırıların sessiz geçişini yaklaşık 5 kat azaltıyor. Ek model gerekmiyor.
+
 ## Sütun hizası ve değer aralığı denetimi (19.10.2026)
 
 Kod: `src/audit_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/audit/audit.json`. Ham verideki 15 etiketin her biri için 6 kontrol (zaman damgası, IP, port 0–65535, 0/1 bayrak, ARP alanları, sayısal sütunlarda metin). İhlal yalnızca DDoS_UDP (zaman %100) ve MITM'de (zaman %100, port %30, bayrak %19); Normal'de %0,11 bayrak ihlali (önemsiz); diğer 12 saldırı türünde %0. Bu iki tür bulgu 7 gereği atıldı.
