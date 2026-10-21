@@ -1,0 +1,286 @@
+"""TabM (Gorishniy vd., ICLR 2025) için scikit-learn uyumlu sınıflandırıcı.
+
+Ekip protokolündeki diğer modellerle aynı arayüz: fit(X, y), predict_proba(X), classes_.
+Böylece model_ml.run_model (OOF, test, süre ölçümü) ve DSS değişmeden kullanılır.
+
+TabM, ağırlıklarının çoğunu paylaşan k adet MLP'den oluşan verimli bir topluluktur
+(BatchEnsemble). Her üye ayrı tahmin üretir; sınıflandırmada olasılıkların ortalaması
+alınır. Üye bazlı olasılıklar (predict_member_proba) bilinmeyen saldırı deneyi ve
+CP-TabM için ayrıca dışarı verilir.
+
+Eğitim, paketin resmi örneğini izler (yandex-research/tabm, example.ipynb):
+  - QuantileTransformer (normal çıktı), yalnızca eğitim verisine uydurulur
+  - PiecewiseLinearEmbeddings (48 bin, d_embedding 16, version B)
+  - TabM.make varsayılanları (k=32, d_block 512, dropout 0,1), AdamW lr 2e-3, wd 3e-4,
+    gradyan kırpma 1,0, tüm üyeler aynı batch'leri görür
+Ekip protokolüne uyarlamalar:
+  - Sınıf ağırlıklı (balanced) çapraz entropi, diğer modellerdeki class_weight ile aynı
+  - Early stopping: VERİLEN eğitim verisinin %10'u (stratified) doğrulama; durma ölçütü
+    AĞIRLIKSIZ doğrulama kaybı (Kişi 1'in boosting bulgusu, bkz. model_ml.EarlyStopping)
+  - Eğitim kümesinde sabit olan sütunlar model içinde atılır (PLE sabit sütun kabul etmez)
+
+Kurulum (Kaggle): pip install tabm rtdl_num_embeddings   (torch Kaggle'da hazır)
+"""
+
+import copy
+import math
+import time
+import warnings
+
+import numpy as np
+from sklearn.base import BaseEstimator, ClassifierMixin
+from sklearn.metrics import f1_score
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import QuantileTransformer
+from sklearn.utils.class_weight import compute_class_weight
+
+
+try:  # torch yalnızca eğitimde gerekir; yoksa modül yine içe aktarılabilsin (testler, CPU analizleri)
+    import torch.nn as _nn
+
+    class MaskedEnsembleView(_nn.Module):
+        """TabM'in EnsembleView katmanının yerine: girdiyi k üyeye kopyalar ve her üyeye yalnızca
+        kendi özellik alt kümesini gösterir (maskelenen özelliklerin gömmeleri 0'lanır)."""
+
+        def __init__(self, mask):
+            super().__init__()
+            self.register_buffer("mask", mask)       # (k, D) float, D = özellik sayısı x d_embedding
+
+        def forward(self, x):
+            if x.ndim == 2:
+                x = x.unsqueeze(1).expand(-1, self.mask.shape[0], -1)
+            return x * self.mask
+except ImportError:  # pragma: no cover
+    MaskedEnsembleView = None
+
+
+def feature_mask(k, n_features, frac, seed):
+    """(k, n) bool: her üye round(frac * n) özellik görür; özellikler üyelere dengeli dağıtılır
+    (her özelliği yaklaşık aynı sayıda üye görür, hiçbir özellik dışarıda kalmaz)."""
+    rng = np.random.default_rng(seed)
+    m = max(1, min(n_features, int(round(frac * n_features))))
+    sees = np.zeros((k, n_features), dtype=bool)
+    load = np.zeros(n_features)
+    for i in range(k):
+        order = rng.permutation(n_features)
+        order = order[np.argsort(load[order], kind="stable")]  # en az görülen özellikler önce
+        sees[i, order[:m]] = True
+        load[order[:m]] += 1
+    return sees
+
+
+class TabMClassifier(ClassifierMixin, BaseEstimator):
+    VERSION = 1  # davranış değişince önbelleği geçersiz kılar (model_ml.model_key)
+
+    def __init__(self, k=32, n_blocks=None, d_block=512, dropout=0.1, lr=2e-3,
+                 weight_decay=3e-4, batch_size=512, max_epochs=60, patience=8,
+                 n_bins=48, d_embedding=16, val_size=0.1, balanced=True,
+                 device="auto", random_state=42, verbose=True, feature_frac=None):
+        self.feature_frac = feature_frac  # None: sade TabM; <1: özellik-bölümlü üyeler (FP-TabM)
+        self.k = k
+        self.n_blocks = n_blocks
+        self.d_block = d_block
+        self.dropout = dropout
+        self.lr = lr
+        self.weight_decay = weight_decay
+        self.batch_size = batch_size
+        self.max_epochs = max_epochs
+        self.patience = patience
+        self.n_bins = n_bins
+        self.d_embedding = d_embedding
+        self.val_size = val_size
+        self.balanced = balanced
+        self.device = device
+        self.random_state = random_state
+        self.verbose = verbose
+
+    # ------------------------------------------------------------ yardımcılar
+    def _torch_device(self):
+        import torch
+        if self.device == "auto":
+            return torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        return torch.device(self.device)
+
+    def _transform(self, X):
+        """Sütun bazında: QuantileTransformer; QT'nin sabite sıkıştırdığı (neredeyse hep 0
+        olan) sütunlarda standartlaştırılmış ham değer. Yalnızca eğitime uydurulmuş parametreler."""
+        Z = self.qt_.transform(X).astype(np.float32)
+        Z[:, self.std_cols_] = (X[:, self.std_cols_] - self.mu_) / self.sd_
+        return Z[:, self.final_cols_]
+
+    def _prep(self, X):
+        return self._transform(np.asarray(X, dtype=np.float32)[:, self.keep_cols_])
+
+    def _logits(self, Xt, batch=8192):
+        """(n, k, C) logit; değerlendirme modunda, batch batch."""
+        import torch
+        dev = next(self.model_.parameters()).device
+        self.model_.eval()
+        out = []
+        with torch.inference_mode():
+            for i in range(0, len(Xt), batch):
+                xb = torch.as_tensor(Xt[i:i + batch], device=dev)
+                out.append(self.model_(xb).float().cpu())
+        return torch.cat(out).numpy()
+
+    # ------------------------------------------------------------ eğitim
+    def fit(self, X, y, sample_weight=None):
+        import rtdl_num_embeddings
+        import tabm
+        import torch
+        import torch.nn.functional as F
+
+        rng = np.random.default_rng(self.random_state)
+        torch.manual_seed(self.random_state)
+        dev = self._torch_device()
+        X = np.asarray(X, dtype=np.float32)
+        y = np.asarray(y)
+        self.classes_, y_idx = np.unique(y, return_inverse=True)
+        n_classes = len(self.classes_)
+
+        self.keep_cols_ = np.where(np.ptp(X, axis=0) > 0)[0]
+        X = X[:, self.keep_cols_]
+        Xtr, Xva, ytr, yva = train_test_split(X, y_idx, test_size=self.val_size, stratify=y_idx,
+                                              random_state=self.random_state)
+
+        noise = rng.normal(0.0, 1e-5, Xtr.shape).astype(np.float32)
+        self.qt_ = QuantileTransformer(n_quantiles=max(min(len(Xtr) // 30, 1000), 10),
+                                       output_distribution="normal", subsample=10**9,
+                                       random_state=self.random_state).fit(Xtr + noise)
+        # Satırların çok küçük bir kısmında dolu sütunlar (ör. icmp.transmit_timestamp, %0,15)
+        # QT'de sabite sıkışır; bunlar için standartlaştırılmış ham değer kullanılır.
+        Zq = self.qt_.transform(Xtr)
+        self.std_cols_ = np.where(np.ptp(Zq, axis=0) <= 1e-6)[0]
+        self.mu_ = Xtr[:, self.std_cols_].mean(axis=0)
+        self.sd_ = Xtr[:, self.std_cols_].std(axis=0) + 1e-6
+        self.final_cols_ = np.arange(Xtr.shape[1])
+        Z = self._transform(Xtr)
+        # Eğitim bölümünde hâlâ sabit kalan sütun (dolu satırların hepsi doğrulamaya düştüyse) atılır
+        self.final_cols_ = np.where(np.ptp(Z, axis=0) > 1e-6)[0]
+        Xtr, Xva = Z[:, self.final_cols_], self._transform(Xva)
+        self.n_features_used_ = int(len(self.final_cols_))
+        if self.verbose:
+            print(f"    TabM: {self.n_features_used_} özellik "
+                  f"({len(self.std_cols_)} seyrek sütun standartlaştırıldı, "
+                  f"{X.shape[1] - self.n_features_used_} sabit sütun atıldı)")
+
+        with warnings.catch_warnings():
+            # 0/1 bayraklar gibi iki değerli sütunlarda tek bin oluşur; beklenen durum
+            warnings.filterwarnings("ignore", message=".*just two bin edges.*")
+            bins = rtdl_num_embeddings.compute_bins(torch.as_tensor(Xtr),
+                                                    n_bins=min(self.n_bins, len(Xtr) - 1))
+            emb = rtdl_num_embeddings.PiecewiseLinearEmbeddings(
+                bins, d_embedding=self.d_embedding, activation=False, version="B")
+        kwargs = dict(n_num_features=Xtr.shape[1], d_out=n_classes, num_embeddings=emb,
+                      k=self.k, d_block=self.d_block, dropout=self.dropout)
+        if self.n_blocks is not None:
+            kwargs["n_blocks"] = self.n_blocks
+        model = tabm.TabM.make(**kwargs).to(dev)
+        if self.feature_frac is not None and self.feature_frac < 1:
+            self.feat_mask_ = feature_mask(model.backbone.k, Xtr.shape[1], self.feature_frac,
+                                           self.random_state)
+            full = np.repeat(self.feat_mask_, self.d_embedding, axis=1).astype(np.float32)
+            model.ensemble_view = MaskedEnsembleView(torch.as_tensor(full)).to(dev)
+            if self.verbose:
+                print(f"    FP-TabM: her üye {self.feat_mask_.sum(1).min()} / {Xtr.shape[1]} özellik görüyor; "
+                      f"her özelliği {self.feat_mask_.sum(0).min()}-{self.feat_mask_.sum(0).max()} üye görüyor")
+        self._setup(n_classes, model.backbone.k, dev, ytr)
+        opt = torch.optim.AdamW(model.parameters(), lr=self.lr, weight_decay=self.weight_decay)
+
+        w = (compute_class_weight("balanced", classes=np.arange(n_classes), y=ytr)
+             if self.balanced else np.ones(n_classes))
+        w_t = torch.as_tensor(w, dtype=torch.float32, device=dev)
+        Xtr_t = torch.as_tensor(Xtr, device=dev)
+        ytr_t = torch.as_tensor(ytr, dtype=torch.long, device=dev)
+        k = model.backbone.k
+
+        best = (math.inf, -1, None)
+        bad = 0
+        self.history_ = []
+        t0 = time.perf_counter()
+        for epoch in range(self.max_epochs):
+            model.train()
+            perm = torch.randperm(len(Xtr_t), device=dev)
+            for idx in perm.split(self.batch_size):
+                opt.zero_grad()
+                logits = model(Xtr_t[idx])                       # (b, k, C)
+                loss = self._train_loss(logits, ytr_t[idx], w_t)
+                loss.backward()
+                torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+                opt.step()
+            self.model_ = model
+            proba_va = self._proba_np(self._logits(Xva))
+            val_loss = float(-np.log(np.clip(proba_va[np.arange(len(yva)), yva], 1e-12, None)).mean())
+            # Yalnızca izleme: durma kararı val_loss'a göre; macro-F1 eğrisiyle karşılaştırmak için
+            val_f1 = float(f1_score(yva, proba_va.argmax(1), average="macro"))
+            self.history_.append({"epoch": epoch, "val_loss": round(val_loss, 5),
+                                  "val_macro_f1": round(val_f1, 5)})
+            if val_loss < best[0] - 1e-5:
+                best = (val_loss, epoch, copy.deepcopy(model.state_dict()))
+                bad = 0
+            else:
+                bad += 1
+            if self.verbose:
+                print(f"    TabM epoch {epoch:3d}  val_loss={val_loss:.4f}  val_macroF1={val_f1:.4f}"
+                      f"{'  *' if bad == 0 else ''}  ({time.perf_counter() - t0:.0f} s)")
+            if bad > self.patience:
+                break
+        model.load_state_dict(best[2])
+        self.model_ = model
+        self._post_fit(Xva, yva)
+        self.best_epoch_ = best[1]
+        self.best_iteration_ = best[1] + 1   # run_model bunu "early stopping" parametresi olarak kaydeder
+        f1s = [h["val_macro_f1"] for h in self.history_]
+        self.best_epoch_by_f1_ = int(np.argmax(f1s))
+        if self.verbose:
+            print(f"    TabM durdu: en iyi epoch val_loss'a göre {self.best_epoch_} "
+                  f"(macro-F1 {f1s[self.best_epoch_]:.4f}), macro-F1'e göre {self.best_epoch_by_f1_} "
+                  f"(macro-F1 {max(f1s):.4f})")
+        return self
+
+    # ------------------------------------------------------------ alt sınıf kancaları
+    # CP-TabM (cp_tabm_classifier.py) bunları değiştirir; TabM davranışı aynen korunur.
+    def _setup(self, n_classes, k, device, y_train):
+        pass
+
+    def _train_loss(self, logits, y, w):
+        import torch.nn.functional as F
+        k = logits.shape[1]
+        return F.cross_entropy(logits.flatten(0, 1), y.repeat_interleave(k), weight=w)
+
+    @staticmethod
+    def _softmax_np(z):
+        z = z - z.max(-1, keepdims=True)
+        e = np.exp(z)
+        return e / e.sum(-1, keepdims=True)
+
+    def _member_proba_np(self, logits):
+        return self._softmax_np(logits)
+
+    def _proba_np(self, logits):
+        return self._member_proba_np(logits).mean(axis=1)
+
+    def _post_fit(self, Xva, yva):
+        pass
+
+    # ------------------------------------------------------------ tahmin
+    def predict_logits(self, X):
+        """(n, k, C) ham logit."""
+        return self._logits(self._prep(X))
+
+    def predict_member_proba(self, X):
+        """(n, k, C): her TabM üyesinin sınıf olasılıkları (bilinmeyen skorları için)."""
+        return self._member_proba_np(self.predict_logits(X))
+
+    def predict_proba(self, X):
+        return self._proba_np(self.predict_logits(X))
+
+    def predict(self, X):
+        return self.classes_[self.predict_proba(X).argmax(axis=1)]
+
+    # joblib ile kaydedip GPU'suz ortamda açılabilsin
+    def __getstate__(self):
+        state = self.__dict__.copy()
+        if "model_" in state:
+            state["model_"] = copy.deepcopy(state["model_"]).cpu()
+        return state

@@ -44,7 +44,7 @@ def ciciot2023_category(label: str) -> str:
     raise ValueError(f"Eşlenmemiş CICIoT2023 etiketi: {label}")
 
 
-# Edge-IIoTset (dataset_26): 14 saldırı + Normal -> ortak kategoriler.
+# Edge-IIoTset (dataset_id: dnn_edgeiiot): 14 saldırı + Normal -> ortak kategoriler.
 # Kaynak gruplama: Ferrag vd., IEEE Access 2022 (5 tehdit ailesi), ekip taksonomisine uyarlandı.
 EDGEIIOT_MAP = {
     "NORMAL": "BENIGN",

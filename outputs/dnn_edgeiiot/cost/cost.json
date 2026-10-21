@@ -1,0 +1,587 @@
+{
+  "dataset_id": "dnn_edgeiiot",
+  "run_dir": "9bba0299",
+  "config": {
+    "data_file": "DNN-EdgeIIoT-dataset.csv",
+    "cap": 40000,
+    "folds": 5,
+    "models": "DT,RF,XGB,LGBM,LR,TabM",
+    "tune": true,
+    "n_iter": 30,
+    "tune_rows": 200000,
+    "drop_features": "",
+    "drop_conflicts": true,
+    "keep_misaligned": false,
+    "seed": 42,
+    "quick": false
+  },
+  "protocol": "Modeller asıl deneyden yüklendi. CPU ölçümleri tek iş parçacığıyla (adil karşılaştırma); toplu tahmin 10.000 test satırı, 3 tekrarın medyanı; tek paket gecikmesi 300 tekil tahminin medyanı ve %95'lik dilimi. DSS oylayıcı seçimi yalnızca OOF macro-F1 ile; kural: OOF'ta en iyiye ≤0,001 yakın alt kümeler arasından en hızlısı.",
+  "hardware_note": "Kaggle (CPU tek çekirdek; GPU sütunları NVIDIA T4)",
+  "models": {
+    "DT": {
+      "test_macro_f1": 0.9938,
+      "fit_seconds": 0.69,
+      "model_mb": 0.37,
+      "load_seconds": 0.0,
+      "batch_ms_per_1k_cpu1": 0.173,
+      "packets_per_second_cpu1": 5792907,
+      "single_ms_median_cpu1": 0.89,
+      "single_ms_p95_cpu1": 1.054
+    },
+    "LGBM": {
+      "test_macro_f1": 0.9902,
+      "fit_seconds": 12.76,
+      "model_mb": 6.07,
+      "load_seconds": 1.28,
+      "batch_ms_per_1k_cpu1": 78.786,
+      "packets_per_second_cpu1": 12692,
+      "single_ms_median_cpu1": 0.848,
+      "single_ms_p95_cpu1": 1.009
+    },
+    "LR": {
+      "test_macro_f1": 0.7453,
+      "fit_seconds": 43.72,
+      "model_mb": 0.01,
+      "load_seconds": 0.0,
+      "batch_ms_per_1k_cpu1": 0.817,
+      "packets_per_second_cpu1": 1224403,
+      "single_ms_median_cpu1": 1.606,
+      "single_ms_p95_cpu1": 2.253
+    },
+    "RF": {
+      "test_macro_f1": 0.994,
+      "fit_seconds": 24.63,
+      "model_mb": 53.21,
+      "load_seconds": 0.09,
+      "batch_ms_per_1k_cpu1": 15.757,
+      "packets_per_second_cpu1": 63462,
+      "single_ms_median_cpu1": 12.04,
+      "single_ms_p95_cpu1": 12.869
+    },
+    "TabM": {
+      "test_macro_f1": 0.9905,
+      "fit_seconds": 465.37,
+      "model_mb": 3.02,
+      "load_seconds": 0.02,
+      "batch_ms_per_1k_cpu1": 689.271,
+      "packets_per_second_cpu1": 1450,
+      "single_ms_median_cpu1": 10.694,
+      "single_ms_p95_cpu1": 12.021,
+      "batch_ms_per_1k_gpu": 20.544,
+      "single_ms_median_gpu": 10.312
+    },
+    "XGB": {
+      "test_macro_f1": 0.9924,
+      "fit_seconds": 8.34,
+      "model_mb": 5.06,
+      "load_seconds": 0.11,
+      "batch_ms_per_1k_cpu1": 45.87,
+      "packets_per_second_cpu1": 21800,
+      "single_ms_median_cpu1": 2.209,
+      "single_ms_p95_cpu1": 2.565,
+      "batch_ms_per_1k_gpu": 3.02,
+      "single_ms_median_gpu": 9.333
+    }
+  },
+  "dss": {
+    "current_rule": {
+      "oof_macro_f1": 0.9941,
+      "test_macro_f1": 0.9941,
+      "attacks_allowed": 1,
+      "missed_attacks": 2,
+      "false_alarm_rate": 0.0,
+      "analyst_review": 24,
+      "voters": [
+        "DT",
+        "RF",
+        "XGB",
+        "LGBM",
+        "TabM"
+      ],
+      "single_ms_sum": 26.681,
+      "batch_ms_per_1k_sum": 829.857
+    },
+    "best_oof": {
+      "oof_macro_f1": 0.9944,
+      "test_macro_f1": 0.9946,
+      "attacks_allowed": 1,
+      "missed_attacks": 3,
+      "false_alarm_rate": 0.0,
+      "analyst_review": 13,
+      "voters": [
+        "DT",
+        "RF",
+        "XGB"
+      ],
+      "single_ms_sum": 15.139,
+      "batch_ms_per_1k_sum": 61.8
+    },
+    "fastest_near_best_oof": {
+      "oof_macro_f1": 0.9938,
+      "test_macro_f1": 0.9938,
+      "attacks_allowed": 2,
+      "missed_attacks": 3,
+      "false_alarm_rate": 0.00038,
+      "analyst_review": 0,
+      "voters": [
+        "DT"
+      ],
+      "single_ms_sum": 0.89,
+      "batch_ms_per_1k_sum": 0.173
+    },
+    "all_subsets": [
+      {
+        "oof_macro_f1": 0.9944,
+        "test_macro_f1": 0.9946,
+        "attacks_allowed": 1,
+        "missed_attacks": 3,
+        "false_alarm_rate": 0.0,
+        "analyst_review": 13,
+        "voters": [
+          "DT",
+          "RF",
+          "XGB"
+        ],
+        "single_ms_sum": 15.139,
+        "batch_ms_per_1k_sum": 61.8
+      },
+      {
+        "oof_macro_f1": 0.9944,
+        "test_macro_f1": 0.9944,
+        "attacks_allowed": 1,
+        "missed_attacks": 3,
+        "false_alarm_rate": 0.0,
+        "analyst_review": 12,
+        "voters": [
+          "DT",
+          "RF",
+          "LGBM"
+        ],
+        "single_ms_sum": 13.778,
+        "batch_ms_per_1k_sum": 94.716
+      },
+      {
+        "oof_macro_f1": 0.9943,
+        "test_macro_f1": 0.9944,
+        "attacks_allowed": 1,
+        "missed_attacks": 2,
+        "false_alarm_rate": 0.0,
+        "analyst_review": 13,
+        "voters": [
+          "DT",
+          "RF",
+          "XGB",
+          "LGBM"
+        ],
+        "single_ms_sum": 15.987,
+        "batch_ms_per_1k_sum": 140.586
+      },
+      {
+        "oof_macro_f1": 0.9943,
+        "test_macro_f1": 0.9944,
+        "attacks_allowed": 1,
+        "missed_attacks": 3,
+        "false_alarm_rate": 0.0,
+        "analyst_review": 13,
+        "voters": [
+          "DT",
+          "RF",
+          "TabM"
+        ],
+        "single_ms_sum": 23.624,
+        "batch_ms_per_1k_sum": 705.201
+      },
+      {
+        "oof_macro_f1": 0.9943,
+        "test_macro_f1": 0.9943,
+        "attacks_allowed": 1,
+        "missed_attacks": 1,
+        "false_alarm_rate": 0.0,
+        "analyst_review": 18,
+        "voters": [
+          "DT",
+          "RF",
+          "XGB",
+          "TabM"
+        ],
+        "single_ms_sum": 25.833,
+        "batch_ms_per_1k_sum": 751.071
+      },
+      {
+        "oof_macro_f1": 0.9942,
+        "test_macro_f1": 0.9943,
+        "attacks_allowed": 1,
+        "missed_attacks": 2,
+        "false_alarm_rate": 0.0,
+        "analyst_review": 11,
+        "voters": [
+          "DT",
+          "XGB"
+        ],
+        "single_ms_sum": 3.099,
+        "batch_ms_per_1k_sum": 46.043
+      },
+      {
+        "oof_macro_f1": 0.9942,
+        "test_macro_f1": 0.9942,
+        "attacks_allowed": 2,
+        "missed_attacks": 3,
+        "false_alarm_rate": 0.0,
+        "analyst_review": 7,
+        "voters": [
+          "DT",
+          "LGBM"
+        ],
+        "single_ms_sum": 1.738,
+        "batch_ms_per_1k_sum": 78.959
+      },
+      {
+        "oof_macro_f1": 0.9942,
+        "test_macro_f1": 0.9942,
+        "attacks_allowed": 1,
+        "missed_attacks": 2,
+        "false_alarm_rate": 0.0,
+        "analyst_review": 22,
+        "voters": [
+          "DT",
+          "XGB",
+          "LGBM"
+        ],
+        "single_ms_sum": 3.947,
+        "batch_ms_per_1k_sum": 124.829
+      },
+      {
+        "oof_macro_f1": 0.9942,
+        "test_macro_f1": 0.9942,
+        "attacks_allowed": 1,
+        "missed_attacks": 2,
+        "false_alarm_rate": 0.0,
+        "analyst_review": 9,
+        "voters": [
+          "DT",
+          "TabM"
+        ],
+        "single_ms_sum": 11.584,
+        "batch_ms_per_1k_sum": 689.444
+      },
+      {
+        "oof_macro_f1": 0.9942,
+        "test_macro_f1": 0.9943,
+        "attacks_allowed": 1,
+        "missed_attacks": 2,
+        "false_alarm_rate": 0.0,
+        "analyst_review": 19,
+        "voters": [
+          "DT",
+          "RF",
+          "LGBM",
+          "TabM"
+        ],
+        "single_ms_sum": 24.472,
+        "batch_ms_per_1k_sum": 783.987
+      },
+      {
+        "oof_macro_f1": 0.9941,
+        "test_macro_f1": 0.994,
+        "attacks_allowed": 0,
+        "missed_attacks": 3,
+        "false_alarm_rate": 0.00038,
+        "analyst_review": 27,
+        "voters": [
+          "RF"
+        ],
+        "single_ms_sum": 12.04,
+        "batch_ms_per_1k_sum": 15.757
+      },
+      {
+        "oof_macro_f1": 0.9941,
+        "test_macro_f1": 0.9941,
+        "attacks_allowed": 1,
+        "missed_attacks": 2,
+        "false_alarm_rate": 0.0,
+        "analyst_review": 24,
+        "voters": [
+          "DT",
+          "RF",
+          "XGB",
+          "LGBM",
+          "TabM"
+        ],
+        "single_ms_sum": 26.681,
+        "batch_ms_per_1k_sum": 829.857
+      },
+      {
+        "oof_macro_f1": 0.994,
+        "test_macro_f1": 0.994,
+        "attacks_allowed": 1,
+        "missed_attacks": 3,
+        "false_alarm_rate": 0.00038,
+        "analyst_review": 9,
+        "voters": [
+          "DT",
+          "RF"
+        ],
+        "single_ms_sum": 12.93,
+        "batch_ms_per_1k_sum": 15.93
+      },
+      {
+        "oof_macro_f1": 0.994,
+        "test_macro_f1": 0.9939,
+        "attacks_allowed": 1,
+        "missed_attacks": 1,
+        "false_alarm_rate": 0.00013,
+        "analyst_review": 25,
+        "voters": [
+          "RF",
+          "XGB"
+        ],
+        "single_ms_sum": 14.249,
+        "batch_ms_per_1k_sum": 61.627
+      },
+      {
+        "oof_macro_f1": 0.994,
+        "test_macro_f1": 0.9942,
+        "attacks_allowed": 1,
+        "missed_attacks": 1,
+        "false_alarm_rate": 0.0,
+        "analyst_review": 25,
+        "voters": [
+          "DT",
+          "XGB",
+          "TabM"
+        ],
+        "single_ms_sum": 13.793,
+        "batch_ms_per_1k_sum": 735.314
+      },
+      {
+        "oof_macro_f1": 0.994,
+        "test_macro_f1": 0.9938,
+        "attacks_allowed": 1,
+        "missed_attacks": 2,
+        "false_alarm_rate": 0.0,
+        "analyst_review": 24,
+        "voters": [
+          "DT",
+          "LGBM",
+          "TabM"
+        ],
+        "single_ms_sum": 12.432,
+        "batch_ms_per_1k_sum": 768.23
+      },
+      {
+        "oof_macro_f1": 0.9938,
+        "test_macro_f1": 0.9938,
+        "attacks_allowed": 2,
+        "missed_attacks": 3,
+        "false_alarm_rate": 0.00038,
+        "analyst_review": 0,
+        "voters": [
+          "DT"
+        ],
+        "single_ms_sum": 0.89,
+        "batch_ms_per_1k_sum": 0.173
+      },
+      {
+        "oof_macro_f1": 0.9938,
+        "test_macro_f1": 0.9937,
+        "attacks_allowed": 1,
+        "missed_attacks": 1,
+        "false_alarm_rate": 0.0,
+        "analyst_review": 21,
+        "voters": [
+          "DT",
+          "XGB",
+          "LGBM",
+          "TabM"
+        ],
+        "single_ms_sum": 14.641,
+        "batch_ms_per_1k_sum": 814.1
+      },
+      {
+        "oof_macro_f1": 0.9937,
+        "test_macro_f1": 0.9934,
+        "attacks_allowed": 2,
+        "missed_attacks": 2,
+        "false_alarm_rate": 0.00038,
+        "analyst_review": 12,
+        "voters": [
+          "RF",
+          "LGBM"
+        ],
+        "single_ms_sum": 12.888,
+        "batch_ms_per_1k_sum": 94.543
+      },
+      {
+        "oof_macro_f1": 0.9937,
+        "test_macro_f1": 0.9936,
+        "attacks_allowed": 1,
+        "missed_attacks": 2,
+        "false_alarm_rate": 0.0,
+        "analyst_review": 15,
+        "voters": [
+          "RF",
+          "XGB",
+          "LGBM"
+        ],
+        "single_ms_sum": 15.097,
+        "batch_ms_per_1k_sum": 140.413
+      },
+      {
+        "oof_macro_f1": 0.9936,
+        "test_macro_f1": 0.9937,
+        "attacks_allowed": 1,
+        "missed_attacks": 2,
+        "false_alarm_rate": 0.00013,
+        "analyst_review": 20,
+        "voters": [
+          "RF",
+          "XGB",
+          "TabM"
+        ],
+        "single_ms_sum": 24.943,
+        "batch_ms_per_1k_sum": 750.898
+      },
+      {
+        "oof_macro_f1": 0.9935,
+        "test_macro_f1": 0.9935,
+        "attacks_allowed": 1,
+        "missed_attacks": 2,
+        "false_alarm_rate": 0.00013,
+        "analyst_review": 26,
+        "voters": [
+          "RF",
+          "TabM"
+        ],
+        "single_ms_sum": 22.734,
+        "batch_ms_per_1k_sum": 705.028
+      },
+      {
+        "oof_macro_f1": 0.9935,
+        "test_macro_f1": 0.9934,
+        "attacks_allowed": 1,
+        "missed_attacks": 1,
+        "false_alarm_rate": 0.0,
+        "analyst_review": 24,
+        "voters": [
+          "RF",
+          "XGB",
+          "LGBM",
+          "TabM"
+        ],
+        "single_ms_sum": 25.791,
+        "batch_ms_per_1k_sum": 829.684
+      },
+      {
+        "oof_macro_f1": 0.9934,
+        "test_macro_f1": 0.9931,
+        "attacks_allowed": 1,
+        "missed_attacks": 2,
+        "false_alarm_rate": 0.00013,
+        "analyst_review": 18,
+        "voters": [
+          "RF",
+          "LGBM",
+          "TabM"
+        ],
+        "single_ms_sum": 23.582,
+        "batch_ms_per_1k_sum": 783.814
+      },
+      {
+        "oof_macro_f1": 0.993,
+        "test_macro_f1": 0.9928,
+        "attacks_allowed": 1,
+        "missed_attacks": 2,
+        "false_alarm_rate": 0.0,
+        "analyst_review": 10,
+        "voters": [
+          "XGB",
+          "LGBM"
+        ],
+        "single_ms_sum": 3.057,
+        "batch_ms_per_1k_sum": 124.656
+      },
+      {
+        "oof_macro_f1": 0.9928,
+        "test_macro_f1": 0.9925,
+        "attacks_allowed": 1,
+        "missed_attacks": 2,
+        "false_alarm_rate": 0.0,
+        "analyst_review": 11,
+        "voters": [
+          "XGB",
+          "LGBM",
+          "TabM"
+        ],
+        "single_ms_sum": 13.751,
+        "batch_ms_per_1k_sum": 813.927
+      },
+      {
+        "oof_macro_f1": 0.9924,
+        "test_macro_f1": 0.9925,
+        "attacks_allowed": 1,
+        "missed_attacks": 4,
+        "false_alarm_rate": 0.00025,
+        "analyst_review": 11,
+        "voters": [
+          "XGB",
+          "TabM"
+        ],
+        "single_ms_sum": 12.903,
+        "batch_ms_per_1k_sum": 735.141
+      },
+      {
+        "oof_macro_f1": 0.9924,
+        "test_macro_f1": 0.9913,
+        "attacks_allowed": 1,
+        "missed_attacks": 3,
+        "false_alarm_rate": 0.00013,
+        "analyst_review": 22,
+        "voters": [
+          "LGBM",
+          "TabM"
+        ],
+        "single_ms_sum": 11.542,
+        "batch_ms_per_1k_sum": 768.057
+      },
+      {
+        "oof_macro_f1": 0.9919,
+        "test_macro_f1": 0.9924,
+        "attacks_allowed": 8,
+        "missed_attacks": 8,
+        "false_alarm_rate": 0.00038,
+        "analyst_review": 7,
+        "voters": [
+          "XGB"
+        ],
+        "single_ms_sum": 2.209,
+        "batch_ms_per_1k_sum": 45.87
+      },
+      {
+        "oof_macro_f1": 0.9915,
+        "test_macro_f1": 0.9905,
+        "attacks_allowed": 2,
+        "missed_attacks": 6,
+        "false_alarm_rate": 0.00013,
+        "analyst_review": 13,
+        "voters": [
+          "TabM"
+        ],
+        "single_ms_sum": 10.694,
+        "batch_ms_per_1k_sum": 689.271
+      },
+      {
+        "oof_macro_f1": 0.9911,
+        "test_macro_f1": 0.9902,
+        "attacks_allowed": 2,
+        "missed_attacks": 2,
+        "false_alarm_rate": 0.0005,
+        "analyst_review": 8,
+        "voters": [
+          "LGBM"
+        ],
+        "single_ms_sum": 0.848,
+        "batch_ms_per_1k_sum": 78.786
+      }
+    ]
+  }
+}

@@ -1,0 +1,24 @@
+Çalıştırma: /kaggle/working/work/dnn_edgeiiot/9bba0299
+  ayarlar: {'data_file': 'DNN-EdgeIIoT-dataset.csv', 'cap': 40000, 'folds': 5, 'models': 'DT,RF,XGB,LGBM,LR,TabM', 'tune': True, 'n_iter': 30, 'tune_rows': 200000, 'drop_features': '', 'drop_conflicts': True, 'keep_misaligned': False, 'seed': 42, 'quick': False}
+Okunuyor: /kaggle/input/datasets/mohamedamineferrag/edgeiiotset-cyber-security-dataset-of-iot-iiot/Edge-IIoTset dataset/Selected dataset for ML and DL/DNN-EdgeIIoT-dataset.csv
+Hizasız satır (frame.time zaman değil): 122782 {'DDoS_UDP': 121568, 'MITM': 1214} -> atıldı
+DT    F1=0.9938      0.4 MB  toplu     0.17 ms/1k  tek   0.890 ms (p95 1.054)
+LGBM  F1=0.9902      6.1 MB  toplu    78.79 ms/1k  tek   0.848 ms (p95 1.009)
+LR    F1=0.7453      0.0 MB  toplu     0.82 ms/1k  tek   1.606 ms (p95 2.253)
+RF    F1=0.9940     53.2 MB  toplu    15.76 ms/1k  tek  12.040 ms (p95 12.869)
+TabM  F1=0.9905      3.0 MB  toplu   689.27 ms/1k  tek  10.694 ms (p95 12.021)  GPU toplu 20.54 ms/1k
+/usr/local/lib/python3.13/dist-packages/xgboost/core.py:569: UserWarning: [16:49:38] WARNING: /__w/xgboost/xgboost/src/common/error_msg.cc:62: Falling back to prediction using DMatrix due to mismatched devices. This might lead to higher memory usage and slower performance. XGBoost is running on: cuda:0, while the input data is on: cpu.
+Potential solutions:
+- Use a data structure that matches the device ordinal in the booster.
+- Set the device for booster before call to inplace_predict.
+
+This warning will only be shown once.
+
+  return func(**kwargs)
+XGB   F1=0.9924      5.1 MB  toplu    45.87 ms/1k  tek   2.209 ms (p95 2.565)  GPU toplu 3.02 ms/1k
+
+DSS oylayıcıları (seçim OOF'a göre; test yalnızca raporlama):
+  şu anki kural                            DT+RF+XGB+LGBM+TabM      OOF 0.9941  test 0.9941  ALLOW saldırı 1  yanlış alarm 0.0000%  toplu 829.9 ms/1k
+  OOF'ta en iyi                            DT+RF+XGB                OOF 0.9944  test 0.9946  ALLOW saldırı 1  yanlış alarm 0.0000%  toplu 61.8 ms/1k
+  OOF'ta en iyiye ≤0,001 yakın, en hızlı   DT                       OOF 0.9938  test 0.9938  ALLOW saldırı 2  yanlış alarm 0.0380%  toplu 0.2 ms/1k
+Çıktılar: outputs/dnn_edgeiiot/cost

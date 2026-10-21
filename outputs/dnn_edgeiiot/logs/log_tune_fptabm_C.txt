@@ -1,0 +1,39 @@
+Okunuyor: /kaggle/input/datasets/mohamedamineferrag/edgeiiotset-cyber-security-dataset-of-iot-iiot/Edge-IIoTset dataset/Selected dataset for ML and DL/DNN-EdgeIIoT-dataset.csv
+Hizasız satır (frame.time zaman değil): 122782 {'DDoS_UDP': 121568, 'MITM': 1214} -> atıldı
+Örneklem: 296506 satır, 32 özellik, koşul C_seq_ack_yok; kör oranları [0.3, 0.5, 0.7]; skorlar ['msp', 'entropy', 'disagree', 'energy']
+
+=== Dış bilinmeyen: DDOS  — iç prova (4 sahte bilinmeyen x 3 kör oranı) ===
+  özellik 0.3    sahte bilinmeyen RECON      (62 s)  msp 0.563  entropy 0.503  disagree 0.865  energy 0.771
+  özellik 0.3    sahte bilinmeyen WEB        (63 s)  msp 0.701  entropy 0.700  disagree 0.443  energy 0.807
+  özellik 0.3    sahte bilinmeyen BRUTEFORCE (63 s)  msp 0.772  entropy 0.721  disagree 0.462  energy 0.753
+  özellik 0.3    sahte bilinmeyen MALWARE    (33 s)  msp 0.779  entropy 0.848  disagree 0.489  energy 0.910
+  özellik 0.5    sahte bilinmeyen RECON      (62 s)  msp 0.628  entropy 0.461  disagree 0.910  energy 0.678
+  özellik 0.5    sahte bilinmeyen WEB        (59 s)  msp 0.769  entropy 0.764  disagree 0.679  energy 0.800
+  özellik 0.5    sahte bilinmeyen BRUTEFORCE (63 s)  msp 0.797  entropy 0.767  disagree 0.681  energy 0.792
+  özellik 0.5    sahte bilinmeyen MALWARE    (52 s)  msp 0.819  entropy 0.863  disagree 0.604  energy 0.944
+  özellik 0.7    sahte bilinmeyen RECON      (62 s)  msp 0.663  entropy 0.552  disagree 0.922  energy 0.574
+  özellik 0.7    sahte bilinmeyen WEB        (64 s)  msp 0.753  entropy 0.739  disagree 0.709  energy 0.808
+  özellik 0.7    sahte bilinmeyen BRUTEFORCE (63 s)  msp 0.762  entropy 0.733  disagree 0.721  energy 0.791
+  özellik 0.7    sahte bilinmeyen MALWARE    (53 s)  msp 0.859  entropy 0.887  disagree 0.733  energy 0.941
+  → SEÇİLEN: özellik oranı 0.3, skor energy  (iç ort. AUROC 0.810)
+  DIŞ TEST (DDOS): AUROC 0.544  FPR95 0.838  yakalanan 0.159  BENIGN'e kaçan 0.004  bilinen F1 0.8681 (160 s)  [877 s]
+
+=== Dış bilinmeyen: RECON  — iç prova (4 sahte bilinmeyen x 3 kör oranı) ===
+  özellik 0.3    sahte bilinmeyen DDOS       (62 s)  msp 0.571  entropy 0.417  disagree 0.776  energy 0.631
+  özellik 0.3    sahte bilinmeyen WEB        (48 s)  msp 0.758  entropy 0.749  disagree 0.428  energy 0.826
+  özellik 0.3    sahte bilinmeyen BRUTEFORCE (64 s)  msp 0.773  entropy 0.770  disagree 0.382  energy 0.795
+  özellik 0.3    sahte bilinmeyen MALWARE    (59 s)  msp 0.903  entropy 0.903  disagree 0.485  energy 0.932
+  özellik 0.5    sahte bilinmeyen DDOS       (62 s)  msp 0.547  entropy 0.436  disagree 0.741  energy 0.489
+  özellik 0.5    sahte bilinmeyen WEB        (64 s)  msp 0.782  entropy 0.779  disagree 0.668  energy 0.833
+  özellik 0.5    sahte bilinmeyen BRUTEFORCE (64 s)  msp 0.795  entropy 0.786  disagree 0.700  energy 0.797
+  özellik 0.5    sahte bilinmeyen MALWARE    (61 s)  msp 0.822  entropy 0.859  disagree 0.655  energy 0.894
+  özellik 0.7    sahte bilinmeyen DDOS       (62 s)  msp 0.549  entropy 0.493  disagree 0.738  energy 0.657
+  özellik 0.7    sahte bilinmeyen WEB        (64 s)  msp 0.784  entropy 0.779  disagree 0.696  energy 0.816
+  özellik 0.7    sahte bilinmeyen BRUTEFORCE (64 s)  msp 0.814  entropy 0.800  disagree 0.786  energy 0.776
+  özellik 0.7    sahte bilinmeyen MALWARE    (64 s)  msp 0.809  entropy 0.837  disagree 0.748  energy 0.885
+  → SEÇİLEN: özellik oranı 0.3, skor energy  (iç ort. AUROC 0.796)
+  DIŞ TEST (RECON): AUROC 0.708  FPR95 0.736  yakalanan 0.264  BENIGN'e kaçan 0.000  bilinen F1 0.8338 (248 s)  [1006 s]
+
+=== Dış bilinmeyen: WEB  — iç prova (4 sahte bilinmeyen x 3 kör oranı) ===
+  özellik 0.3    sahte bilinmeyen DDOS       (45 s)  msp 0.672  entropy 0.587  disagree 0.814  energy 0.494
+  özellik 0.3    sahte bilinmeyen RECON      (59 s)  msp 0.645  entropy 0.574  disagree 0.829  energy 0.746

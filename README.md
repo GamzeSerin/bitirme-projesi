@@ -9,7 +9,7 @@ iot-security-project/
 ├── data/                      # Ham veri: Git'e GİRMEZ (yerelde ya da Drive'da durur)
 │   ├── dataset_23/            # Kişi 1: CICIoT2023
 │   ├── dataset_25/            # Kişi 2
-│   └── dataset_26/            # Kişi 3: Edge-IIoTset
+│   └── dnn_edgeiiot/          # Kişi 3: Edge-IIoTset
 ├── src/
 │   ├── common/
 │   │   ├── taxonomy.py        # Ortak saldırı kategorileri + ciddiyet (herkes aynısını kullanır)
@@ -17,10 +17,12 @@ iot-security-project/
 │   │   └── report.py          # Analiz tabloları ve makale grafikleri
 │   ├── model_ml.py            # Kişi 1: dataset_23, DT/RF/XGB/LGBM/LR + SHAP
 │   ├── model_dl.py            # Kişi 2: dataset_25 (şablon)
-│   └── model_other.py         # Kişi 3: dataset_26 (Edge-IIoTset), model_ml.py akışını yeniden kullanır
+│   ├── model_dnn_edgeiiot.py  # Kişi 3: Edge-IIoTset, model_ml.py akışını yeniden kullanır
+│   └── ablation_dnn_edgeiiot.py # Kişi 3: Edge-IIoTset kısayol özellik ablation deneyi
 ├── notebooks/
 │   ├── analysis.ipynb         # ⭐ Tablolar + grafikler (yalnızca outputs/ okur, veri gerekmez)
-│   └── dataset_23_colab.ipynb # Colab'da eğitim şablonu (güçlü bilgisayarı olmayanlar için)
+│   ├── dataset_23_colab.ipynb # Colab'da eğitim şablonu (güçlü bilgisayarı olmayanlar için)
+│   └── dnn_edgeiiot_kaggle.ipynb # Kişi 3: Edge-IIoTset, Kaggle'da eğitim
 ├── outputs/                   # Herkesin çıktı JSON'ları: Git'e GİRER
 │   └── <dataset_id>/{manifest,metrics,reliability}.json, test_predictions.csv.gz, figures/ (SHAP)
 ├── figures/                   # analysis.ipynb'nin ürettiği makale grafikleri (PNG) ve tablolar
@@ -54,21 +56,21 @@ Eğitim Kaggle/Colab'da yapılır. Docker, `outputs/` klasörünü okuyan DSS'i 
 ```bash
 docker compose run --rm validate                      # sözleşme kontrolü (CI ile aynı)
 docker compose run --rm dss                           # DSS raporu -> outputs/dss_report.json
-DEMO_DATASET=dataset_26 docker compose run --rm demo  # örnek kararlar ve açıklamalar
+DEMO_DATASET=dnn_edgeiiot docker compose run --rm demo  # örnek kararlar ve açıklamalar
 ```
 
 Yerelde eğitimi tekrar üretmek için (veri `./data/<dataset_id>/` altında olmalı):
 
 ```bash
 docker compose --profile train run --rm train-23
-docker compose --profile train run --rm train-26
+docker compose --profile train run --rm train-dnn_edgeiiot
 ```
 
 `Dockerfile` iki hedef içerir: `dss` (yalnızca numpy, pandas, scikit-learn) ve `train` (`requirements.txt`'in tamamı).
 
 ## Çalışma düzeni (GitHub)
 
-- `main` dalı korunur. Herkes kendi dalında çalışır (`dataset_23`, `dataset_25`, `dataset_26`) ve Pull Request ile birleştirir.
+- `main` dalı korunur. Herkes kendi dalında çalışır (`dataset_23`, `dataset_25`, `dnn_edgeiiot`) ve Pull Request ile birleştirir.
 - Ortak dosyaları (`src/common/*`, `main.py`) değiştiren PR'ı herkes onaylar.
 - Ham veri ve modeller Git'e girmez (`.gitignore`). Herkes veriyi kendi `data/<dataset_id>/` klasöründe tutar; Colab kullanan Drive'a koyar.
 - GitHub Actions her PR'da `python main.py --validate-only` çalıştırır. Format bozuksa PR kırmızı olur.

@@ -1,0 +1,38 @@
+Okunuyor: /kaggle/input/datasets/mohamedamineferrag/edgeiiotset-cyber-security-dataset-of-iot-iiot/Edge-IIoTset dataset/Selected dataset for ML and DL/DNN-EdgeIIoT-dataset.csv
+Hizasız satır (frame.time zaman değil): 122782 {'DDoS_UDP': 121568, 'MITM': 1214} -> atıldı
+Örneklem: 296506 satır, 34 özellik; test 59302 satır
+Tek-özellik testi mbtcp.trans_id: macro-F1=0.1112, farklı değer=22
+Tek-özellik testi icmp.transmit_timestamp: macro-F1=0.1114, farklı değer=84
+
+== A: Tam (34 özellik) (34 özellik) ==
+  farklı kategoriyle çakışan satır: %0.0
+  RF: macro-F1=0.9932 [0.9925, 0.9939]  en önemli: ['tcp.ack', 'tcp.dstport', 'tcp.seq']
+  DT: macro-F1=0.9932 [0.9925, 0.9938]  en önemli: ['tcp.ack', 'tcp.dstport', 'tcp.seq']
+
+== B: Portlar yok (32 özellik) ==
+  farklı kategoriyle çakışan satır: %13.36
+  RF: macro-F1=0.957 [0.9554, 0.9586]  en önemli: ['tcp.ack', 'tcp.seq', 'tcp.len']
+  DT: macro-F1=0.9561 [0.9544, 0.9578]  en önemli: ['tcp.ack', 'tcp.seq', 'tcp.flags']
+
+== C: tcp.seq/ack yok (32 özellik) ==
+  farklı kategoriyle çakışan satır: %22.15
+  RF: macro-F1=0.8239 [0.8206, 0.827]  en önemli: ['tcp.dstport', 'tcp.len', 'tcp.flags']
+  DT: macro-F1=0.8533 [0.8502, 0.8561]  en önemli: ['tcp.dstport', 'tcp.len', 'http.response']
+
+== D: Sayaç + zaman damgası yok (32 özellik) ==
+  farklı kategoriyle çakışan satır: %0.0
+  RF: macro-F1=0.9932 [0.9925, 0.9938]  en önemli: ['tcp.ack', 'tcp.dstport', 'tcp.seq']
+  DT: macro-F1=0.9931 [0.9924, 0.9938]  en önemli: ['tcp.ack', 'tcp.dstport', 'tcp.seq']
+
+== E: Hepsi çıkarıldı (28 özellik) ==
+  farklı kategoriyle çakışan satır: %59.17
+  RF: macro-F1=0.6175 [0.6133, 0.6215]  en önemli: ['tcp.len', 'tcp.flags', 'http.content_length']
+  DT: macro-F1=0.6169 [0.6129, 0.6211]  en önemli: ['tcp.len', 'tcp.flags', 'http.content_length']
+
+Özet (test macro-F1, tam modele göre fark):
+  A: Tam (34 özellik)              RF 0.9932 (+0.0000)  DT 0.9932 (+0.0000)
+  B: Portlar yok                   RF 0.9570 (-0.0362)  DT 0.9561 (-0.0371)
+  C: tcp.seq/ack yok               RF 0.8239 (-0.1693)  DT 0.8533 (-0.1399)
+  D: Sayaç + zaman damgası yok     RF 0.9932 (+0.0000)  DT 0.9931 (-0.0001)
+  E: Hepsi çıkarıldı               RF 0.6175 (-0.3757)  DT 0.6169 (-0.3763)
+Çıktılar: outputs/dnn_edgeiiot/ablation

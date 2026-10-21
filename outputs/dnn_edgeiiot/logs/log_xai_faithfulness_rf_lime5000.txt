@@ -1,0 +1,33 @@
+Okunuyor: /kaggle/input/datasets/mohamedamineferrag/edgeiiotset-cyber-security-dataset-of-iot-iiot/Edge-IIoTset dataset/Selected dataset for ML and DL/DNN-EdgeIIoT-dataset.csv
+Hizasız satır (frame.time zaman değil): 122782 {'DDoS_UDP': 121568, 'MITM': 1214} -> atıldı
+Örneklem: 296506 satır, 34 özellik, 6 kategori (A_tam_lime5000)
+RF test macro-F1 = 0.9932
+Drop-one önceki çalıştırmadan alındı: outputs/dnn_edgeiiot/xai_faithfulness/faithfulness_RF_A_tam.json
+Permütasyon önemi tamam
+SHAP tamam (600 satır)
+LIME tamam (300 satır, 25 s)
+LIME kararlılığı: {'rows': 30, 'seeds': [0, 1, 2], 'num_samples': 5000, 'top5_jaccard_mean': 0.376, 'top5_jaccard_min': 0.111, 'weight_spearman_mean': 0.721}
+
+İlk 5 özellik:
+  Drop-one     ['tcp.ack', 'tcp.dstport', 'tcp.len', 'tcp.seq', 'http.content_length']
+  Permütasyon  ['tcp.ack', 'tcp.dstport', 'tcp.seq', 'icmp.seq_le', 'tcp.len']
+  SHAP         ['tcp.ack', 'tcp.dstport', 'tcp.seq', 'tcp.flags', 'tcp.len']
+  LIME         ['tcp.ack', 'tcp.seq', 'tcp.dstport', 'udp.time_delta', 'dns.retransmission']
+
+Sıra uyumu (Spearman | Kendall | ilk-5 Jaccard | ilk-10 Jaccard):
+  Drop-one ~ Permütasyon       +0.574 | +0.473 | 0.67 | 0.54
+  Drop-one ~ SHAP              +0.387 | +0.291 | 0.67 | 0.54
+  Drop-one ~ LIME              +0.020 | +0.000 | 0.43 | 0.25
+  Permütasyon ~ SHAP           +0.630 | +0.525 | 0.67 | 0.82
+  Permütasyon ~ LIME           +0.368 | +0.299 | 0.43 | 0.25
+  SHAP ~ LIME                  +0.552 | +0.394 | 0.43 | 0.25
+
+Sınıf bazında SHAP ve LIME ilk-3 uyumu:
+  BENIGN      J=1.00  SHAP ['tcp.dstport', 'tcp.ack', 'tcp.seq']  LIME ['tcp.seq', 'tcp.ack', 'tcp.dstport']
+  RECON       J=0.50  SHAP ['tcp.dstport', 'tcp.ack', 'tcp.seq']  LIME ['http.content_length', 'tcp.seq', 'tcp.ack']
+  BRUTEFORCE  J=0.20  SHAP ['tcp.ack', 'tcp.seq', 'tcp.dstport']  LIME ['tcp.ack', 'udp.time_delta', 'udp.port']
+  WEB         J=0.20  SHAP ['tcp.ack', 'tcp.dstport', 'tcp.seq']  LIME ['dns.qry.name', 'tcp.dstport', 'dns.retransmission']
+  MALWARE     J=0.50  SHAP ['tcp.dstport', 'tcp.ack', 'tcp.seq']  LIME ['tcp.dstport', 'tcp.ack', 'dns.retransmission']
+  DDOS        J=0.20  SHAP ['tcp.dstport', 'tcp.ack', 'tcp.flags']  LIME ['tcp.seq', 'icmp.seq_le', 'tcp.ack']
+
+Çıktılar: outputs/dnn_edgeiiot/xai_faithfulness  (107 s)

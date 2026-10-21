@@ -1,0 +1,26 @@
+2219201 satır, 63 sütun
+
+İhlal oranı (%), etiket × kontrol:
+                             n  zaman   ip  port  bayrak  arp  sayisal
+Backdoor                 24862   0.00 0.00  0.00    0.00 0.00     0.00
+DDoS_HTTP                49911   0.00 0.00  0.00    0.00 0.00     0.00
+DDoS_ICMP               116436   0.00 0.00  0.00    0.00 0.00     0.00
+DDoS_TCP                 50062   0.00 0.00  0.00    0.00 0.00     0.00
+DDoS_UDP                121568 100.00 0.00  0.00    0.00 0.00     0.00
+Fingerprinting            1001   0.00 0.00  0.00    0.00 0.00     0.00
+MITM                      1214 100.00 0.00 30.23   18.70 0.00     0.00
+Normal                 1615643   0.00 0.00  0.00    0.11 0.00     0.00
+Password                 50153   0.00 0.00  0.00    0.00 0.00     0.00
+Port_Scanning            22564   0.00 0.00  0.00    0.00 0.00     0.00
+Ransomware               10925   0.00 0.00  0.00    0.00 0.00     0.00
+SQL_injection            51203   0.00 0.00  0.00    0.00 0.00     0.00
+Uploading                37634   0.00 0.00  0.00    0.00 0.00     0.00
+Vulnerability_scanner    50110   0.00 0.00  0.00    0.00 0.00     0.00
+XSS                      15915   0.00 0.00  0.00    0.00 0.00     0.00
+
+%0.1'in üzerindeki ihlaller:
+  DDoS_UDP               {'zaman': 100.0}
+  MITM                   {'zaman': 100.0, 'port': 30.231, 'bayrak': 18.699}
+  Normal                 {'bayrak': 0.114}
+
+Çıktı: outputs/dnn_edgeiiot/audit/audit.json

@@ -1,0 +1,48 @@
+Hizasız satır atıldı: 122782 {'DDoS_UDP': 121568, 'MITM': 1214}
+frame.time örnekleri: [' 2021 11:44:10.081753000 ', ' 2021 11:44:10.162218000 ', ' 2021 11:44:10.162271000 ', ' 2021 11:44:10.162641000 ', ' 2021 11:44:10.166132000 ']
+Zaman ayrıştırma: günün saati (tarih yok), başarı %100.00
+Örneklem: 296506 satır, 34 özellik
+  BACKDOOR               n= 23121  süre=11318.0 s  zaman~dosya sırası ρ=1.0
+  DDOS_HTTP              n= 26876  süre=267.3 s  zaman~dosya sırası ρ=1.0
+  DDOS_ICMP              n= 40000  süre=403.7 s  zaman~dosya sırası ρ=1.0
+  DDOS_TCP               n= 40000  süre=528.0 s  zaman~dosya sırası ρ=1.0
+  FINGERPRINTING         n=   181  süre=820.6 s  zaman~dosya sırası ρ=1.0
+  NORMAL                 n= 40000  süre=78191.7 s  zaman~dosya sırası ρ=0.879
+  PASSWORD               n= 20782  süre=68504.7 s  zaman~dosya sırası ρ=1.0
+  PORT_SCANNING          n= 19949  süre=9999.7 s  zaman~dosya sırası ρ=1.0
+  RANSOMWARE             n=  8336  süre=86398.1 s  zaman~dosya sırası ρ=0.109
+  SQL_INJECTION          n= 22706  süre=505.1 s  zaman~dosya sırası ρ=1.0
+  UPLOADING              n= 14269  süre=487.8 s  zaman~dosya sırası ρ=1.0
+  VULNERABILITY_SCANNER  n= 34389  süre=1217.4 s  zaman~dosya sırası ρ=1.0
+  XSS                    n=  5897  süre=7703.7 s  zaman~dosya sırası ρ=1.0
+A_tam RF seed=0: rastgele 0.9936  zaman 0.9319  (27 s)
+A_tam RF seed=1: rastgele 0.9935  zaman 0.9179  (27 s)
+A_tam RF seed=2: rastgele 0.9938  zaman 0.9319  (26 s)
+A_tam RF seed=3: rastgele 0.9937  zaman 0.9333  (26 s)
+A_tam RF seed=4: rastgele 0.9940  zaman 0.9036  (26 s)
+A_tam DT seed=0: rastgele 0.9935  zaman 0.8939  (2 s)
+A_tam DT seed=1: rastgele 0.9930  zaman 0.8935  (2 s)
+A_tam DT seed=2: rastgele 0.9934  zaman 0.8948  (2 s)
+A_tam DT seed=3: rastgele 0.9934  zaman 0.8953  (2 s)
+A_tam DT seed=4: rastgele 0.9937  zaman 0.8939  (2 s)
+E_kisayolsuz RF seed=0: rastgele 0.6151  zaman 0.6204  (13 s)
+E_kisayolsuz RF seed=1: rastgele 0.6136  zaman 0.6202  (13 s)
+E_kisayolsuz RF seed=2: rastgele 0.6169  zaman 0.6205  (13 s)
+E_kisayolsuz RF seed=3: rastgele 0.6167  zaman 0.6204  (13 s)
+E_kisayolsuz RF seed=4: rastgele 0.6159  zaman 0.6204  (13 s)
+E_kisayolsuz DT seed=0: rastgele 0.6141  zaman 0.6191  (1 s)
+E_kisayolsuz DT seed=1: rastgele 0.6131  zaman 0.6191  (1 s)
+E_kisayolsuz DT seed=2: rastgele 0.6162  zaman 0.6191  (1 s)
+E_kisayolsuz DT seed=3: rastgele 0.6163  zaman 0.6191  (1 s)
+E_kisayolsuz DT seed=4: rastgele 0.6150  zaman 0.6191  (1 s)
+
+Özet (test macro-F1, ort. ± ss | kaçırılan saldırı | yanlış alarm):
+  A_tam         rastgele  RF: 0.9937 ± 0.0002 | 0.0000 | 0.0001
+  A_tam         rastgele  DT: 0.9934 ± 0.0002 | 0.0000 | 0.0003
+  A_tam         zaman     RF: 0.9237 ± 0.0129 | 0.0000 | 0.0394
+  A_tam         zaman     DT: 0.8943 ± 0.0008 | 0.0000 | 0.0401
+  E_kisayolsuz  rastgele  RF: 0.6157 ± 0.0014 | 0.0116 | 0.4305
+  E_kisayolsuz  rastgele  DT: 0.6149 ± 0.0014 | 0.0119 | 0.4311
+  E_kisayolsuz  zaman     RF: 0.6204 ± 0.0001 | 0.0123 | 0.4198
+  E_kisayolsuz  zaman     DT: 0.6191 ± 0.0000 | 0.0135 | 0.4205
+Çıktılar: outputs/dnn_edgeiiot/split_check

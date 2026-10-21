@@ -1,0 +1,94 @@
+Okunuyor: /kaggle/input/datasets/mohamedamineferrag/edgeiiotset-cyber-security-dataset-of-iot-iiot/Edge-IIoTset dataset/Selected dataset for ML and DL/DNN-EdgeIIoT-dataset.csv
+Hizasız satır (frame.time zaman değil): 122782 {'DDoS_UDP': 121568, 'MITM': 1214} -> atıldı
+Örneklem: 296506 satır, 32 özellik, koşul C_seq_ack_yok; kör oranları [0.25, 0.125, 0.0625]; skorlar ['signature', 'expert_disagree', 'expert_energy_z', 'comb_max', 'comb_mean']
+
+=== Dış bilinmeyen: DDOS  — iç prova (4 sahte bilinmeyen x 3 kör oranı) ===
+  kör 0.25   sahte bilinmeyen RECON      (61 s)  signature 0.593  expert_disagree 0.792  expert_energy_z 0.208  comb_max 0.689  comb_mean 0.479
+  kör 0.25   sahte bilinmeyen WEB        (50 s)  signature 0.762  expert_disagree 0.750  expert_energy_z 0.606  comb_max 0.713  comb_mean 0.690
+  kör 0.25   sahte bilinmeyen BRUTEFORCE (63 s)  signature 0.698  expert_disagree 0.709  expert_energy_z 0.623  comb_max 0.683  comb_mean 0.668
+  kör 0.25   sahte bilinmeyen MALWARE    (63 s)  signature 0.766  expert_disagree 0.851  expert_energy_z 0.560  comb_max 0.739  comb_mean 0.722
+  kör 0.125  sahte bilinmeyen RECON      (60 s)  signature 0.551  expert_disagree 0.794  expert_energy_z 0.211  comb_max 0.696  comb_mean 0.461
+  kör 0.125  sahte bilinmeyen WEB        (51 s)  signature 0.794  expert_disagree 0.785  expert_energy_z 0.592  comb_max 0.738  comb_mean 0.696
+  kör 0.125  sahte bilinmeyen BRUTEFORCE (63 s)  signature 0.714  expert_disagree 0.789  expert_energy_z 0.625  comb_max 0.756  comb_mean 0.714
+  kör 0.125  sahte bilinmeyen MALWARE    (63 s)  signature 0.737  expert_disagree 0.787  expert_energy_z 0.456  comb_max 0.626  comb_mean 0.625
+  kör 0.0625 sahte bilinmeyen RECON      (62 s)  signature 0.503  expert_disagree 0.848  expert_energy_z 0.221  comb_max 0.771  comb_mean 0.475
+  kör 0.0625 sahte bilinmeyen WEB        (56 s)  signature 0.793  expert_disagree 0.809  expert_energy_z 0.575  comb_max 0.745  comb_mean 0.711
+  kör 0.0625 sahte bilinmeyen BRUTEFORCE (43 s)  signature 0.635  expert_disagree 0.689  expert_energy_z 0.634  comb_max 0.709  comb_mean 0.661
+  kör 0.0625 sahte bilinmeyen MALWARE    (52 s)  signature 0.729  expert_disagree 0.840  expert_energy_z 0.498  comb_max 0.749  comb_mean 0.666
+  → SEÇİLEN: kör oranı 0.0625, skor expert_disagree  (iç ort. AUROC 0.796)
+  DIŞ TEST (DDOS): AUROC 0.736  FPR95 0.917  yakalanan 0.083  BENIGN'e kaçan 0.001  bilinen F1 0.8872 (157 s)  [868 s]
+
+=== Dış bilinmeyen: RECON  — iç prova (4 sahte bilinmeyen x 3 kör oranı) ===
+  kör 0.25   sahte bilinmeyen DDOS       (56 s)  signature 0.620  expert_disagree 0.650  expert_energy_z 0.312  comb_max 0.505  comb_mean 0.458
+  kör 0.25   sahte bilinmeyen WEB        (64 s)  signature 0.821  expert_disagree 0.851  expert_energy_z 0.629  comb_max 0.786  comb_mean 0.752
+  kör 0.25   sahte bilinmeyen BRUTEFORCE (64 s)  signature 0.793  expert_disagree 0.856  expert_energy_z 0.658  comb_max 0.824  comb_mean 0.786
+  kör 0.25   sahte bilinmeyen MALWARE    (64 s)  signature 0.790  expert_disagree 0.788  expert_energy_z 0.651  comb_max 0.686  comb_mean 0.722
+  kör 0.125  sahte bilinmeyen DDOS       (62 s)  signature 0.641  expert_disagree 0.694  expert_energy_z 0.298  comb_max 0.525  comb_mean 0.480
+  kör 0.125  sahte bilinmeyen WEB        (64 s)  signature 0.817  expert_disagree 0.855  expert_energy_z 0.611  comb_max 0.770  comb_mean 0.754
+  kör 0.125  sahte bilinmeyen BRUTEFORCE (64 s)  signature 0.782  expert_disagree 0.853  expert_energy_z 0.634  comb_max 0.821  comb_mean 0.772
+  kör 0.125  sahte bilinmeyen MALWARE    (64 s)  signature 0.763  expert_disagree 0.825  expert_energy_z 0.561  comb_max 0.728  comb_mean 0.714
+  kör 0.0625 sahte bilinmeyen DDOS       (43 s)  signature 0.607  expert_disagree 0.714  expert_energy_z 0.284  comb_max 0.581  comb_mean 0.494
+  kör 0.0625 sahte bilinmeyen WEB        (64 s)  signature 0.811  expert_disagree 0.856  expert_energy_z 0.606  comb_max 0.759  comb_mean 0.761
+  kör 0.0625 sahte bilinmeyen BRUTEFORCE (64 s)  signature 0.773  expert_disagree 0.850  expert_energy_z 0.605  comb_max 0.816  comb_mean 0.760
+  kör 0.0625 sahte bilinmeyen MALWARE    (64 s)  signature 0.751  expert_disagree 0.798  expert_energy_z 0.551  comb_max 0.693  comb_mean 0.677
+  → SEÇİLEN: kör oranı 0.0625, skor expert_disagree  (iç ort. AUROC 0.804)
+  DIŞ TEST (RECON): AUROC 0.724  FPR95 0.811  yakalanan 0.188  BENIGN'e kaçan 0.001  bilinen F1 0.8425 (269 s)  [1037 s]
+
+=== Dış bilinmeyen: WEB  — iç prova (4 sahte bilinmeyen x 3 kör oranı) ===
+  kör 0.25   sahte bilinmeyen DDOS       (48 s)  signature 0.763  expert_disagree 0.790  expert_energy_z 0.553  comb_max 0.742  comb_mean 0.661
+  kör 0.25   sahte bilinmeyen RECON      (64 s)  signature 0.747  expert_disagree 0.741  expert_energy_z 0.595  comb_max 0.730  comb_mean 0.677
+  kör 0.25   sahte bilinmeyen BRUTEFORCE (63 s)  signature 0.837  expert_disagree 0.848  expert_energy_z 0.785  comb_max 0.833  comb_mean 0.823
+  kör 0.25   sahte bilinmeyen MALWARE    (63 s)  signature 0.922  expert_disagree 0.944  expert_energy_z 0.826  comb_max 0.923  comb_mean 0.904
+  kör 0.125  sahte bilinmeyen DDOS       (64 s)  signature 0.691  expert_disagree 0.826  expert_energy_z 0.745  comb_max 0.778  comb_mean 0.788
+  kör 0.125  sahte bilinmeyen RECON      (64 s)  signature 0.632  expert_disagree 0.779  expert_energy_z 0.565  comb_max 0.700  comb_mean 0.662
+  kör 0.125  sahte bilinmeyen BRUTEFORCE (64 s)  signature 0.805  expert_disagree 0.852  expert_energy_z 0.786  comb_max 0.843  comb_mean 0.823
+  kör 0.125  sahte bilinmeyen MALWARE    (64 s)  signature 0.921  expert_disagree 0.940  expert_energy_z 0.758  comb_max 0.890  comb_mean 0.899
+  kör 0.0625 sahte bilinmeyen DDOS       (64 s)  signature 0.728  expert_disagree 0.857  expert_energy_z 0.650  comb_max 0.805  comb_mean 0.757
+  kör 0.0625 sahte bilinmeyen RECON      (64 s)  signature 0.609  expert_disagree 0.702  expert_energy_z 0.719  comb_max 0.740  comb_mean 0.731
+  kör 0.0625 sahte bilinmeyen BRUTEFORCE (64 s)  signature 0.799  expert_disagree 0.852  expert_energy_z 0.791  comb_max 0.853  comb_mean 0.825
+  kör 0.0625 sahte bilinmeyen MALWARE    (64 s)  signature 0.930  expert_disagree 0.937  expert_energy_z 0.745  comb_max 0.889  comb_mean 0.891
+  → SEÇİLEN: kör oranı 0.125, skor expert_disagree  (iç ort. AUROC 0.849)
+  DIŞ TEST (WEB): AUROC 0.877  FPR95 0.760  yakalanan 0.234  BENIGN'e kaçan 0.023  bilinen F1 0.8869 (114 s)  [896 s]
+
+=== Dış bilinmeyen: BRUTEFORCE  — iç prova (4 sahte bilinmeyen x 3 kör oranı) ===
+  kör 0.25   sahte bilinmeyen DDOS       (63 s)  signature 0.795  expert_disagree 0.812  expert_energy_z 0.730  comb_max 0.752  comb_mean 0.756
+  kör 0.25   sahte bilinmeyen RECON      (63 s)  signature 0.786  expert_disagree 0.780  expert_energy_z 0.734  comb_max 0.791  comb_mean 0.777
+  kör 0.25   sahte bilinmeyen WEB        (63 s)  signature 0.850  expert_disagree 0.858  expert_energy_z 0.807  comb_max 0.851  comb_mean 0.831
+  kör 0.25   sahte bilinmeyen MALWARE    (63 s)  signature 0.850  expert_disagree 0.914  expert_energy_z 0.760  comb_max 0.869  comb_mean 0.854
+  kör 0.125  sahte bilinmeyen DDOS       (63 s)  signature 0.778  expert_disagree 0.789  expert_energy_z 0.696  comb_max 0.728  comb_mean 0.724
+  kör 0.125  sahte bilinmeyen RECON      (63 s)  signature 0.689  expert_disagree 0.795  expert_energy_z 0.694  comb_max 0.782  comb_mean 0.770
+  kör 0.125  sahte bilinmeyen WEB        (64 s)  signature 0.821  expert_disagree 0.863  expert_energy_z 0.804  comb_max 0.855  comb_mean 0.838
+  kör 0.125  sahte bilinmeyen MALWARE    (51 s)  signature 0.860  expert_disagree 0.911  expert_energy_z 0.714  comb_max 0.879  comb_mean 0.833
+  kör 0.0625 sahte bilinmeyen DDOS       (63 s)  signature 0.764  expert_disagree 0.866  expert_energy_z 0.736  comb_max 0.844  comb_mean 0.801
+  kör 0.0625 sahte bilinmeyen RECON      (63 s)  signature 0.657  expert_disagree 0.797  expert_energy_z 0.720  comb_max 0.824  comb_mean 0.775
+  kör 0.0625 sahte bilinmeyen WEB        (64 s)  signature 0.799  expert_disagree 0.864  expert_energy_z 0.786  comb_max 0.857  comb_mean 0.829
+  kör 0.0625 sahte bilinmeyen MALWARE    (51 s)  signature 0.827  expert_disagree 0.914  expert_energy_z 0.596  comb_max 0.881  comb_mean 0.767
+  → SEÇİLEN: kör oranı 0.0625, skor expert_disagree  (iç ort. AUROC 0.860)
+  DIŞ TEST (BRUTEFORCE): AUROC 0.858  FPR95 0.664  yakalanan 0.328  BENIGN'e kaçan 0.104  bilinen F1 0.9355 (199 s)  [967 s]
+
+=== Dış bilinmeyen: MALWARE  — iç prova (4 sahte bilinmeyen x 3 kör oranı) ===
+  kör 0.25   sahte bilinmeyen DDOS       (64 s)  signature 0.686  expert_disagree 0.705  expert_energy_z 0.831  comb_max 0.804  comb_mean 0.795
+  kör 0.25   sahte bilinmeyen RECON      (64 s)  signature 0.488  expert_disagree 0.510  expert_energy_z 0.594  comb_max 0.620  comb_mean 0.549
+  kör 0.25   sahte bilinmeyen WEB        (47 s)  signature 0.768  expert_disagree 0.826  expert_energy_z 0.534  comb_max 0.773  comb_mean 0.689
+  kör 0.25   sahte bilinmeyen BRUTEFORCE (66 s)  signature 0.745  expert_disagree 0.797  expert_energy_z 0.614  comb_max 0.751  comb_mean 0.712
+  kör 0.125  sahte bilinmeyen DDOS       (64 s)  signature 0.618  expert_disagree 0.776  expert_energy_z 0.750  comb_max 0.774  comb_mean 0.761
+  kör 0.125  sahte bilinmeyen RECON      (64 s)  signature 0.529  expert_disagree 0.633  expert_energy_z 0.623  comb_max 0.650  comb_mean 0.638
+  kör 0.125  sahte bilinmeyen WEB        (47 s)  signature 0.795  expert_disagree 0.826  expert_energy_z 0.564  comb_max 0.767  comb_mean 0.712
+  kör 0.125  sahte bilinmeyen BRUTEFORCE (67 s)  signature 0.767  expert_disagree 0.807  expert_energy_z 0.599  comb_max 0.758  comb_mean 0.726
+  kör 0.0625 sahte bilinmeyen DDOS       (58 s)  signature 0.606  expert_disagree 0.796  expert_energy_z 0.755  comb_max 0.767  comb_mean 0.789
+  kör 0.0625 sahte bilinmeyen RECON      (64 s)  signature 0.468  expert_disagree 0.645  expert_energy_z 0.671  comb_max 0.785  comb_mean 0.660
+  kör 0.0625 sahte bilinmeyen WEB        (47 s)  signature 0.791  expert_disagree 0.825  expert_energy_z 0.525  comb_max 0.766  comb_mean 0.693
+  kör 0.0625 sahte bilinmeyen BRUTEFORCE (67 s)  signature 0.749  expert_disagree 0.802  expert_energy_z 0.594  comb_max 0.758  comb_mean 0.719
+  → SEÇİLEN: kör oranı 0.0625, skor comb_max  (iç ort. AUROC 0.769)
+  DIŞ TEST (MALWARE): AUROC 0.838  FPR95 0.504  yakalanan 0.496  BENIGN'e kaçan 0.000  bilinen F1 0.8221 (134 s)  [884 s]
+
+Seçilen ayarlarla dış test (CP-TabM, iç provayla seçildi):
+    family  blind_frac           score  auroc  fpr95  detect@cal  silent_benign@cal  closed_f1
+      DDOS      0.0625 expert_disagree 0.7359 0.9167      0.0825             0.0007     0.8872
+     RECON      0.0625 expert_disagree 0.7240 0.8108      0.1882             0.0005     0.8425
+       WEB      0.1250 expert_disagree 0.8767 0.7602      0.2342             0.0231     0.8869
+BRUTEFORCE      0.0625 expert_disagree 0.8581 0.6639      0.3281             0.1037     0.9355
+   MALWARE      0.0625        comb_max 0.8384 0.5041      0.4959             0.0000     0.8221
+Ortalama: {'auroc': 0.8066, 'fpr95': 0.7311, 'detect@cal': 0.2658, 'silent_benign@cal': 0.0256, 'open_f1@cal': 0.7306, 'closed_f1': 0.8748}
+
+Çıktılar: outputs/dnn_edgeiiot/cp_tune  (4691 s)
