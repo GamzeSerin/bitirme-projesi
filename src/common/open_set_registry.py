@@ -30,10 +30,21 @@ def _edge_category(label):
     return edgeiiot_category(label)
 
 
+# Kişi 1'in resmi protokolü (model_ml.py, 18.10.2026): Number her zaman atılır (veri toplama izi:
+# floodlar 100, diğer sınıflar 10 paketlik pencereyle üretilmiş). model_ml.load_data bunu yalnızca
+# drop_features ile yapar; komut satırındaki varsayılan burada açıkça tekrarlanır.
+CICIOT_PROTOCOL_DROP = ("Number",)
+
+
 def _ciciot_loader(data_file, cap, seed):
     # Kişi 1'in yükleyicisi: data_file = Merged*.csv dosyalarının bulunduğu klasör
     from model_ml import load_data
-    return load_data(data_file, cap, seed, drop_conflicts=True)
+    X, fine, category, stats = load_data(data_file, cap, seed, drop_features=CICIOT_PROTOCOL_DROP,
+                                         drop_conflicts=True)
+    leaked = [c for c in CICIOT_PROTOCOL_DROP if c in X.columns]
+    if leaked:  # yükleyici değişirse sessizce geri gelmesin
+        raise SystemExit(f"CICIoT2023: protokol gereği atılması gereken sütun(lar) veride: {leaked}")
+    return X, fine, category, stats
 
 
 def _ciciot_category(label):
