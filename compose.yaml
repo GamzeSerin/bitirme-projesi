@@ -44,7 +44,7 @@ services:
   train-23:
     <<: *train
     command: ["python", "src/model_ml.py", "--data-dir", "data/dataset_23",
-              "--work-dir", "work/dataset_23", "--shap", "--drop-features", "Number"]
+              "--work-dir", "work/dataset_23", "--tune", "--shap", "--drop-features", "Number"]
 
   train-dnn_edgeiiot:
     <<: *train

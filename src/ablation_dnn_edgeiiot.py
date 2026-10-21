@@ -1,4 +1,4 @@
-"""Kişi 3 - Edge-IIoTset kısayol (shortcut) ablation deneyi.
+"""Kısayol (shortcut) ablation deneyi (ekip ortak aracı, --dataset; adı tarihsel).
 
 Soru: Modelin ~0,995 macro-F1'i saldırı davranışından mı, yoksa veri toplama
 izlerinden (hedef port, TCP sıra/onay numarası, sayaç ve zaman damgası) mı geliyor?
@@ -13,11 +13,18 @@ böylece fark yalnızca özelliklerden gelir. Her senaryo için:
     edilemez hâle geliyor?)
 Ayrıca şüpheli iki sütun için tek-özellik sızıntı testi yapılır.
 
-Çıktı: outputs/dnn_edgeiiot/ablation/ (ablation.json + 2 grafik). Sözleşme dosyalarına
+Veri setine özel her şey (yükleyici, koşullar) src/common/open_set_registry.py'de; koşullar
+görülmemiş saldırı deneyindeki A/C/E ile aynıdır. RF ve DT her veri setinde aynı sabit ayarlarla
+(build_models) eğitilir. Tek-özellik testi: kayıtta leak_test_columns varsa o sütunlar
+(Edge-IIoTset: iki şüpheli kimlik alanı), yoksa bütün sütunlar.
+
+Çıktı: outputs/<dataset>/ablation/ (ablation.json + 2 grafik). Sözleşme dosyalarına
 dokunmaz; DSS etkilenmez.
 
-Kullanım (Kaggle, CPU yeterli, ~5-10 dk):
+Kullanım (CPU yeterli, ~5-10 dk):
   python src/ablation_dnn_edgeiiot.py --data-file "<.../DNN-EdgeIIoT-dataset.csv>"
+  python src/ablation_dnn_edgeiiot.py --dataset dataset_23 --data-file <Merged*.csv klasörü>
+  ... --quick   (etiket başına 3.000 satır, tesisat denemesi)
 """
 
 import argparse
@@ -36,10 +43,10 @@ from sklearn.metrics import f1_score
 from sklearn.model_selection import cross_val_predict, train_test_split
 from sklearn.tree import DecisionTreeClassifier
 
+from common import open_set_registry as registry
 from common.taxonomy import COMMON_CLASSES
-from model_dnn_edgeiiot import load_data
 
-OUT_DIR = "outputs/dnn_edgeiiot/ablation"
+OUT_DIR = "outputs/dnn_edgeiiot/ablation"  # Edge-IIoTset varsayılanı (geriye uyumluluk)
 
 PORTS = ["tcp.dstport", "udp.port"]
 SEQ_ACK = ["tcp.seq", "tcp.ack"]
@@ -121,7 +128,21 @@ def single_feature_leak(X, y, cols, seed, per_class=5000):
     return out
 
 
-def plot(results, classes, out_dir):
+_TITLES = dict(SCENARIO_TITLES)  # main() veri setine göre değiştirir
+
+
+def title(s):
+    return _TITLES.get(s, s)
+
+
+def make_titles(dataset_id, conditions):
+    """Edge-IIoTset: elle yazılmış başlıklar; diğerleri: çıkarılan sütunlardan (ör. 'C: Time_To_Live yok')."""
+    if dataset_id == "dnn_edgeiiot":
+        return dict(SCENARIO_TITLES)
+    return {c: f"{c[0]}: " + (", ".join(cols) + " yok" if cols else "tam") for c, cols in conditions.items()}
+
+
+def plot(results, classes, out_dir, dataset_id="dnn_edgeiiot", dataset_name="Edge-IIoTset"):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -141,16 +162,16 @@ def plot(results, classes, out_dir):
                 xerr=[lo, hi], error_kw={"elinewidth": 0.8, "capsize": 2})
         for yv, v, e in zip(ys, vals, hi):
             ax.text(v + e + 0.006, yv, f"{v:.3f}", va="center", fontsize=8)
-    ax.set_yticks(np.arange(len(names)), [SCENARIO_TITLES[s] for s in names])
+    ax.set_yticks(np.arange(len(names)), [title(s) for s in names])
     ax.invert_yaxis()
     lo_all = min(results[s]["models"][m]["test_macro_f1"] for s in names for m in models)
     ax.set_xlim(max(0, lo_all - 0.08), 1.06)
     ax.set_xlabel("Test macro-F1 (%95 bootstrap GA)")
-    ax.set_title("Edge-IIoTset: özellik çıkarma (ablation)", fontsize=11)
+    ax.set_title(f"{dataset_name}: özellik çıkarma (ablation)", fontsize=11)
     ax.spines[["top", "right"]].set_visible(False)
     ax.legend(frameon=False, loc="lower right")
     fig.tight_layout()
-    fig.savefig(os.path.join(out_dir, f"fig_ablation_macro_f1_dnn_edgeiiot_{'_'.join(models)}.png"), dpi=200)
+    fig.savefig(os.path.join(out_dir, f"fig_ablation_macro_f1_{dataset_id}_{'_'.join(models)}.png"), dpi=200)
     plt.close(fig)
 
     mat = np.array([[results[s]["models"]["RF"]["test_per_class_f1"][c] for c in classes]
@@ -158,7 +179,7 @@ def plot(results, classes, out_dir):
     fig, ax = plt.subplots(figsize=(8, 3.6))
     im = ax.imshow(mat, cmap="Blues", vmin=max(0, mat.min() - 0.05), vmax=1, aspect="auto")
     ax.set_xticks(range(len(classes)), classes, rotation=30, ha="right")
-    ax.set_yticks(range(len(names)), [SCENARIO_TITLES[s] for s in names])
+    ax.set_yticks(range(len(names)), [title(s) for s in names])
     for i in range(len(names)):
         for j in range(len(classes)):
             v = mat[i, j]
@@ -167,36 +188,43 @@ def plot(results, classes, out_dir):
     ax.set_title("RF: senaryo × sınıf F1", fontsize=11)
     fig.colorbar(im, ax=ax, fraction=0.03)
     fig.tight_layout()
-    fig.savefig(os.path.join(out_dir, "fig_ablation_class_f1_dnn_edgeiiot_RF.png"), dpi=200)
+    fig.savefig(os.path.join(out_dir, f"fig_ablation_class_f1_{dataset_id}_RF.png"), dpi=200)
     plt.close(fig)
 
 
 def main():
     p = argparse.ArgumentParser()
-    p.add_argument("--data-file", required=True)
-    p.add_argument("--out-dir", default=OUT_DIR)
+    p.add_argument("--dataset", default="dnn_edgeiiot", choices=list(registry.DATASETS))
+    p.add_argument("--data-file", required=True, help="Edge-IIoTset: CSV; CICIoT2023: Merged*.csv klasörü")
+    p.add_argument("--out-dir", default=None, help="Varsayılan outputs/<dataset>/ablation")
     p.add_argument("--cap", type=int, default=40000)
     p.add_argument("--models", default="RF,DT")
-    p.add_argument("--scenarios", default=",".join(SCENARIOS))
+    p.add_argument("--scenarios", default="", help="Varsayılan: kayıttaki bütün koşullar")
     p.add_argument("--n-boot", type=int, default=300)
     p.add_argument("--n-jobs", type=int, default=-1)
     p.add_argument("--seed", type=int, default=42)
     p.add_argument("--quick", action="store_true", help="Etiket başına 3.000 satır, deneme için")
     args = p.parse_args()
+    spec = registry.get(args.dataset)
+    args.out_dir = args.out_dir or f"outputs/{args.dataset}/ablation"
+    conditions = spec["conditions"]
+    scenarios = [c for c in args.scenarios.split(",") if c] or list(conditions)
+    _TITLES.clear()
+    _TITLES.update(make_titles(args.dataset, conditions))
     if args.quick:
         args.cap, args.n_boot = min(args.cap, 3000), 50
     os.makedirs(args.out_dir, exist_ok=True)
 
     # Asıl deneyle aynı satırlar: tam özellik uzayında tekrar ve çakışma temizliği.
-    X, fine, category, data_stats = load_data(args.data_file, args.cap, args.seed,
-                                              drop_features=(), drop_conflicts=True)
+    X, fine, category, data_stats = spec["loader"](args.data_file, args.cap, args.seed)
     classes = [c for c in COMMON_CLASSES if c in set(category)]
     y = np.array([classes.index(c) for c in category])
     idx_tr, idx_te = train_test_split(np.arange(len(y)), test_size=0.2,
                                       stratify=fine, random_state=args.seed)
     print(f"Örneklem: {len(y)} satır, {X.shape[1]} özellik; test {len(idx_te)} satır")
 
-    leak = single_feature_leak(X, y, SUSPECT_IDS, args.seed)
+    leak_cols = spec.get("leak_test_columns") or list(X.columns)
+    leak = single_feature_leak(X, y, leak_cols, args.seed)
     for c in leak:
         nz = (X[c] != 0).groupby(category).mean()
         leak[c]["nonzero_pct_by_category"] = {k: round(100 * float(v), 2) for k, v in nz.items()}
@@ -206,10 +234,9 @@ def main():
     models = build_models(args.seed, args.n_jobs)
     model_names = [m for m in args.models.split(",") if m in models]
     results = {}
-    for s in args.scenarios.split(","):
-        drop = [c for c in SCENARIOS[s] if c in X.columns]
-        Xs = X.drop(columns=drop)
-        print(f"\n== {SCENARIO_TITLES[s]} ({Xs.shape[1]} özellik) ==")
+    for s in scenarios:
+        Xs, drop = registry.apply_condition(X, spec, s)  # kayıtta olup veride olmayan sütun -> durur
+        print(f"\n== {title(s)} ({Xs.shape[1]} özellik) ==")
         res = {"dropped": drop, "n_features": int(Xs.shape[1]),
                "collisions": collision_stats(Xs, fine, category), "models": {}}
         print(f"  farklı kategoriyle çakışan satır: %{res['collisions']['cross_category_conflict_pct']}")
@@ -242,14 +269,14 @@ def main():
                 mr["delta_vs_full"] = round(mr["test_macro_f1"] - base["models"][m]["test_macro_f1"], 4)
 
     out = {
-        "dataset_id": "dnn_edgeiiot",
-        "dataset_name": "Edge-IIoTset",
+        "dataset_id": args.dataset,
+        "dataset_name": spec["name"],
         "protocol": "Aynı satırlar ve aynı 80/20 bölme (seed=42); sabit hiperparametreler; "
                     "yalnızca sütunlar çıkarılır. Satırlar tam özellik uzayında tekrar/çakışma "
                     "temizliğinden geçti (--drop-conflicts).",
         "seed": args.seed, "cap_per_fine_label": args.cap, "quick": bool(args.quick),
         "n_rows": int(len(y)), "n_test": int(len(idx_te)), "classes": classes,
-        "scenarios": SCENARIOS,
+        "scenarios": {c: conditions[c] for c in scenarios},
         "single_feature_leak_test": leak,
         "results": results,
         "data_prep": data_stats,
@@ -257,13 +284,13 @@ def main():
     with open(os.path.join(args.out_dir, "ablation.json"), "w", encoding="utf-8") as f:
         json.dump(out, f, indent=2, ensure_ascii=False)
     if "RF" in model_names:
-        plot(results, classes, args.out_dir)
+        plot(results, classes, args.out_dir, args.dataset, spec["name"])
 
     print("\nÖzet (test macro-F1, tam modele göre fark):")
     for s, r in results.items():
         row = "  ".join(f"{m} {mr['test_macro_f1']:.4f} ({mr.get('delta_vs_full', 0):+.4f})"
                         for m, mr in r["models"].items())
-        print(f"  {SCENARIO_TITLES[s]:32s} {row}")
+        print(f"  {title(s):32s} {row}")
     print(f"Çıktılar: {args.out_dir}")
 
 
