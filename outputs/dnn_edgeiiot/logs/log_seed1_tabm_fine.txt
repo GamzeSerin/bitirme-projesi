@@ -1,0 +1,59 @@
+Okunuyor: /kaggle/input/datasets/mohamedamineferrag/edgeiiotset-cyber-security-dataset-of-iot-iiot/Edge-IIoTset dataset/Selected dataset for ML and DL/DNN-EdgeIIoT-dataset.csv
+Hizasız satır (frame.time zaman değil): 122782 {'DDoS_UDP': 121568, 'MITM': 1214} -> atıldı
+Örneklem: 296506 satır, 32 özellik, kategoriler ['BENIGN', 'RECON', 'BRUTEFORCE', 'WEB', 'MALWARE', 'DDOS'] (koşul C_seq_ack_yok)
+
+=== Bilinmeyen aile: DDOS  (eğitim 136532, kalibrasyon 15171, test bilinen 37927, bilinmeyen 21375) ===
+  TabM: bilinen testte macro-F1 0.8850 (131 s); bilinmeyenler şuna atandı: {'RECON': 0.7606, 'WEB': 0.1743, 'BRUTEFORCE': 0.0601, 'MALWARE': 0.0044, 'BENIGN': 0.0007}
+    TabM     msp       AUROC 0.710  FPR95 0.959  yakalanan 0.041  BENIGN'e kaçan 0.001  open-F1 0.635
+    TabM     entropy   AUROC 0.732  FPR95 0.975  yakalanan 0.025  BENIGN'e kaçan 0.000  open-F1 0.629
+    TabM     disagree  AUROC 0.888  FPR95 0.428  yakalanan 0.573  BENIGN'e kaçan 0.000  open-F1 0.771
+    TabM     energy    AUROC 0.619  FPR95 0.896  yakalanan 0.108  BENIGN'e kaçan 0.000  open-F1 0.659
+    bağımsız knn       AUROC 0.914  FPR95 0.243  yakalanan 0.756  BENIGN'e kaçan 0.001  open-F1 0.800
+  (146 s)
+
+=== Bilinmeyen aile: RECON  (eğitim 174230, kalibrasyon 19359, test bilinen 48398, bilinmeyen 10904) ===
+  TabM: bilinen testte macro-F1 0.8513 (205 s); bilinmeyenler şuna atandı: {'DDOS': 0.8024, 'BRUTEFORCE': 0.1801, 'WEB': 0.0168, 'BENIGN': 0.0006, 'MALWARE': 0.0002}
+    TabM     msp       AUROC 0.579  FPR95 0.976  yakalanan 0.024  BENIGN'e kaçan 0.001  open-F1 0.662
+    TabM     entropy   AUROC 0.576  FPR95 0.981  yakalanan 0.019  BENIGN'e kaçan 0.001  open-F1 0.660
+    TabM     disagree  AUROC 0.750  FPR95 0.586  yakalanan 0.415  BENIGN'e kaçan 0.000  open-F1 0.748
+    TabM     energy    AUROC 0.548  FPR95 0.926  yakalanan 0.073  BENIGN'e kaçan 0.001  open-F1 0.666
+    bağımsız knn       AUROC 0.888  FPR95 0.265  yakalanan 0.735  BENIGN'e kaçan 0.000  open-F1 0.777
+  (220 s)
+
+=== Bilinmeyen aile: WEB  (eğitim 182616, kalibrasyon 20291, test bilinen 50727, bilinmeyen 8575) ===
+  TabM: bilinen testte macro-F1 0.8955 (140 s); bilinmeyenler şuna atandı: {'BRUTEFORCE': 0.6934, 'DDOS': 0.2546, 'BENIGN': 0.0282, 'RECON': 0.0206, 'MALWARE': 0.0031}
+    TabM     msp       AUROC 0.851  FPR95 0.881  yakalanan 0.115  BENIGN'e kaçan 0.028  open-F1 0.716
+    TabM     entropy   AUROC 0.850  FPR95 0.884  yakalanan 0.113  BENIGN'e kaçan 0.027  open-F1 0.716
+    TabM     disagree  AUROC 0.824  FPR95 0.706  yakalanan 0.289  BENIGN'e kaçan 0.015  open-F1 0.753
+    TabM     energy    AUROC 0.845  FPR95 0.867  yakalanan 0.130  BENIGN'e kaçan 0.025  open-F1 0.716
+    bağımsız knn       AUROC 0.867  FPR95 0.662  yakalanan 0.331  BENIGN'e kaçan 0.017  open-F1 0.747
+  (156 s)
+
+=== Bilinmeyen aile: BRUTEFORCE  (eğitim 198521, kalibrasyon 22058, test bilinen 55145, bilinmeyen 4157) ===
+  TabM: bilinen testte macro-F1 0.9355 (338 s); bilinmeyenler şuna atandı: {'WEB': 0.4532, 'DDOS': 0.2827, 'RECON': 0.1544, 'BENIGN': 0.109, 'MALWARE': 0.0007}
+    TabM     msp       AUROC 0.804  FPR95 0.902  yakalanan 0.091  BENIGN'e kaçan 0.101  open-F1 0.763
+    TabM     entropy   AUROC 0.799  FPR95 0.907  yakalanan 0.089  BENIGN'e kaçan 0.102  open-F1 0.766
+    TabM     disagree  AUROC 0.846  FPR95 0.702  yakalanan 0.303  BENIGN'e kaçan 0.080  open-F1 0.799
+    TabM     energy    AUROC 0.769  FPR95 0.891  yakalanan 0.108  BENIGN'e kaçan 0.095  open-F1 0.764
+    bağımsız knn       AUROC 0.859  FPR95 0.622  yakalanan 0.376  BENIGN'e kaçan 0.085  open-F1 0.803
+  (354 s)
+
+=== Bilinmeyen aile: MALWARE  (eğitim 190834, kalibrasyon 21204, test bilinen 53011, bilinmeyen 6291) ===
+  TabM: bilinen testte macro-F1 0.8254 (160 s); bilinmeyenler şuna atandı: {'WEB': 0.6748, 'DDOS': 0.214, 'BRUTEFORCE': 0.1102, 'BENIGN': 0.0011}
+    TabM     msp       AUROC 0.841  FPR95 0.655  yakalanan 0.345  BENIGN'e kaçan 0.000  open-F1 0.724
+    TabM     entropy   AUROC 0.894  FPR95 0.646  yakalanan 0.354  BENIGN'e kaçan 0.000  open-F1 0.724
+    TabM     disagree  AUROC 0.873  FPR95 0.504  yakalanan 0.496  BENIGN'e kaçan 0.000  open-F1 0.731
+    TabM     energy    AUROC 0.926  FPR95 0.599  yakalanan 0.401  BENIGN'e kaçan 0.000  open-F1 0.724
+    bağımsız knn       AUROC 0.876  FPR95 0.491  yakalanan 0.508  BENIGN'e kaçan 0.000  open-F1 0.713
+  (175 s)
+
+Ailelerin ortalaması:
+                    auroc   fpr95  detect@cal  silent_benign@cal  open_f1@cal
+model    score                                                               
+bağımsız knn       0.8812  0.4568      0.5414             0.0206       0.7679
+TabM     disagree  0.8363  0.5851      0.4152             0.0191       0.7603
+         entropy   0.7701  0.8786      0.1200             0.0261       0.6992
+         msp       0.7570  0.8747      0.1231             0.0260       0.7001
+         energy    0.7416  0.8361      0.1641             0.0241       0.7058
+
+Çıktılar: outputs/dnn_edgeiiot/seeds/s1  (1091 s)

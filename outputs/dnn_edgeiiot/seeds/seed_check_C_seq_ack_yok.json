@@ -1,0 +1,703 @@
+{
+  "condition": "C_seq_ack_yok",
+  "note": "veri bölmesi sabit (seed 42); yalnızca model eğitim tohumu değişir",
+  "rows": [
+    {
+      "method": "CP-TabM v3 · seçilen",
+      "seed": 42,
+      "family": "DDOS",
+      "closed_f1": 0.8872,
+      "auroc": 0.7359,
+      "silent_benign@cal": 0.0007,
+      "detect@cal": 0.0825
+    },
+    {
+      "method": "CP-TabM · emin olma derecesi",
+      "seed": 42,
+      "family": "DDOS",
+      "closed_f1": 0.8872,
+      "auroc": 0.7328,
+      "silent_benign@cal": 0.0,
+      "detect@cal": 0.1131
+    },
+    {
+      "method": "CP-TabM v3 · seçilen",
+      "seed": 42,
+      "family": "RECON",
+      "closed_f1": 0.8425,
+      "auroc": 0.724,
+      "silent_benign@cal": 0.0005,
+      "detect@cal": 0.1882
+    },
+    {
+      "method": "CP-TabM · emin olma derecesi",
+      "seed": 42,
+      "family": "RECON",
+      "closed_f1": 0.8425,
+      "auroc": 0.6917,
+      "silent_benign@cal": 0.0001,
+      "detect@cal": 0.0702
+    },
+    {
+      "method": "CP-TabM v3 · seçilen",
+      "seed": 42,
+      "family": "WEB",
+      "closed_f1": 0.8869,
+      "auroc": 0.8767,
+      "silent_benign@cal": 0.0231,
+      "detect@cal": 0.2342
+    },
+    {
+      "method": "CP-TabM · emin olma derecesi",
+      "seed": 42,
+      "family": "WEB",
+      "closed_f1": 0.8869,
+      "auroc": 0.6435,
+      "silent_benign@cal": 0.0033,
+      "detect@cal": 0.0784
+    },
+    {
+      "method": "CP-TabM v3 · seçilen",
+      "seed": 42,
+      "family": "BRUTEFORCE",
+      "closed_f1": 0.9355,
+      "auroc": 0.8581,
+      "silent_benign@cal": 0.1037,
+      "detect@cal": 0.3281
+    },
+    {
+      "method": "CP-TabM · emin olma derecesi",
+      "seed": 42,
+      "family": "BRUTEFORCE",
+      "closed_f1": 0.9355,
+      "auroc": 0.665,
+      "silent_benign@cal": 0.0007,
+      "detect@cal": 0.21
+    },
+    {
+      "method": "CP-TabM v3 · seçilen",
+      "seed": 42,
+      "family": "MALWARE",
+      "closed_f1": 0.8221,
+      "auroc": 0.8384,
+      "silent_benign@cal": 0.0,
+      "detect@cal": 0.4959
+    },
+    {
+      "method": "CP-TabM · emin olma derecesi",
+      "seed": 42,
+      "family": "MALWARE",
+      "closed_f1": 0.8221,
+      "auroc": 0.5743,
+      "silent_benign@cal": 0.0,
+      "detect@cal": 0.1933
+    },
+    {
+      "method": "TabM · anlaşmazlık",
+      "seed": 42,
+      "family": "DDOS",
+      "closed_f1": 0.8877,
+      "auroc": 0.7795,
+      "silent_benign@cal": 0.0005,
+      "detect@cal": 0.4865
+    },
+    {
+      "method": "TabM · anlaşmazlık",
+      "seed": 42,
+      "family": "RECON",
+      "closed_f1": 0.8467,
+      "auroc": 0.896,
+      "silent_benign@cal": 0.0005,
+      "detect@cal": 0.6986
+    },
+    {
+      "method": "TabM · anlaşmazlık",
+      "seed": 42,
+      "family": "WEB",
+      "closed_f1": 0.8886,
+      "auroc": 0.8797,
+      "silent_benign@cal": 0.0231,
+      "detect@cal": 0.3083
+    },
+    {
+      "method": "TabM · anlaşmazlık",
+      "seed": 42,
+      "family": "BRUTEFORCE",
+      "closed_f1": 0.9325,
+      "auroc": 0.8612,
+      "silent_benign@cal": 0.1164,
+      "detect@cal": 0.357
+    },
+    {
+      "method": "TabM · anlaşmazlık",
+      "seed": 42,
+      "family": "MALWARE",
+      "closed_f1": 0.8199,
+      "auroc": 0.8894,
+      "silent_benign@cal": 0.0,
+      "detect@cal": 0.5112
+    },
+    {
+      "method": "TabM (alt tür) · anlaşmazlık",
+      "seed": 42,
+      "family": "DDOS",
+      "closed_f1": 0.8857,
+      "auroc": 0.7788,
+      "silent_benign@cal": 0.0003,
+      "detect@cal": 0.5375
+    },
+    {
+      "method": "TabM (alt tür) · anlaşmazlık",
+      "seed": 42,
+      "family": "RECON",
+      "closed_f1": 0.8518,
+      "auroc": 0.7465,
+      "silent_benign@cal": 0.0002,
+      "detect@cal": 0.4287
+    },
+    {
+      "method": "TabM (alt tür) · anlaşmazlık",
+      "seed": 42,
+      "family": "WEB",
+      "closed_f1": 0.8844,
+      "auroc": 0.8322,
+      "silent_benign@cal": 0.0091,
+      "detect@cal": 0.344
+    },
+    {
+      "method": "TabM (alt tür) · anlaşmazlık",
+      "seed": 42,
+      "family": "BRUTEFORCE",
+      "closed_f1": 0.9265,
+      "auroc": 0.8667,
+      "silent_benign@cal": 0.0164,
+      "detect@cal": 0.4063
+    },
+    {
+      "method": "TabM (alt tür) · anlaşmazlık",
+      "seed": 42,
+      "family": "MALWARE",
+      "closed_f1": 0.8259,
+      "auroc": 0.8842,
+      "silent_benign@cal": 0.0,
+      "detect@cal": 0.5165
+    },
+    {
+      "method": "kNN",
+      "seed": 42,
+      "family": "DDOS",
+      "closed_f1": NaN,
+      "auroc": 0.9145,
+      "silent_benign@cal": 0.0005,
+      "detect@cal": 0.7564
+    },
+    {
+      "method": "kNN",
+      "seed": 42,
+      "family": "RECON",
+      "closed_f1": NaN,
+      "auroc": 0.8885,
+      "silent_benign@cal": 0.0003,
+      "detect@cal": 0.7351
+    },
+    {
+      "method": "kNN",
+      "seed": 42,
+      "family": "WEB",
+      "closed_f1": NaN,
+      "auroc": 0.8674,
+      "silent_benign@cal": 0.0166,
+      "detect@cal": 0.3308
+    },
+    {
+      "method": "kNN",
+      "seed": 42,
+      "family": "BRUTEFORCE",
+      "closed_f1": NaN,
+      "auroc": 0.8589,
+      "silent_benign@cal": 0.1186,
+      "detect@cal": 0.3762
+    },
+    {
+      "method": "kNN",
+      "seed": 42,
+      "family": "MALWARE",
+      "closed_f1": NaN,
+      "auroc": 0.8765,
+      "silent_benign@cal": 0.0,
+      "detect@cal": 0.5083
+    },
+    {
+      "method": "TabM · anlaşmazlık",
+      "seed": 1,
+      "family": "DDOS",
+      "closed_f1": 0.8881,
+      "auroc": 0.7821,
+      "silent_benign@cal": 0.0005,
+      "detect@cal": 0.5833
+    },
+    {
+      "method": "TabM · anlaşmazlık",
+      "seed": 1,
+      "family": "RECON",
+      "closed_f1": 0.8455,
+      "auroc": 0.8504,
+      "silent_benign@cal": 0.0005,
+      "detect@cal": 0.5067
+    },
+    {
+      "method": "TabM · anlaşmazlık",
+      "seed": 1,
+      "family": "WEB",
+      "closed_f1": 0.8832,
+      "auroc": 0.8659,
+      "silent_benign@cal": 0.0139,
+      "detect@cal": 0.2957
+    },
+    {
+      "method": "TabM · anlaşmazlık",
+      "seed": 1,
+      "family": "BRUTEFORCE",
+      "closed_f1": 0.9364,
+      "auroc": 0.8902,
+      "silent_benign@cal": 0.1025,
+      "detect@cal": 0.3933
+    },
+    {
+      "method": "TabM · anlaşmazlık",
+      "seed": 1,
+      "family": "MALWARE",
+      "closed_f1": 0.8201,
+      "auroc": 0.9215,
+      "silent_benign@cal": 0.0,
+      "detect@cal": 0.5473
+    },
+    {
+      "method": "TabM (alt tür) · anlaşmazlık",
+      "seed": 1,
+      "family": "DDOS",
+      "closed_f1": 0.885,
+      "auroc": 0.8876,
+      "silent_benign@cal": 0.0003,
+      "detect@cal": 0.5728
+    },
+    {
+      "method": "TabM (alt tür) · anlaşmazlık",
+      "seed": 1,
+      "family": "RECON",
+      "closed_f1": 0.8513,
+      "auroc": 0.7498,
+      "silent_benign@cal": 0.0003,
+      "detect@cal": 0.4154
+    },
+    {
+      "method": "TabM (alt tür) · anlaşmazlık",
+      "seed": 1,
+      "family": "WEB",
+      "closed_f1": 0.8955,
+      "auroc": 0.8244,
+      "silent_benign@cal": 0.0155,
+      "detect@cal": 0.2887
+    },
+    {
+      "method": "TabM (alt tür) · anlaşmazlık",
+      "seed": 1,
+      "family": "BRUTEFORCE",
+      "closed_f1": 0.9355,
+      "auroc": 0.8462,
+      "silent_benign@cal": 0.0796,
+      "detect@cal": 0.3031
+    },
+    {
+      "method": "TabM (alt tür) · anlaşmazlık",
+      "seed": 1,
+      "family": "MALWARE",
+      "closed_f1": 0.8254,
+      "auroc": 0.8733,
+      "silent_benign@cal": 0.0,
+      "detect@cal": 0.4961
+    },
+    {
+      "method": "CP-TabM v3 · seçilen",
+      "seed": 1,
+      "family": "DDOS",
+      "closed_f1": 0.8888,
+      "auroc": 0.7241,
+      "silent_benign@cal": 0.0005,
+      "detect@cal": 0.1902
+    },
+    {
+      "method": "CP-TabM v3 · seçilen",
+      "seed": 1,
+      "family": "RECON",
+      "closed_f1": 0.8458,
+      "auroc": 0.7456,
+      "silent_benign@cal": 0.0005,
+      "detect@cal": 0.2535
+    },
+    {
+      "method": "CP-TabM v3 · seçilen",
+      "seed": 1,
+      "family": "WEB",
+      "closed_f1": 0.889,
+      "auroc": 0.8692,
+      "silent_benign@cal": 0.0231,
+      "detect@cal": 0.2508
+    },
+    {
+      "method": "CP-TabM v3 · seçilen",
+      "seed": 1,
+      "family": "BRUTEFORCE",
+      "closed_f1": 0.9334,
+      "auroc": 0.8443,
+      "silent_benign@cal": 0.1417,
+      "detect@cal": 0.2485
+    },
+    {
+      "method": "CP-TabM v3 · seçilen",
+      "seed": 1,
+      "family": "MALWARE",
+      "closed_f1": 0.8215,
+      "auroc": 0.8191,
+      "silent_benign@cal": 0.0,
+      "detect@cal": 0.5126
+    },
+    {
+      "method": "CP-TabM · emin olma derecesi",
+      "seed": 1,
+      "family": "DDOS",
+      "closed_f1": 0.8888,
+      "auroc": 0.7521,
+      "silent_benign@cal": 0.0008,
+      "detect@cal": 0.1295
+    },
+    {
+      "method": "CP-TabM · emin olma derecesi",
+      "seed": 1,
+      "family": "RECON",
+      "closed_f1": 0.8458,
+      "auroc": 0.5888,
+      "silent_benign@cal": 0.0001,
+      "detect@cal": 0.0006
+    },
+    {
+      "method": "CP-TabM · emin olma derecesi",
+      "seed": 1,
+      "family": "WEB",
+      "closed_f1": 0.889,
+      "auroc": 0.5716,
+      "silent_benign@cal": 0.0033,
+      "detect@cal": 0.0412
+    },
+    {
+      "method": "CP-TabM · emin olma derecesi",
+      "seed": 1,
+      "family": "BRUTEFORCE",
+      "closed_f1": 0.9334,
+      "auroc": 0.6763,
+      "silent_benign@cal": 0.0007,
+      "detect@cal": 0.1929
+    },
+    {
+      "method": "CP-TabM · emin olma derecesi",
+      "seed": 1,
+      "family": "MALWARE",
+      "closed_f1": 0.8215,
+      "auroc": 0.5024,
+      "silent_benign@cal": 0.0,
+      "detect@cal": 0.014
+    },
+    {
+      "method": "TabM · anlaşmazlık",
+      "seed": 2,
+      "family": "DDOS",
+      "closed_f1": 0.8849,
+      "auroc": 0.7826,
+      "silent_benign@cal": 0.0028,
+      "detect@cal": 0.5807
+    },
+    {
+      "method": "TabM · anlaşmazlık",
+      "seed": 2,
+      "family": "RECON",
+      "closed_f1": 0.843,
+      "auroc": 0.8909,
+      "silent_benign@cal": 0.0005,
+      "detect@cal": 0.7537
+    },
+    {
+      "method": "TabM · anlaşmazlık",
+      "seed": 2,
+      "family": "WEB",
+      "closed_f1": 0.884,
+      "auroc": 0.8906,
+      "silent_benign@cal": 0.0155,
+      "detect@cal": 0.3271
+    },
+    {
+      "method": "TabM · anlaşmazlık",
+      "seed": 2,
+      "family": "BRUTEFORCE",
+      "closed_f1": 0.9353,
+      "auroc": 0.8668,
+      "silent_benign@cal": 0.1013,
+      "detect@cal": 0.3859
+    },
+    {
+      "method": "TabM · anlaşmazlık",
+      "seed": 2,
+      "family": "MALWARE",
+      "closed_f1": 0.8254,
+      "auroc": 0.8823,
+      "silent_benign@cal": 0.0,
+      "detect@cal": 0.5931
+    },
+    {
+      "method": "TabM (alt tür) · anlaşmazlık",
+      "seed": 2,
+      "family": "DDOS",
+      "closed_f1": 0.8875,
+      "auroc": 0.8416,
+      "silent_benign@cal": 0.0003,
+      "detect@cal": 0.568
+    },
+    {
+      "method": "TabM (alt tür) · anlaşmazlık",
+      "seed": 2,
+      "family": "RECON",
+      "closed_f1": 0.8527,
+      "auroc": 0.7153,
+      "silent_benign@cal": 0.0004,
+      "detect@cal": 0.3833
+    },
+    {
+      "method": "TabM (alt tür) · anlaşmazlık",
+      "seed": 2,
+      "family": "WEB",
+      "closed_f1": 0.8942,
+      "auroc": 0.8007,
+      "silent_benign@cal": 0.0022,
+      "detect@cal": 0.2683
+    },
+    {
+      "method": "TabM (alt tür) · anlaşmazlık",
+      "seed": 2,
+      "family": "BRUTEFORCE",
+      "closed_f1": 0.9346,
+      "auroc": 0.8566,
+      "silent_benign@cal": 0.0529,
+      "detect@cal": 0.3291
+    },
+    {
+      "method": "TabM (alt tür) · anlaşmazlık",
+      "seed": 2,
+      "family": "MALWARE",
+      "closed_f1": 0.8228,
+      "auroc": 0.8805,
+      "silent_benign@cal": 0.0,
+      "detect@cal": 0.5083
+    },
+    {
+      "method": "CP-TabM v3 · seçilen",
+      "seed": 2,
+      "family": "DDOS",
+      "closed_f1": 0.8845,
+      "auroc": 0.736,
+      "silent_benign@cal": 0.0043,
+      "detect@cal": 0.5417
+    },
+    {
+      "method": "CP-TabM v3 · seçilen",
+      "seed": 2,
+      "family": "RECON",
+      "closed_f1": 0.8402,
+      "auroc": 0.7527,
+      "silent_benign@cal": 0.0005,
+      "detect@cal": 0.2703
+    },
+    {
+      "method": "CP-TabM v3 · seçilen",
+      "seed": 2,
+      "family": "WEB",
+      "closed_f1": 0.8915,
+      "auroc": 0.8723,
+      "silent_benign@cal": 0.0231,
+      "detect@cal": 0.2388
+    },
+    {
+      "method": "CP-TabM v3 · seçilen",
+      "seed": 2,
+      "family": "BRUTEFORCE",
+      "closed_f1": 0.9355,
+      "auroc": 0.8556,
+      "silent_benign@cal": 0.1032,
+      "detect@cal": 0.2978
+    },
+    {
+      "method": "CP-TabM v3 · seçilen",
+      "seed": 2,
+      "family": "MALWARE",
+      "closed_f1": 0.825,
+      "auroc": 0.816,
+      "silent_benign@cal": 0.0,
+      "detect@cal": 0.324
+    },
+    {
+      "method": "CP-TabM · emin olma derecesi",
+      "seed": 2,
+      "family": "DDOS",
+      "closed_f1": 0.8845,
+      "auroc": 0.757,
+      "silent_benign@cal": 0.0049,
+      "detect@cal": 0.5429
+    },
+    {
+      "method": "CP-TabM · emin olma derecesi",
+      "seed": 2,
+      "family": "RECON",
+      "closed_f1": 0.8402,
+      "auroc": 0.6208,
+      "silent_benign@cal": 0.0001,
+      "detect@cal": 0.001
+    },
+    {
+      "method": "CP-TabM · emin olma derecesi",
+      "seed": 2,
+      "family": "WEB",
+      "closed_f1": 0.8915,
+      "auroc": 0.581,
+      "silent_benign@cal": 0.0,
+      "detect@cal": 0.0324
+    },
+    {
+      "method": "CP-TabM · emin olma derecesi",
+      "seed": 2,
+      "family": "BRUTEFORCE",
+      "closed_f1": 0.9355,
+      "auroc": 0.6869,
+      "silent_benign@cal": 0.0209,
+      "detect@cal": 0.1903
+    },
+    {
+      "method": "CP-TabM · emin olma derecesi",
+      "seed": 2,
+      "family": "MALWARE",
+      "closed_f1": 0.825,
+      "auroc": 0.6113,
+      "silent_benign@cal": 0.0002,
+      "detect@cal": 0.1607
+    }
+  ],
+  "overall": {
+    "CP-TabM v3 · seçilen": {
+      "auroc": {
+        "mean": 0.8045,
+        "std": 0.0035,
+        "count": 3.0
+      },
+      "silent_benign@cal": {
+        "mean": 0.0283,
+        "std": 0.0042,
+        "count": 3.0
+      },
+      "detect@cal": {
+        "mean": 0.2971,
+        "std": 0.0348,
+        "count": 3.0
+      },
+      "closed_f1": {
+        "mean": 0.8753,
+        "std": 0.0004,
+        "count": 3.0
+      }
+    },
+    "CP-TabM · emin olma derecesi": {
+      "auroc": {
+        "mean": 0.6437,
+        "std": 0.0226,
+        "count": 3.0
+      },
+      "silent_benign@cal": {
+        "mean": 0.0023,
+        "std": 0.0025,
+        "count": 3.0
+      },
+      "detect@cal": {
+        "mean": 0.1314,
+        "std": 0.0549,
+        "count": 3.0
+      },
+      "closed_f1": {
+        "mean": 0.8753,
+        "std": 0.0004,
+        "count": 3.0
+      }
+    },
+    "TabM (alt tür) · anlaşmazlık": {
+      "auroc": {
+        "mean": 0.8256,
+        "std": 0.0093,
+        "count": 3.0
+      },
+      "silent_benign@cal": {
+        "mean": 0.0118,
+        "std": 0.007,
+        "count": 3.0
+      },
+      "detect@cal": {
+        "mean": 0.4244,
+        "std": 0.0193,
+        "count": 3.0
+      },
+      "closed_f1": {
+        "mean": 0.8773,
+        "std": 0.0021,
+        "count": 3.0
+      }
+    },
+    "TabM · anlaşmazlık": {
+      "auroc": {
+        "mean": 0.8619,
+        "std": 0.0007,
+        "count": 3.0
+      },
+      "silent_benign@cal": {
+        "mean": 0.0252,
+        "std": 0.0025,
+        "count": 3.0
+      },
+      "detect@cal": {
+        "mean": 0.4886,
+        "std": 0.0344,
+        "count": 3.0
+      },
+      "closed_f1": {
+        "mean": 0.8748,
+        "std": 0.0003,
+        "count": 3.0
+      }
+    },
+    "kNN": {
+      "auroc": {
+        "mean": 0.8812,
+        "std": NaN,
+        "count": 1.0
+      },
+      "silent_benign@cal": {
+        "mean": 0.0272,
+        "std": NaN,
+        "count": 1.0
+      },
+      "detect@cal": {
+        "mean": 0.5414,
+        "std": NaN,
+        "count": 1.0
+      },
+      "closed_f1": {
+        "mean": NaN,
+        "std": NaN,
+        "count": 0.0
+      }
+    }
+  }
+}
