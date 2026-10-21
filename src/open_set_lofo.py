@@ -88,11 +88,13 @@ def scores_from_members(P_members, logits=None):
 
 
 def rf_members(model, X, batch=20000):
-    """RF: (n, ağaç, C). Her ağaç sınıfları model.classes_ sırasıyla verir."""
+    """RF: (n, ağaç, C). Her ağaç sınıfları model.classes_ sırasıyla verir.
+    float32: tam CICIoT2023 testinde (147 bin satır x 100 ağaç x 7 sınıf) belleği yarıya indirir."""
     Xn = np.asarray(X, dtype=np.float32)
     parts = []
     for i in range(0, len(Xn), batch):
-        parts.append(np.stack([t.predict_proba(Xn[i:i + batch]) for t in model.estimators_], axis=1))
+        parts.append(np.stack([t.predict_proba(Xn[i:i + batch]) for t in model.estimators_],
+                              axis=1).astype(np.float32))
     return np.concatenate(parts)
 
 

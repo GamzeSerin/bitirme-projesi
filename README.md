@@ -79,7 +79,7 @@ docker compose --profile train run --rm train-dnn_edgeiiot
 
 Herkes kendi dalında aynı protokolü çalıştırır; sonuçlar böylece veri setleri arasında karşılaştırılabilir.
 
-- **Betik:** `src/open_set_lofo.py --dataset <dataset_id>` (veri setinden bağımsız). İç provayla yöntem ayarı: `src/cp_tune_dnn_edgeiiot.py --dataset <dataset_id>` (adı tarihsel; her veri setinde çalışır).
+- **Betik:** `src/open_set_lofo.py --dataset <dataset_id>` (veri setinden bağımsız). İç provayla yöntem ayarı: `src/cp_tune_dnn_edgeiiot.py --dataset <dataset_id>` (adı tarihsel; her veri setinde çalışır). İki sinyalli kural: `src/two_signal.py --dataset <dataset_id>`.
 - **Veri setine özel her şey tek yerde:** `src/common/open_set_registry.py`. Her kayıt şunları içerir:
   - yükleyici: `(data_file, cap, seed) -> X, fine, category, stats`,
   - aileler: `{aile: [kategoriler]}`; bir aile birden fazla kategori kapsayabilir (CICIoT2023'te FLOOD = DOS + DDOS),
@@ -90,7 +90,8 @@ Herkes kendi dalında aynı protokolü çalıştırır; sonuçlar böylece veri 
   - ekip bölmesi 80/20, ince etikete göre katmanlı, seed 42,
   - eğitimin %10'u kalibrasyon,
   - eşik yalnızca bilinen kalibrasyon verisinden seçilir (bilinenlerin %95'i kabul),
-  - koşul sütunları veri yüklendikten sonra çıkarılır (her koşulda satırlar aynı).
+  - koşul sütunları veri yüklendikten sonra çıkarılır (her koşulda satırlar aynı),
+  - RF ve DT **bütün veri setlerinde aynı sabit ayarlarla** eğitilir (`ablation_dnn_edgeiiot.build_models`: RF 100 ağaç, derinlik 40, max_features 0,5; DT derinlik 20, entropy). Ayarlar Edge-IIoTset'in asıl deneyinde seçildi; her veri setinde yeniden aranmaz ki skor farkı ayardan değil veriden gelsin.
 - **Ölçütler:** AUROC, AUPR, FPR95, yakalanan, yanlış reddedilen bilinen, sessiz BENIGN kaçışı, open-F1, bilinen F1.
 - **Doğrudan karşılaştırılan aileler** (`COMPARABLE`): FLOOD~DDOS, RECON, WEB, BRUTEFORCE. MIRAI, SPOOFING ve MALWARE veri setine özeldir.
 - **Backdoor:** her veri seti kendi yazarlarının gruplamasını korur (CICIoT2023: WEB, Edge-IIoTset: MALWARE).
@@ -98,9 +99,23 @@ Herkes kendi dalında aynı protokolü çalıştırır; sonuçlar böylece veri 
 ```bash
 python src/open_set_lofo.py --dataset dataset_23   --data-file <Merged*.csv klasörü> --models RF,TabM --condition C_ttl_yok
 python src/open_set_lofo.py --dataset dnn_edgeiiot --data-file <DNN-EdgeIIoT-dataset.csv> --models RF,TabM --condition C_seq_ack_yok
-python src/cp_tune_dnn_edgeiiot.py --dataset dataset_23 --data-file <klasör>     # CP-TabM, iç provayla
+python src/two_signal.py --dataset dataset_23 --data-file <klasör>               # iki sinyalli kural (aşağıda)
 # önce her komutu --quick ile deneyin (~1 dk)
 ```
+
+### İki sinyalli karar kuralı (DSS'in bilinmeyen katmanı)
+
+`src/two_signal.py --dataset <dataset_id>`: görülmemiş bir saldırının sessizce "normal trafik" diye geçirilmesini (ALLOW edilen görülmemiş saldırı) ölçer.
+
+1. **Alarm:** TabM üye anlaşmazlığı bilinen kalibrasyonun %95 eşiğini aşarsa "bilinmeyen".
+2. **BENIGN kontrolü:** alarm yoksa ve tahmin BENIGN ise, güven skoru eşiği aşan satır ALLOW edilmez, analiste gider. Eşik, kalibrasyondaki gerçek BENIGN trafiğin yalnızca **q** kadarını (analist bütçesi; %0,5–10) işaretleyecek şekilde seçilir.
+3. **Ortak DSS ölçütü:** `silent_benign` = ALLOW edilen görülmemiş saldırı oranı; her zaman bütçeyle (`benign_review`) birlikte raporlanır.
+
+Karşılaştırılan kontrol skorları: TabM'in kendi skorları (anlaşmazlık, MSP, enerji), CP-TabM BENIGN uzmanları ve kNN.
+
+**CP-TabM ayarı:** Edge-IIoTset'te iç provayla seçildi (`--cp-config`). Diğer veri setlerine **ayar aktarımı** ile taşınır: kör oranı 0,0625 (Edge-IIoTset iç provasında 5 ailenin 4'ünde seçilen değer), hedef veride ayar yapılmaz. JSON'daki `blind_frac_source` alanı bunu kaydeder.
+
+Edge-IIoTset sonucu ve önceden yazılan ölçütler: `data/dnn_edgeiiot/README.md` ("İki sinyalli karar kuralı").
 
 ## Nasıl çalıştırılır?
 

@@ -177,17 +177,8 @@ def main():
     with open(os.path.join(run_dir, "config.json"), "w", encoding="utf-8") as f:
         json.dump(cfg, f, indent=2)
 
-    all_models = shared.build_models(args.seed, args.n_jobs, args.gpu, args.quick)
-    if "TabM" in args.models.split(","):
-        try:
-            import rtdl_num_embeddings, tabm, torch  # noqa: F401
-            from tabm_classifier import TabMClassifier
-            all_models["TabM"] = TabMClassifier(max_epochs=3 if args.quick else 60,
-                                                random_state=args.seed)
-            print(f"TabM: torch {torch.__version__}, cihaz "
-                  f"{'cuda' if torch.cuda.is_available() else 'cpu'}")
-        except ImportError as e:
-            print(f"! TabM atlanıyor ({e}); kurulum: pip install tabm rtdl_num_embeddings")
+    all_models = shared.build_models(args.seed, args.n_jobs, args.gpu, args.quick,
+                                     tabm="TabM" in args.models.split(","))
     names = [m for m in args.models.split(",") if m in all_models]
     results = {}
     for name in names:
@@ -197,10 +188,9 @@ def main():
             results[name] = joblib.load(cache)
             continue
         print(f"{name} eğitiliyor...")
-        # TabM için hiperparametre araması yok (resmi varsayılanlar + early stopping)
-        run_args = argparse.Namespace(**{**vars(args), "tune": args.tune and name in shared.PARAM_SPACE})
+        # TabM için arama atlanır (model_ml.run_model: arama uzayı olmayan model)
         res = shared.run_model(name, all_models[name], Xtr, ytr, fine[idx_tr], Xte,
-                               len(classes), run_args)
+                               len(classes), args)
         joblib.dump(res.pop("model"), os.path.join(run_dir, "models", f"{name}.joblib"))
         joblib.dump(res, cache)
         results[name] = res
