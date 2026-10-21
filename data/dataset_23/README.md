@@ -147,3 +147,22 @@ BRUTEFORCE ve WEB ayrıca raporlanır (H2). Kural sınıf tahminini değiştirme
 - **Yöntem:** FP-TabM önerilmiyor; ana yöntem TabM + iki sinyalli kural. 3 tohumla sade TabM'in üye anlaşmazlığı (ort. AUROC 0,862 ± 0,001, Edge-IIoTset koşul C) CP-TabM v3'ten (0,805 ± 0,004) iyi; CP-TabM'in emin olma derecesi skoru ise sessiz BENIGN kaçışını %2,5'ten %0,2'ye indiriyor.
 - **Ortak LOFO aracı:** `src/open_set_lofo.py` ve `src/common/open_set_registry.py` (PR #6, birleşti). Bu veri setinin kaydı orada: yükleyici `model_ml.load_data`'yı sarmalar, `Number` ve çakışmaları atar; `Number` veride kalırsa deney durur. Aileler ve A/C/E koşulları bu README'deki tanımlarla aynı.
 - **Sıra:** yukarıdaki "Başarı ölçütleri" bölümünde. CP-TabM'in tam iç provası yerine ayar aktarımı (Gamze Serin'in önerisi, 21.10.2026).
+
+## TabM, kapalı küme (21.10.2026)
+
+TabM (Gorishniy vd., ICLR 2025; ekibin ortak `model_ml.py` bağlantısı, PR #7) resmi varsayılanlarla ve early stopping ile eğitildi; hiperparametre araması yok (Edge-IIoTset ile aynı). Diğer beş model önbellekten okundu, değişmedi. GPU: RTX 5060, eğitim 253 s.
+
+| Model | Test macro-F1 | %95 aralık |
+| --- | --- | --- |
+| DSS birleşik tahmini (RF+XGB+LGBM) | 0,712 | 0,702 – 0,722 |
+| XGB | 0,707 | 0,697 – 0,717 |
+| RF | 0,706 | 0,696 – 0,716 |
+| LGBM | 0,694 | 0,685 – 0,702 |
+| **TabM** | **0,663** | **0,658 – 0,669** |
+| DT | 0,644 | 0,635 – 0,651 |
+| LR | 0,552 | 0,549 – 0,556 |
+
+- **TabM ağaç modellerinin ~0,04 gerisinde** ve güven aralıkları çakışmıyor. Edge-IIoTset'te fark binde 3,5'ti. Fark en çok zor sınıflarda: WEB 0,18 (XGB 0,28), BRUTEFORCE 0,18 (XGB 0,31), RECON 0,74 (0,82). DDOS'ta ağaçlarla aynı (0,87).
+- OOF macro-F1 0,654; DSS oylama kuralının (en iyinin en fazla 0,05 altı) dışında kalıyor, DSS'in oylayanları değişmedi (RF, XGB, LGBM).
+- Early stopping: fold modelleri 12–26. epoch'ta, son model 6. epoch'ta durdu (ağırlıksız doğrulama kaybı, sabır 8).
+- **Görülmemiş saldırı deneyi için not:** TabM, ölçütlerde belirlendiği gibi resmi varsayılanlarla kullanılır; sonuçlardan sonra ayar yapılmaz. TabM'li sonuçlar yorumlanırken bu veri setinde sınıflandırıcı olarak ağaç modellerinden zayıf olduğu, özellikle WEB ve BRUTEFORCE'ta, göz önünde tutulur.

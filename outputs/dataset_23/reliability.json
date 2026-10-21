@@ -208,5 +208,47 @@
       "recall": 0.99299,
       "f1": 0.987517
     }
+  },
+  "TabM": {
+    "BENIGN": {
+      "precision": 0.724769,
+      "recall": 0.799375,
+      "f1": 0.760246
+    },
+    "RECON": {
+      "precision": 0.86425,
+      "recall": 0.618758,
+      "f1": 0.721185
+    },
+    "SPOOFING": {
+      "precision": 0.944012,
+      "recall": 0.843972,
+      "f1": 0.891193
+    },
+    "BRUTEFORCE": {
+      "precision": 0.100998,
+      "recall": 0.526642,
+      "f1": 0.169492
+    },
+    "WEB": {
+      "precision": 0.086694,
+      "recall": 0.560556,
+      "f1": 0.150164
+    },
+    "DOS": {
+      "precision": 0.570258,
+      "recall": 0.870708,
+      "f1": 0.68916
+    },
+    "DDOS": {
+      "precision": 0.944792,
+      "recall": 0.771988,
+      "f1": 0.849693
+    },
+    "MIRAI": {
+      "precision": 0.997438,
+      "recall": 0.997469,
+      "f1": 0.997453
+    }
   }
 }
