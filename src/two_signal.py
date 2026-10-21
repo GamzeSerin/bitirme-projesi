@@ -85,6 +85,8 @@ def main():
         if mseed != args.seed:
             args.out_dir = os.path.join(args.out_dir, f"s{mseed}")
     os.makedirs(args.out_dir, exist_ok=True)
+    # Dosya adı da tohumu taşır: --out-dir elle verilse bile tohumlar birbirini silmez
+    tag = args.condition if mseed == args.seed else f"{args.condition}_seed{mseed}"
     epochs = 3 if args.quick else 60
     t_start = time.perf_counter()
 
@@ -162,7 +164,7 @@ def main():
             print(f"  {g:14s} " + "  ".join(f"q={x['q']:.3f}: kaçış {x['silent_benign']:.4f} / "
                                             f"inceleme {x['benign_review']:.4f}" for x in r if x["q"] in (0.01, 0.05)))
         if args.save_rows:
-            np.savez_compressed(os.path.join(args.out_dir, f"rows_{fam}_{args.condition}.npz"),
+            np.savez_compressed(os.path.join(args.out_dir, f"rows_{fam}_{tag}.npz"),
                                 test_index=idx_te, category=category[idx_te], is_unknown=is_unk,
                                 tabm_pred=np.array(known)[pred_te], alarm=alarm, tau_alarm=tau1,
                                 **{f"score_{k}": v for k, v in G_te.items()})
@@ -178,10 +180,10 @@ def main():
            "primary_guard": PRIMARY_GUARD,
            "families": details, "results": rows, "mean_over_families": mean.to_dict(orient="records"),
            "runtime_seconds": round(time.perf_counter() - t_start, 1)}
-    with open(os.path.join(args.out_dir, f"two_signal_{args.condition}.json"), "w", encoding="utf-8") as f:
+    with open(os.path.join(args.out_dir, f"two_signal_{tag}.json"), "w", encoding="utf-8") as f:
         json.dump(out, f, indent=2, ensure_ascii=False)
     plot(mean, df, spec["name"], args.condition,
-         os.path.join(args.out_dir, f"fig_two_signal_{args.dataset}_{args.condition}.png"), len(families))
+         os.path.join(args.out_dir, f"fig_two_signal_{args.dataset}_{tag}.png"), len(families))
     print("\nAilelerin ortalaması (q = analist bütçesi):")
     print(mean.pivot_table(index="guard", columns="q", values=["silent_benign", "benign_review"]).round(4).to_string())
     print(f"\nÇıktılar: {args.out_dir}  ({time.perf_counter() - t_start:.0f} s)")
