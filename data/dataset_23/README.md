@@ -166,3 +166,75 @@ TabM (Gorishniy vd., ICLR 2025; ekibin ortak `model_ml.py` bağlantısı, PR #7)
 - OOF macro-F1 0,654; DSS oylama kuralının (en iyinin en fazla 0,05 altı) dışında kalıyor, DSS'in oylayanları değişmedi (RF, XGB, LGBM).
 - Early stopping: fold modelleri 12–26. epoch'ta, son model 6. epoch'ta durdu (ağırlıksız doğrulama kaybı, sabır 8).
 - **Görülmemiş saldırı deneyi için not:** TabM, ölçütlerde belirlendiği gibi resmi varsayılanlarla kullanılır; sonuçlardan sonra ayar yapılmaz. TabM'li sonuçlar yorumlanırken bu veri setinde sınıflandırıcı olarak ağaç modellerinden zayıf olduğu, özellikle WEB ve BRUTEFORCE'ta, göz önünde tutulur.
+
+## Görülmemiş saldırı deneyi: sonuçlar ve ölçütlerle değerlendirme (22.10.2026)
+
+> Yukarıdaki protokol, hipotezler ve başarı ölçütleri değiştirilmeden uygulandı. Bu bölüm sonuçlardan SONRA yazıldı; ölçütler sonuçlara göre yeniden yorumlanmadı.
+
+**Çalıştırılanlar** (hepsi ortak araçlarla, ekip bölmesi seed 42):
+
+- Ablation, ortak format: `src/ablation_dnn_edgeiiot.py --dataset dataset_23` → `outputs/dataset_23/ablation/ablation.json`
+- LOFO: RF ve TabM, A / C / E (tohum 42); koşul C'de tohum 1 ve 2 (`--model-seed`, dosya eki `_seed1`, `_seed2`); CP-TabM, C, ayar aktarımı (kör oranı 0,0625) → `outputs/dataset_23/open_set/`
+- İki sinyalli kural: koşul C, tohum 42, 1, 2 → `outputs/dataset_23/two_signal/` (satır dosyaları `.npz` yeniden üretilebilir, depoya girmez)
+
+### Ablation, ortak format
+
+Ortak araç sabit ayarlarla çalışır (RF 100 ağaç, derinlik 40, `max_features` 0,5; DT derinlik 20; sınıf ağırlığı yok; 300 bootstrap). Bu yüzden değerler yukarıdaki ilk tablodan biraz düşük; ekip karşılaştırmasında bu tablo esas alınır.
+
+| Koşul | RF test macro-F1 [%95 GA] | DT | En güçlü tek sütun |
+| --- | --- | --- | --- |
+| A: tam (36) | 0,695 [0,683 – 0,706] | 0,633 | `Max` 0,46 |
+| C: −`Time_To_Live` (35) | 0,691 (−0,004) | 0,628 | |
+| E: + −`IAT`, `Rate`, `Header_Length` (32) | 0,670 (−0,025) | 0,629 | |
+
+Bulgu aynı: kısayol adayları çıkınca kayıp en fazla 0,025. **Not:** E'de farklı kategoriden birebir aynı satır oranı %0,03'ten %32'ye çıkıyor; yani `IAT`/`Rate` sızıntı olmasa da satırları ayıran asıl bilgilerden biri. E bu yüzden "kısayolsuz" değil "bilgisi azaltılmış" bir koşul olarak yorumlanır.
+
+### LOFO, koşul C (3 tohum ortalaması ± sapma, eşik: kalibrasyonda bilinenlerin %95'i)
+
+| Görülmemiş aile | RF anlaşmazlık AUROC | RF sessiz BENIGN | TabM en iyi skor AUROC | TabM sessiz BENIGN (o skorla) | kNN AUROC (tohum 42) |
+| --- | --- | --- | --- | --- | --- |
+| FLOOD | 0,857 ± 0,006 | %0,2 | anlaşmazlık 0,770 ± 0,025 | %0 | **0,977** |
+| MIRAI | 0,960 ± 0,010 | %0 | anlaşmazlık 0,959 ± 0,037 | %0 | 0,912 |
+| RECON | 0,921 ± 0,000 | **%30,0** | enerji **0,978 ± 0,007** | **%4,6** | 0,829 |
+| SPOOFING | 0,950 ± 0,001 | %10,2 | enerji 0,972 ± 0,002 | %9,3 | 0,810 |
+| WEB | 0,910 ± 0,003 | %5,6 | enerji 0,950 ± 0,004 | %12,9 | 0,753 |
+| BRUTEFORCE | 0,922 ± 0,003 | %9,4 | anlaşmazlık 0,945 ± 0,005 | %20,8 | 0,799 |
+
+- Tohumlar arası sapma küçük (AUROC'ta çoğunlukla < 0,01); sonuçlar tohuma bağlı değil.
+- RF ve TabM birbirini tamamlıyor: TabM enerjisi RECON'daki sessiz kaçışı %30'dan %5'e indiriyor; WEB ve BRUTEFORCE'ta ise RF daha az sessiz kaçış veriyor.
+- TabM'in msp, entropi ve enerjisi görülmemiş MIRAI'de rastgele düzeyde (AUROC 0,52 – 0,56); MIRAI'yi yalnız üye anlaşmazlığı yakalıyor. FLOOD'da da TabM skorları zayıf (≤ 0,77); en iyisi kNN.
+
+### Hipotezler
+
+| | Sonuç | Kanıt |
+| --- | --- | --- |
+| H1 | **Kısmen desteklendi** | RF: anlaşmazlık msp'den 6/6 ailede yüksek (ortalama +0,08). TabM: anlaşmazlık msp ve enerjiden yalnız 3/6 ailede (FLOOD, MIRAI, BRUTEFORCE) yüksek; RECON, SPOOFING, WEB'de enerji daha iyi. Edge-IIoTset'in aksine burada enerji çökmüyor. |
+| H2 | **Desteklenmedi** | WEB ve BRUTEFORCE'ta en iyi AUROC 0,95 ve 0,95 (< 0,75 beklenmişti). Sessiz kaçış TabM'de yüksek (%13, %21), ama RF'de en yüksek kaçış RECON'da (%30). Kapalı kümedeki zorluk (F1 0,28 / 0,31) bilinmeyen tespitine taşınmıyor. |
+| H3 | **Desteklendi** | Görülmemiş MIRAI'nin %99,9'u DDOS/DOS'a atanıyor (güvenli hata, RF tohum 42); sessiz BENIGN kaçışı her modelde ve tohumda %0. |
+| H4 | **Desteklendi** (gerekçesi kısmen değil) | FLOOD için RF/TabM skorlarının AUROC'u görece düşük (0,86 / 0,77), sessiz kaçış ≤ %0,2. Ancak görülmemiş FLOOD MIRAI'ye değil çoğunlukla RECON'a atanıyor (RF: RECON %56, MIRAI %27). |
+| H5 | **Desteklendi** | Aile başına en iyi skorun (kNN dahil) ortalama AUROC'u, tohum 42: RF A 0,940 → E 0,951; TabM A 0,967 → E 0,965. Fark ≤ 0,011 (sınır 0,05). Edge-IIoTset'teki çöküş burada yok. |
+
+### Başarı ölçütü: iki sinyalli kural (ana yöntem)
+
+Koşul C, 6 ailenin ortalaması, 3 tohum; kontrol skoru **TabM enerjisi** (önceden seçilen). Değer: ALLOW edilen görülmemiş saldırı oranı (sessiz BENIGN kaçışı).
+
+| Bütçe q | Yalnız alarm | İki sinyalli | Oran | Gerçekleşen inceleme |
+| --- | --- | --- | --- | --- |
+| %1 (ikincil, Edge-IIoTset ana ölçütü) | %12,8 ± 2,0 | %12,4 ± 1,9 | 0,97 | %0,73 |
+| **%5 (ana)** | **%12,8 ± 2,0** | **%10,8 ± 1,7** | **0,85** | **%3,6** |
+| %10 | %12,8 ± 2,0 | %9,2 ± 1,2 | 0,72 | %7,0 |
+
+Tohum başına (q = %5): 14,1 → 11,9; 13,8 → 11,8; 10,5 → 8,9. Aile başına (q = %5, 3 tohum ort.): RECON 23,6 → 19,8; WEB 20,1 → 17,0; BRUTEFORCE 20,8 → 17,2; SPOOFING 12,4 → 11,1; FLOOD ve MIRAI 0 → 0. msp ile (ikincil) sonuç benzer: %10,5.
+
+**Karar: kısmi başarı.** Oran her tohumda azalıyor (ortalama −2,0 puan, tohumlar arası sapma kadar ama her tohumda aynı yönde), fakat hiçbir bütçede yarıya inmiyor. Gerçekleşen inceleme oranı bütçenin altında (q = %5'te %3,6; ölçütteki "en fazla 1 puan fark"tan 1,4 puan aşağıda, yani analist bütçeyi aşmıyor ama tam kullanmıyor; eşik kalibrasyonda seçildiği için test BENIGN dağılımı biraz farklı). Kural sınıf tahminini değiştirmez; bilinen sınıflardaki macro-F1 aynıdır.
+
+**Yorum:** Kalan kaçış neredeyse tamamen RECON, WEB ve BRUTEFORCE'tan geliyor; bu aileler normal trafiğe benziyor ve BENIGN sanılan satırları enerji de normalden ayıramıyor. Not: TabM enerjisi *alarm* skoru olarak RECON'da sessiz kaçışı %4,6'ya indiriyor (LOFO tablosu); iki sinyalli kuralda alarm üye anlaşmazlığından verildiği için bu güç kullanılmıyor. Bu, kuralın kurgusunun (önceden sabitlendi) bir sonucu olarak raporlanır, sonradan değiştirilmez.
+
+### CP-TabM, ayar aktarımı (betimleyici, başarı iddiası yok)
+
+Koşul C, tohum 42, aile başına en iyi skor: ortalama AUROC CP-TabM 0,936, sade TabM 0,919; sessiz kaçış %7,2 ve %7,4. Farkın çoğu FLOOD'dan geliyor (0,866 / 0,744); diğer ailelerde iki model benzer. Aktarılan ayar bu veri setinde çalışıyor, ama sade TabM'e belirgin bir üstünlük yok (Edge-IIoTset'teki sonuçla tutarlı).
+
+### Henüz yapılmayanlar
+
+- `--keep-conflicts` duyarlılık kontrolü (protokolde bir kez öngörüldü).
+- Güvenli hata oranı yalnız atama dağılımı olarak raporlandı (`unknown_assigned_to`); DSS kararına (BLOCK/ALERT) çevrilmiş hali henüz hesaplanmadı.
