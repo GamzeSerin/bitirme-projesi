@@ -236,7 +236,7 @@ Koşul C, tohum 42, aile başına en iyi skor: ortalama AUROC CP-TabM 0,936, sad
 
 ### Duyarlılık kontrolü: çakışan etiketli satırlar korunarak (`--keep-conflicts`, koşul C, tohum 42)
 
-Ortak LOFO aracında bu seçenek olmadığı için ortak dosyalar değiştirilmeden, yükleyici yalnız bu çalıştırmada `drop_conflicts=False` ile çağrıldı (sonuç dosyasında `data_preparation.sensitivity: keep_conflicts`). Örnekleme sonrası satır sayısı 738.144'ten 738.479'a çıkıyor (+335, %0,05). Çıktılar: `outputs/dataset_23/open_set/open_set_lofo_{RF,TabM}_C_ttl_yok_keep_conflicts.*`.
+Ortak LOFO aracında bu seçenek olmadığı için ortak dosyalar değiştirilmeden, yükleyici yalnız bu çalıştırmada `drop_conflicts=False` ile çağrıldı (sonuç dosyasında `data_preparation.sensitivity: keep_conflicts`). Geçici betik: `python src/lofo_keep_conflicts.py --dataset dataset_23 --data-file data/dataset_23 --condition C_ttl_yok --models RF --tag-suffix _keep_conflicts` (TabM için `--models TabM`); ortak araca `--keep-conflicts` seçeneği eklenince kaldırılacak. Örnekleme sonrası satır sayısı 738.144'ten 738.479'a çıkıyor (+335, %0,05). Çıktılar: `outputs/dataset_23/open_set/open_set_lofo_{RF,TabM}_C_ttl_yok_keep_conflicts.*`.
 
 | Görülmemiş aile | RF anlaşmazlık AUROC (3 tohum aralığı → korunarak) | TabM en iyi skor AUROC (aralık → korunarak) | TabM sessiz BENIGN (aralık → korunarak) |
 | --- | --- | --- | --- |
