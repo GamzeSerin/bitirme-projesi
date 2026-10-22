@@ -183,11 +183,11 @@ Ortak araç sabit ayarlarla çalışır (RF 100 ağaç, derinlik 40, `max_featur
 
 | Koşul | RF test macro-F1 [%95 GA] | DT | En güçlü tek sütun |
 | --- | --- | --- | --- |
-| A: tam (36) | 0,695 [0,683 – 0,706] | 0,633 | `Max` 0,46 |
+| A: tam (36) | 0,695 [0,683 – 0,706] | 0,633 | `Max` 0,46, `Tot sum` 0,45 |
 | C: −`Time_To_Live` (35) | 0,691 (−0,004) | 0,628 | |
 | E: + −`IAT`, `Rate`, `Header_Length` (32) | 0,670 (−0,025) | 0,629 | |
 
-Bulgu aynı: kısayol adayları çıkınca kayıp en fazla 0,025. **Not:** E'de farklı kategoriden birebir aynı satır oranı %0,03'ten %32'ye çıkıyor; yani `IAT`/`Rate` sızıntı olmasa da satırları ayıran asıl bilgilerden biri. E bu yüzden "kısayolsuz" değil "bilgisi azaltılmış" bir koşul olarak yorumlanır.
+Bulgu aynı: kısayol adayları çıkınca kayıp en fazla 0,025. **Not:** E'de, kalan 32 sütunda farklı kategoriden birebir aynı olan satır oranı %0,03'ten %32'ye çıkıyor (A ve C'de çakışmalar zaten atılmıştı; E'de sütun azalınca yeniden oluşuyor). Bunun büyük kısmı DoS ↔ DDoS arasında (DDoS ince etiketlerinin %81–90'ı, DoS'un %53–77'si), yani aynı FLOOD ailesinin içinde. Ama BENIGN satırlarının %26'sı ve RECON, WEB, BRUTEFORCE etiketlerinin %4–18'i de başka kategoriyle çakışıyor. `IAT`/`Rate` sızıntı değil, satırları ayıran gerçek bilgi taşıyor; E bu yüzden "kısayolsuz" değil "bilgisi azaltılmış" bir koşul olarak yorumlanır.
 
 ### LOFO, koşul C (3 tohum ortalaması ± sapma, eşik: kalibrasyonda bilinenlerin %95'i)
 
@@ -235,6 +235,8 @@ Tohum başına (q = %5): 14,1 → 11,9; 13,8 → 11,8; 10,5 → 8,9. Aile başı
 Koşul C, tohum 42, aile başına en iyi skor: ortalama AUROC CP-TabM 0,936, sade TabM 0,919; sessiz kaçış %7,2 ve %7,4. Farkın çoğu FLOOD'dan geliyor (0,866 / 0,744); diğer ailelerde iki model benzer. Aktarılan ayar bu veri setinde çalışıyor, ama sade TabM'e belirgin bir üstünlük yok (Edge-IIoTset'teki sonuçla tutarlı).
 
 ### Henüz yapılmayanlar
+
+- A ve E koşulları yalnız tohum 42 ile çalıştı (3 tohum ana koşul C'de; protokoldeki "3 tohum" ifadesi ana koşul için uygulandı). A/E'deki tek tohumlu farklar, C'deki tohum sapmasıyla (AUROC'ta çoğunlukla < 0,01) birlikte okunur.
 
 - `--keep-conflicts` duyarlılık kontrolü (protokolde bir kez öngörüldü).
 - Güvenli hata oranı yalnız atama dağılımı olarak raporlandı (`unknown_assigned_to`); DSS kararına (BLOCK/ALERT) çevrilmiş hali henüz hesaplanmadı.
