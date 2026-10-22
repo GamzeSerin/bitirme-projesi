@@ -234,9 +234,23 @@ Tohum başına (q = %5): 14,1 → 11,9; 13,8 → 11,8; 10,5 → 8,9. Aile başı
 
 Koşul C, tohum 42, aile başına en iyi skor: ortalama AUROC CP-TabM 0,936, sade TabM 0,919; sessiz kaçış %7,2 ve %7,4. Farkın çoğu FLOOD'dan geliyor (0,866 / 0,744); diğer ailelerde iki model benzer. Aktarılan ayar bu veri setinde çalışıyor, ama sade TabM'e belirgin bir üstünlük yok (Edge-IIoTset'teki sonuçla tutarlı).
 
+### Duyarlılık kontrolü: çakışan etiketli satırlar korunarak (`--keep-conflicts`, koşul C, tohum 42)
+
+Ortak LOFO aracında bu seçenek olmadığı için ortak dosyalar değiştirilmeden, yükleyici yalnız bu çalıştırmada `drop_conflicts=False` ile çağrıldı (sonuç dosyasında `data_preparation.sensitivity: keep_conflicts`). Örnekleme sonrası satır sayısı 738.144'ten 738.479'a çıkıyor (+335, %0,05). Çıktılar: `outputs/dataset_23/open_set/open_set_lofo_{RF,TabM}_C_ttl_yok_keep_conflicts.*`.
+
+| Görülmemiş aile | RF anlaşmazlık AUROC (3 tohum aralığı → korunarak) | TabM en iyi skor AUROC (aralık → korunarak) | TabM sessiz BENIGN (aralık → korunarak) |
+| --- | --- | --- | --- |
+| FLOOD | 0,852–0,864 → 0,862 | anlaşmazlık 0,744–0,794 → 0,769 | %0 → %0 |
+| MIRAI | 0,950–0,970 → 0,967 | anlaşmazlık 0,917–0,989 → 0,979 | %0 → %0 |
+| RECON | 0,921 → 0,927 | enerji 0,970–0,983 → 0,973 | %3,8–5,1 → %6,8 |
+| SPOOFING | 0,949–0,950 → 0,956 | enerji 0,970–0,973 → 0,974 | %8,1–11,7 → %8,1 |
+| WEB | 0,906–0,913 → 0,919 | enerji 0,946–0,954 → 0,953 | %12,7–13,2 → %9,7 |
+| BRUTEFORCE | 0,921–0,926 → 0,920 | anlaşmazlık 0,940–0,950 → 0,948 | %19,8–22,3 → %11,4 |
+
+**Sonuç: bulgular değişmiyor.** Aile başına en iyi skorların AUROC'u her iki modelde de tohum aralığının içinde ya da 0,01'den az dışında; hipotez kararları (H1–H5) aynı kalıyor. RF'nin msp skoru çakışmalar korununca biraz düşüyor (ör. RECON 0,825 → 0,798), çünkü aynı satıra iki etiket verilince model daha az emin oluyor. TabM'in sessiz kaçış oranları birkaç puan oynuyor (BRUTEFORCE %21 → %11); satırların yalnız %0,05'i değiştiği için bu, çakışmaların etkisinden çok TabM'in eşik yakınındaki eğitim rastlantısallığını gösteriyor ve küçük ailelerde (testte BRUTEFORCE 202, WEB 378 satır) sessiz kaçış oranlarının tek tohumla değil tohum aralığıyla okunması gerektiğini doğruluyor.
+
 ### Henüz yapılmayanlar
 
 - A ve E koşulları yalnız tohum 42 ile çalıştı (3 tohum ana koşul C'de; protokoldeki "3 tohum" ifadesi ana koşul için uygulandı). A/E'deki tek tohumlu farklar, C'deki tohum sapmasıyla (AUROC'ta çoğunlukla < 0,01) birlikte okunur.
 
-- `--keep-conflicts` duyarlılık kontrolü (protokolde bir kez öngörüldü).
 - Güvenli hata oranı yalnız atama dağılımı olarak raporlandı (`unknown_assigned_to`); DSS kararına (BLOCK/ALERT) çevrilmiş hali henüz hesaplanmadı.
