@@ -1,0 +1,265 @@
+{
+  "dataset_id": "dataset_23",
+  "condition": "C_ttl_yok",
+  "seeds": [
+    42,
+    1,
+    2
+  ],
+  "guard": "tabm_energy",
+  "q": 0.05,
+  "classifier": "TabM (two_signal.py satır dosyaları)",
+  "groups": "review = alarm; block/alert = alarm yok, ciddiyeti 3 / 1-2 olan saldırı sanıldı (güvenli hata); silent = alarm yok, BENIGN sanıldı",
+  "mean_over_seeds": {
+    "FLOOD": {
+      "review": 0.5577,
+      "block": 0.2088,
+      "alert": 0.2335,
+      "silent": 0.0,
+      "safe_conf": 0.4418,
+      "silent_q0.05": 0.0
+    },
+    "MIRAI": {
+      "review": 0.746,
+      "block": 0.2535,
+      "alert": 0.0005,
+      "silent": 0.0,
+      "safe_conf": 0.2452,
+      "silent_q0.05": 0.0
+    },
+    "RECON": {
+      "review": 0.5364,
+      "block": 0.0,
+      "alert": 0.2275,
+      "silent": 0.236,
+      "safe_conf": 0.0392,
+      "silent_q0.05": 0.1976
+    },
+    "SPOOFING": {
+      "review": 0.7669,
+      "block": 0.0,
+      "alert": 0.1092,
+      "silent": 0.1239,
+      "safe_conf": 0.029,
+      "silent_q0.05": 0.111
+    },
+    "WEB": {
+      "review": 0.4524,
+      "block": 0.0,
+      "alert": 0.3466,
+      "silent": 0.2011,
+      "safe_conf": 0.0926,
+      "silent_q0.05": 0.1702
+    },
+    "BRUTEFORCE": {
+      "review": 0.5363,
+      "block": 0.0,
+      "alert": 0.2558,
+      "silent": 0.2079,
+      "safe_conf": 0.0825,
+      "silent_q0.05": 0.1716
+    },
+    "ORTALAMA": {
+      "review": 0.5993,
+      "block": 0.0771,
+      "alert": 0.1955,
+      "silent": 0.1281,
+      "safe_conf": 0.1551,
+      "silent_q0.05": 0.1084
+    }
+  },
+  "per_seed": {
+    "FLOOD": [
+      {
+        "seed": 42,
+        "n_unknown": 97528,
+        "review": 0.5632331227955049,
+        "block": 0.1664137478467722,
+        "alert": 0.27035312935772293,
+        "silent": 0.0,
+        "safe_conf": 0.43676687720449514,
+        "silent_q0.05": 0.0
+      },
+      {
+        "seed": 1,
+        "n_unknown": 97528,
+        "review": 0.5349745714051349,
+        "block": 0.23872118776146337,
+        "alert": 0.2262734804363875,
+        "silent": 3.076039701419079e-05,
+        "safe_conf": 0.4638770404396686,
+        "silent_q0.05": 2e-05
+      },
+      {
+        "seed": 2,
+        "n_unknown": 97528,
+        "review": 0.5748400459355262,
+        "block": 0.221249282257403,
+        "alert": 0.2039106718070708,
+        "silent": 0.0,
+        "safe_conf": 0.4248318431629891,
+        "silent_q0.05": 0.0
+      }
+    ],
+    "MIRAI": [
+      {
+        "seed": 42,
+        "n_unknown": 24000,
+        "review": 0.4985833333333333,
+        "block": 0.5011666666666666,
+        "alert": 0.00025,
+        "silent": 0.0,
+        "safe_conf": 0.49954166666666666,
+        "silent_q0.05": 0.0
+      },
+      {
+        "seed": 1,
+        "n_unknown": 24000,
+        "review": 0.7921666666666667,
+        "block": 0.20716666666666667,
+        "alert": 0.0006666666666666666,
+        "silent": 0.0,
+        "safe_conf": 0.187375,
+        "silent_q0.05": 0.0
+      },
+      {
+        "seed": 2,
+        "n_unknown": 24000,
+        "review": 0.9473333333333334,
+        "block": 0.05204166666666667,
+        "alert": 0.000625,
+        "silent": 0.0,
+        "safe_conf": 0.048625,
+        "silent_q0.05": 0.0
+      }
+    ],
+    "RECON": [
+      {
+        "seed": 42,
+        "n_unknown": 10443,
+        "review": 0.4966005936991286,
+        "block": 0.0,
+        "alert": 0.19659101790673178,
+        "silent": 0.3068083883941396,
+        "safe_conf": 0.01991764818538734,
+        "silent_q0.05": 0.2483
+      },
+      {
+        "seed": 1,
+        "n_unknown": 10443,
+        "review": 0.46164895145073254,
+        "block": 0.0,
+        "alert": 0.2796131379871684,
+        "silent": 0.258737910562099,
+        "safe_conf": 0.028440103418557884,
+        "silent_q0.05": 0.22417
+      },
+      {
+        "seed": 2,
+        "n_unknown": 10443,
+        "review": 0.6510581250598487,
+        "block": 0.0,
+        "alert": 0.20635832615148902,
+        "silent": 0.14258354878866225,
+        "safe_conf": 0.06932873695298286,
+        "silent_q0.05": 0.12018
+      }
+    ],
+    "SPOOFING": [
+      {
+        "seed": 42,
+        "n_unknown": 7078,
+        "review": 0.7609494207403221,
+        "block": 0.0,
+        "alert": 0.12404634077423,
+        "silent": 0.11500423848544787,
+        "safe_conf": 0.04422153150607516,
+        "silent_q0.05": 0.10215
+      },
+      {
+        "seed": 1,
+        "n_unknown": 7078,
+        "review": 0.7472449844588867,
+        "block": 0.0,
+        "alert": 0.1058208533484035,
+        "silent": 0.1469341621927098,
+        "safe_conf": 0.01313930488838655,
+        "silent_q0.05": 0.13648
+      },
+      {
+        "seed": 2,
+        "n_unknown": 7078,
+        "review": 0.7925967787510596,
+        "block": 0.0,
+        "alert": 0.0977677309974569,
+        "silent": 0.10963549025148348,
+        "safe_conf": 0.02952811528680418,
+        "silent_q0.05": 0.09424
+      }
+    ],
+    "WEB": [
+      {
+        "seed": 42,
+        "n_unknown": 378,
+        "review": 0.4444444444444444,
+        "block": 0.0,
+        "alert": 0.328042328042328,
+        "silent": 0.2275132275132275,
+        "safe_conf": 0.08465608465608465,
+        "silent_q0.05": 0.19841
+      },
+      {
+        "seed": 1,
+        "n_unknown": 378,
+        "review": 0.3439153439153439,
+        "block": 0.0,
+        "alert": 0.4576719576719577,
+        "silent": 0.1984126984126984,
+        "safe_conf": 0.0873015873015873,
+        "silent_q0.05": 0.16402
+      },
+      {
+        "seed": 2,
+        "n_unknown": 378,
+        "review": 0.5687830687830688,
+        "block": 0.0,
+        "alert": 0.25396825396825395,
+        "silent": 0.17724867724867724,
+        "safe_conf": 0.10582010582010581,
+        "silent_q0.05": 0.14815
+      }
+    ],
+    "BRUTEFORCE": [
+      {
+        "seed": 42,
+        "n_unknown": 202,
+        "review": 0.5643564356435643,
+        "block": 0.0,
+        "alert": 0.2376237623762376,
+        "silent": 0.19801980198019803,
+        "safe_conf": 0.07425742574257425,
+        "silent_q0.05": 0.16337
+      },
+      {
+        "seed": 1,
+        "n_unknown": 202,
+        "review": 0.4405940594059406,
+        "block": 0.0,
+        "alert": 0.33663366336633666,
+        "silent": 0.22277227722772278,
+        "safe_conf": 0.1485148514851485,
+        "silent_q0.05": 0.18317
+      },
+      {
+        "seed": 2,
+        "n_unknown": 202,
+        "review": 0.6039603960396039,
+        "block": 0.0,
+        "alert": 0.19306930693069307,
+        "silent": 0.20297029702970298,
+        "safe_conf": 0.024752475247524754,
+        "silent_q0.05": 0.16832
+      }
+    ]
+  }
+}
