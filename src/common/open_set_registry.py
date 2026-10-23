@@ -3,7 +3,8 @@
 Her veri seti burada BİR kez tanımlanır; deney betikleri (open_set_lofo.py, cp_tune_dnn_edgeiiot.py)
 veri setine özel hiçbir şey bilmez. Yeni bir veri seti eklemek için gereken her şey:
 
-  loader(data_file, cap, seed) -> X, fine, category, stats
+  loader(data_file, cap, seed, drop_conflicts=True) -> X, fine, category, stats
+      drop_conflicts=False yalnızca duyarlılık analizi içindir (--keep-conflicts): ekip protokolü atar
       X        : pandas DataFrame, float32, yalnızca model özellikleri
       fine     : np.array, ince etiketler (büyük harf)
       category : np.array, ortak kategoriler (common/taxonomy.py)
@@ -21,9 +22,9 @@ Kayıtta adı geçen ama veride olmayan bir sütun deneyi DURDURUR (yazım hatas
 """
 
 
-def _edge_loader(data_file, cap, seed):
+def _edge_loader(data_file, cap, seed, drop_conflicts=True):
     from model_dnn_edgeiiot import load_data
-    return load_data(data_file, cap, seed, drop_conflicts=True)
+    return load_data(data_file, cap, seed, drop_conflicts=drop_conflicts)
 
 
 def _edge_category(label):
@@ -37,11 +38,11 @@ def _edge_category(label):
 CICIOT_PROTOCOL_DROP = ("Number",)
 
 
-def _ciciot_loader(data_file, cap, seed):
+def _ciciot_loader(data_file, cap, seed, drop_conflicts=True):
     # Kişi 1'in yükleyicisi: data_file = Merged*.csv dosyalarının bulunduğu klasör
     from model_ml import load_data
     X, fine, category, stats = load_data(data_file, cap, seed, drop_features=CICIOT_PROTOCOL_DROP,
-                                         drop_conflicts=True)
+                                         drop_conflicts=drop_conflicts)
     leaked = [c for c in CICIOT_PROTOCOL_DROP if c in X.columns]
     if leaked:  # yükleyici değişirse sessizce geri gelmesin
         raise SystemExit(f"CICIoT2023: protokol gereği atılması gereken sütun(lar) veride: {leaked}")
