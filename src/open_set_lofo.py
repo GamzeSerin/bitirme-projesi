@@ -212,6 +212,9 @@ def main():
     p.add_argument("--label-level", default="category", choices=["category", "fine"],
                    help="fine: alt türlerle eğit, tahmini kategoriye topla")
     p.add_argument("--tag-suffix", default="", help="Çıktı adına ek (ör. _fp05)")
+    p.add_argument("--keep-conflicts", action="store_true",
+                   help="DUYARLILIK ANALİZİ: aynı özelliklerle farklı etiket taşıyan satırlar atılmaz "
+                        "(ekip protokolü atar). Çıktı adına _keep_conflicts eklenir.")
     p.add_argument("--quick", action="store_true")
     args = p.parse_args()
     if args.quick:
@@ -223,7 +226,13 @@ def main():
     t_start = time.perf_counter()
 
     # Satırlar tam koşulda seçilir, sütunlar sonra çıkarılır: her koşulda eğitim/test satırları aynıdır.
-    X, fine, category, data_stats = spec["loader"](args.data_file, args.cap, args.seed)
+    if args.keep_conflicts:
+        X, fine, category, data_stats = spec["loader"](args.data_file, args.cap, args.seed, drop_conflicts=False)
+        data_stats = dict(data_stats, sensitivity="keep_conflicts (çakışan etiketli satırlar korundu)")
+        if "_keep_conflicts" not in args.tag_suffix:
+            args.tag_suffix += "_keep_conflicts"
+    else:
+        X, fine, category, data_stats = spec["loader"](args.data_file, args.cap, args.seed)
     X, drop = registry.apply_condition(X, spec, args.condition)
     benign = spec["benign"]
     present = [c for c in COMMON_CLASSES if c in set(category)] + sorted(set(category) - set(COMMON_CLASSES))
