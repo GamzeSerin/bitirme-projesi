@@ -236,7 +236,7 @@ Koşul C, tohum 42, aile başına en iyi skor: ortalama AUROC CP-TabM 0,936, sad
 
 ### Duyarlılık kontrolü: çakışan etiketli satırlar korunarak (`--keep-conflicts`, koşul C, tohum 42)
 
-Ortak LOFO aracında bu seçenek olmadığı için ortak dosyalar değiştirilmeden, yükleyici yalnız bu çalıştırmada `drop_conflicts=False` ile çağrıldı (sonuç dosyasında `data_preparation.sensitivity: keep_conflicts`). Geçici betik: `python src/lofo_keep_conflicts.py --dataset dataset_23 --data-file data/dataset_23 --condition C_ttl_yok --models RF --tag-suffix _keep_conflicts` (TabM için `--models TabM`); ortak araca `--keep-conflicts` seçeneği eklenince kaldırılacak. Örnekleme sonrası satır sayısı 738.144'ten 738.479'a çıkıyor (+335, %0,05). Çıktılar: `outputs/dataset_23/open_set/open_set_lofo_{RF,TabM}_C_ttl_yok_keep_conflicts.*`.
+Yükleyici `drop_conflicts=False` ile çağrıldı (sonuç dosyasında `data_preparation.sensitivity: keep_conflicts`). Komut: `python src/open_set_lofo.py --dataset dataset_23 --data-file data/dataset_23 --condition C_ttl_yok --models RF --keep-conflicts` (TabM için `--models TabM`). Sonuçlar ilk olarak geçici bir betikle üretildi; ortak araca bu seçenek eklenince (PR #13) RF yeniden çalıştırıldı ve çıktı sayısal olarak birebir aynı çıktı, geçici betik kaldırıldı. Örnekleme sonrası satır sayısı 738.144'ten 738.479'a çıkıyor (+335, %0,05). Çıktılar: `outputs/dataset_23/open_set/open_set_lofo_{RF,TabM}_C_ttl_yok_keep_conflicts.*`.
 
 | Görülmemiş aile | RF anlaşmazlık AUROC (3 tohum aralığı → korunarak) | TabM en iyi skor AUROC (aralık → korunarak) | TabM sessiz BENIGN (aralık → korunarak) |
 | --- | --- | --- | --- |
@@ -249,8 +249,25 @@ Ortak LOFO aracında bu seçenek olmadığı için ortak dosyalar değiştirilme
 
 **Sonuç: bulgular değişmiyor.** Aile başına en iyi skorların AUROC'u her iki modelde de tohum aralığının içinde ya da 0,01'den az dışında; hipotez kararları (H1–H5) aynı kalıyor. RF'nin msp skoru çakışmalar korununca biraz düşüyor (ör. RECON 0,825 → 0,798), çünkü aynı satıra iki etiket verilince model daha az emin oluyor. TabM'in sessiz kaçış oranları birkaç puan oynuyor (BRUTEFORCE %21 → %11); satırların yalnız %0,05'i değiştiği için bu, çakışmaların etkisinden çok TabM'in eşik yakınındaki eğitim rastlantısallığını gösteriyor ve küçük ailelerde (testte BRUTEFORCE 202, WEB 378 satır) sessiz kaçış oranlarının tek tohumla değil tohum aralığıyla okunması gerektiğini doğruluyor.
 
+### Güvenli hata: görülmemiş saldırının DSS'teki akıbeti (23.10.2026)
+
+Protokolde tanımlanan güvenli hata oranı, iki sinyalli kuralın satır dosyalarından yeniden eğitim yapmadan hesaplandı (`python src/safe_error.py --dataset dataset_23` → `outputs/dataset_23/two_signal/safe_error_C_ttl_yok.json`). Sınıflandırıcı TabM, koşul C, 3 tohum ortalaması. Her görülmemiş saldırı satırı tek bir gruba düşer; satır toplamı %100:
+
+| Görülmemiş aile | İnceleme (alarm) | Güvenli hata: ciddiyet 3 (BLOCK) | Güvenli hata: ciddiyet 1–2 (ALERT) | Sessiz kaçış, yalnız alarm | Sessiz kaçış, q = %5 |
+| --- | --- | --- | --- | --- | --- |
+| FLOOD | %55,8 | %20,9 | %23,4 | %0 | %0 |
+| MIRAI | %74,6 | %25,4 | %0,1 | %0 | %0 |
+| RECON | %53,6 | %0 | %22,8 | %23,6 | %19,8 |
+| SPOOFING | %76,7 | %0 | %10,9 | %12,4 | %11,1 |
+| WEB | %45,2 | %0 | %34,7 | %20,1 | %17,0 |
+| BRUTEFORCE | %53,6 | %0 | %25,6 | %20,8 | %17,2 |
+| **Ortalama** | **%59,9** | **%7,7** | **%19,6** | **%12,8** | **%10,8** |
+
+- Görülmemiş saldırıların **%87'si sessizce geçmiyor**: %60'ı analiste gidiyor, %27'si başka bir saldırı sanılıp yine BLOCK ya da ALERT alıyor.
+- FLOOD ve MIRAI hiç kaçmıyor; tanınmadıklarında bile çoğunlukla başka bir flood sanılıp BLOCK alıyor (H3).
+- Tehlikeli kısım (sessiz kaçış) neredeyse tamamen RECON, WEB ve BRUTEFORCE'tan geliyor. İki sinyalli kural yalnız BENIGN denen kararlara dokunduğu için güvenli hata oranlarını değiştirmiyor; yalnız sessiz kaçışı azaltıyor.
+- **Güven çekincesi:** DSS, ciddiyet olasılığı 0,80'in altındaysa BLOCK/ALERT yerine LOG_MONITOR verir. Güvenli hatanın en yüksek olasılığı ≥ 0,80 olan kısmı (kesin BLOCK/ALERT, alt sınır) ortalama %15,5; kalan ~%12 en az LOG_MONITOR alır, hiçbiri ALLOW almaz. Aynı şekilde sessiz kaçışın düşük güvenli kısmı DSS'te ALLOW yerine LOG_MONITOR alır; ortak ölçüt (ALLOW edilen görülmemiş saldırı) bu yüzden bir üst sınırdır.
+
 ### Henüz yapılmayanlar
 
 - A ve E koşulları yalnız tohum 42 ile çalıştı (3 tohum ana koşul C'de; protokoldeki "3 tohum" ifadesi ana koşul için uygulandı). A/E'deki tek tohumlu farklar, C'deki tohum sapmasıyla (AUROC'ta çoğunlukla < 0,01) birlikte okunur.
-
-- Güvenli hata oranı yalnız atama dağılımı olarak raporlandı (`unknown_assigned_to`); DSS kararına (BLOCK/ALERT) çevrilmiş hali henüz hesaplanmadı.
