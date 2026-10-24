@@ -1,7 +1,10 @@
-"""Kişi 3 - Edge-IIoTset maliyet analizi: modeller ve DSS için başarı-maliyet ödünleşimi.
+"""Maliyet analizi: modeller ve DSS için başarı-maliyet ödünleşimi (ekip ortak aracı, --dataset; adı tarihsel).
 
-Asıl deneyde (model_dnn_edgeiiot.py) eğitilip work dizinine kaydedilen modeller yüklenir;
-yeniden eğitim yapılmaz. Aynı veri hazırlığı ve aynı 80/20 bölme yeniden kurulur.
+Asıl deneyde (Edge-IIoTset: model_dnn_edgeiiot.py, CICIoT2023: model_ml.py) eğitilip work dizinine
+kaydedilen modeller yüklenir; yeniden eğitim yapılmaz. Aynı veri hazırlığı ve aynı 80/20 bölme yeniden
+kurulur. Veri setine özel her şey (yükleyici, resmi model dosyalarını bulma, protokol gereği atılan
+sütunlar, donanım notu) src/common/open_set_registry.py'de. Yeniden kurulan özellikler manifest'teki
+özelliklerle birebir aynı değilse ya da config.json kayıtla çelişiyorsa durur.
 
 Ölçülenler (her model için):
   - Eğitim süresi: asıl deneyden (metrics.json); donanım manifest'te
@@ -14,11 +17,13 @@ DSS:
     değerlendirilir; seçim YALNIZCA OOF macro-F1'e göre yapılır, test yalnızca raporlanır.
   - Her alt küme için: OOF ve test macro-F1, ALLOW edilen saldırı, yanlış alarm, gecikme toplamı.
 
-Çıktı: outputs/dnn_edgeiiot/cost/ (cost.json + fig_cost_f1_vs_latency_dnn_edgeiiot.png)
+Çıktı: outputs/<dataset>/cost/ (cost.json + fig_cost_f1_vs_latency_<dataset>.png)
 
-Kullanım (Kaggle, asıl deneyle aynı oturumda; ~10-15 dk):
+Kullanım (asıl deneyin work dizini olan makinede; ~10-15 dk):
   python src/cost_dnn_edgeiiot.py --data-file "<.../DNN-EdgeIIoT-dataset.csv>" \\
       --work-dir /kaggle/working/work/dnn_edgeiiot
+  python src/cost_dnn_edgeiiot.py --dataset dataset_23 --data-file data/dataset_23 \\
+      --run-dir work/dataset_23/<çalıştırma>
 """
 
 import argparse
@@ -38,11 +43,10 @@ import numpy as np
 from sklearn.metrics import f1_score
 from sklearn.model_selection import train_test_split
 
-from common import contract
+from common import open_set_registry as registry
 from common.taxonomy import COMMON_CLASSES, SEVERITY
-from model_dnn_edgeiiot import load_data
 
-OUT_DIR = "outputs/dnn_edgeiiot/cost"
+OUT_DIR = "outputs/dnn_edgeiiot/cost"  # Edge-IIoTset varsayılanı (geriye uyumluluk)
 DSS_CANDIDATES = ["DT", "RF", "XGB", "LGBM", "TabM"]
 
 
@@ -142,7 +146,7 @@ def dss_eval(voters, oof, test, ytr, yte, classes, decide):
     }
 
 
-def plot(rows, dss_best, out_dir):
+def plot(rows, dss_best, out_dir, dataset_id="dnn_edgeiiot", dataset_name="Edge-IIoTset"):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -160,36 +164,56 @@ def plot(rows, dss_best, out_dir):
     ax.set_xscale("log")
     ax.set_xlabel("Tek paket gecikmesi, CPU tek çekirdek (ms, medyan; log ölçek)")
     ax.set_ylabel("Test macro-F1")
-    lo = min(r["test_macro_f1"] for r in rows.values() if r["test_macro_f1"] > 0.9)
-    ax.set_ylim(lo - 0.003, 1.0)
-    ax.set_title("Edge-IIoTset: başarı – gecikme ödünleşimi (LR grafik dışında)", fontsize=11)
+    ys = [r["test_macro_f1"] for r in rows.values()] + ([dss_best["test_macro_f1"]] if dss_best else [])
+    pad = max(0.003, 0.08 * (max(ys) - min(ys)))
+    ax.set_ylim(min(ys) - pad, min(1.0, max(ys) + pad))
+    ax.set_title(f"{dataset_name}: başarı – gecikme ödünleşimi (LR grafik dışında)", fontsize=11)
     ax.grid(color="#e1e0d9", linewidth=0.8)
     ax.spines[["top", "right"]].set_visible(False)
     fig.tight_layout()
-    fig.savefig(os.path.join(out_dir, "fig_cost_f1_vs_latency_dnn_edgeiiot.png"), dpi=200)
+    fig.savefig(os.path.join(out_dir, f"fig_cost_f1_vs_latency_{dataset_id}.png"), dpi=200)
     plt.close(fig)
 
 
 # ---------------------------------------------------------------- ana akış
 def main():
     p = argparse.ArgumentParser()
-    p.add_argument("--data-file", required=True)
-    p.add_argument("--work-dir", default="/kaggle/working/work/dnn_edgeiiot")
+    p.add_argument("--dataset", default="dnn_edgeiiot", choices=list(registry.DATASETS))
+    p.add_argument("--data-file", required=True, help="Edge-IIoTset: CSV; CICIoT2023: Merged*.csv klasörü")
+    p.add_argument("--work-dir", default=None, help="Varsayılan Edge: /kaggle/working/work/dnn_edgeiiot, "
+                                                     "diğerleri: work/<dataset>")
     p.add_argument("--run-dir", default=None, help="Belirtilmezse work-dir altındaki en yeni çalıştırma")
-    p.add_argument("--out-dir", default=OUT_DIR)
-    p.add_argument("--metrics", default="outputs/dnn_edgeiiot/metrics.json")
+    p.add_argument("--out-dir", default=None, help="Varsayılan outputs/<dataset>/cost")
+    p.add_argument("--metrics", default=None, help="Varsayılan outputs/<dataset>/metrics.json")
+    p.add_argument("--manifest", default=None, help="Varsayılan outputs/<dataset>/manifest.json")
+    p.add_argument("--hardware-note", default=None, help="Varsayılan: kayıttaki not")
     p.add_argument("--batch-rows", type=int, default=10000)
     p.add_argument("--single-n", type=int, default=300)
     args = p.parse_args()
+    spec = registry.get(args.dataset)
+    base = f"outputs/{args.dataset}"
+    args.work_dir = args.work_dir or ("/kaggle/working/work/dnn_edgeiiot" if args.dataset == "dnn_edgeiiot"
+                                      else f"work/{args.dataset}")
+    args.out_dir = args.out_dir or f"{base}/cost"
+    args.metrics = args.metrics or f"{base}/metrics.json"
+    args.manifest = args.manifest or f"{base}/manifest.json"
     os.makedirs(args.out_dir, exist_ok=True)
     import main as dss_main                             # decide() ve eşikler main.py'den
 
     run_dir = args.run_dir or find_run_dir(args.work_dir)
     cfg = json.load(open(os.path.join(run_dir, "config.json")))
     print(f"Çalıştırma: {run_dir}\n  ayarlar: {cfg}")
-    drop = [f for f in str(cfg.get("drop_features") or "").split(",") if f]
-    X, fine, category, _ = load_data(args.data_file, cfg["cap"], cfg["seed"], drop,
-                                     cfg["drop_conflicts"], cfg.get("keep_misaligned", False))
+    # config.json kayıttaki veri hazırlığıyla aynı olmalı (yükleyici kayıttan geliyor)
+    drop = sorted(f for f in str(cfg.get("drop_features") or "").split(",") if f)
+    if drop != sorted(spec["protocol_drop"]) or cfg.get("keep_misaligned", False):
+        raise SystemExit(f"Çalıştırmanın veri hazırlığı kayıtla çelişiyor: drop_features={drop} "
+                         f"(kayıt {spec['protocol_drop']}), keep_misaligned={cfg.get('keep_misaligned', False)}")
+    X, fine, category, _ = spec["loader"](args.data_file, cfg["cap"], cfg["seed"],
+                                          drop_conflicts=bool(cfg["drop_conflicts"]))
+    manifest = json.load(open(args.manifest, encoding="utf-8"))
+    if list(X.columns) != list(manifest["features"]):
+        raise SystemExit(f"Yeniden kurulan özellikler manifest'tekilerle aynı değil:\n  veri: {list(X.columns)}"
+                         f"\n  manifest: {manifest['features']}")
     classes = [c for c in COMMON_CLASSES if c in set(category)]
     y = np.array([classes.index(c) for c in category])
     idx_tr, idx_te = train_test_split(np.arange(len(y)), test_size=0.2, stratify=fine,
@@ -200,9 +224,10 @@ def main():
     metrics = json.load(open(args.metrics)) if os.path.exists(args.metrics) else {}
 
     rows, oof, test = {}, {}, {}
-    for path in sorted(glob.glob(os.path.join(run_dir, "models", "*.joblib"))):
-        name = os.path.splitext(os.path.basename(path))[0]
-        res = joblib.load(os.path.join(run_dir, f"result_{name}.joblib"))
+    files = spec["model_files"](run_dir, manifest)
+    print("Model dosyaları: " + ", ".join(f"{n}={os.path.basename(m)}" for n, (m, _) in files.items()))
+    for name, (path, res_path) in files.items():
+        res = joblib.load(res_path)
         oof[name], test[name] = res["oof_proba"], res["test_proba"]
         t0 = time.perf_counter()
         model = joblib.load(path)
@@ -259,19 +284,21 @@ def main():
               f"  toplu {e['batch_ms_per_1k_sum']:.1f} ms/1k")
 
     out = {
-        "dataset_id": "dnn_edgeiiot", "run_dir": os.path.basename(run_dir), "config": cfg,
+        "dataset_id": args.dataset, "run_dir": os.path.basename(run_dir), "config": cfg,
+        "model_files": {n: os.path.basename(m) for n, (m, _) in files.items()},
         "protocol": "Modeller asıl deneyden yüklendi. CPU ölçümleri tek iş parçacığıyla (adil karşılaştırma); "
                     "toplu tahmin 10.000 test satırı, 3 tekrarın medyanı; tek paket gecikmesi 300 tekil "
                     "tahminin medyanı ve %95'lik dilimi. DSS oylayıcı seçimi yalnızca OOF macro-F1 ile; "
                     "kural: OOF'ta en iyiye ≤0,001 yakın alt kümeler arasından en hızlısı.",
-        "hardware_note": "Kaggle (CPU tek çekirdek; GPU sütunları NVIDIA T4)",
+        "hardware_note": args.hardware_note or spec["hardware_note"],
+        "gpu": manifest.get("runtime", {}).get("gpu"),
         "models": rows,
         "dss": {"current_rule": current_rule, "best_oof": best_oof,
                 "fastest_near_best_oof": fastest_near, "all_subsets": subsets},
     }
     with open(os.path.join(args.out_dir, "cost.json"), "w", encoding="utf-8") as f:
         json.dump(out, f, indent=2, ensure_ascii=False)
-    plot({k: v for k, v in rows.items() if k != "LR"}, fastest_near, args.out_dir)
+    plot({k: v for k, v in rows.items() if k != "LR"}, fastest_near, args.out_dir, args.dataset, spec["name"])
     print(f"Çıktılar: {args.out_dir}")
 
 
