@@ -79,7 +79,9 @@ def _ciciot_model_files(run_dir, manifest):
     for name in names:
         found = []
         for gpu in dict.fromkeys([gpu_first, not gpu_first]):
-            model = build_models(manifest.get("seed", 42), -1, gpu, False, tabm=(name == "TabM")).get(name)
+            # tohum koşularında (model_ml --model-seed) modeller model tohumuyla kurulmuştu
+            seed = manifest.get("model_seed", manifest.get("seed", 42))
+            model = build_models(seed, -1, gpu, False, tabm=(name == "TabM")).get(name)
             if model is None:
                 continue
             key = model_key(name, model)
