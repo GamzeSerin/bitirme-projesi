@@ -267,7 +267,7 @@ Protokolde tanımlanan güvenli hata oranı, iki sinyalli kuralın satır dosyal
 - Görülmemiş saldırıların **%87'si sessizce geçmiyor**: %60'ı analiste gidiyor, %27'si başka bir saldırı sanılıp yine BLOCK ya da ALERT alıyor.
 - FLOOD ve MIRAI hiç kaçmıyor; tanınmadıklarında bile çoğunlukla başka bir flood sanılıp BLOCK alıyor (H3).
 - Tehlikeli kısım (sessiz kaçış) neredeyse tamamen RECON, WEB ve BRUTEFORCE'tan geliyor. İki sinyalli kural yalnız BENIGN denen kararlara dokunduğu için güvenli hata oranlarını değiştirmiyor; yalnız sessiz kaçışı azaltıyor.
-- **Güven çekincesi:** DSS, ciddiyet olasılığı 0,80'in altındaysa BLOCK/ALERT yerine LOG_MONITOR verir. Güvenli hatanın en yüksek olasılığı ≥ 0,80 olan kısmı (kesin BLOCK/ALERT, alt sınır) ortalama %15,5; kalan ~%12 en az LOG_MONITOR alır, hiçbiri ALLOW almaz. Aynı şekilde sessiz kaçışın düşük güvenli kısmı DSS'te ALLOW yerine LOG_MONITOR alır; ortak ölçüt (ALLOW edilen görülmemiş saldırı) bu yüzden bir üst sınırdır.
+- **Güven çekincesi:** DSS, ciddiyet olasılığı 0,80'in altındaysa BLOCK/ALERT yerine LOG_MONITOR verir. Asıl DSS RF, XGB ve LGBM'in birleşimini kullanır; buradaki hesap TabM'in olasılıklarıyla yapıldığı için **TabM'i sınıflandırıcı alan bir DSS'i** anlatır. Böyle bir DSS'te güvenli hatanın en yüksek olasılığı ≥ 0,80 olan kısmı (kesin BLOCK/ALERT, alt sınır) ortalama %15,5; kalan ~%12 en az LOG_MONITOR alır, hiçbiri ALLOW almaz. Aynı şekilde sessiz kaçışın düşük güvenli kısmı DSS'te ALLOW yerine LOG_MONITOR alır; ortak ölçüt (ALLOW edilen görülmemiş saldırı) bu yüzden bir üst sınırdır.
 
 ### Henüz yapılmayanlar
 
