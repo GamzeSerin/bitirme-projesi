@@ -64,6 +64,17 @@ def _edge_model_files(run_dir, manifest):
     return out
 
 
+def alias_model_ml_into_main():
+    """model_ml.py betik olarak çalıştığı için kaydettiği modellerde kendi sınıf/fonksiyonları
+    (EarlyStopping, signed_log1p ...) '__main__.<ad>' diye geçiyor; başka bir betikten joblib.load edilince
+    bulunamıyor. model_ml'deki karşılıklarını __main__'e takma ad olarak ekler (var olanlara dokunmaz)."""
+    import __main__
+    import model_ml
+    for name, obj in vars(model_ml).items():
+        if callable(obj) and getattr(obj, "__module__", None) == "model_ml" and not hasattr(__main__, name):
+            setattr(__main__, name, obj)
+
+
 def _ciciot_model_files(run_dir, manifest):
     """CICIoT2023 (model_ml.py): dosya adları model tanımının anahtarını taşır (models/RF_4deb3c.joblib) ve
     aynı modelin eski sürümleri klasörde durabilir. Resmi anahtar, asıl deneyin kurduğu modelden
@@ -73,6 +84,7 @@ def _ciciot_model_files(run_dir, manifest):
     import glob
     import os
     from model_ml import build_models, model_key
+    alias_model_ml_into_main()  # dosyalar açılabilsin (Gülsü'nün tam çalıştırmasında XGB'de bulundu)
     gpu_first = bool(manifest.get("runtime", {}).get("gpu_used_for_xgb", False))
     names = manifest.get("models") or []
     out = {}
