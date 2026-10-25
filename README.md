@@ -79,7 +79,7 @@ docker compose --profile train run --rm train-dnn_edgeiiot
 
 Herkes kendi dalında aynı protokolü çalıştırır; sonuçlar böylece veri setleri arasında karşılaştırılabilir.
 
-- **Betik:** `src/open_set_lofo.py --dataset <dataset_id>` (veri setinden bağımsız). İç provayla yöntem ayarı: `src/cp_tune_dnn_edgeiiot.py --dataset <dataset_id>` (adı tarihsel; her veri setinde çalışır). İki sinyalli kural: `src/two_signal.py --dataset <dataset_id>`.
+- **Betik:** `src/open_set_lofo.py --dataset <dataset_id>` (veri setinden bağımsız). İç provayla yöntem ayarı: `src/cp_tune_dnn_edgeiiot.py --dataset <dataset_id>` (adı tarihsel; her veri setinde çalışır). İki sinyalli kural: `src/two_signal.py --dataset <dataset_id>`. Kısayol ablation'ı (kapalı küme, aynı A/C/E koşulları, sabit RF/DT ayarları, bootstrap aralıkları): `src/ablation_dnn_edgeiiot.py --dataset <dataset_id>` (adı tarihsel). Maliyet analizi (model başına gecikme/boyut, DSS oylayıcı alt kümeleri; asıl deneyin kayıtlı modelleriyle, yeniden eğitim yok): `src/cost_dnn_edgeiiot.py --dataset <dataset_id> --run-dir work/<dataset_id>/<çalıştırma>` (adı tarihsel).
 - **Veri setine özel her şey tek yerde:** `src/common/open_set_registry.py`. Her kayıt şunları içerir:
   - yükleyici: `(data_file, cap, seed) -> X, fine, category, stats`,
   - aileler: `{aile: [kategoriler]}`; bir aile birden fazla kategori kapsayabilir (CICIoT2023'te FLOOD = DOS + DDOS),
@@ -99,6 +99,7 @@ Herkes kendi dalında aynı protokolü çalıştırır; sonuçlar böylece veri 
 ```bash
 python src/open_set_lofo.py --dataset dataset_23   --data-file <Merged*.csv klasörü> --models RF,TabM --condition C_ttl_yok
 python src/open_set_lofo.py --dataset dnn_edgeiiot --data-file <DNN-EdgeIIoT-dataset.csv> --models RF,TabM --condition C_seq_ack_yok
+python src/ablation_dnn_edgeiiot.py --dataset dataset_23 --data-file <klasör>    # kısayol ablation'ı (~10 dk, CPU)
 python src/two_signal.py --dataset dataset_23 --data-file <klasör>               # iki sinyalli kural (aşağıda)
 # önce her komutu --quick ile deneyin (~1 dk)
 ```

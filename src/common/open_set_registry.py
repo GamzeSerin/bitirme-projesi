@@ -3,7 +3,8 @@
 Her veri seti burada BİR kez tanımlanır; deney betikleri (open_set_lofo.py, cp_tune_dnn_edgeiiot.py)
 veri setine özel hiçbir şey bilmez. Yeni bir veri seti eklemek için gereken her şey:
 
-  loader(data_file, cap, seed) -> X, fine, category, stats
+  loader(data_file, cap, seed, drop_conflicts=True) -> X, fine, category, stats
+      drop_conflicts=False yalnızca duyarlılık analizi içindir (--keep-conflicts): ekip protokolü atar
       X        : pandas DataFrame, float32, yalnızca model özellikleri
       fine     : np.array, ince etiketler (büyük harf)
       category : np.array, ortak kategoriler (common/taxonomy.py)
@@ -14,15 +15,21 @@ veri setine özel hiçbir şey bilmez. Yeni bir veri seti eklemek için gereken 
   conditions  : {koşul adı: [çıkarılacak sütunlar]}  A tam, C ana koşul, E en sert
   benign      : zararsız kategorinin adı (sessiz kaçış ölçütü için)
   default_condition : ana koşul
+  leak_test_columns : (isteğe bağlı) ablation'daki tek-özellik testi için sütunlar; yoksa hepsi
+  model_files(run_dir, manifest) -> {model: (model.joblib, result.joblib)}   maliyet analizi için;
+      asıl deneyin kaydettiği RESMİ model dosyaları (eski sürümler aynı klasörde dursa da)
+  protocol_drop     : asıl deneyde her zaman atılan sütunlar (çalıştırmanın config.json'u ile denetlenir)
+  hardware_note     : maliyet ölçümlerinin donanımı (raporlama için)
+  dss_voters        : asıl DSS'in oylayan modelleri (main.py kuralıyla seçilmiş hâli; dss_guard.py bunları sabit kullanır)
 
 Koşul sütunları veri yüklendikten SONRA çıkarılır; böylece her koşulda satırlar birebir aynıdır.
 Kayıtta adı geçen ama veride olmayan bir sütun deneyi DURDURUR (yazım hatası sessizce geçmesin).
 """
 
 
-def _edge_loader(data_file, cap, seed):
+def _edge_loader(data_file, cap, seed, drop_conflicts=True):
     from model_dnn_edgeiiot import load_data
-    return load_data(data_file, cap, seed, drop_conflicts=True)
+    return load_data(data_file, cap, seed, drop_conflicts=drop_conflicts)
 
 
 def _edge_category(label):
@@ -36,15 +43,71 @@ def _edge_category(label):
 CICIOT_PROTOCOL_DROP = ("Number",)
 
 
-def _ciciot_loader(data_file, cap, seed):
+def _ciciot_loader(data_file, cap, seed, drop_conflicts=True):
     # Kişi 1'in yükleyicisi: data_file = Merged*.csv dosyalarının bulunduğu klasör
     from model_ml import load_data
     X, fine, category, stats = load_data(data_file, cap, seed, drop_features=CICIOT_PROTOCOL_DROP,
-                                         drop_conflicts=True)
+                                         drop_conflicts=drop_conflicts)
     leaked = [c for c in CICIOT_PROTOCOL_DROP if c in X.columns]
     if leaked:  # yükleyici değişirse sessizce geri gelmesin
         raise SystemExit(f"CICIoT2023: protokol gereği atılması gereken sütun(lar) veride: {leaked}")
     return X, fine, category, stats
+
+
+def _edge_model_files(run_dir, manifest):
+    """Edge-IIoTset (model_dnn_edgeiiot.py): models/<ad>.joblib + result_<ad>.joblib, anahtarsız."""
+    import glob
+    import os
+    out = {}
+    for path in sorted(glob.glob(os.path.join(run_dir, "models", "*.joblib"))):
+        name = os.path.splitext(os.path.basename(path))[0]
+        out[name] = (path, os.path.join(run_dir, f"result_{name}.joblib"))
+    return out
+
+
+def alias_model_ml_into_main():
+    """model_ml.py betik olarak çalıştığı için kaydettiği modellerde kendi sınıf/fonksiyonları
+    (EarlyStopping, signed_log1p ...) '__main__.<ad>' diye geçiyor; başka bir betikten joblib.load edilince
+    bulunamıyor. model_ml'deki karşılıklarını __main__'e takma ad olarak ekler (var olanlara dokunmaz)."""
+    import __main__
+    import model_ml
+    for name, obj in vars(model_ml).items():
+        if callable(obj) and getattr(obj, "__module__", None) == "model_ml" and not hasattr(__main__, name):
+            setattr(__main__, name, obj)
+
+
+def _ciciot_model_files(run_dir, manifest):
+    """CICIoT2023 (model_ml.py): dosya adları model tanımının anahtarını taşır (models/RF_4deb3c.joblib) ve
+    aynı modelin eski sürümleri klasörde durabilir. Resmi anahtar, asıl deneyin kurduğu modelden
+    (build_models + model_key) yeniden hesaplanır. XGB'nin anahtarı GPU ayarına bağlı: önce manifest'teki
+    değer, olmazsa diğeri denenir. Varsayımlar: n_jobs=-1 ve --quick değil (model_ml.py varsayılanları).
+    Tam bir eşleşme yoksa ya da birden fazla varsa durur."""
+    import glob
+    import os
+    from model_ml import build_models, model_key
+    alias_model_ml_into_main()  # dosyalar açılabilsin (Gülsü'nün tam çalıştırmasında XGB'de bulundu)
+    gpu_first = bool(manifest.get("runtime", {}).get("gpu_used_for_xgb", False))
+    names = manifest.get("models") or []
+    out = {}
+    for name in names:
+        found = []
+        for gpu in dict.fromkeys([gpu_first, not gpu_first]):
+            # tohum koşularında (model_ml --model-seed) modeller model tohumuyla kurulmuştu
+            seed = manifest.get("model_seed", manifest.get("seed", 42))
+            model = build_models(seed, -1, gpu, False, tabm=(name == "TabM")).get(name)
+            if model is None:
+                continue
+            key = model_key(name, model)
+            mp = os.path.join(run_dir, "models", f"{name}_{key}.joblib")
+            rp = os.path.join(run_dir, f"result_{name}_{key}.joblib")
+            if os.path.exists(mp) and os.path.exists(rp) and (mp, rp) not in found:
+                found.append((mp, rp))
+        if len(found) != 1:
+            present = sorted(os.path.basename(f) for f in glob.glob(os.path.join(run_dir, "models", f"{name}_*.joblib")))
+            raise SystemExit(f"{name}: resmi model dosyası {'bulunamadı' if not found else 'birden fazla'} "
+                             f"(klasördekiler: {present}). Model tanımı asıl deneyden sonra değişmiş olabilir.")
+        out[name] = found[0]
+    return out
 
 
 def _ciciot_category(label):
@@ -72,6 +135,12 @@ DATASETS = {
                        "D_sayac_zaman_yok": _EDGE_COUNTERS,
                        "E_hepsi_cikarildi": _EDGE_PORTS + _EDGE_SEQ_ACK + _EDGE_COUNTERS},
         "default_condition": "C_seq_ack_yok",
+        # ablation tek-özellik testi: yalnızca şüpheli kimlik alanları (yoksa bütün sütunlar)
+        "leak_test_columns": _EDGE_COUNTERS,
+        "model_files": _edge_model_files,
+        "dss_voters": ["DT", "RF", "XGB", "LGBM", "TabM"],
+        "protocol_drop": [],
+        "hardware_note": "Kaggle (CPU tek çekirdek; GPU sütunları NVIDIA T4)",
         "notes": "SPOOFING yok (MITM satırları sütun kayması nedeniyle atıldı); Backdoor MALWARE'de "
                  "(Edge-IIoTset makalesinin gruplaması).",
     },
@@ -90,6 +159,10 @@ DATASETS = {
                        "C_ttl_yok": ["Time_To_Live"],
                        "E_hepsi_cikarildi": ["Time_To_Live", "IAT", "Rate", "Header_Length"]},
         "default_condition": "C_ttl_yok",
+        "model_files": _ciciot_model_files,
+        "dss_voters": ["RF", "XGB", "LGBM"],
+        "protocol_drop": list(CICIOT_PROTOCOL_DROP),
+        "hardware_note": "Intel Core 7 240H (CPU tek çekirdek), NVIDIA RTX 5060 Laptop (GPU sütunları)",
         "notes": "Backdoor_Malware WEB'de (CICIoT2023 resmi gruplaması).",
     },
 }

@@ -11,6 +11,8 @@ models/
 *.pkl
 *.pt
 *.h5
+# two_signal satır dosyaları (yeniden üretilebilir, büyük)
+*.npz
 
 __pycache__/
 .ipynb_checkpoints/

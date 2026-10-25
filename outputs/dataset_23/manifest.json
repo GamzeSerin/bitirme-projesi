@@ -57,7 +57,8 @@
     "RF",
     "XGB",
     "LGBM",
-    "LR"
+    "LR",
+    "TabM"
   ],
   "primary_model": "XGB",
   "best_model_per_class": {
@@ -87,7 +88,8 @@
       "scikit-learn": "1.9.1",
       "xgboost": "3.4.1",
       "lightgbm": "4.7.0",
-      "shap": "0.54.1"
+      "shap": "0.54.1",
+      "torch": "2.11.0+cu128"
     },
     "gpu_used_for_xgb": true,
     "gpu": "NVIDIA GeForce RTX 5060 Laptop GPU"
@@ -160,5 +162,5 @@
     }
   },
   "contract_version": "1.0",
-  "created_at": "2026-10-18T21:08:09+00:00"
+  "created_at": "2026-10-21T17:55:34+00:00"
 }
