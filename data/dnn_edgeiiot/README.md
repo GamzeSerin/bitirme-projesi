@@ -337,6 +337,23 @@ En zor aileler (TabM enerji): **BRUTEFORCE** kontrolsüz %10,7 ± 0,8 → q = %1
 
 Saldırıların normal trafikten ayırt edilebildiği veride kural düşük bedelle büyük kazanç sağlıyor; ayırt edilemediği veride kazanç küçük, bedel büyük. Sınırlılık: tek tohum (42).
 
+### KEŞİF (sonuçlardan sonra tanımlandı): alarmı kademelendirmek
+
+Gülsü'nün aracı `src/alarm_tiers.py` (dss_guard satır dosyalarından, yeni eğitim yok). Alt kademe yalnız yükseltir; BLOCK/ALERT düşmez. **tek**: alarm → ANALYST_REVIEW (dss_guard ile birebir aynı çıktı); **skor**: alarm skoru kalibrasyondaki bilinenlerin %95–99'u arası → en az LOG_MONITOR, %99 üstü → ANALYST_REVIEW; **ciddiyet**: alarm + DSS sınıfı BENIGN/RECON → en az LOG_MONITOR, diğerleri → ANALYST_REVIEW. 5 ailenin ortalaması:
+
+| Kurulum | q | Görülmemiş: ALLOW | Görülmemiş: analiste | Normal trafik: analiste |
+| --- | --- | --- | --- | --- |
+| tek | 0 | %2,1 | %50,9 | %4,5 |
+| **skor** | 0 | %2,1 | %41,1 | **%1,9** |
+| ciddiyet | 0 | %2,1 | %36,9 | %2,1 |
+| tek | %5 | %0,8 | %53,3 | %8,1 |
+| **skor** | %5 | %0,8 | %43,5 | **%5,6** |
+| ciddiyet | %5 | %0,8 | %39,3 | %5,8 |
+
+- Skor kademesi ALLOW'u değiştirmeden normal trafikte analist yükünü q = 0'da %4,5 → %1,9, q = %5'te %8,1 → %5,6'ya indiriyor (CICIoT2023'te %20,5 → %8,3).
+- **Ciddiyet varyantının riski burada daha belirgin:** görülmemiş DDOS'un analiste gitme oranı tek kademede %49, skor varyantında %46,5, ciddiyet varyantında **%3,2** (RECON sanılan DDoS satırları alt kademeye kayıyor; DSS'ten ALERT aldıkları için ALLOW olmuyorlar ama insan incelemesine gitmiyorlar). Bu yüzden skor varyantı tercih edilir; ciddiyet karşılaştırma için raporlanır.
+- Satır dosyaları (`rows_*.npz`) Kaggle çıktısından indirilip `-f` ile eklendi (`.gitignore` `*.npz`'i yok sayıyor).
+
 ## Sütun hizası ve değer aralığı denetimi (19.10.2026)
 
 Kod: `src/audit_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/audit/audit.json`. Ham verideki 15 etiketin her biri için 6 kontrol (zaman damgası, IP, port 0–65535, 0/1 bayrak, ARP alanları, sayısal sütunlarda metin). İhlal yalnızca DDoS_UDP (zaman %100) ve MITM'de (zaman %100, port %30, bayrak %19); Normal'de %0,11 bayrak ihlali (önemsiz); diğer 12 saldırı türünde %0. Bu iki tür bulgu 7 gereği atıldı.
