@@ -1,0 +1,18 @@
+Oylayanlar (sabit): ['DT', 'RF', 'XGB', 'LGBM', 'TabM']; bekçi: TabM; ayarlar: {'DT': 'metrics.json[DT].params', 'RF': 'metrics.json[RF].params', 'XGB': 'metrics.json[XGB].params', 'LGBM': 'metrics.json[LGBM].params', 'TabM': 'metrics.json[TabM].params'}; XGB GPU: True
+Okunuyor: /kaggle/input/datasets/mohamedamineferrag/edgeiiotset-cyber-security-dataset-of-iot-iiot/Edge-IIoTset dataset/Selected dataset for ML and DL/DNN-EdgeIIoT-dataset.csv
+Hizasız satır (frame.time zaman değil): 122782 {'DDoS_UDP': 121568, 'MITM': 1214} -> atıldı
+Edge-IIoTset: 296506 satır, koşul C_seq_ack_yok (çıkarılan ['tcp.seq', 'tcp.ack']); aileler ['DDOS', 'RECON', 'WEB', 'BRUTEFORCE', 'MALWARE']
+
+=== DDOS ['DDOS']: eğitim 136532, kalibrasyon 15171, test bilinen 37927, bilinmeyen 21375 ===
+TabM: torch 2.11.0+cu128, cihaz cuda
+  DT    oylayan, OOF + son model (2 s)
+  RF    oylayan, OOF + son model (76 s)
+/usr/local/lib/python3.13/dist-packages/xgboost/core.py:569: UserWarning: [12:43:40] WARNING: /__w/xgboost/xgboost/src/common/error_msg.cc:62: Falling back to prediction using DMatrix due to mismatched devices. This might lead to higher memory usage and slower performance. XGBoost is running on: cuda:0, while the input data is on: cpu.
+Potential solutions:
+- Use a data structure that matches the device ordinal in the booster.
+- Set the device for booster before call to inplace_predict.
+
+This warning will only be shown once.
+
+  return func(**kwargs)
+  XGB   oylayan, OOF + son model (16 s)
