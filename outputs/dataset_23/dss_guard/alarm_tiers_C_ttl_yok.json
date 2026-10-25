@@ -1,0 +1,754 @@
+{
+  "dataset_id": "dataset_23",
+  "condition": "C_ttl_yok",
+  "status": "KEŞİF: sonuçlardan sonra tanımlandı",
+  "low": 0.95,
+  "high": 0.99,
+  "variants": [
+    "tek",
+    "skor",
+    "ciddiyet"
+  ],
+  "thresholds": {
+    "BRUTEFORCE": {
+      "tau_low": 0.03495219349861145,
+      "tau_high": 0.08729147911071777
+    },
+    "FLOOD": {
+      "tau_low": 0.05430757999420166,
+      "tau_high": 0.10309179127216339
+    },
+    "MIRAI": {
+      "tau_low": 0.08014550060033798,
+      "tau_high": 0.1617998480796814
+    },
+    "RECON": {
+      "tau_low": 0.02885504439473152,
+      "tau_high": 0.08426892012357712
+    },
+    "SPOOFING": {
+      "tau_low": 0.10991823673248291,
+      "tau_high": 0.2357044667005539
+    },
+    "WEB": {
+      "tau_low": 0.047638989984989166,
+      "tau_high": 0.1043824553489685
+    }
+  },
+  "mean_over_families": {
+    "0.0": {
+      "tek": {
+        "unknown": {
+          "ALLOW": 0.0438,
+          "LOG_MONITOR": 0.15854,
+          "ANALYST_REVIEW": 0.59408,
+          "ALERT": 0.09238,
+          "BLOCK": 0.11119
+        },
+        "benign": {
+          "ALLOW": 0.46881,
+          "LOG_MONITOR": 0.30604,
+          "ANALYST_REVIEW": 0.2054,
+          "ALERT": 0.01975,
+          "BLOCK": 0.0
+        }
+      },
+      "skor": {
+        "unknown": {
+          "ALLOW": 0.0438,
+          "LOG_MONITOR": 0.31204,
+          "ANALYST_REVIEW": 0.36129,
+          "ALERT": 0.13616,
+          "BLOCK": 0.14671
+        },
+        "benign": {
+          "ALLOW": 0.46881,
+          "LOG_MONITOR": 0.42088,
+          "ANALYST_REVIEW": 0.0831,
+          "ALERT": 0.02721,
+          "BLOCK": 0.0
+        }
+      },
+      "ciddiyet": {
+        "unknown": {
+          "ALLOW": 0.0438,
+          "LOG_MONITOR": 0.38922,
+          "ANALYST_REVIEW": 0.31293,
+          "ALERT": 0.14286,
+          "BLOCK": 0.11119
+        },
+        "benign": {
+          "ALLOW": 0.46881,
+          "LOG_MONITOR": 0.4316,
+          "ANALYST_REVIEW": 0.07283,
+          "ALERT": 0.02675,
+          "BLOCK": 0.0
+        }
+      }
+    },
+    "0.05": {
+      "tek": {
+        "unknown": {
+          "ALLOW": 0.04115,
+          "LOG_MONITOR": 0.14442,
+          "ANALYST_REVIEW": 0.61086,
+          "ALERT": 0.09238,
+          "BLOCK": 0.11119
+        },
+        "benign": {
+          "ALLOW": 0.46554,
+          "LOG_MONITOR": 0.28171,
+          "ANALYST_REVIEW": 0.233,
+          "ALERT": 0.01975,
+          "BLOCK": 0.0
+        }
+      },
+      "skor": {
+        "unknown": {
+          "ALLOW": 0.04115,
+          "LOG_MONITOR": 0.29792,
+          "ANALYST_REVIEW": 0.37806,
+          "ALERT": 0.13616,
+          "BLOCK": 0.14671
+        },
+        "benign": {
+          "ALLOW": 0.46554,
+          "LOG_MONITOR": 0.39654,
+          "ANALYST_REVIEW": 0.11071,
+          "ALERT": 0.02721,
+          "BLOCK": 0.0
+        }
+      },
+      "ciddiyet": {
+        "unknown": {
+          "ALLOW": 0.04115,
+          "LOG_MONITOR": 0.37509,
+          "ANALYST_REVIEW": 0.32971,
+          "ALERT": 0.14286,
+          "BLOCK": 0.11119
+        },
+        "benign": {
+          "ALLOW": 0.46554,
+          "LOG_MONITOR": 0.40727,
+          "ANALYST_REVIEW": 0.10044,
+          "ALERT": 0.02675,
+          "BLOCK": 0.0
+        }
+      }
+    }
+  },
+  "per_family": {
+    "BRUTEFORCE": {
+      "0.0": {
+        "tek": {
+          "unknown": {
+            "ALLOW": 0.04455445544554455,
+            "LOG_MONITOR": 0.2079207920792079,
+            "ANALYST_REVIEW": 0.6336633663366337,
+            "ALERT": 0.11386138613861387,
+            "BLOCK": 0.0
+          },
+          "benign": {
+            "ALLOW": 0.423375,
+            "LOG_MONITOR": 0.331875,
+            "ANALYST_REVIEW": 0.222125,
+            "ALERT": 0.022625,
+            "BLOCK": 0.0
+          }
+        },
+        "skor": {
+          "unknown": {
+            "ALLOW": 0.04455445544554455,
+            "LOG_MONITOR": 0.4900990099009901,
+            "ANALYST_REVIEW": 0.2524752475247525,
+            "ALERT": 0.21287128712871287,
+            "BLOCK": 0.0
+          },
+          "benign": {
+            "ALLOW": 0.423375,
+            "LOG_MONITOR": 0.451,
+            "ANALYST_REVIEW": 0.09575,
+            "ALERT": 0.029875,
+            "BLOCK": 0.0
+          }
+        },
+        "ciddiyet": {
+          "unknown": {
+            "ALLOW": 0.04455445544554455,
+            "LOG_MONITOR": 0.5198019801980198,
+            "ANALYST_REVIEW": 0.19306930693069307,
+            "ALERT": 0.24257425742574257,
+            "BLOCK": 0.0
+          },
+          "benign": {
+            "ALLOW": 0.423375,
+            "LOG_MONITOR": 0.460125,
+            "ANALYST_REVIEW": 0.086125,
+            "ALERT": 0.030375,
+            "BLOCK": 0.0
+          }
+        }
+      },
+      "0.05": {
+        "tek": {
+          "unknown": {
+            "ALLOW": 0.04455445544554455,
+            "LOG_MONITOR": 0.19306930693069307,
+            "ANALYST_REVIEW": 0.6485148514851485,
+            "ALERT": 0.11386138613861387,
+            "BLOCK": 0.0
+          },
+          "benign": {
+            "ALLOW": 0.423,
+            "LOG_MONITOR": 0.310875,
+            "ANALYST_REVIEW": 0.2435,
+            "ALERT": 0.022625,
+            "BLOCK": 0.0
+          }
+        },
+        "skor": {
+          "unknown": {
+            "ALLOW": 0.04455445544554455,
+            "LOG_MONITOR": 0.4752475247524752,
+            "ANALYST_REVIEW": 0.26732673267326734,
+            "ALERT": 0.21287128712871287,
+            "BLOCK": 0.0
+          },
+          "benign": {
+            "ALLOW": 0.423,
+            "LOG_MONITOR": 0.43,
+            "ANALYST_REVIEW": 0.117125,
+            "ALERT": 0.029875,
+            "BLOCK": 0.0
+          }
+        },
+        "ciddiyet": {
+          "unknown": {
+            "ALLOW": 0.04455445544554455,
+            "LOG_MONITOR": 0.504950495049505,
+            "ANALYST_REVIEW": 0.2079207920792079,
+            "ALERT": 0.24257425742574257,
+            "BLOCK": 0.0
+          },
+          "benign": {
+            "ALLOW": 0.423,
+            "LOG_MONITOR": 0.439125,
+            "ANALYST_REVIEW": 0.1075,
+            "ALERT": 0.030375,
+            "BLOCK": 0.0
+          }
+        }
+      }
+    },
+    "FLOOD": {
+      "0.0": {
+        "tek": {
+          "unknown": {
+            "ALLOW": 0.0,
+            "LOG_MONITOR": 0.030565581166434253,
+            "ANALYST_REVIEW": 0.5694774833893856,
+            "ALERT": 0.23412763514067755,
+            "BLOCK": 0.1658293003035026
+          },
+          "benign": {
+            "ALLOW": 0.42625,
+            "LOG_MONITOR": 0.41325,
+            "ANALYST_REVIEW": 0.13675,
+            "ALERT": 0.02375,
+            "BLOCK": 0.0
+          }
+        },
+        "skor": {
+          "unknown": {
+            "ALLOW": 0.0,
+            "LOG_MONITOR": 0.03436961693052252,
+            "ANALYST_REVIEW": 0.5460278073989008,
+            "ALERT": 0.25307603970141906,
+            "BLOCK": 0.16652653596915756
+          },
+          "benign": {
+            "ALLOW": 0.42625,
+            "LOG_MONITOR": 0.45425,
+            "ANALYST_REVIEW": 0.092625,
+            "ALERT": 0.026875,
+            "BLOCK": 0.0
+          }
+        },
+        "ciddiyet": {
+          "unknown": {
+            "ALLOW": 0.0,
+            "LOG_MONITOR": 0.18364982364039045,
+            "ANALYST_REVIEW": 0.38321302600278895,
+            "ALERT": 0.26730785005331803,
+            "BLOCK": 0.1658293003035026
+          },
+          "benign": {
+            "ALLOW": 0.42625,
+            "LOG_MONITOR": 0.45675,
+            "ANALYST_REVIEW": 0.090125,
+            "ALERT": 0.026875,
+            "BLOCK": 0.0
+          }
+        }
+      },
+      "0.05": {
+        "tek": {
+          "unknown": {
+            "ALLOW": 0.0,
+            "LOG_MONITOR": 0.030565581166434253,
+            "ANALYST_REVIEW": 0.5694774833893856,
+            "ALERT": 0.23412763514067755,
+            "BLOCK": 0.1658293003035026
+          },
+          "benign": {
+            "ALLOW": 0.42525,
+            "LOG_MONITOR": 0.38825,
+            "ANALYST_REVIEW": 0.16275,
+            "ALERT": 0.02375,
+            "BLOCK": 0.0
+          }
+        },
+        "skor": {
+          "unknown": {
+            "ALLOW": 0.0,
+            "LOG_MONITOR": 0.03436961693052252,
+            "ANALYST_REVIEW": 0.5460278073989008,
+            "ALERT": 0.25307603970141906,
+            "BLOCK": 0.16652653596915756
+          },
+          "benign": {
+            "ALLOW": 0.42525,
+            "LOG_MONITOR": 0.42925,
+            "ANALYST_REVIEW": 0.118625,
+            "ALERT": 0.026875,
+            "BLOCK": 0.0
+          }
+        },
+        "ciddiyet": {
+          "unknown": {
+            "ALLOW": 0.0,
+            "LOG_MONITOR": 0.18364982364039045,
+            "ANALYST_REVIEW": 0.38321302600278895,
+            "ALERT": 0.26730785005331803,
+            "BLOCK": 0.1658293003035026
+          },
+          "benign": {
+            "ALLOW": 0.42525,
+            "LOG_MONITOR": 0.43175,
+            "ANALYST_REVIEW": 0.116125,
+            "ALERT": 0.026875,
+            "BLOCK": 0.0
+          }
+        }
+      }
+    },
+    "MIRAI": {
+      "0.0": {
+        "tek": {
+          "unknown": {
+            "ALLOW": 0.0,
+            "LOG_MONITOR": 8.333333333333333e-05,
+            "ANALYST_REVIEW": 0.4985833333333333,
+            "ALERT": 0.0,
+            "BLOCK": 0.5013333333333333
+          },
+          "benign": {
+            "ALLOW": 0.408,
+            "LOG_MONITOR": 0.334625,
+            "ANALYST_REVIEW": 0.2375,
+            "ALERT": 0.019875,
+            "BLOCK": 0.0
+          }
+        },
+        "skor": {
+          "unknown": {
+            "ALLOW": 0.0,
+            "LOG_MONITOR": 0.0003333333333333333,
+            "ANALYST_REVIEW": 0.28570833333333334,
+            "ALERT": 0.00020833333333333335,
+            "BLOCK": 0.71375
+          },
+          "benign": {
+            "ALLOW": 0.408,
+            "LOG_MONITOR": 0.453625,
+            "ANALYST_REVIEW": 0.111875,
+            "ALERT": 0.0265,
+            "BLOCK": 0.0
+          }
+        },
+        "ciddiyet": {
+          "unknown": {
+            "ALLOW": 0.0,
+            "LOG_MONITOR": 0.000125,
+            "ANALYST_REVIEW": 0.49854166666666666,
+            "ALERT": 0.0,
+            "BLOCK": 0.5013333333333333
+          },
+          "benign": {
+            "ALLOW": 0.408,
+            "LOG_MONITOR": 0.470125,
+            "ANALYST_REVIEW": 0.0935,
+            "ALERT": 0.028375,
+            "BLOCK": 0.0
+          }
+        }
+      },
+      "0.05": {
+        "tek": {
+          "unknown": {
+            "ALLOW": 0.0,
+            "LOG_MONITOR": 8.333333333333333e-05,
+            "ANALYST_REVIEW": 0.4985833333333333,
+            "ALERT": 0.0,
+            "BLOCK": 0.5013333333333333
+          },
+          "benign": {
+            "ALLOW": 0.40575,
+            "LOG_MONITOR": 0.307,
+            "ANALYST_REVIEW": 0.267375,
+            "ALERT": 0.019875,
+            "BLOCK": 0.0
+          }
+        },
+        "skor": {
+          "unknown": {
+            "ALLOW": 0.0,
+            "LOG_MONITOR": 0.0003333333333333333,
+            "ANALYST_REVIEW": 0.28570833333333334,
+            "ALERT": 0.00020833333333333335,
+            "BLOCK": 0.71375
+          },
+          "benign": {
+            "ALLOW": 0.40575,
+            "LOG_MONITOR": 0.426,
+            "ANALYST_REVIEW": 0.14175,
+            "ALERT": 0.0265,
+            "BLOCK": 0.0
+          }
+        },
+        "ciddiyet": {
+          "unknown": {
+            "ALLOW": 0.0,
+            "LOG_MONITOR": 0.000125,
+            "ANALYST_REVIEW": 0.49854166666666666,
+            "ALERT": 0.0,
+            "BLOCK": 0.5013333333333333
+          },
+          "benign": {
+            "ALLOW": 0.40575,
+            "LOG_MONITOR": 0.4425,
+            "ANALYST_REVIEW": 0.123375,
+            "ALERT": 0.028375,
+            "BLOCK": 0.0
+          }
+        }
+      }
+    },
+    "RECON": {
+      "0.0": {
+        "tek": {
+          "unknown": {
+            "ALLOW": 0.14057263238532988,
+            "LOG_MONITOR": 0.26563248108781,
+            "ANALYST_REVIEW": 0.5285837403045102,
+            "ALERT": 0.0652111462223499,
+            "BLOCK": 0.0
+          },
+          "benign": {
+            "ALLOW": 0.615875,
+            "LOG_MONITOR": 0.1985,
+            "ANALYST_REVIEW": 0.175625,
+            "ALERT": 0.01,
+            "BLOCK": 0.0
+          }
+        },
+        "skor": {
+          "unknown": {
+            "ALLOW": 0.14057263238532988,
+            "LOG_MONITOR": 0.4979412046346835,
+            "ANALYST_REVIEW": 0.24628938044623191,
+            "ALERT": 0.11519678253375466,
+            "BLOCK": 0.0
+          },
+          "benign": {
+            "ALLOW": 0.615875,
+            "LOG_MONITOR": 0.31925,
+            "ANALYST_REVIEW": 0.04675,
+            "ALERT": 0.018125,
+            "BLOCK": 0.0
+          }
+        },
+        "ciddiyet": {
+          "unknown": {
+            "ALLOW": 0.14057263238532988,
+            "LOG_MONITOR": 0.4707459542277123,
+            "ANALYST_REVIEW": 0.32347026716460786,
+            "ALERT": 0.0652111462223499,
+            "BLOCK": 0.0
+          },
+          "benign": {
+            "ALLOW": 0.615875,
+            "LOG_MONITOR": 0.327,
+            "ANALYST_REVIEW": 0.047125,
+            "ALERT": 0.01,
+            "BLOCK": 0.0
+          }
+        }
+      },
+      "0.05": {
+        "tek": {
+          "unknown": {
+            "ALLOW": 0.1270707651058125,
+            "LOG_MONITOR": 0.22254141530211624,
+            "ANALYST_REVIEW": 0.5851766733697213,
+            "ALERT": 0.0652111462223499,
+            "BLOCK": 0.0
+          },
+          "benign": {
+            "ALLOW": 0.60825,
+            "LOG_MONITOR": 0.177,
+            "ANALYST_REVIEW": 0.20475,
+            "ALERT": 0.01,
+            "BLOCK": 0.0
+          }
+        },
+        "skor": {
+          "unknown": {
+            "ALLOW": 0.1270707651058125,
+            "LOG_MONITOR": 0.4548501388489897,
+            "ANALYST_REVIEW": 0.30288231351144307,
+            "ALERT": 0.11519678253375466,
+            "BLOCK": 0.0
+          },
+          "benign": {
+            "ALLOW": 0.60825,
+            "LOG_MONITOR": 0.29775,
+            "ANALYST_REVIEW": 0.075875,
+            "ALERT": 0.018125,
+            "BLOCK": 0.0
+          }
+        },
+        "ciddiyet": {
+          "unknown": {
+            "ALLOW": 0.1270707651058125,
+            "LOG_MONITOR": 0.4276548884420186,
+            "ANALYST_REVIEW": 0.38006320022981904,
+            "ALERT": 0.0652111462223499,
+            "BLOCK": 0.0
+          },
+          "benign": {
+            "ALLOW": 0.60825,
+            "LOG_MONITOR": 0.3055,
+            "ANALYST_REVIEW": 0.07625,
+            "ALERT": 0.01,
+            "BLOCK": 0.0
+          }
+        }
+      }
+    },
+    "SPOOFING": {
+      "0.0": {
+        "tek": {
+          "unknown": {
+            "ALLOW": 0.05651313930488839,
+            "LOG_MONITOR": 0.13224074597343882,
+            "ANALYST_REVIEW": 0.7998022040124328,
+            "ALERT": 0.011443910709239898,
+            "BLOCK": 0.0
+          },
+          "benign": {
+            "ALLOW": 0.52925,
+            "LOG_MONITOR": 0.2055,
+            "ANALYST_REVIEW": 0.2465,
+            "ALERT": 0.01875,
+            "BLOCK": 0.0
+          }
+        },
+        "skor": {
+          "unknown": {
+            "ALLOW": 0.05651313930488839,
+            "LOG_MONITOR": 0.2886408589997174,
+            "ANALYST_REVIEW": 0.6256004521051144,
+            "ALERT": 0.02924554959027974,
+            "BLOCK": 0.0
+          },
+          "benign": {
+            "ALLOW": 0.52925,
+            "LOG_MONITOR": 0.37575,
+            "ANALYST_REVIEW": 0.065875,
+            "ALERT": 0.029125,
+            "BLOCK": 0.0
+          }
+        },
+        "ciddiyet": {
+          "unknown": {
+            "ALLOW": 0.05651313930488839,
+            "LOG_MONITOR": 0.5974851653009324,
+            "ANALYST_REVIEW": 0.2729584628426109,
+            "ALERT": 0.07304323255156824,
+            "BLOCK": 0.0
+          },
+          "benign": {
+            "ALLOW": 0.52925,
+            "LOG_MONITOR": 0.397875,
+            "ANALYST_REVIEW": 0.041125,
+            "ALERT": 0.03175,
+            "BLOCK": 0.0
+          }
+        }
+      },
+      "0.05": {
+        "tek": {
+          "unknown": {
+            "ALLOW": 0.05411133088443063,
+            "LOG_MONITOR": 0.11867759254026561,
+            "ANALYST_REVIEW": 0.8157671658660639,
+            "ALERT": 0.011443910709239898,
+            "BLOCK": 0.0
+          },
+          "benign": {
+            "ALLOW": 0.521625,
+            "LOG_MONITOR": 0.18225,
+            "ANALYST_REVIEW": 0.277375,
+            "ALERT": 0.01875,
+            "BLOCK": 0.0
+          }
+        },
+        "skor": {
+          "unknown": {
+            "ALLOW": 0.05411133088443063,
+            "LOG_MONITOR": 0.2750777055665442,
+            "ANALYST_REVIEW": 0.6415654139587454,
+            "ALERT": 0.02924554959027974,
+            "BLOCK": 0.0
+          },
+          "benign": {
+            "ALLOW": 0.521625,
+            "LOG_MONITOR": 0.3525,
+            "ANALYST_REVIEW": 0.09675,
+            "ALERT": 0.029125,
+            "BLOCK": 0.0
+          }
+        },
+        "ciddiyet": {
+          "unknown": {
+            "ALLOW": 0.05411133088443063,
+            "LOG_MONITOR": 0.5839220118677593,
+            "ANALYST_REVIEW": 0.2889234246962419,
+            "ALERT": 0.07304323255156824,
+            "BLOCK": 0.0
+          },
+          "benign": {
+            "ALLOW": 0.521625,
+            "LOG_MONITOR": 0.374625,
+            "ANALYST_REVIEW": 0.072,
+            "ALERT": 0.03175,
+            "BLOCK": 0.0
+          }
+        }
+      }
+    },
+    "WEB": {
+      "0.0": {
+        "tek": {
+          "unknown": {
+            "ALLOW": 0.021164021164021163,
+            "LOG_MONITOR": 0.3148148148148148,
+            "ANALYST_REVIEW": 0.5343915343915344,
+            "ALERT": 0.12962962962962962,
+            "BLOCK": 0.0
+          },
+          "benign": {
+            "ALLOW": 0.410125,
+            "LOG_MONITOR": 0.3525,
+            "ANALYST_REVIEW": 0.213875,
+            "ALERT": 0.0235,
+            "BLOCK": 0.0
+          }
+        },
+        "skor": {
+          "unknown": {
+            "ALLOW": 0.021164021164021163,
+            "LOG_MONITOR": 0.5608465608465608,
+            "ANALYST_REVIEW": 0.21164021164021163,
+            "ALERT": 0.20634920634920634,
+            "BLOCK": 0.0
+          },
+          "benign": {
+            "ALLOW": 0.410125,
+            "LOG_MONITOR": 0.471375,
+            "ANALYST_REVIEW": 0.08575,
+            "ALERT": 0.03275,
+            "BLOCK": 0.0
+          }
+        },
+        "ciddiyet": {
+          "unknown": {
+            "ALLOW": 0.021164021164021163,
+            "LOG_MONITOR": 0.5634920634920635,
+            "ANALYST_REVIEW": 0.20634920634920634,
+            "ALERT": 0.20899470899470898,
+            "BLOCK": 0.0
+          },
+          "benign": {
+            "ALLOW": 0.410125,
+            "LOG_MONITOR": 0.47775,
+            "ANALYST_REVIEW": 0.079,
+            "ALERT": 0.033125,
+            "BLOCK": 0.0
+          }
+        }
+      },
+      "0.05": {
+        "tek": {
+          "unknown": {
+            "ALLOW": 0.021164021164021163,
+            "LOG_MONITOR": 0.30158730158730157,
+            "ANALYST_REVIEW": 0.5476190476190477,
+            "ALERT": 0.12962962962962962,
+            "BLOCK": 0.0
+          },
+          "benign": {
+            "ALLOW": 0.409375,
+            "LOG_MONITOR": 0.324875,
+            "ANALYST_REVIEW": 0.24225,
+            "ALERT": 0.0235,
+            "BLOCK": 0.0
+          }
+        },
+        "skor": {
+          "unknown": {
+            "ALLOW": 0.021164021164021163,
+            "LOG_MONITOR": 0.5476190476190477,
+            "ANALYST_REVIEW": 0.22486772486772486,
+            "ALERT": 0.20634920634920634,
+            "BLOCK": 0.0
+          },
+          "benign": {
+            "ALLOW": 0.409375,
+            "LOG_MONITOR": 0.44375,
+            "ANALYST_REVIEW": 0.114125,
+            "ALERT": 0.03275,
+            "BLOCK": 0.0
+          }
+        },
+        "ciddiyet": {
+          "unknown": {
+            "ALLOW": 0.021164021164021163,
+            "LOG_MONITOR": 0.5502645502645502,
+            "ANALYST_REVIEW": 0.21957671957671956,
+            "ALERT": 0.20899470899470898,
+            "BLOCK": 0.0
+          },
+          "benign": {
+            "ALLOW": 0.409375,
+            "LOG_MONITOR": 0.450125,
+            "ANALYST_REVIEW": 0.107375,
+            "ALERT": 0.033125,
+            "BLOCK": 0.0
+          }
+        }
+      }
+    }
+  }
+}
