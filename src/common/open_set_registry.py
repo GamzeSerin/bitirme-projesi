@@ -20,6 +20,7 @@ veri setine özel hiçbir şey bilmez. Yeni bir veri seti eklemek için gereken 
       asıl deneyin kaydettiği RESMİ model dosyaları (eski sürümler aynı klasörde dursa da)
   protocol_drop     : asıl deneyde her zaman atılan sütunlar (çalıştırmanın config.json'u ile denetlenir)
   hardware_note     : maliyet ölçümlerinin donanımı (raporlama için)
+  dss_voters        : asıl DSS'in oylayan modelleri (main.py kuralıyla seçilmiş hâli; dss_guard.py bunları sabit kullanır)
 
 Koşul sütunları veri yüklendikten SONRA çıkarılır; böylece her koşulda satırlar birebir aynıdır.
 Kayıtta adı geçen ama veride olmayan bir sütun deneyi DURDURUR (yazım hatası sessizce geçmesin).
@@ -137,6 +138,7 @@ DATASETS = {
         # ablation tek-özellik testi: yalnızca şüpheli kimlik alanları (yoksa bütün sütunlar)
         "leak_test_columns": _EDGE_COUNTERS,
         "model_files": _edge_model_files,
+        "dss_voters": ["DT", "RF", "XGB", "LGBM", "TabM"],
         "protocol_drop": [],
         "hardware_note": "Kaggle (CPU tek çekirdek; GPU sütunları NVIDIA T4)",
         "notes": "SPOOFING yok (MITM satırları sütun kayması nedeniyle atıldı); Backdoor MALWARE'de "
@@ -158,6 +160,7 @@ DATASETS = {
                        "E_hepsi_cikarildi": ["Time_To_Live", "IAT", "Rate", "Header_Length"]},
         "default_condition": "C_ttl_yok",
         "model_files": _ciciot_model_files,
+        "dss_voters": ["RF", "XGB", "LGBM"],
         "protocol_drop": list(CICIOT_PROTOCOL_DROP),
         "hardware_note": "Intel Core 7 240H (CPU tek çekirdek), NVIDIA RTX 5060 Laptop (GPU sütunları)",
         "notes": "Backdoor_Malware WEB'de (CICIoT2023 resmi gruplaması).",

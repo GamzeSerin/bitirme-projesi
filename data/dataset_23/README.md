@@ -269,6 +269,24 @@ Protokolde tanımlanan güvenli hata oranı, iki sinyalli kuralın satır dosyal
 - Tehlikeli kısım (sessiz kaçış) neredeyse tamamen RECON, WEB ve BRUTEFORCE'tan geliyor. İki sinyalli kural yalnız BENIGN denen kararlara dokunduğu için güvenli hata oranlarını değiştirmiyor; yalnız sessiz kaçışı azaltıyor.
 - **Güven çekincesi:** DSS, ciddiyet olasılığı 0,80'in altındaysa BLOCK/ALERT yerine LOG_MONITOR verir. Asıl DSS RF, XGB ve LGBM'in birleşimini kullanır; buradaki hesap TabM'in olasılıklarıyla yapıldığı için **TabM'i sınıflandırıcı alan bir DSS'i** anlatır. Böyle bir DSS'te güvenli hatanın en yüksek olasılığı ≥ 0,80 olan kısmı (kesin BLOCK/ALERT, alt sınır) ortalama %15,5; kalan ~%12 en az LOG_MONITOR alır, hiçbiri ALLOW almaz. Aynı şekilde sessiz kaçışın düşük güvenli kısmı DSS'te ALLOW yerine LOG_MONITOR alır; ortak ölçüt (ALLOW edilen görülmemiş saldırı) bu yüzden bir üst sınırdır.
 
+### Gerçek DSS'te BENIGN kontrolü (24.10.2026)
+
+Yukarıdaki iki sinyalli kural ve güvenli hata TabM'in kendi kararıyla hesaplandı; asıl DSS ise RF, XGB ve LGBM'i birleştirir. Bu analizde aynı bekçi (TabM: alarm = üye anlaşmazlığı, kontrol = enerji) gerçek DSS'in kararına uygulandı (`python src/dss_guard.py --dataset dataset_23 --data-file data/dataset_23 --run-dir work/dataset_23/3ed30bf6` → `outputs/dataset_23/dss_guard/dss_guard_C_ttl_yok.json`). Her ailede oylayanlar (RF, XGB, LGBM; sabit) asıl deneyin ayarlarıyla, 5-fold OOF ağırlıklarıyla yeniden eğitildi; aksiyonlar `main.py`'nin kuralıyla. Koşul C, tohum 42, 6 ailenin ortalaması:
+
+| Kurulum | Görülmemiş saldırı: gerçek ALLOW | BENIGN sanıldı ve geçti | Analiste giden görülmemiş saldırı | Analiste giden normal trafik |
+| --- | --- | --- | --- | --- |
+| Yalnız DSS | %6,0 | %24,4 | %12,8 | %6,4 |
+| DSS + TabM alarmı (q = 0) | %4,4 | %14,0 | %59,4 | %20,5 |
+| DSS + alarm + enerji kontrolü, q = %1 | %4,4 | %13,5 | %59,7 | %20,9 |
+| **DSS + alarm + enerji kontrolü, q = %5** | **%4,1** | **%11,5** | **%61,1** | **%23,3** |
+| DSS + alarm + enerji kontrolü, q = %10 | %3,7 | %9,3 | — | — |
+
+- **Yalnız DSS bile görülmemiş saldırıların çoğunu geçirmiyor:** BENIGN sandığı %24'ün çoğu düşük güvenle LOG_MONITOR alıyor; gerçek ALLOW %6,0. Görülmemiş saldırıların %20'si BLOCK, %16'sı ALERT, %45'i LOG_MONITOR.
+- **Katkının çoğu TabM alarmından geliyor** (ALLOW %6,0 → %4,4; BENIGN geçiş %24 → %14). Enerji kontrolü üstüne az ekliyor (q = %5'te %4,4 → %4,1). Kontrolü TabM'in kararına ya da DSS'in kararına uygulamak sonucu neredeyse değiştirmiyor (q = %5: %11,9 ve %11,5).
+- **Maliyet:** Alarm, normal trafiğin %16'sını analiste gönderiyor (eşik bilinen kalibrasyon satırlarının %95'i; BENIGN satırları TabM'de ortalamadan daha belirsiz). Kontrolle birlikte q = %5'te normal trafiğin %23'ü analiste gidiyor. Bu, two_signal'de raporlanan "gerçekleşen inceleme"nin (%3,6, yalnız kontrol) üstüne alarmın yükünü de ekleyen toplam yük.
+- **Aile başına (q = %5, gerçek ALLOW):** FLOOD %0, MIRAI %0, RECON %12,7, SPOOFING %5,4, BRUTEFORCE %4,5, WEB %2,1. Tehlikeli kısım yine RECON'da yoğunlaşıyor.
+- Sınırlılık: tek tohum (42); ölçüt ve bütçeler two_signal ile aynı, sonuçlardan sonra değiştirilmedi.
+
 ### Henüz yapılmayanlar
 
 - A ve E koşulları yalnız tohum 42 ile çalıştı (3 tohum ana koşul C'de; protokoldeki "3 tohum" ifadesi ana koşul için uygulandı). A/E'deki tek tohumlu farklar, C'deki tohum sapmasıyla (AUROC'ta çoğunlukla < 0,01) birlikte okunur.
