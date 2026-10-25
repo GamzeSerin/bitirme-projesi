@@ -23,7 +23,7 @@ Taban çizgileri: dss_only (alarm ve kontrol yok, yalnız DSS) ve alarm_only (q 
 
 Çalıştırma (asıl deneyin work dizini olan makinede; --run-dir o çalıştırmanın klasörü):
   python src/dss_guard.py --dataset dataset_23 --data-file data/dataset_23 --run-dir work/dataset_23/3ed30bf6
-  python src/dss_guard.py --dataset dnn_edgeiiot --data-file <csv> --run-dir /kaggle/working/work/dnn_edgeiiot/<...>
+  python src/dss_guard.py --dataset dnn_edgeiiot --data-file <csv> --params-from metrics   (asıl deneyin klasörü yoksa)
   ... --quick           (etiket başına 3.000 satır, 3 fold, kısa eğitim: tesisat denemesi)
   ... --model-seed 1    (yalnız model tohumu; bölme --seed'de sabit, çıktı .../dss_guard/s1)
 """
@@ -51,6 +51,19 @@ from open_set_lofo import model_scores
 
 QS = [0.005, 0.01, 0.02, 0.05, 0.10]
 ACTIONS = ["ALLOW", "LOG_MONITOR", "ANALYST_REVIEW", "ALERT", "BLOCK"]
+
+
+def params_from_metrics(metrics_path, names):
+    """Yedek: asıl deneyin metrics.json'undaki params (run_dir artık yoksa, ör. Kaggle oturumu kapandıysa).
+    Aynı değerler asıl deneyin result_*.joblib dosyalarından yazılmıştır."""
+    with open(metrics_path, encoding="utf-8") as f:
+        metrics = json.load(f)
+    missing = [n for n in names if n not in metrics or "params" not in metrics[n]]
+    if missing:
+        raise SystemExit(f"{metrics_path} içinde ayarları olmayan model(ler): {missing}")
+    out = {n: {k: v for k, v in metrics[n]["params"].items() if k != "n_estimators (early stopping)"}
+           for n in names}
+    return out, {n: f"{os.path.basename(metrics_path)}[{n}].params" for n in names}
 
 
 def official_params(spec, run_dir, manifest, names):
@@ -126,7 +139,11 @@ def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--dataset", default="dnn_edgeiiot", choices=list(registry.DATASETS))
     p.add_argument("--data-file", required=True)
-    p.add_argument("--run-dir", required=True, help="Asıl deneyin çalıştırma klasörü (ayarlar buradan)")
+    p.add_argument("--run-dir", default=None,
+                   help="Asıl deneyin çalıştırma klasörü (ayarlar buradan). Yoksa --params-from metrics")
+    p.add_argument("--params-from", choices=["run", "metrics"], default="run",
+                   help="run: run-dir'deki result dosyaları (varsayılan); metrics: outputs/<dataset>/metrics.json "
+                        "(asıl deneyin klasörü artık yoksa; aynı değerler)")
     p.add_argument("--manifest", default=None, help="Varsayılan outputs/<dataset>/manifest.json")
     p.add_argument("--out-dir", default=None, help="Varsayılan outputs/<dataset>/dss_guard")
     p.add_argument("--condition", default=None, help="Varsayılan: ana koşul")
@@ -160,7 +177,12 @@ def main():
         manifest = json.load(f)
     voters = list(spec["dss_voters"])
     names = voters + ([] if "TabM" in voters else ["TabM"])
-    params, params_src = official_params(spec, args.run_dir, manifest, names)
+    if args.params_from == "metrics":
+        params, params_src = params_from_metrics(f"outputs/{args.dataset}/metrics.json", names)
+    else:
+        if not args.run_dir or not os.path.isdir(args.run_dir):
+            raise SystemExit(f"--run-dir bulunamadı ({args.run_dir}); asıl deneyin klasörü yoksa --params-from metrics")
+        params, params_src = official_params(spec, args.run_dir, manifest, names)
     gpu = bool(manifest.get("runtime", {}).get("gpu_used_for_xgb", False))
     print(f"Oylayanlar (sabit): {voters}; bekçi: TabM; ayarlar: {params_src}; XGB GPU: {gpu}")
 
