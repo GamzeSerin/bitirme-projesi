@@ -264,10 +264,12 @@ def tune(name, model, X, y, seed, n_iter, max_rows):
     return search.best_params_
 
 
-def run_model(name, base, Xtr, ytr, strat_tr, Xte, n_classes, args):
+def run_model(name, base, Xtr, ytr, strat_tr, Xte, n_classes, args, params=None):
+    # params verilirse (ör. model tohumu 1-2: seed 42'nin bulduğu ayarlar) arama YAPILMAZ.
     # Arama uzayı olmayan modellerde (TabM) arama atlanır: resmi varsayılanlar kullanılır
-    params = tune(name, base, Xtr, ytr, args.seed, args.n_iter, args.tune_rows) \
-        if args.tune and name in PARAM_SPACE else {}
+    if params is None:
+        params = tune(name, base, Xtr, ytr, args.seed, args.n_iter, args.tune_rows) \
+            if args.tune and name in PARAM_SPACE else {}
     model = clone(base).set_params(**params)
 
     oof = np.zeros((len(ytr), n_classes), dtype=np.float32)
@@ -389,13 +391,22 @@ def main():
                    help="Eski sürümlerle uyumluluk için; artık varsayılan")
     p.add_argument("--gpu", action="store_true", help="XGBoost'u GPU'da eğit")
     p.add_argument("--n-jobs", type=int, default=-1)
-    p.add_argument("--seed", type=int, default=42)
+    p.add_argument("--seed", type=int, default=42, help="Veri bölmesi, örneklem ve fold'lar (ekip protokolü: 42)")
+    p.add_argument("--model-seed", type=int, default=None,
+                   help="Yalnızca model eğitim tohumu (varsayılan: --seed). Bölme --seed'de sabit kalır; "
+                        "--tune ile seed 42'nin bulduğu ayarlar kullanılır (arama tekrarlanmaz); çıktılar "
+                        "outputs/<dataset>/seeds/s<N>'e gider, sözleşme dosyaları ezilmez.")
     p.add_argument("--quick", action="store_true", help="Küçük örneklem, 3 fold: hızlı deneme")
     p.add_argument("--force", action="store_true", help="Kaydedilmiş model sonuçlarını yok say")
     args = p.parse_args()
     args.drop_conflicts = not args.keep_conflicts
     if args.quick:
         args.cap, args.folds = min(args.cap, 3000), 3
+    mseed = args.seed if args.model_seed is None else args.model_seed
+    extra_seed = mseed != args.seed
+    if extra_seed and os.path.normpath(args.out_dir) == os.path.normpath(f"outputs/{DATASET_ID}"):
+        # Sözleşme dosyaları (DSS'in okuduğu) yalnızca resmi çalıştırmadan yazılır
+        args.out_dir = os.path.join(args.out_dir, "seeds", f"s{mseed}")
 
     drop = [f.strip() for f in args.drop_features.split(",") if f.strip()]
     X, fine, category, data_stats = load_data(args.data_dir, args.cap, args.seed,
@@ -417,16 +428,28 @@ def main():
     # Liste değişince (ör. TabM eklenince) diğer modeller yeniden eğitilmesin. Sabit değer, eski
     # varsayılanla aynı tutuldu ki daha önce kaydedilmiş klasörler geçerli kalsın.
     cfg["models"] = CACHE_MODELS_KEY
-    run_dir = os.path.join(args.work_dir, hashlib.md5(
-        json.dumps(cfg, sort_keys=True).encode()).hexdigest()[:8])
+
+    def cfg_dir(c):
+        return os.path.join(args.work_dir, hashlib.md5(json.dumps(c, sort_keys=True).encode()).hexdigest()[:8])
+
+    base_run_dir = cfg_dir(cfg)            # resmi (model tohumu = bölme tohumu) çalıştırma
+    if extra_seed:
+        # Model tohumu klasör özetine girer: seed 42'nin önbelleği okunmaz. Resmi çalıştırmanın özeti
+        # değişmesin diye yalnızca tohum farklıyken eklenir.
+        cfg["model_seed"] = mseed
+    run_dir = cfg_dir(cfg)
     os.makedirs(os.path.join(run_dir, "models"), exist_ok=True)
     with open(os.path.join(run_dir, "config.json"), "w", encoding="utf-8") as f:
         # "models" önbellek anahtarıdır, çalışan model listesi değil (o: models_run)
         json.dump({**cfg, "models_note": "önbellek anahtarı; çalışan model listesi değil",
                    "models_run": args.models}, f, indent=2, ensure_ascii=False)
-    all_models = build_models(args.seed, args.n_jobs, args.gpu, args.quick,
+    all_models = build_models(mseed, args.n_jobs, args.gpu, args.quick,
                               tabm="TabM" in args.models.split(","))
     names = [m for m in args.models.split(",") if m in all_models]
+    base_models = (build_models(args.seed, args.n_jobs, args.gpu, args.quick,
+                                tabm="TabM" in args.models.split(","))
+                   if extra_seed and args.tune else {})
+    params_from = {}
     results = {}
     for name in names:
         # Model tanımı (ör. LR max_iter) değişirse yalnızca o model yeniden eğitilir
@@ -436,9 +459,20 @@ def main():
             print(f"{name}: kayıtlı sonuç kullanılıyor ({cache})")
             results[name] = joblib.load(cache)
             continue
-        print(f"{name} eğitiliyor...")
+        fixed = None
+        if extra_seed and args.tune and name in PARAM_SPACE:
+            # Arama tekrarlanmaz: resmi çalıştırmanın (seed 42) bulduğu ayarlar
+            base_res = os.path.join(base_run_dir, f"result_{name}_{model_key(name, base_models[name])}.joblib")
+            if not os.path.exists(base_res):
+                raise SystemExit(f"{name}: resmi çalıştırmanın sonucu yok ({base_res}). Önce --model-seed "
+                                 f"olmadan aynı ayarlarla çalıştırın.")
+            fixed = {k: v for k, v in joblib.load(base_res)["params"].items()
+                     if k != "n_estimators (early stopping)"}
+            params_from[name] = os.path.relpath(base_res, args.work_dir)
+            print(f"  {name}: seed {args.seed}'in ayarları kullanılıyor {fixed}")
+        print(f"{name} eğitiliyor (model tohumu {mseed})...")
         res = run_model(name, all_models[name], Xtr, ytr, fine[idx_tr], Xte,
-                        len(classes), args)
+                        len(classes), args, params=fixed)
         joblib.dump(res.pop("model"), os.path.join(run_dir, "models", f"{name}_{key}.joblib"))
         joblib.dump(res, cache)
         results[name] = res
@@ -499,6 +533,8 @@ def main():
         "cv_folds": args.folds,
         "tuned": bool(args.tune),
         "seed": args.seed,
+        "model_seed": mseed,
+        "params_from_seed_run": params_from or None,
         "runtime": {"gpu_used_for_xgb": bool(args.gpu), "gpu": gpu_name()},
         "data_prep": data_stats,
     }
