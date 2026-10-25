@@ -66,7 +66,8 @@ Test macro-F1 (147.629 satır), %95 bootstrap güven aralığı:
 | DT | 0,644 | 0,635 – 0,651 | |
 | LR | 0,552 | 0,549 – 0,556 | |
 
-- DSS, XGB ve RF'nin güven aralıkları çakışıyor: aralarındaki farklar istatistiksel olarak anlamlı değil. LGBM, DT ve LR açıkça geride.
+- DSS, XGB ve RF'nin güven aralıkları çakışıyor. LGBM, DT ve LR açıkça geride.
+  - **Düzeltme (25.10.2026):** İlk sürümde "farklar istatistiksel olarak anlamlı değil" yazıyordu; aralıkların çakışması bunu göstermez. Aynı test satırlarında eşleştirilmiş bootstrapla (1000 örneklem, `python src/paired_compare.py --outputs outputs/dataset_23`): DSS − RF +0,0064 [+0,0008, +0,0127] **anlamlı**; DSS − XGB +0,0046 [−0,0002, +0,0097] sınırda, anlamlı değil; XGB − RF +0,0018 [−0,0049, +0,0084] anlamlı değil. Üç karşılaştırma birlikte yapıldığı için Bonferroni düzeltmesiyle (her biri %98,3) DSS − RF [−0,0001, +0,0140] ve DSS − XGB [−0,0015, +0,0108] sınırın hemen altında kalıyor. **Doğru ifade: DSS'in üstünlüğü küçük (en fazla 0,006) ama tutarlı; üç tohumda da aynı yönde. Tek başına "istatistiksel olarak anlamlı" denmez.**
 - **Early stopping teşhisi:** Sınıf ağırlıklı doğrulama kaybı 64. turda en düşüğe iniyor (nadir sınıfların birkaç düzine örneği hızla ezberleniyor), macro-F1 ise ~400. tura kadar artıyor. Ağırlıksız kayıp macro-F1 ile aynı noktada en düşük olduğu için durma kriteri olarak o kullanıldı. Ağırlıklı kriterle XGB 64 turda duruyor ve 0,667 alıyordu.
 - **NIDS:** saldırı tespit oranı %98,5; yanlış alarm oranı XGB %17,5, DSS %17,7, RF %19,2.
 - **DSS kararları:** Ciddiyet grubuna göre karar sayesinde DoS, DDoS ve Mirai'nin %100'ü BLOCK alıyor (önceden DDoS'un ~üçte biri LOG_MONITOR'a düşüyordu).
@@ -167,6 +168,47 @@ TabM (Gorishniy vd., ICLR 2025; ekibin ortak `model_ml.py` bağlantısı, PR #7)
 - Early stopping: fold modelleri 12–26. epoch'ta, son model 6. epoch'ta durdu (ağırlıksız doğrulama kaybı, sabır 8).
 - **Durma kuralı kontrolü (24.10.2026, yeni koşu yok):** "TabM'in geride kalması durma kuralından mı?" sorusu için kayıtlı son modelin eğitim geçmişine bakıldı (`work/dataset_23/3ed30bf6/models/TabM_b9a0d9.joblib`: `history_`, `best_epoch_`, `best_epoch_by_f1_`). Doğrulama kaybına göre en iyi epoch 6, doğrulama macro-F1'ine göre en iyi epoch da 6 (macro-F1 0,668); fark 0. Eğitim 15. epoch'ta sabır dolunca bitti; 6'dan sonra doğrulama macro-F1'i 0,628–0,651 arasında kaldı, yükselme eğilimi yok. Kriter (fark < 0,01) sağlandığı için F1'e göre durdurulan TabM duyarlılık analizine gerek görülmedi: TabM'in bu veride ağaçların gerisinde kalması durma kuralından kaynaklanmıyor. Not: fold modelleri kaydedilmediği için bu kontrol yalnız test tahminlerini üreten son model için yapılabildi; doğrulama F1'i epoch'tan epoch'a ±0,02 oynuyor.
 - **Görülmemiş saldırı deneyi için not:** TabM, ölçütlerde belirlendiği gibi resmi varsayılanlarla kullanılır; sonuçlardan sonra ayar yapılmaz. TabM'li sonuçlar yorumlanırken bu veri setinde sınıflandırıcı olarak ağaç modellerinden zayıf olduğu, özellikle WEB ve BRUTEFORCE'ta, göz önünde tutulur.
+
+## Kapalı kümede 3 tohum (25.10.2026)
+
+Soru: DSS, XGB ve RF arasındaki sıralama ve küçük farklar eğitim rastgeleliğine karşı da sağlam mı? Bölme, örneklem ve fold'lar tohum 42'de sabit; yalnız model eğitim tohumu değişti (1 ve 2). Ayarlar tohum 42'nin aramasından alındı, arama tekrarlanmadı. Komut (resmi çalıştırmayla aynı bayraklar): `python src/model_ml.py --models DT,RF,XGB,LGBM,LR --tune --gpu --model-seed 1` (ve `2`) → `outputs/dataset_23/seeds/s1`, `s2` (sözleşme dosyaları değişmez). DSS her tohum klasörü için `main.py` ile ayrı ayrı hesaplandı (klasör `<dizin>/dataset_23` olarak verilip `--outputs <dizin>`). TabM bu kontrolde yok (DSS'te oylamıyor).
+
+| Model | Tohum 42 | Tohum 1 | Tohum 2 | Ortalama ± sapma | OOF ortalama ± sapma |
+| --- | --- | --- | --- | --- | --- |
+| **DSS** (RF+XGB+LGBM) | 0,712 | 0,714 | 0,709 | **0,712 ± 0,002** | – |
+| XGB | 0,707 | 0,708 | 0,708 | 0,708 ± 0,000 | 0,714 ± 0,001 |
+| RF | 0,706 | 0,705 | 0,703 | 0,704 ± 0,001 | 0,712 ± 0,000 |
+| LGBM | 0,694 | 0,708 | 0,691 | 0,697 ± 0,009 | 0,709 ± 0,001 |
+| DT | 0,644 | 0,645 | 0,644 | 0,644 ± 0,001 | 0,652 ± 0,000 |
+| LR | 0,552 | 0,552 | 0,552 | 0,552 (rastgelelik yok) | 0,555 |
+
+- **Sonuç sağlam:** Sıralama ve birincil model (XGB) her tohumda aynı. DSS üç tohumda da hem XGB'nin (+0,005 / +0,006 / +0,001) hem RF'nin (+0,006 / +0,010 / +0,006) önünde; küçük ama tutarlı bir üstünlük, yönü tohuma bağlı değil (tohum 42'de eşleştirilmiş bootstrapla çoklu karşılaştırma düzeltmesinde sınırda; yukarıdaki düzeltme notu). ALLOW edilen saldırı 463 / 489 / 465.
+- **LGBM en oynak model:** testte 0,691–0,708, OOF'ta ise sabit (0,709 ± 0,001). Yüksek öğrenme oranıyla (0,1) az ağaçta (~88) durduğu için tek modelin rastgeleliğine duyarlı; DSS'in birleşik tahmini bu oynamayı büyük ölçüde sönümlüyor.
+
+## Maliyet analizi (25.10.2026)
+
+Ortak araç (`python src/cost_dnn_edgeiiot.py --dataset dataset_23 --data-file data/dataset_23 --run-dir work/dataset_23/3ed30bf6` → `outputs/dataset_23/cost/`): asıl deneyin kayıtlı modelleri yüklendi, yeniden eğitim yok. CPU ölçümleri tek iş parçacığıyla (adil karşılaştırma; GPU'suz edge cihazı için yaklaşık gösterge); toplu tahmin 10.000 test satırı, tek paket 300 tekil tahminin medyanı. Donanım: Intel Core 7 240H, GPU sütunları RTX 5060 Laptop. Edge-IIoTset ile aynı protokol.
+
+| Model | Test F1 | Boyut | Eğitim | Toplu (ms / 1.000, 1 çekirdek) | Saniyede paket | Tek paket (ms) | GPU toplu (ms / 1.000) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| DT | 0,644 | 10,8 MB | 5 s | 0,4 | ~2,7 milyon | 0,7 | – |
+| RF | 0,706 | **922,8 MB** | 48 s | 41 | ~24 bin | 13,5 | – |
+| XGB | 0,707 | 63,3 MB | 63 s (GPU) | 248 | ~4 bin | 7,8 | 7,7 |
+| LGBM | 0,694 | 9,6 MB | 11 s | 88 | ~11 bin | 0,9 | – |
+| TabM | 0,663 | 3,6 MB | 253 s (GPU) | 519 | ~1,9 bin | 9,6 | 23,8 |
+
+**DSS oylayıcıları** (31 alt küme; seçim yalnız OOF macro-F1 ile, test yalnız raporlama):
+
+| Oylayıcılar | OOF | Test | ALLOW edilen saldırı | Yanlış alarm | Toplu (ms / 1.000) |
+| --- | --- | --- | --- | --- | --- |
+| Şu anki kural ve OOF'ta en iyi: RF+XGB+LGBM | 0,7198 | 0,7120 | 463 | %17,70 | 377 |
+| **RF+XGB** (önceden konan "OOF'ta en iyiye ≤ 0,001 yakın, en hızlı" kuralı) | 0,7188 | 0,7142 | 455 | %17,83 | **290** |
+
+- **Doğrulama:** şu anki kuralın sonuçları resmi çalıştırmayla birebir aynı (test 0,712, ALLOW 463, yanlış alarm %17,70); doğru modeller yüklendi.
+- **Ayrı bulgu: aynı başarıyla daha hafif DSS (kurulumda önerilen), RF+XGB.** Başarı ve güvenlik aynı (farklar binde 2–3), maliyet %23 düşük; LGBM'in tohumdan tohuma oynaması (3 tohum bölümü) da LGBM'siz birleşimi destekliyor. **Ana kural değişmedi** (ekip kararı, 25.10.2026): oylama kuralı deneylerden önce sabitlenmişti ve bütün sonuçlar (iki veri seti, güvenli hata, gerçek DSS'te kontrol) mevcut kuralla (RF+XGB+LGBM) üretildi. Edge-IIoTset'te aynı bulgu DT+RF+XGB.
+- **RF diskte 923 MB** (Edge-IIoTset'te 53 MB): 200 derin ağaç (derinlik 40) ve 590 bin satır. Bellek kısıtlı bir edge cihazında RF yerine XGB (63 MB) ya da LGBM (10 MB) daha uygun; LGBM tek paket gecikmesinde de en hızlılardan (0,9 ms).
+- **TabM CPU'da en yavaş model**, GPU'da toplu tahminde 22 kat hızlanıyor; boyutu en küçük (3,6 MB). Rolü sınıflandırma değil bilinmeyen tespiti olduğu için bu ödünleşim bekçi olarak kullanımda geçerli.
+- **Ölçüm gürültüsü:** aynı modellerle daha önceki bir deneme ölçümünde süreler %30–40 daha kısa çıktı (dizüstü bilgisayarda güç ve ısı durumu); modellerin sıralaması ve oranlar aynı kaldı. Mutlak milisaniyeler bu yüzden yaklaşık; karşılaştırmalar oran olarak okunmalı. Gerçek bir edge cihazında ölçülmedi.
 
 ## Görülmemiş saldırı deneyi: sonuçlar ve ölçütlerle değerlendirme (22.10.2026)
 
@@ -273,19 +315,41 @@ Protokolde tanımlanan güvenli hata oranı, iki sinyalli kuralın satır dosyal
 
 Yukarıdaki iki sinyalli kural ve güvenli hata TabM'in kendi kararıyla hesaplandı; asıl DSS ise RF, XGB ve LGBM'i birleştirir. Bu analizde aynı bekçi (TabM: alarm = üye anlaşmazlığı, kontrol = enerji) gerçek DSS'in kararına uygulandı (`python src/dss_guard.py --dataset dataset_23 --data-file data/dataset_23 --run-dir work/dataset_23/3ed30bf6` → `outputs/dataset_23/dss_guard/dss_guard_C_ttl_yok.json`). Her ailede oylayanlar (RF, XGB, LGBM; sabit) asıl deneyin ayarlarıyla, 5-fold OOF ağırlıklarıyla yeniden eğitildi; aksiyonlar `main.py`'nin kuralıyla. Koşul C, tohum 42, 6 ailenin ortalaması:
 
-| Kurulum | Görülmemiş saldırı: gerçek ALLOW | BENIGN sanıldı ve geçti | Analiste giden görülmemiş saldırı | Analiste giden normal trafik |
-| --- | --- | --- | --- | --- |
-| Yalnız DSS | %6,0 | %24,4 | %12,8 | %6,4 |
-| DSS + TabM alarmı (q = 0) | %4,4 | %14,0 | %59,4 | %20,5 |
-| DSS + alarm + enerji kontrolü, q = %1 | %4,4 | %13,5 | %59,7 | %20,9 |
-| **DSS + alarm + enerji kontrolü, q = %5** | **%4,1** | **%11,5** | **%61,1** | **%23,3** |
-| DSS + alarm + enerji kontrolü, q = %10 | %3,7 | %9,3 | — | — |
+**İşletim noktaları.** Tek bir "doğru" bütçe yok; seçim operatörün (kaç görülmemiş saldırıyı ALLOW etmeye karşı ne kadar analist yükü kabul edildiği). Aşağıdaki tablo bütün noktaları yan yana verir (ekip kararı, 25.10.2026: tek sayı yerine işletim noktaları raporlanır):
+
+| Kurulum | Görülmemiş saldırı: gerçek ALLOW | BENIGN sanıldı ve geçti | Analiste giden görülmemiş saldırı | Analiste giden normal trafik (toplam) | Bunun alarm + kontrolden gelen kısmı |
+| --- | --- | --- | --- | --- | --- |
+| Yalnız DSS | %6,0 | %24,4 | %12,8 | %6,4 | – |
+| DSS + TabM alarmı (q = 0) | %4,4 | %14,0 | %59,4 | %20,5 | %16,2 |
+| + enerji kontrolü, q = %0,5 | %4,4 | %13,7 | %59,6 | %20,7 | %16,4 |
+| + enerji kontrolü, q = %1 | %4,4 | %13,5 | %59,7 | %20,9 | %16,8 |
+| + enerji kontrolü, q = %2 | %4,3 | %12,9 | %60,0 | %21,5 | %17,6 |
+| **+ enerji kontrolü, q = %5** | **%4,1** | **%11,5** | **%61,1** | **%23,3** | **%19,8** |
+| + enerji kontrolü, q = %10 | %3,7 | %9,3 | %62,9 | %26,4 | %23,4 |
+
+"Toplam" sütunu DSS'in kendi düşük güvenli ANALYST_REVIEW kararlarını da içerir (yalnız DSS satırındaki %6,4). Görülmemiş saldırıların %20,4'ü her noktada BLOCK ya da ALERT alıyor (güvenli hata; kontrol yalnız BENIGN kararlarına dokunduğu için değişmiyor).
 
 - **Yalnız DSS bile görülmemiş saldırıların çoğunu geçirmiyor:** BENIGN sandığı %24'ün çoğu düşük güvenle LOG_MONITOR alıyor; gerçek ALLOW %6,0. Görülmemiş saldırıların %20'si BLOCK, %16'sı ALERT, %45'i LOG_MONITOR.
 - **Katkının çoğu TabM alarmından geliyor** (ALLOW %6,0 → %4,4; BENIGN geçiş %24 → %14). Enerji kontrolü üstüne az ekliyor (q = %5'te %4,4 → %4,1). Kontrolü TabM'in kararına ya da DSS'in kararına uygulamak sonucu neredeyse değiştirmiyor (q = %5: %11,9 ve %11,5).
 - **Maliyet:** Alarm, normal trafiğin %16'sını analiste gönderiyor (eşik bilinen kalibrasyon satırlarının %95'i; BENIGN satırları TabM'de ortalamadan daha belirsiz). Kontrolle birlikte q = %5'te normal trafiğin %23'ü analiste gidiyor. Bu, two_signal'de raporlanan "gerçekleşen inceleme"nin (%3,6, yalnız kontrol) üstüne alarmın yükünü de ekleyen toplam yük.
+- **Somut olarak:** Test kümesinde trafiğin yalnız %5'i normal (etiket başına sınır yüzünden), gerçek bir ağda ise çoğu. Normal trafiğin %99 olduğu bir ağda 10.000 pencerenin 9.900'ü normaldir: yalnız DSS'te bunların ~630'u, q = %5'te ~2.300'ü analiste gider. Yani bilinmeyen saldırı katmanı, ALLOW edilen görülmemiş saldırıyı yaklaşık üçte bir azaltmak (%6,0 → %4,1) için analistin önüne gelen normal pencere sayısını yaklaşık 3,6 katına çıkarır. Bu yükün çoğu (%16 puan) alarmdan, kontrolün kendisinden değil.
+- **Veri setlerinin karşıtlığı (ön bilgi):** Edge-IIoTset'te alarmın normal trafiğe yükü ~%3 (toplam ~%6); burada %16 ve %23. CICIoT2023'te normal trafik TabM için daha belirsiz (kısayol yok, düşük hacimli saldırılar normale benziyor). Edge'in gerçek DSS sonucu gelince iki veri setinin işletim noktaları ortak tabloda karşılaştırılacak.
 - **Aile başına (q = %5, gerçek ALLOW):** FLOOD %0, MIRAI %0, RECON %12,7, SPOOFING %5,4, BRUTEFORCE %4,5, WEB %2,1. Tehlikeli kısım yine RECON'da yoğunlaşıyor.
 - Sınırlılık: tek tohum (42); ölçüt ve bütçeler two_signal ile aynı, sonuçlardan sonra değiştirilmedi.
+
+**KEŞİF (sonuçlardan sonra tanımlandı): alarmı kademelendirmek.** Normal trafiğe yükün çoğu alarmdan geldiği için alarmın bir kısmının analiste değil LOG_MONITOR'a gitmesi iki tanımla denendi. Yeni eğitim yok; `dss_guard`'ın satır dosyalarından (`python src/alarm_tiers.py --dataset dataset_23` → `outputs/dataset_23/dss_guard/alarm_tiers_C_ttl_yok.json`). Alt kademe yalnız yükseltir, hiçbir kararı düşürmez (DSS BLOCK/ALERT dediyse o kalır).
+- **skor** (Gamze Serin'in önerisi): alarm skoru kalibrasyonda bilinenlerin %95–%99'u arasındaysa LOG_MONITOR, %99 üstündeyse ANALYST_REVIEW.
+- **ciddiyet** (ikinci varyant): alarm + DSS sınıfı BENIGN/RECON ise LOG_MONITOR, daha ağır bir sınıfsa ANALYST_REVIEW.
+
+| Kurulum (q = 0; q = %5 parantezde) | Görülmemiş: ALLOW | Görülmemiş: analiste | Görülmemiş: LOG_MONITOR | Görülmemiş: BLOCK/ALERT | Normal: analiste |
+| --- | --- | --- | --- | --- | --- |
+| tek (alarm → analist; dss_guard) | %4,4 (%4,1) | %59,4 (%61,1) | %15,9 | %20,4 | %20,5 (%23,3) |
+| **skor** | %4,4 (%4,1) | %36,1 (%37,8) | %31,2 | %28,3 | **%8,3 (%11,1)** |
+| ciddiyet | %4,4 (%4,1) | %31,3 (%33,0) | %38,9 | %25,4 | %7,3 (%10,0) |
+
+- **İki varyant da ALLOW'u değiştirmiyor** (alarm alan satırlar zaten ALLOW almıyordu) ve normal trafiğin analiste giden payını yaklaşık üçte bire indiriyor (%20,5 → %8,3 / %7,3).
+- **Ciddiyet varyantının riski verilerde görülüyor:** görülmemiş FLOOD'un analiste giden payı %56,9'dan %38,3'e düşüyor (RECON sanılan flood satırları LOG_MONITOR'a kayıyor); skor varyantında %54,6'da kalıyor. En ağır bilinmeyenlerin analistten kaçmaması için **skor varyantı tercih edilir**; ciddiyet varyantı karşılaştırma için raporlanır.
+- Keşif olduğu için başarı iddiası yok; eşikler (%95/%99) sonuçlara bakılarak ayarlanmadı. Edge-IIoTset sonucuyla birlikte ortak tabloda raporlanacak.
 
 ### Henüz yapılmayanlar
 

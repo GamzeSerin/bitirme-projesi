@@ -1,0 +1,212 @@
+{
+  "DT": {
+    "BENIGN": {
+      "precision": 0.67722,
+      "recall": 0.704562,
+      "f1": 0.690621
+    },
+    "RECON": {
+      "precision": 0.752346,
+      "recall": 0.721621,
+      "f1": 0.736663
+    },
+    "SPOOFING": {
+      "precision": 0.848705,
+      "recall": 0.848705,
+      "f1": 0.848705
+    },
+    "BRUTEFORCE": {
+      "precision": 0.234801,
+      "recall": 0.277571,
+      "f1": 0.254401
+    },
+    "WEB": {
+      "precision": 0.150617,
+      "recall": 0.201853,
+      "f1": 0.172511
+    },
+    "DOS": {
+      "precision": 0.583148,
+      "recall": 0.772472,
+      "f1": 0.66459
+    },
+    "DDOS": {
+      "precision": 0.910451,
+      "recall": 0.807434,
+      "f1": 0.855853
+    },
+    "MIRAI": {
+      "precision": 0.996977,
+      "recall": 0.996333,
+      "f1": 0.996655
+    }
+  },
+  "RF": {
+    "BENIGN": {
+      "precision": 0.748803,
+      "recall": 0.806344,
+      "f1": 0.776509
+    },
+    "RECON": {
+      "precision": 0.803746,
+      "recall": 0.828027,
+      "f1": 0.815706
+    },
+    "SPOOFING": {
+      "precision": 0.941712,
+      "recall": 0.854922,
+      "f1": 0.896221
+    },
+    "BRUTEFORCE": {
+      "precision": 0.454545,
+      "recall": 0.309789,
+      "f1": 0.36846
+    },
+    "WEB": {
+      "precision": 0.410788,
+      "recall": 0.196559,
+      "f1": 0.265891
+    },
+    "DOS": {
+      "precision": 0.608737,
+      "recall": 0.834543,
+      "f1": 0.703976
+    },
+    "DDOS": {
+      "precision": 0.933637,
+      "recall": 0.813433,
+      "f1": 0.869399
+    },
+    "MIRAI": {
+      "precision": 0.997802,
+      "recall": 0.997698,
+      "f1": 0.99775
+    }
+  },
+  "XGB": {
+    "BENIGN": {
+      "precision": 0.754008,
+      "recall": 0.818594,
+      "f1": 0.784975
+    },
+    "RECON": {
+      "precision": 0.821752,
+      "recall": 0.816991,
+      "f1": 0.819365
+    },
+    "SPOOFING": {
+      "precision": 0.924472,
+      "recall": 0.873397,
+      "f1": 0.898209
+    },
+    "BRUTEFORCE": {
+      "precision": 0.508511,
+      "recall": 0.296159,
+      "f1": 0.374315
+    },
+    "WEB": {
+      "precision": 0.358351,
+      "recall": 0.224355,
+      "f1": 0.275946
+    },
+    "DOS": {
+      "precision": 0.581608,
+      "recall": 0.886336,
+      "f1": 0.702343
+    },
+    "DDOS": {
+      "precision": 0.951323,
+      "recall": 0.778598,
+      "f1": 0.856337
+    },
+    "MIRAI": {
+      "precision": 0.998301,
+      "recall": 0.997927,
+      "f1": 0.998114
+    }
+  },
+  "LGBM": {
+    "BENIGN": {
+      "precision": 0.749856,
+      "recall": 0.813688,
+      "f1": 0.780469
+    },
+    "RECON": {
+      "precision": 0.822833,
+      "recall": 0.798487,
+      "f1": 0.810477
+    },
+    "SPOOFING": {
+      "precision": 0.916087,
+      "recall": 0.874245,
+      "f1": 0.894677
+    },
+    "BRUTEFORCE": {
+      "precision": 0.432292,
+      "recall": 0.30855,
+      "f1": 0.360087
+    },
+    "WEB": {
+      "precision": 0.250158,
+      "recall": 0.262078,
+      "f1": 0.255979
+    },
+    "DOS": {
+      "precision": 0.583189,
+      "recall": 0.883557,
+      "f1": 0.702617
+    },
+    "DDOS": {
+      "precision": 0.950107,
+      "recall": 0.780873,
+      "f1": 0.857217
+    },
+    "MIRAI": {
+      "precision": 0.998863,
+      "recall": 0.997375,
+      "f1": 0.998118
+    }
+  },
+  "LR": {
+    "BENIGN": {
+      "precision": 0.633158,
+      "recall": 0.635156,
+      "f1": 0.634155
+    },
+    "RECON": {
+      "precision": 0.829003,
+      "recall": 0.488821,
+      "f1": 0.615005
+    },
+    "SPOOFING": {
+      "precision": 0.646742,
+      "recall": 0.559151,
+      "f1": 0.599765
+    },
+    "BRUTEFORCE": {
+      "precision": 0.057303,
+      "recall": 0.480793,
+      "f1": 0.102402
+    },
+    "WEB": {
+      "precision": 0.04291,
+      "recall": 0.471873,
+      "f1": 0.078667
+    },
+    "DOS": {
+      "precision": 0.489259,
+      "recall": 0.909214,
+      "f1": 0.636181
+    },
+    "DDOS": {
+      "precision": 0.954557,
+      "recall": 0.666466,
+      "f1": 0.784912
+    },
+    "MIRAI": {
+      "precision": 0.982105,
+      "recall": 0.99299,
+      "f1": 0.987517
+    }
+  }
+}
