@@ -168,6 +168,47 @@ TabM (Gorishniy vd., ICLR 2025; ekibin ortak `model_ml.py` bağlantısı, PR #7)
 - **Durma kuralı kontrolü (24.10.2026, yeni koşu yok):** "TabM'in geride kalması durma kuralından mı?" sorusu için kayıtlı son modelin eğitim geçmişine bakıldı (`work/dataset_23/3ed30bf6/models/TabM_b9a0d9.joblib`: `history_`, `best_epoch_`, `best_epoch_by_f1_`). Doğrulama kaybına göre en iyi epoch 6, doğrulama macro-F1'ine göre en iyi epoch da 6 (macro-F1 0,668); fark 0. Eğitim 15. epoch'ta sabır dolunca bitti; 6'dan sonra doğrulama macro-F1'i 0,628–0,651 arasında kaldı, yükselme eğilimi yok. Kriter (fark < 0,01) sağlandığı için F1'e göre durdurulan TabM duyarlılık analizine gerek görülmedi: TabM'in bu veride ağaçların gerisinde kalması durma kuralından kaynaklanmıyor. Not: fold modelleri kaydedilmediği için bu kontrol yalnız test tahminlerini üreten son model için yapılabildi; doğrulama F1'i epoch'tan epoch'a ±0,02 oynuyor.
 - **Görülmemiş saldırı deneyi için not:** TabM, ölçütlerde belirlendiği gibi resmi varsayılanlarla kullanılır; sonuçlardan sonra ayar yapılmaz. TabM'li sonuçlar yorumlanırken bu veri setinde sınıflandırıcı olarak ağaç modellerinden zayıf olduğu, özellikle WEB ve BRUTEFORCE'ta, göz önünde tutulur.
 
+## Kapalı kümede 3 tohum (25.10.2026)
+
+Soru: "DSS, XGB ve RF eşdeğer" sonucu eğitim rastgeleliğine karşı da sağlam mı? Bölme, örneklem ve fold'lar tohum 42'de sabit; yalnız model eğitim tohumu değişti (1 ve 2). Ayarlar tohum 42'nin aramasından alındı, arama tekrarlanmadı. Komut (resmi çalıştırmayla aynı bayraklar): `python src/model_ml.py --models DT,RF,XGB,LGBM,LR --tune --gpu --model-seed 1` (ve `2`) → `outputs/dataset_23/seeds/s1`, `s2` (sözleşme dosyaları değişmez). DSS her tohum klasörü için `main.py` ile ayrı ayrı hesaplandı (klasör `<dizin>/dataset_23` olarak verilip `--outputs <dizin>`). TabM bu kontrolde yok (DSS'te oylamıyor).
+
+| Model | Tohum 42 | Tohum 1 | Tohum 2 | Ortalama ± sapma | OOF ortalama ± sapma |
+| --- | --- | --- | --- | --- | --- |
+| **DSS** (RF+XGB+LGBM) | 0,712 | 0,714 | 0,709 | **0,712 ± 0,002** | – |
+| XGB | 0,707 | 0,708 | 0,708 | 0,708 ± 0,000 | 0,714 ± 0,001 |
+| RF | 0,706 | 0,705 | 0,703 | 0,704 ± 0,001 | 0,712 ± 0,000 |
+| LGBM | 0,694 | 0,708 | 0,691 | 0,697 ± 0,009 | 0,709 ± 0,001 |
+| DT | 0,644 | 0,645 | 0,644 | 0,644 ± 0,001 | 0,652 ± 0,000 |
+| LR | 0,552 | 0,552 | 0,552 | 0,552 (rastgelelik yok) | 0,555 |
+
+- **Sonuç sağlam:** Sıralama ve birincil model (XGB) her tohumda aynı; DSS, XGB ve RF arasındaki fark en fazla 0,008, test güven aralıklarının (~±0,01) içinde. ALLOW edilen saldırı 463 / 489 / 465.
+- **LGBM en oynak model:** testte 0,691–0,708, OOF'ta ise sabit (0,709 ± 0,001). Yüksek öğrenme oranıyla (0,1) az ağaçta (~88) durduğu için tek modelin rastgeleliğine duyarlı; DSS'in birleşik tahmini bu oynamayı büyük ölçüde sönümlüyor.
+
+## Maliyet analizi (25.10.2026)
+
+Ortak araç (`python src/cost_dnn_edgeiiot.py --dataset dataset_23 --data-file data/dataset_23 --run-dir work/dataset_23/3ed30bf6` → `outputs/dataset_23/cost/`): asıl deneyin kayıtlı modelleri yüklendi, yeniden eğitim yok. CPU ölçümleri tek iş parçacığıyla (adil karşılaştırma; GPU'suz edge cihazı için yaklaşık gösterge); toplu tahmin 10.000 test satırı, tek paket 300 tekil tahminin medyanı. Donanım: Intel Core 7 240H, GPU sütunları RTX 5060 Laptop. Edge-IIoTset ile aynı protokol.
+
+| Model | Test F1 | Boyut | Eğitim | Toplu (ms / 1.000, 1 çekirdek) | Saniyede paket | Tek paket (ms) | GPU toplu (ms / 1.000) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| DT | 0,644 | 10,8 MB | 5 s | 0,4 | ~2,7 milyon | 0,7 | – |
+| RF | 0,706 | **922,8 MB** | 48 s | 41 | ~24 bin | 13,5 | – |
+| XGB | 0,707 | 63,3 MB | 63 s (GPU) | 248 | ~4 bin | 7,8 | 7,7 |
+| LGBM | 0,694 | 9,6 MB | 11 s | 88 | ~11 bin | 0,9 | – |
+| TabM | 0,663 | 3,6 MB | 253 s (GPU) | 519 | ~1,9 bin | 9,6 | 23,8 |
+
+**DSS oylayıcıları** (31 alt küme; seçim yalnız OOF macro-F1 ile, test yalnız raporlama):
+
+| Oylayıcılar | OOF | Test | ALLOW edilen saldırı | Yanlış alarm | Toplu (ms / 1.000) |
+| --- | --- | --- | --- | --- | --- |
+| Şu anki kural ve OOF'ta en iyi: RF+XGB+LGBM | 0,7198 | 0,7120 | 463 | %17,70 | 377 |
+| **RF+XGB** (önceden konan "OOF'ta en iyiye ≤ 0,001 yakın, en hızlı" kuralı) | 0,7188 | 0,7142 | 455 | %17,83 | **290** |
+
+- **Doğrulama:** şu anki kuralın sonuçları resmi çalıştırmayla birebir aynı (test 0,712, ALLOW 463, yanlış alarm %17,70); doğru modeller yüklendi.
+- **DSS için öneri: RF+XGB.** Başarı ve güvenlik aynı (farklar binde 2–3), maliyet %23 düşük. Ortak DSS kuralını değiştirdiği için ekip kararı gerekiyor (Edge-IIoTset'te de kural DT+RF+XGB öneriyordu).
+- **RF diskte 923 MB** (Edge-IIoTset'te 53 MB): 200 derin ağaç (derinlik 40) ve 590 bin satır. Bellek kısıtlı bir edge cihazında RF yerine XGB (63 MB) ya da LGBM (10 MB) daha uygun; LGBM tek paket gecikmesinde de en hızlılardan (0,9 ms).
+- **TabM CPU'da en yavaş model**, GPU'da toplu tahminde 22 kat hızlanıyor; boyutu en küçük (3,6 MB). Rolü sınıflandırma değil bilinmeyen tespiti olduğu için bu ödünleşim bekçi olarak kullanımda geçerli.
+- **Ölçüm gürültüsü:** aynı modellerle daha önceki bir deneme ölçümünde süreler %30–40 daha kısa çıktı (dizüstü bilgisayarda güç ve ısı durumu); modellerin sıralaması ve oranlar aynı kaldı. Mutlak milisaniyeler bu yüzden yaklaşık; karşılaştırmalar oran olarak okunmalı. Gerçek bir edge cihazında ölçülmedi.
+
 ## Görülmemiş saldırı deneyi: sonuçlar ve ölçütlerle değerlendirme (22.10.2026)
 
 > Yukarıdaki protokol, hipotezler ve başarı ölçütleri değiştirilmeden uygulandı. Bu bölüm sonuçlardan SONRA yazıldı; ölçütler sonuçlara göre yeniden yorumlanmadı.
