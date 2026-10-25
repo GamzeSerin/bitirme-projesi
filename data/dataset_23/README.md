@@ -205,7 +205,7 @@ Ortak araç (`python src/cost_dnn_edgeiiot.py --dataset dataset_23 --data-file d
 | **RF+XGB** (önceden konan "OOF'ta en iyiye ≤ 0,001 yakın, en hızlı" kuralı) | 0,7188 | 0,7142 | 455 | %17,83 | **290** |
 
 - **Doğrulama:** şu anki kuralın sonuçları resmi çalıştırmayla birebir aynı (test 0,712, ALLOW 463, yanlış alarm %17,70); doğru modeller yüklendi.
-- **DSS için öneri: RF+XGB.** Başarı ve güvenlik aynı (farklar binde 2–3), maliyet %23 düşük. Ortak DSS kuralını değiştirdiği için ekip kararı gerekiyor (Edge-IIoTset'te de kural DT+RF+XGB öneriyordu).
+- **Ayrı bulgu: aynı başarıyla daha hafif DSS (kurulumda önerilen), RF+XGB.** Başarı ve güvenlik aynı (farklar binde 2–3), maliyet %23 düşük; LGBM'in tohumdan tohuma oynaması (3 tohum bölümü) da LGBM'siz birleşimi destekliyor. **Ana kural değişmedi** (ekip kararı, 25.10.2026): oylama kuralı deneylerden önce sabitlenmişti ve bütün sonuçlar (iki veri seti, güvenli hata, gerçek DSS'te kontrol) mevcut kuralla (RF+XGB+LGBM) üretildi. Edge-IIoTset'te aynı bulgu DT+RF+XGB.
 - **RF diskte 923 MB** (Edge-IIoTset'te 53 MB): 200 derin ağaç (derinlik 40) ve 590 bin satır. Bellek kısıtlı bir edge cihazında RF yerine XGB (63 MB) ya da LGBM (10 MB) daha uygun; LGBM tek paket gecikmesinde de en hızlılardan (0,9 ms).
 - **TabM CPU'da en yavaş model**, GPU'da toplu tahminde 22 kat hızlanıyor; boyutu en küçük (3,6 MB). Rolü sınıflandırma değil bilinmeyen tespiti olduğu için bu ödünleşim bekçi olarak kullanımda geçerli.
 - **Ölçüm gürültüsü:** aynı modellerle daha önceki bir deneme ölçümünde süreler %30–40 daha kısa çıktı (dizüstü bilgisayarda güç ve ısı durumu); modellerin sıralaması ve oranlar aynı kaldı. Mutlak milisaniyeler bu yüzden yaklaşık; karşılaştırmalar oran olarak okunmalı. Gerçek bir edge cihazında ölçülmedi.
@@ -315,17 +315,25 @@ Protokolde tanımlanan güvenli hata oranı, iki sinyalli kuralın satır dosyal
 
 Yukarıdaki iki sinyalli kural ve güvenli hata TabM'in kendi kararıyla hesaplandı; asıl DSS ise RF, XGB ve LGBM'i birleştirir. Bu analizde aynı bekçi (TabM: alarm = üye anlaşmazlığı, kontrol = enerji) gerçek DSS'in kararına uygulandı (`python src/dss_guard.py --dataset dataset_23 --data-file data/dataset_23 --run-dir work/dataset_23/3ed30bf6` → `outputs/dataset_23/dss_guard/dss_guard_C_ttl_yok.json`). Her ailede oylayanlar (RF, XGB, LGBM; sabit) asıl deneyin ayarlarıyla, 5-fold OOF ağırlıklarıyla yeniden eğitildi; aksiyonlar `main.py`'nin kuralıyla. Koşul C, tohum 42, 6 ailenin ortalaması:
 
-| Kurulum | Görülmemiş saldırı: gerçek ALLOW | BENIGN sanıldı ve geçti | Analiste giden görülmemiş saldırı | Analiste giden normal trafik |
-| --- | --- | --- | --- | --- |
-| Yalnız DSS | %6,0 | %24,4 | %12,8 | %6,4 |
-| DSS + TabM alarmı (q = 0) | %4,4 | %14,0 | %59,4 | %20,5 |
-| DSS + alarm + enerji kontrolü, q = %1 | %4,4 | %13,5 | %59,7 | %20,9 |
-| **DSS + alarm + enerji kontrolü, q = %5** | **%4,1** | **%11,5** | **%61,1** | **%23,3** |
-| DSS + alarm + enerji kontrolü, q = %10 | %3,7 | %9,3 | — | — |
+**İşletim noktaları.** Tek bir "doğru" bütçe yok; seçim operatörün (kaç görülmemiş saldırıyı ALLOW etmeye karşı ne kadar analist yükü kabul edildiği). Aşağıdaki tablo bütün noktaları yan yana verir (ekip kararı, 25.10.2026: tek sayı yerine işletim noktaları raporlanır):
+
+| Kurulum | Görülmemiş saldırı: gerçek ALLOW | BENIGN sanıldı ve geçti | Analiste giden görülmemiş saldırı | Analiste giden normal trafik (toplam) | Bunun alarm + kontrolden gelen kısmı |
+| --- | --- | --- | --- | --- | --- |
+| Yalnız DSS | %6,0 | %24,4 | %12,8 | %6,4 | – |
+| DSS + TabM alarmı (q = 0) | %4,4 | %14,0 | %59,4 | %20,5 | %16,2 |
+| + enerji kontrolü, q = %0,5 | %4,4 | %13,7 | %59,6 | %20,7 | %16,4 |
+| + enerji kontrolü, q = %1 | %4,4 | %13,5 | %59,7 | %20,9 | %16,8 |
+| + enerji kontrolü, q = %2 | %4,3 | %12,9 | %60,0 | %21,5 | %17,6 |
+| **+ enerji kontrolü, q = %5** | **%4,1** | **%11,5** | **%61,1** | **%23,3** | **%19,8** |
+| + enerji kontrolü, q = %10 | %3,7 | %9,3 | %62,9 | %26,4 | %23,4 |
+
+"Toplam" sütunu DSS'in kendi düşük güvenli ANALYST_REVIEW kararlarını da içerir (yalnız DSS satırındaki %6,4). Görülmemiş saldırıların %20,4'ü her noktada BLOCK ya da ALERT alıyor (güvenli hata; kontrol yalnız BENIGN kararlarına dokunduğu için değişmiyor).
 
 - **Yalnız DSS bile görülmemiş saldırıların çoğunu geçirmiyor:** BENIGN sandığı %24'ün çoğu düşük güvenle LOG_MONITOR alıyor; gerçek ALLOW %6,0. Görülmemiş saldırıların %20'si BLOCK, %16'sı ALERT, %45'i LOG_MONITOR.
 - **Katkının çoğu TabM alarmından geliyor** (ALLOW %6,0 → %4,4; BENIGN geçiş %24 → %14). Enerji kontrolü üstüne az ekliyor (q = %5'te %4,4 → %4,1). Kontrolü TabM'in kararına ya da DSS'in kararına uygulamak sonucu neredeyse değiştirmiyor (q = %5: %11,9 ve %11,5).
 - **Maliyet:** Alarm, normal trafiğin %16'sını analiste gönderiyor (eşik bilinen kalibrasyon satırlarının %95'i; BENIGN satırları TabM'de ortalamadan daha belirsiz). Kontrolle birlikte q = %5'te normal trafiğin %23'ü analiste gidiyor. Bu, two_signal'de raporlanan "gerçekleşen inceleme"nin (%3,6, yalnız kontrol) üstüne alarmın yükünü de ekleyen toplam yük.
+- **Somut olarak:** Test kümesinde trafiğin yalnız %5'i normal (etiket başına sınır yüzünden), gerçek bir ağda ise çoğu. Normal trafiğin %99 olduğu bir ağda 10.000 pencerenin 9.900'ü normaldir: yalnız DSS'te bunların ~630'u, q = %5'te ~2.300'ü analiste gider. Yani bilinmeyen saldırı katmanı, ALLOW edilen görülmemiş saldırıyı yaklaşık üçte bir azaltmak (%6,0 → %4,1) için analistin önüne gelen normal pencere sayısını yaklaşık 3,6 katına çıkarır. Bu yükün çoğu (%16 puan) alarmdan, kontrolün kendisinden değil.
+- **Veri setlerinin karşıtlığı (ön bilgi):** Edge-IIoTset'te alarmın normal trafiğe yükü ~%3 (toplam ~%6); burada %16 ve %23. CICIoT2023'te normal trafik TabM için daha belirsiz (kısayol yok, düşük hacimli saldırılar normale benziyor). Edge'in gerçek DSS sonucu gelince iki veri setinin işletim noktaları ortak tabloda karşılaştırılacak.
 - **Aile başına (q = %5, gerçek ALLOW):** FLOOD %0, MIRAI %0, RECON %12,7, SPOOFING %5,4, BRUTEFORCE %4,5, WEB %2,1. Tehlikeli kısım yine RECON'da yoğunlaşıyor.
 - Sınırlılık: tek tohum (42); ölçüt ve bütçeler two_signal ile aynı, sonuçlardan sonra değiştirilmedi.
 
