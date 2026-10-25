@@ -310,6 +310,33 @@ En zor aileler (TabM enerji): **BRUTEFORCE** kontrolsüz %10,7 ± 0,8 → q = %1
 4. **Gerçekleşen inceleme bütçenin altında (tanımdan):** q = %5'te normal trafiğin %3,2–4,0'ı incelemeye gidiyor. Bütçe q, yalnızca alarm almamış ve BENIGN denmiş BENIGN satırlarına uygulanıyor; gerçekleşen oran ise bütün BENIGN satırlarına bölünüyor (bu küme BENIGN'in ~%65–75'i, yani ~0,7 × %5 ≈ %3,5). Dağılım farkı değil, oranın paydası farklı. (Düzeltme 23.10.2026: ilk yazımda bunu kalibrasyon–test dağılım farkına bağlamıştık; açıklamayı CICIoT2023 raporu doğru verdi.) Analist yükü raporlanırken gerçekleşen oran kullanılır.
 5. **Pratik sonuç:** "alarm yoksa ve tahmin BENIGN ise TabM'in enerji skoruyla ikinci kontrol" kuralı, normal trafiğin yaklaşık %3'ünü analiste göndererek görülmemiş saldırıların sessiz geçişini yaklaşık 5 kat azaltıyor. Ek model gerekmiyor. **Toplam analist yükü (düzeltme 25.10.2026):** bu %3 yalnız kontrolün yükü. TabM alarmı da normal trafiğin bir kısmını analiste gönderiyor (kayıtlı satırlardan, 3 tohum: %3,0 / %3,4 / %2,8); q = %5'te toplam yük yaklaşık %6. CICIoT2023'te aynı alarmın tek başına yükü %16, toplam %23 (`data/dataset_23/README.md`, gerçek DSS'te BENIGN kontrolü).
 
+### Gerçek DSS'te BENIGN kontrolü (25.10.2026, koşul C, tohum 42)
+
+İki sinyalli kural yukarıda TabM'in kendi kararına uygulandı; asıl DSS ise DT, RF, XGB, LGBM ve TabM'i birleştirir. Aynı bekçi (TabM: alarm = üye anlaşmazlığı, kontrol = enerji) gerçek DSS'in kararına uygulandı: `python src/dss_guard.py --dataset dnn_edgeiiot --data-file <csv> --params-from metrics` → `outputs/dnn_edgeiiot/dss_guard/dss_guard_C_seq_ack_yok.json` (Kaggle T4, 120 dk). Her ailede oylayanlar (sabit) asıl deneyin ayarlarıyla (`metrics.json`; asıl deneyin Kaggle klasörü artık yok, ayarlar aynı) 5-fold OOF ağırlıklarıyla yeniden eğitildi; aksiyonlar `main.py`'nin kuralıyla. 5 ailenin ortalaması:
+
+| Kurulum | Görülmemiş saldırı: gerçek ALLOW | Görülmemiş: analiste | Normal trafik: analiste |
+| --- | --- | --- | --- |
+| Yalnız DSS | %2,5 | %9,2 | %1,6 |
+| DSS + TabM alarmı (q = 0) | %2,1 | %50,9 | %4,5 |
+| **DSS + alarm + enerji kontrolü, q = %5** | **%0,8** | %53,3 | **%8,1** |
+| DSS + alarm + enerji kontrolü, q = %10 | %0,02 | %54,3 | %11,4 |
+
+- **Kural gerçek DSS'te çalışıyor:** q = %5'te gerçek ALLOW %2,5'ten %0,8'e (yaklaşık 3 kat), q = %10'da neredeyse sıfıra iniyor. Normal trafikte toplam analist yükü %8.
+- **Burada katkının çoğu enerji kontrolünden geliyor** (alarm %2,5 → %2,1; kontrol %2,1 → %0,8). CICIoT2023'te tersi: katkının çoğu alarmdan, kontrol az ekliyor.
+- **Kontrolü TabM'in ya da DSS'in kararına uygulamak sonucu değiştirmiyor** (q = %5'te sessiz kaçış %0,75 ve %1,09).
+- **Aile başına (gerçek ALLOW, yalnız DSS → q = %5):** BRUTEFORCE %10,4 → %3,6, WEB %1,9 → %0,5; DDOS, RECON, MALWARE ~%0 (DSS'in BENIGN dediği görülmemiş MALWARE'in hepsi düşük güvenle LOG_MONITOR/REVIEW alıyor, hiçbiri ALLOW değil).
+- Yalnız DSS bile görülmemiş saldırıların %58'ine BLOCK/ALERT, %31'ine LOG_MONITOR veriyor.
+
+**İki veri seti (gerçek DSS, q = %5):**
+
+| | Edge-IIoTset | CICIoT2023 |
+| --- | --- | --- |
+| Görülmemiş saldırı ALLOW: yalnız DSS → kural | %2,5 → %0,8 | %6,0 → %4,1 |
+| Normal trafik analiste: yalnız DSS → kural | %1,6 → %8,1 | %6,4 → %23,3 |
+| Katkının kaynağı | enerji kontrolü | TabM alarmı |
+
+Saldırıların normal trafikten ayırt edilebildiği veride kural düşük bedelle büyük kazanç sağlıyor; ayırt edilemediği veride kazanç küçük, bedel büyük. Sınırlılık: tek tohum (42).
+
 ## Sütun hizası ve değer aralığı denetimi (19.10.2026)
 
 Kod: `src/audit_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/audit/audit.json`. Ham verideki 15 etiketin her biri için 6 kontrol (zaman damgası, IP, port 0–65535, 0/1 bayrak, ARP alanları, sayısal sütunlarda metin). İhlal yalnızca DDoS_UDP (zaman %100) ve MITM'de (zaman %100, port %30, bayrak %19); Normal'de %0,11 bayrak ihlali (önemsiz); diğer 12 saldırı türünde %0. Bu iki tür bulgu 7 gereği atıldı.
