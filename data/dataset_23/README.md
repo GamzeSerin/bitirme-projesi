@@ -67,7 +67,7 @@ Test macro-F1 (147.629 satır), %95 bootstrap güven aralığı:
 | LR | 0,552 | 0,549 – 0,556 | |
 
 - DSS, XGB ve RF'nin güven aralıkları çakışıyor. LGBM, DT ve LR açıkça geride.
-  - **Düzeltme (25.10.2026):** İlk sürümde "farklar istatistiksel olarak anlamlı değil" yazıyordu; aralıkların çakışması bunu göstermez. Aynı test satırlarında eşleştirilmiş bootstrapla (1000 örneklem, `python src/paired_compare.py --outputs outputs/dataset_23`): DSS − RF +0,0064 [+0,0008, +0,0127] **anlamlı**; DSS − XGB +0,0046 [−0,0002, +0,0097] sınırda, anlamlı değil; XGB − RF +0,0018 [−0,0049, +0,0084] anlamlı değil. Doğru ifade: DSS'in üstünlüğü küçük (en fazla 0,006); RF'ye karşı anlamlı, XGB'ye karşı sınırda.
+  - **Düzeltme (25.10.2026):** İlk sürümde "farklar istatistiksel olarak anlamlı değil" yazıyordu; aralıkların çakışması bunu göstermez. Aynı test satırlarında eşleştirilmiş bootstrapla (1000 örneklem, `python src/paired_compare.py --outputs outputs/dataset_23`): DSS − RF +0,0064 [+0,0008, +0,0127] **anlamlı**; DSS − XGB +0,0046 [−0,0002, +0,0097] sınırda, anlamlı değil; XGB − RF +0,0018 [−0,0049, +0,0084] anlamlı değil. Üç karşılaştırma birlikte yapıldığı için Bonferroni düzeltmesiyle (her biri %98,3) DSS − RF [−0,0001, +0,0140] ve DSS − XGB [−0,0015, +0,0108] sınırın hemen altında kalıyor. **Doğru ifade: DSS'in üstünlüğü küçük (en fazla 0,006) ama tutarlı; üç tohumda da aynı yönde. Tek başına "istatistiksel olarak anlamlı" denmez.**
 - **Early stopping teşhisi:** Sınıf ağırlıklı doğrulama kaybı 64. turda en düşüğe iniyor (nadir sınıfların birkaç düzine örneği hızla ezberleniyor), macro-F1 ise ~400. tura kadar artıyor. Ağırlıksız kayıp macro-F1 ile aynı noktada en düşük olduğu için durma kriteri olarak o kullanıldı. Ağırlıklı kriterle XGB 64 turda duruyor ve 0,667 alıyordu.
 - **NIDS:** saldırı tespit oranı %98,5; yanlış alarm oranı XGB %17,5, DSS %17,7, RF %19,2.
 - **DSS kararları:** Ciddiyet grubuna göre karar sayesinde DoS, DDoS ve Mirai'nin %100'ü BLOCK alıyor (önceden DDoS'un ~üçte biri LOG_MONITOR'a düşüyordu).
@@ -182,7 +182,7 @@ Soru: DSS, XGB ve RF arasındaki sıralama ve küçük farklar eğitim rastgelel
 | DT | 0,644 | 0,645 | 0,644 | 0,644 ± 0,001 | 0,652 ± 0,000 |
 | LR | 0,552 | 0,552 | 0,552 | 0,552 (rastgelelik yok) | 0,555 |
 
-- **Sonuç sağlam:** Sıralama ve birincil model (XGB) her tohumda aynı. DSS üç tohumda da hem XGB'nin (+0,005 / +0,006 / +0,001) hem RF'nin (+0,006 / +0,010 / +0,006) önünde; üstünlük küçük ama yönü tohuma bağlı değil (tohum 42'de eşleştirilmiş bootstrapla RF'ye karşı anlamlı, XGB'ye karşı sınırda; yukarıdaki düzeltme notu). ALLOW edilen saldırı 463 / 489 / 465.
+- **Sonuç sağlam:** Sıralama ve birincil model (XGB) her tohumda aynı. DSS üç tohumda da hem XGB'nin (+0,005 / +0,006 / +0,001) hem RF'nin (+0,006 / +0,010 / +0,006) önünde; küçük ama tutarlı bir üstünlük, yönü tohuma bağlı değil (tohum 42'de eşleştirilmiş bootstrapla çoklu karşılaştırma düzeltmesinde sınırda; yukarıdaki düzeltme notu). ALLOW edilen saldırı 463 / 489 / 465.
 - **LGBM en oynak model:** testte 0,691–0,708, OOF'ta ise sabit (0,709 ± 0,001). Yüksek öğrenme oranıyla (0,1) az ağaçta (~88) durduğu için tek modelin rastgeleliğine duyarlı; DSS'in birleşik tahmini bu oynamayı büyük ölçüde sönümlüyor.
 
 ## Maliyet analizi (25.10.2026)
@@ -336,6 +336,20 @@ Yukarıdaki iki sinyalli kural ve güvenli hata TabM'in kendi kararıyla hesapla
 - **Veri setlerinin karşıtlığı (ön bilgi):** Edge-IIoTset'te alarmın normal trafiğe yükü ~%3 (toplam ~%6); burada %16 ve %23. CICIoT2023'te normal trafik TabM için daha belirsiz (kısayol yok, düşük hacimli saldırılar normale benziyor). Edge'in gerçek DSS sonucu gelince iki veri setinin işletim noktaları ortak tabloda karşılaştırılacak.
 - **Aile başına (q = %5, gerçek ALLOW):** FLOOD %0, MIRAI %0, RECON %12,7, SPOOFING %5,4, BRUTEFORCE %4,5, WEB %2,1. Tehlikeli kısım yine RECON'da yoğunlaşıyor.
 - Sınırlılık: tek tohum (42); ölçüt ve bütçeler two_signal ile aynı, sonuçlardan sonra değiştirilmedi.
+
+**KEŞİF (sonuçlardan sonra tanımlandı): alarmı kademelendirmek.** Normal trafiğe yükün çoğu alarmdan geldiği için alarmın bir kısmının analiste değil LOG_MONITOR'a gitmesi iki tanımla denendi. Yeni eğitim yok; `dss_guard`'ın satır dosyalarından (`python src/alarm_tiers.py --dataset dataset_23` → `outputs/dataset_23/dss_guard/alarm_tiers_C_ttl_yok.json`). Alt kademe yalnız yükseltir, hiçbir kararı düşürmez (DSS BLOCK/ALERT dediyse o kalır).
+- **skor** (Gamze Serin'in önerisi): alarm skoru kalibrasyonda bilinenlerin %95–%99'u arasındaysa LOG_MONITOR, %99 üstündeyse ANALYST_REVIEW.
+- **ciddiyet** (ikinci varyant): alarm + DSS sınıfı BENIGN/RECON ise LOG_MONITOR, daha ağır bir sınıfsa ANALYST_REVIEW.
+
+| Kurulum (q = 0; q = %5 parantezde) | Görülmemiş: ALLOW | Görülmemiş: analiste | Görülmemiş: LOG_MONITOR | Görülmemiş: BLOCK/ALERT | Normal: analiste |
+| --- | --- | --- | --- | --- | --- |
+| tek (alarm → analist; dss_guard) | %4,4 (%4,1) | %59,4 (%61,1) | %15,9 | %20,4 | %20,5 (%23,3) |
+| **skor** | %4,4 (%4,1) | %36,1 (%37,8) | %31,2 | %28,3 | **%8,3 (%11,1)** |
+| ciddiyet | %4,4 (%4,1) | %31,3 (%33,0) | %38,9 | %25,4 | %7,3 (%10,0) |
+
+- **İki varyant da ALLOW'u değiştirmiyor** (alarm alan satırlar zaten ALLOW almıyordu) ve normal trafiğin analiste giden payını yaklaşık üçte bire indiriyor (%20,5 → %8,3 / %7,3).
+- **Ciddiyet varyantının riski verilerde görülüyor:** görülmemiş FLOOD'un analiste giden payı %56,9'dan %38,3'e düşüyor (RECON sanılan flood satırları LOG_MONITOR'a kayıyor); skor varyantında %54,6'da kalıyor. En ağır bilinmeyenlerin analistten kaçmaması için **skor varyantı tercih edilir**; ciddiyet varyantı karşılaştırma için raporlanır.
+- Keşif olduğu için başarı iddiası yok; eşikler (%95/%99) sonuçlara bakılarak ayarlanmadı. Edge-IIoTset sonucuyla birlikte ortak tabloda raporlanacak.
 
 ### Henüz yapılmayanlar
 

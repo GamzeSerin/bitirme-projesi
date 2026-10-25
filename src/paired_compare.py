@@ -49,13 +49,19 @@ def main():
     print(f"{env.id}: {len(y)} test satırı, {args.n_boot} eşleştirilmiş bootstrap; DSS oylayanlar {env.voters}")
     for m in sorted(pred):
         print(f"  {m:5s} macro-F1 {macro_f1(y, pred[m], n_classes):.4f}")
-    for pair in args.pairs.split(","):
+    pairs = args.pairs.split(",")
+    # Bonferroni: k karşılaştırma birlikte yapıldığında her biri için %(1 - 0,05/k) aralık
+    a_adj = 0.05 / len(pairs)
+    for pair in pairs:
         a, b = pair.split("-")
         d = np.array([macro_f1(y[i], pred[a][i], n_classes) - macro_f1(y[i], pred[b][i], n_classes) for i in idx])
         lo, hi = np.percentile(d, [2.5, 97.5])
+        blo, bhi = np.percentile(d, [100 * a_adj / 2, 100 * (1 - a_adj / 2)])
         diff = macro_f1(y, pred[a], n_classes) - macro_f1(y, pred[b], n_classes)
         print(f"  {a} − {b}: fark {diff:+.4f}, %95 aralık [{lo:+.4f}, {hi:+.4f}] "
-              f"-> {'anlamlı' if lo > 0 or hi < 0 else 'anlamlı değil'}")
+              f"-> {'anlamlı' if lo > 0 or hi < 0 else 'anlamlı değil'}; "
+              f"Bonferroni (k={len(pairs)}) [{blo:+.4f}, {bhi:+.4f}] "
+              f"-> {'anlamlı' if blo > 0 or bhi < 0 else 'anlamlı değil'}")
 
 
 if __name__ == "__main__":
