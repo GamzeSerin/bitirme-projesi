@@ -66,7 +66,8 @@ Test macro-F1 (147.629 satır), %95 bootstrap güven aralığı:
 | DT | 0,644 | 0,635 – 0,651 | |
 | LR | 0,552 | 0,549 – 0,556 | |
 
-- DSS, XGB ve RF'nin güven aralıkları çakışıyor: aralarındaki farklar istatistiksel olarak anlamlı değil. LGBM, DT ve LR açıkça geride.
+- DSS, XGB ve RF'nin güven aralıkları çakışıyor. LGBM, DT ve LR açıkça geride.
+  - **Düzeltme (25.10.2026):** İlk sürümde "farklar istatistiksel olarak anlamlı değil" yazıyordu; aralıkların çakışması bunu göstermez. Aynı test satırlarında eşleştirilmiş bootstrapla (1000 örneklem, `python src/paired_compare.py --outputs outputs/dataset_23`): DSS − RF +0,0064 [+0,0008, +0,0127] **anlamlı**; DSS − XGB +0,0046 [−0,0002, +0,0097] sınırda, anlamlı değil; XGB − RF +0,0018 [−0,0049, +0,0084] anlamlı değil. Doğru ifade: DSS'in üstünlüğü küçük (en fazla 0,006); RF'ye karşı anlamlı, XGB'ye karşı sınırda.
 - **Early stopping teşhisi:** Sınıf ağırlıklı doğrulama kaybı 64. turda en düşüğe iniyor (nadir sınıfların birkaç düzine örneği hızla ezberleniyor), macro-F1 ise ~400. tura kadar artıyor. Ağırlıksız kayıp macro-F1 ile aynı noktada en düşük olduğu için durma kriteri olarak o kullanıldı. Ağırlıklı kriterle XGB 64 turda duruyor ve 0,667 alıyordu.
 - **NIDS:** saldırı tespit oranı %98,5; yanlış alarm oranı XGB %17,5, DSS %17,7, RF %19,2.
 - **DSS kararları:** Ciddiyet grubuna göre karar sayesinde DoS, DDoS ve Mirai'nin %100'ü BLOCK alıyor (önceden DDoS'un ~üçte biri LOG_MONITOR'a düşüyordu).
@@ -170,7 +171,7 @@ TabM (Gorishniy vd., ICLR 2025; ekibin ortak `model_ml.py` bağlantısı, PR #7)
 
 ## Kapalı kümede 3 tohum (25.10.2026)
 
-Soru: "DSS, XGB ve RF eşdeğer" sonucu eğitim rastgeleliğine karşı da sağlam mı? Bölme, örneklem ve fold'lar tohum 42'de sabit; yalnız model eğitim tohumu değişti (1 ve 2). Ayarlar tohum 42'nin aramasından alındı, arama tekrarlanmadı. Komut (resmi çalıştırmayla aynı bayraklar): `python src/model_ml.py --models DT,RF,XGB,LGBM,LR --tune --gpu --model-seed 1` (ve `2`) → `outputs/dataset_23/seeds/s1`, `s2` (sözleşme dosyaları değişmez). DSS her tohum klasörü için `main.py` ile ayrı ayrı hesaplandı (klasör `<dizin>/dataset_23` olarak verilip `--outputs <dizin>`). TabM bu kontrolde yok (DSS'te oylamıyor).
+Soru: DSS, XGB ve RF arasındaki sıralama ve küçük farklar eğitim rastgeleliğine karşı da sağlam mı? Bölme, örneklem ve fold'lar tohum 42'de sabit; yalnız model eğitim tohumu değişti (1 ve 2). Ayarlar tohum 42'nin aramasından alındı, arama tekrarlanmadı. Komut (resmi çalıştırmayla aynı bayraklar): `python src/model_ml.py --models DT,RF,XGB,LGBM,LR --tune --gpu --model-seed 1` (ve `2`) → `outputs/dataset_23/seeds/s1`, `s2` (sözleşme dosyaları değişmez). DSS her tohum klasörü için `main.py` ile ayrı ayrı hesaplandı (klasör `<dizin>/dataset_23` olarak verilip `--outputs <dizin>`). TabM bu kontrolde yok (DSS'te oylamıyor).
 
 | Model | Tohum 42 | Tohum 1 | Tohum 2 | Ortalama ± sapma | OOF ortalama ± sapma |
 | --- | --- | --- | --- | --- | --- |
@@ -181,7 +182,7 @@ Soru: "DSS, XGB ve RF eşdeğer" sonucu eğitim rastgeleliğine karşı da sağl
 | DT | 0,644 | 0,645 | 0,644 | 0,644 ± 0,001 | 0,652 ± 0,000 |
 | LR | 0,552 | 0,552 | 0,552 | 0,552 (rastgelelik yok) | 0,555 |
 
-- **Sonuç sağlam:** Sıralama ve birincil model (XGB) her tohumda aynı; DSS, XGB ve RF arasındaki fark en fazla 0,008, test güven aralıklarının (~±0,01) içinde. ALLOW edilen saldırı 463 / 489 / 465.
+- **Sonuç sağlam:** Sıralama ve birincil model (XGB) her tohumda aynı. DSS üç tohumda da hem XGB'nin (+0,005 / +0,006 / +0,001) hem RF'nin (+0,006 / +0,010 / +0,006) önünde; üstünlük küçük ama yönü tohuma bağlı değil (tohum 42'de eşleştirilmiş bootstrapla RF'ye karşı anlamlı, XGB'ye karşı sınırda; yukarıdaki düzeltme notu). ALLOW edilen saldırı 463 / 489 / 465.
 - **LGBM en oynak model:** testte 0,691–0,708, OOF'ta ise sabit (0,709 ± 0,001). Yüksek öğrenme oranıyla (0,1) az ağaçta (~88) durduğu için tek modelin rastgeleliğine duyarlı; DSS'in birleşik tahmini bu oynamayı büyük ölçüde sönümlüyor.
 
 ## Maliyet analizi (25.10.2026)
