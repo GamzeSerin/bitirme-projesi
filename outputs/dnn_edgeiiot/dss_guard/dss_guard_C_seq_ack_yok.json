@@ -1,0 +1,1633 @@
+{
+  "dataset_id": "dnn_edgeiiot",
+  "condition": "C_seq_ack_yok",
+  "dropped_features": [
+    "tcp.seq",
+    "tcp.ack"
+  ],
+  "settings": {
+    "dataset": "dnn_edgeiiot",
+    "data_file": "/kaggle/input/datasets/mohamedamineferrag/edgeiiotset-cyber-security-dataset-of-iot-iiot/Edge-IIoTset dataset/Selected dataset for ML and DL/DNN-EdgeIIoT-dataset.csv",
+    "run_dir": null,
+    "params_from": "metrics",
+    "manifest": "outputs/dnn_edgeiiot/manifest.json",
+    "out_dir": "outputs/dnn_edgeiiot/dss_guard",
+    "condition": "C_seq_ack_yok",
+    "families": "",
+    "cap": 40000,
+    "seed": 42,
+    "model_seed": null,
+    "folds": 5,
+    "cal_size": 0.1,
+    "target": 0.95,
+    "n_jobs": -1,
+    "save_rows": true,
+    "quick": false
+  },
+  "model_seed": 42,
+  "dss_voters": [
+    "DT",
+    "RF",
+    "XGB",
+    "LGBM",
+    "TabM"
+  ],
+  "guard": "TabM (alarm: üye anlaşmazlığı; kontrol: enerji)",
+  "params_from": {
+    "DT": "metrics.json[DT].params",
+    "RF": "metrics.json[RF].params",
+    "XGB": "metrics.json[XGB].params",
+    "LGBM": "metrics.json[LGBM].params",
+    "TabM": "metrics.json[TabM].params"
+  },
+  "xgb_gpu": true,
+  "guard_threshold": "kalibrasyonda alarm almamış ve aynı kararla BENIGN denmiş gerçek BENIGN satırlarının (1-q) yüzdeliği; q = 0 yalnız alarm",
+  "families": {
+    "DDOS": {
+      "categories": [
+        "DDOS"
+      ],
+      "known_classes": [
+        "BENIGN",
+        "RECON",
+        "BRUTEFORCE",
+        "WEB",
+        "MALWARE"
+      ],
+      "n_unknown": 21375,
+      "n_benign_test": 8000,
+      "tau_alarm": 0.0031703412532806396,
+      "dss_weights": {
+        "DT": {
+          "BENIGN": 0.1975,
+          "RECON": 0.2003,
+          "BRUTEFORCE": 0.1825,
+          "WEB": 0.1828,
+          "MALWARE": 0.2002
+        },
+        "RF": {
+          "BENIGN": 0.1996,
+          "RECON": 0.2006,
+          "BRUTEFORCE": 0.1932,
+          "WEB": 0.1984,
+          "MALWARE": 0.2002
+        },
+        "XGB": {
+          "BENIGN": 0.2011,
+          "RECON": 0.1996,
+          "BRUTEFORCE": 0.2084,
+          "WEB": 0.2062,
+          "MALWARE": 0.1999
+        },
+        "LGBM": {
+          "BENIGN": 0.201,
+          "RECON": 0.2001,
+          "BRUTEFORCE": 0.2085,
+          "WEB": 0.2061,
+          "MALWARE": 0.1997
+        },
+        "TabM": {
+          "BENIGN": 0.2008,
+          "RECON": 0.1994,
+          "BRUTEFORCE": 0.2074,
+          "WEB": 0.2066,
+          "MALWARE": 0.2
+        }
+      },
+      "closed_f1_known": {
+        "DT": 0.844,
+        "RF": 0.8651,
+        "XGB": 0.884,
+        "LGBM": 0.8844,
+        "TabM": 0.8877
+      },
+      "dss_only": {
+        "allow": 0.00042,
+        "silent_benign": 0.00959,
+        "actions_unknown": {
+          "ALLOW": 0.00042,
+          "LOG_MONITOR": 0.176,
+          "ANALYST_REVIEW": 0.00398,
+          "ALERT": 0.81516,
+          "BLOCK": 0.00444
+        },
+        "actions_benign": {
+          "ALLOW": 0.86675,
+          "LOG_MONITOR": 0.09388,
+          "ANALYST_REVIEW": 0.01213,
+          "ALERT": 0.02725,
+          "BLOCK": 0.0
+        }
+      },
+      "dss_unknown_assigned_to": {
+        "RECON": 0.7845,
+        "WEB": 0.1386,
+        "BRUTEFORCE": 0.0604,
+        "BENIGN": 0.0096,
+        "MALWARE": 0.0069
+      }
+    },
+    "RECON": {
+      "categories": [
+        "RECON"
+      ],
+      "known_classes": [
+        "BENIGN",
+        "BRUTEFORCE",
+        "WEB",
+        "MALWARE",
+        "DDOS"
+      ],
+      "n_unknown": 10904,
+      "n_benign_test": 8000,
+      "tau_alarm": 0.0033692121505737305,
+      "dss_weights": {
+        "DT": {
+          "BENIGN": 0.1968,
+          "BRUTEFORCE": 0.1829,
+          "WEB": 0.1838,
+          "MALWARE": 0.2002,
+          "DDOS": 0.2008
+        },
+        "RF": {
+          "BENIGN": 0.1993,
+          "BRUTEFORCE": 0.1951,
+          "WEB": 0.1967,
+          "MALWARE": 0.2002,
+          "DDOS": 0.2021
+        },
+        "XGB": {
+          "BENIGN": 0.2014,
+          "BRUTEFORCE": 0.2069,
+          "WEB": 0.2064,
+          "MALWARE": 0.2,
+          "DDOS": 0.1992
+        },
+        "LGBM": {
+          "BENIGN": 0.2013,
+          "BRUTEFORCE": 0.2079,
+          "WEB": 0.207,
+          "MALWARE": 0.1998,
+          "DDOS": 0.1995
+        },
+        "TabM": {
+          "BENIGN": 0.2012,
+          "BRUTEFORCE": 0.2071,
+          "WEB": 0.2061,
+          "MALWARE": 0.1998,
+          "DDOS": 0.1984
+        }
+      },
+      "closed_f1_known": {
+        "DT": 0.8076,
+        "RF": 0.8304,
+        "XGB": 0.8451,
+        "LGBM": 0.8462,
+        "TabM": 0.8467
+      },
+      "dss_only": {
+        "allow": 0.00046,
+        "silent_benign": 0.00679,
+        "actions_unknown": {
+          "ALLOW": 0.00046,
+          "LOG_MONITOR": 0.44883,
+          "ANALYST_REVIEW": 0.01458,
+          "ALERT": 0.06255,
+          "BLOCK": 0.47359
+        },
+        "actions_benign": {
+          "ALLOW": 0.86575,
+          "LOG_MONITOR": 0.09638,
+          "ANALYST_REVIEW": 0.01287,
+          "ALERT": 0.025,
+          "BLOCK": 0.0
+        }
+      },
+      "dss_unknown_assigned_to": {
+        "DDOS": 0.8582,
+        "WEB": 0.0769,
+        "BRUTEFORCE": 0.0581,
+        "BENIGN": 0.0068
+      }
+    },
+    "WEB": {
+      "categories": [
+        "WEB"
+      ],
+      "known_classes": [
+        "BENIGN",
+        "RECON",
+        "BRUTEFORCE",
+        "MALWARE",
+        "DDOS"
+      ],
+      "n_unknown": 8575,
+      "n_benign_test": 8000,
+      "tau_alarm": 0.00918639451265335,
+      "dss_weights": {
+        "DT": {
+          "BENIGN": 0.1973,
+          "RECON": 0.1987,
+          "BRUTEFORCE": 0.2042,
+          "MALWARE": 0.2004,
+          "DDOS": 0.2018
+        },
+        "RF": {
+          "BENIGN": 0.199,
+          "RECON": 0.2008,
+          "BRUTEFORCE": 0.2114,
+          "MALWARE": 0.2004,
+          "DDOS": 0.2046
+        },
+        "XGB": {
+          "BENIGN": 0.2013,
+          "RECON": 0.2003,
+          "BRUTEFORCE": 0.194,
+          "MALWARE": 0.2002,
+          "DDOS": 0.1977
+        },
+        "LGBM": {
+          "BENIGN": 0.2011,
+          "RECON": 0.2005,
+          "BRUTEFORCE": 0.1969,
+          "MALWARE": 0.1999,
+          "DDOS": 0.1984
+        },
+        "TabM": {
+          "BENIGN": 0.2012,
+          "RECON": 0.1997,
+          "BRUTEFORCE": 0.1934,
+          "MALWARE": 0.1991,
+          "DDOS": 0.1976
+        }
+      },
+      "closed_f1_known": {
+        "DT": 0.8958,
+        "RF": 0.9069,
+        "XGB": 0.8885,
+        "LGBM": 0.8906,
+        "TabM": 0.8886
+      },
+      "dss_only": {
+        "allow": 0.01936,
+        "silent_benign": 0.05329,
+        "actions_unknown": {
+          "ALLOW": 0.01936,
+          "LOG_MONITOR": 0.3902,
+          "ANALYST_REVIEW": 0.09691,
+          "ALERT": 0.35464,
+          "BLOCK": 0.13889
+        },
+        "actions_benign": {
+          "ALLOW": 0.87262,
+          "LOG_MONITOR": 0.09725,
+          "ANALYST_REVIEW": 0.028,
+          "ALERT": 0.00213,
+          "BLOCK": 0.0
+        }
+      },
+      "dss_unknown_assigned_to": {
+        "BRUTEFORCE": 0.5789,
+        "DDOS": 0.2105,
+        "RECON": 0.1546,
+        "BENIGN": 0.0533,
+        "MALWARE": 0.0027
+      }
+    },
+    "BRUTEFORCE": {
+      "categories": [
+        "BRUTEFORCE"
+      ],
+      "known_classes": [
+        "BENIGN",
+        "RECON",
+        "WEB",
+        "MALWARE",
+        "DDOS"
+      ],
+      "n_unknown": 4157,
+      "n_benign_test": 8000,
+      "tau_alarm": 0.004626806825399399,
+      "dss_weights": {
+        "DT": {
+          "BENIGN": 0.1978,
+          "RECON": 0.1982,
+          "WEB": 0.1977,
+          "MALWARE": 0.2003,
+          "DDOS": 0.2001
+        },
+        "RF": {
+          "BENIGN": 0.2011,
+          "RECON": 0.2002,
+          "WEB": 0.2004,
+          "MALWARE": 0.2002,
+          "DDOS": 0.2018
+        },
+        "XGB": {
+          "BENIGN": 0.2003,
+          "RECON": 0.2006,
+          "WEB": 0.2006,
+          "MALWARE": 0.1999,
+          "DDOS": 0.1992
+        },
+        "LGBM": {
+          "BENIGN": 0.2007,
+          "RECON": 0.2004,
+          "WEB": 0.2009,
+          "MALWARE": 0.1995,
+          "DDOS": 0.1996
+        },
+        "TabM": {
+          "BENIGN": 0.2001,
+          "RECON": 0.2006,
+          "WEB": 0.2004,
+          "MALWARE": 0.2001,
+          "DDOS": 0.1994
+        }
+      },
+      "closed_f1_known": {
+        "DT": 0.9283,
+        "RF": 0.9369,
+        "XGB": 0.9318,
+        "LGBM": 0.9342,
+        "TabM": 0.9325
+      },
+      "dss_only": {
+        "allow": 0.10368,
+        "silent_benign": 0.15877,
+        "actions_unknown": {
+          "ALLOW": 0.10368,
+          "LOG_MONITOR": 0.33702,
+          "ANALYST_REVIEW": 0.04955,
+          "ALERT": 0.39043,
+          "BLOCK": 0.11932
+        },
+        "actions_benign": {
+          "ALLOW": 0.91438,
+          "LOG_MONITOR": 0.06438,
+          "ANALYST_REVIEW": 0.0015,
+          "ALERT": 0.01575,
+          "BLOCK": 0.004
+        }
+      },
+      "dss_unknown_assigned_to": {
+        "WEB": 0.4982,
+        "DDOS": 0.2333,
+        "BENIGN": 0.1588,
+        "RECON": 0.1095,
+        "MALWARE": 0.0002
+      }
+    },
+    "MALWARE": {
+      "categories": [
+        "MALWARE"
+      ],
+      "known_classes": [
+        "BENIGN",
+        "RECON",
+        "BRUTEFORCE",
+        "WEB",
+        "DDOS"
+      ],
+      "n_unknown": 6291,
+      "n_benign_test": 8000,
+      "tau_alarm": 0.004986305255442858,
+      "dss_weights": {
+        "DT": {
+          "BENIGN": 0.1959,
+          "RECON": 0.1987,
+          "BRUTEFORCE": 0.1854,
+          "WEB": 0.1827,
+          "DDOS": 0.2003
+        },
+        "RF": {
+          "BENIGN": 0.1993,
+          "RECON": 0.2007,
+          "BRUTEFORCE": 0.1962,
+          "WEB": 0.1966,
+          "DDOS": 0.2023
+        },
+        "XGB": {
+          "BENIGN": 0.2018,
+          "RECON": 0.2002,
+          "BRUTEFORCE": 0.2062,
+          "WEB": 0.2071,
+          "DDOS": 0.1995
+        },
+        "LGBM": {
+          "BENIGN": 0.2015,
+          "RECON": 0.2004,
+          "BRUTEFORCE": 0.2079,
+          "WEB": 0.2069,
+          "DDOS": 0.1996
+        },
+        "TabM": {
+          "BENIGN": 0.2015,
+          "RECON": 0.2,
+          "BRUTEFORCE": 0.2043,
+          "WEB": 0.2066,
+          "DDOS": 0.1983
+        }
+      },
+      "closed_f1_known": {
+        "DT": 0.7867,
+        "RF": 0.8096,
+        "XGB": 0.8229,
+        "LGBM": 0.8252,
+        "TabM": 0.8199
+      },
+      "dss_only": {
+        "allow": 0.0,
+        "silent_benign": 0.14274,
+        "actions_unknown": {
+          "ALLOW": 0.0,
+          "LOG_MONITOR": 0.18836,
+          "ANALYST_REVIEW": 0.2928,
+          "ALERT": 0.48975,
+          "BLOCK": 0.02909
+        },
+        "actions_benign": {
+          "ALLOW": 0.86713,
+          "LOG_MONITOR": 0.08787,
+          "ANALYST_REVIEW": 0.02438,
+          "ALERT": 0.02063,
+          "BLOCK": 0.0
+        }
+      },
+      "dss_unknown_assigned_to": {
+        "WEB": 0.6144,
+        "BENIGN": 0.1427,
+        "BRUTEFORCE": 0.138,
+        "RECON": 0.0752,
+        "DDOS": 0.0297
+      }
+    }
+  },
+  "results": [
+    {
+      "family": "DDOS",
+      "decision": "tabm",
+      "q": 0.0,
+      "tau_guard": null,
+      "silent_benign": 0.00047,
+      "benign_review": 0.02225,
+      "guard_review": 0.0,
+      "unknown_caught": 0.4865
+    },
+    {
+      "family": "DDOS",
+      "decision": "tabm",
+      "q": 0.005,
+      "tau_guard": -3.2130026817321777,
+      "silent_benign": 0.00023,
+      "benign_review": 0.02863,
+      "guard_review": 0.00637,
+      "unknown_caught": 0.48674
+    },
+    {
+      "family": "DDOS",
+      "decision": "tabm",
+      "q": 0.01,
+      "tau_guard": -4.023115634918213,
+      "silent_benign": 0.00019,
+      "benign_review": 0.03488,
+      "guard_review": 0.01263,
+      "unknown_caught": 0.48678
+    },
+    {
+      "family": "DDOS",
+      "decision": "tabm",
+      "q": 0.02,
+      "tau_guard": -4.403548717498779,
+      "silent_benign": 0.00019,
+      "benign_review": 0.04462,
+      "guard_review": 0.02237,
+      "unknown_caught": 0.48678
+    },
+    {
+      "family": "DDOS",
+      "decision": "tabm",
+      "q": 0.05,
+      "tau_guard": -7.414256572723389,
+      "silent_benign": 9e-05,
+      "benign_review": 0.07013,
+      "guard_review": 0.04788,
+      "unknown_caught": 0.48688
+    },
+    {
+      "family": "DDOS",
+      "decision": "tabm",
+      "q": 0.1,
+      "tau_guard": -7.414256572723389,
+      "silent_benign": 9e-05,
+      "benign_review": 0.07013,
+      "guard_review": 0.04788,
+      "unknown_caught": 0.48688
+    },
+    {
+      "family": "DDOS",
+      "decision": "dss",
+      "q": 0.0,
+      "tau_guard": null,
+      "silent_benign": 0.00735,
+      "benign_review": 0.02225,
+      "guard_review": 0.0,
+      "unknown_caught": 0.4865,
+      "allow": 0.00014,
+      "actions_unknown": {
+        "ALLOW": 0.00014,
+        "LOG_MONITOR": 0.14236,
+        "ANALYST_REVIEW": 0.49043,
+        "ALERT": 0.36351,
+        "BLOCK": 0.00356
+      },
+      "actions_benign": {
+        "ALLOW": 0.858,
+        "LOG_MONITOR": 0.08263,
+        "ANALYST_REVIEW": 0.03288,
+        "ALERT": 0.0265,
+        "BLOCK": 0.0
+      }
+    },
+    {
+      "family": "DDOS",
+      "decision": "dss",
+      "q": 0.005,
+      "tau_guard": -2.3963940143585205,
+      "silent_benign": 0.00505,
+      "benign_review": 0.02675,
+      "guard_review": 0.0045,
+      "unknown_caught": 0.4888,
+      "allow": 0.00014,
+      "actions_unknown": {
+        "ALLOW": 0.00014,
+        "LOG_MONITOR": 0.14007,
+        "ANALYST_REVIEW": 0.49273,
+        "ALERT": 0.36351,
+        "BLOCK": 0.00356
+      },
+      "actions_benign": {
+        "ALLOW": 0.858,
+        "LOG_MONITOR": 0.07838,
+        "ANALYST_REVIEW": 0.03712,
+        "ALERT": 0.0265,
+        "BLOCK": 0.0
+      }
+    },
+    {
+      "family": "DDOS",
+      "decision": "dss",
+      "q": 0.01,
+      "tau_guard": -2.5899007320404053,
+      "silent_benign": 0.00112,
+      "benign_review": 0.03213,
+      "guard_review": 0.00988,
+      "unknown_caught": 0.49273,
+      "allow": 0.00014,
+      "actions_unknown": {
+        "ALLOW": 0.00014,
+        "LOG_MONITOR": 0.13637,
+        "ANALYST_REVIEW": 0.49642,
+        "ALERT": 0.36351,
+        "BLOCK": 0.00356
+      },
+      "actions_benign": {
+        "ALLOW": 0.858,
+        "LOG_MONITOR": 0.07362,
+        "ANALYST_REVIEW": 0.04188,
+        "ALERT": 0.0265,
+        "BLOCK": 0.0
+      }
+    },
+    {
+      "family": "DDOS",
+      "decision": "dss",
+      "q": 0.02,
+      "tau_guard": -3.1721513271331787,
+      "silent_benign": 0.00014,
+      "benign_review": 0.046,
+      "guard_review": 0.02375,
+      "unknown_caught": 0.49371,
+      "allow": 0.00014,
+      "actions_unknown": {
+        "ALLOW": 0.00014,
+        "LOG_MONITOR": 0.13544,
+        "ANALYST_REVIEW": 0.49736,
+        "ALERT": 0.36351,
+        "BLOCK": 0.00356
+      },
+      "actions_benign": {
+        "ALLOW": 0.85313,
+        "LOG_MONITOR": 0.06563,
+        "ANALYST_REVIEW": 0.05475,
+        "ALERT": 0.0265,
+        "BLOCK": 0.0
+      }
+    },
+    {
+      "family": "DDOS",
+      "decision": "dss",
+      "q": 0.05,
+      "tau_guard": -4.8146071434021,
+      "silent_benign": 0.0,
+      "benign_review": 0.07412,
+      "guard_review": 0.05187,
+      "unknown_caught": 0.49385,
+      "allow": 0.0,
+      "actions_unknown": {
+        "ALLOW": 0.0,
+        "LOG_MONITOR": 0.13544,
+        "ANALYST_REVIEW": 0.4975,
+        "ALERT": 0.36351,
+        "BLOCK": 0.00356
+      },
+      "actions_benign": {
+        "ALLOW": 0.82537,
+        "LOG_MONITOR": 0.06538,
+        "ANALYST_REVIEW": 0.08275,
+        "ALERT": 0.0265,
+        "BLOCK": 0.0
+      }
+    },
+    {
+      "family": "DDOS",
+      "decision": "dss",
+      "q": 0.1,
+      "tau_guard": -7.414256572723389,
+      "silent_benign": 0.0,
+      "benign_review": 0.08787,
+      "guard_review": 0.06563,
+      "unknown_caught": 0.49385,
+      "allow": 0.0,
+      "actions_unknown": {
+        "ALLOW": 0.0,
+        "LOG_MONITOR": 0.13544,
+        "ANALYST_REVIEW": 0.4975,
+        "ALERT": 0.36351,
+        "BLOCK": 0.00356
+      },
+      "actions_benign": {
+        "ALLOW": 0.81163,
+        "LOG_MONITOR": 0.06538,
+        "ANALYST_REVIEW": 0.0965,
+        "ALERT": 0.0265,
+        "BLOCK": 0.0
+      }
+    },
+    {
+      "family": "RECON",
+      "decision": "tabm",
+      "q": 0.0,
+      "tau_guard": null,
+      "silent_benign": 0.00046,
+      "benign_review": 0.02513,
+      "guard_review": 0.0,
+      "unknown_caught": 0.69855
+    },
+    {
+      "family": "RECON",
+      "decision": "tabm",
+      "q": 0.005,
+      "tau_guard": -4.130369663238525,
+      "silent_benign": 0.00046,
+      "benign_review": 0.03075,
+      "guard_review": 0.00562,
+      "unknown_caught": 0.69855
+    },
+    {
+      "family": "RECON",
+      "decision": "tabm",
+      "q": 0.01,
+      "tau_guard": -4.235069274902344,
+      "silent_benign": 0.00046,
+      "benign_review": 0.03513,
+      "guard_review": 0.01,
+      "unknown_caught": 0.69855
+    },
+    {
+      "family": "RECON",
+      "decision": "tabm",
+      "q": 0.02,
+      "tau_guard": -4.60210657119751,
+      "silent_benign": 0.00028,
+      "benign_review": 0.04263,
+      "guard_review": 0.0175,
+      "unknown_caught": 0.69873
+    },
+    {
+      "family": "RECON",
+      "decision": "tabm",
+      "q": 0.05,
+      "tau_guard": -6.245784759521484,
+      "silent_benign": 9e-05,
+      "benign_review": 0.05187,
+      "guard_review": 0.02675,
+      "unknown_caught": 0.69892
+    },
+    {
+      "family": "RECON",
+      "decision": "tabm",
+      "q": 0.1,
+      "tau_guard": -6.245784759521484,
+      "silent_benign": 9e-05,
+      "benign_review": 0.05187,
+      "guard_review": 0.02675,
+      "unknown_caught": 0.69892
+    },
+    {
+      "family": "RECON",
+      "decision": "dss",
+      "q": 0.0,
+      "tau_guard": null,
+      "silent_benign": 0.00614,
+      "benign_review": 0.02513,
+      "guard_review": 0.0,
+      "unknown_caught": 0.69855,
+      "allow": 0.00046,
+      "actions_unknown": {
+        "ALLOW": 0.00046,
+        "LOG_MONITOR": 0.04934,
+        "ANALYST_REVIEW": 0.69855,
+        "ALERT": 0.01587,
+        "BLOCK": 0.23579
+      },
+      "actions_benign": {
+        "ALLOW": 0.85525,
+        "LOG_MONITOR": 0.08563,
+        "ANALYST_REVIEW": 0.03737,
+        "ALERT": 0.02175,
+        "BLOCK": 0.0
+      }
+    },
+    {
+      "family": "RECON",
+      "decision": "dss",
+      "q": 0.005,
+      "tau_guard": -2.3501718044281006,
+      "silent_benign": 0.00614,
+      "benign_review": 0.03363,
+      "guard_review": 0.0085,
+      "unknown_caught": 0.69855,
+      "allow": 0.00046,
+      "actions_unknown": {
+        "ALLOW": 0.00046,
+        "LOG_MONITOR": 0.04934,
+        "ANALYST_REVIEW": 0.69855,
+        "ALERT": 0.01587,
+        "BLOCK": 0.23579
+      },
+      "actions_benign": {
+        "ALLOW": 0.85525,
+        "LOG_MONITOR": 0.081,
+        "ANALYST_REVIEW": 0.042,
+        "ALERT": 0.02175,
+        "BLOCK": 0.0
+      }
+    },
+    {
+      "family": "RECON",
+      "decision": "dss",
+      "q": 0.01,
+      "tau_guard": -2.6588492393493652,
+      "silent_benign": 0.00614,
+      "benign_review": 0.03587,
+      "guard_review": 0.01075,
+      "unknown_caught": 0.69855,
+      "allow": 0.00046,
+      "actions_unknown": {
+        "ALLOW": 0.00046,
+        "LOG_MONITOR": 0.04934,
+        "ANALYST_REVIEW": 0.69855,
+        "ALERT": 0.01587,
+        "BLOCK": 0.23579
+      },
+      "actions_benign": {
+        "ALLOW": 0.85525,
+        "LOG_MONITOR": 0.07888,
+        "ANALYST_REVIEW": 0.04412,
+        "ALERT": 0.02175,
+        "BLOCK": 0.0
+      }
+    },
+    {
+      "family": "RECON",
+      "decision": "dss",
+      "q": 0.02,
+      "tau_guard": -3.9431822299957275,
+      "silent_benign": 0.00532,
+      "benign_review": 0.04625,
+      "guard_review": 0.02113,
+      "unknown_caught": 0.69938,
+      "allow": 0.00046,
+      "actions_unknown": {
+        "ALLOW": 0.00046,
+        "LOG_MONITOR": 0.04851,
+        "ANALYST_REVIEW": 0.69938,
+        "ALERT": 0.01587,
+        "BLOCK": 0.23579
+      },
+      "actions_benign": {
+        "ALLOW": 0.85125,
+        "LOG_MONITOR": 0.073,
+        "ANALYST_REVIEW": 0.054,
+        "ALERT": 0.02175,
+        "BLOCK": 0.0
+      }
+    },
+    {
+      "family": "RECON",
+      "decision": "dss",
+      "q": 0.05,
+      "tau_guard": -6.245784759521484,
+      "silent_benign": 9e-05,
+      "benign_review": 0.071,
+      "guard_review": 0.04587,
+      "unknown_caught": 0.7046,
+      "allow": 9e-05,
+      "actions_unknown": {
+        "ALLOW": 9e-05,
+        "LOG_MONITOR": 0.04365,
+        "ANALYST_REVIEW": 0.7046,
+        "ALERT": 0.01587,
+        "BLOCK": 0.23579
+      },
+      "actions_benign": {
+        "ALLOW": 0.829,
+        "LOG_MONITOR": 0.0705,
+        "ANALYST_REVIEW": 0.07875,
+        "ALERT": 0.02175,
+        "BLOCK": 0.0
+      }
+    },
+    {
+      "family": "RECON",
+      "decision": "dss",
+      "q": 0.1,
+      "tau_guard": -6.245784759521484,
+      "silent_benign": 9e-05,
+      "benign_review": 0.071,
+      "guard_review": 0.04587,
+      "unknown_caught": 0.7046,
+      "allow": 9e-05,
+      "actions_unknown": {
+        "ALLOW": 9e-05,
+        "LOG_MONITOR": 0.04365,
+        "ANALYST_REVIEW": 0.7046,
+        "ALERT": 0.01587,
+        "BLOCK": 0.23579
+      },
+      "actions_benign": {
+        "ALLOW": 0.829,
+        "LOG_MONITOR": 0.0705,
+        "ANALYST_REVIEW": 0.07875,
+        "ALERT": 0.02175,
+        "BLOCK": 0.0
+      }
+    },
+    {
+      "family": "WEB",
+      "decision": "tabm",
+      "q": 0.0,
+      "tau_guard": null,
+      "silent_benign": 0.02309,
+      "benign_review": 0.00925,
+      "guard_review": 0.0,
+      "unknown_caught": 0.30834
+    },
+    {
+      "family": "WEB",
+      "decision": "tabm",
+      "q": 0.005,
+      "tau_guard": -4.296769142150879,
+      "silent_benign": 0.01749,
+      "benign_review": 0.01188,
+      "guard_review": 0.00263,
+      "unknown_caught": 0.31394
+    },
+    {
+      "family": "WEB",
+      "decision": "tabm",
+      "q": 0.01,
+      "tau_guard": -4.373619556427002,
+      "silent_benign": 0.01155,
+      "benign_review": 0.01475,
+      "guard_review": 0.0055,
+      "unknown_caught": 0.31988
+    },
+    {
+      "family": "WEB",
+      "decision": "tabm",
+      "q": 0.02,
+      "tau_guard": -4.810861110687256,
+      "silent_benign": 0.00863,
+      "benign_review": 0.02325,
+      "guard_review": 0.014,
+      "unknown_caught": 0.3228
+    },
+    {
+      "family": "WEB",
+      "decision": "tabm",
+      "q": 0.05,
+      "tau_guard": -7.711950302124023,
+      "silent_benign": 0.00327,
+      "benign_review": 0.04963,
+      "guard_review": 0.04038,
+      "unknown_caught": 0.32816
+    },
+    {
+      "family": "WEB",
+      "decision": "tabm",
+      "q": 0.1,
+      "tau_guard": -9.202194213867188,
+      "silent_benign": 0.00327,
+      "benign_review": 0.05675,
+      "guard_review": 0.0475,
+      "unknown_caught": 0.32816
+    },
+    {
+      "family": "WEB",
+      "decision": "dss",
+      "q": 0.0,
+      "tau_guard": null,
+      "silent_benign": 0.04735,
+      "benign_review": 0.00925,
+      "guard_review": 0.0,
+      "unknown_caught": 0.30834,
+      "allow": 0.01913,
+      "actions_unknown": {
+        "ALLOW": 0.01913,
+        "LOG_MONITOR": 0.19825,
+        "ANALYST_REVIEW": 0.34449,
+        "ALERT": 0.33213,
+        "BLOCK": 0.10601
+      },
+      "actions_benign": {
+        "ALLOW": 0.869,
+        "LOG_MONITOR": 0.092,
+        "ANALYST_REVIEW": 0.03687,
+        "ALERT": 0.00213,
+        "BLOCK": 0.0
+      }
+    },
+    {
+      "family": "WEB",
+      "decision": "dss",
+      "q": 0.005,
+      "tau_guard": -2.43190598487854,
+      "silent_benign": 0.03487,
+      "benign_review": 0.013,
+      "guard_review": 0.00375,
+      "unknown_caught": 0.32082,
+      "allow": 0.01913,
+      "actions_unknown": {
+        "ALLOW": 0.01913,
+        "LOG_MONITOR": 0.19184,
+        "ANALYST_REVIEW": 0.3509,
+        "ALERT": 0.33213,
+        "BLOCK": 0.10601
+      },
+      "actions_benign": {
+        "ALLOW": 0.869,
+        "LOG_MONITOR": 0.0905,
+        "ANALYST_REVIEW": 0.03837,
+        "ALERT": 0.00213,
+        "BLOCK": 0.0
+      }
+    },
+    {
+      "family": "WEB",
+      "decision": "dss",
+      "q": 0.01,
+      "tau_guard": -2.8093504905700684,
+      "silent_benign": 0.02566,
+      "benign_review": 0.01812,
+      "guard_review": 0.00887,
+      "unknown_caught": 0.33003,
+      "allow": 0.01913,
+      "actions_unknown": {
+        "ALLOW": 0.01913,
+        "LOG_MONITOR": 0.18717,
+        "ANALYST_REVIEW": 0.35557,
+        "ALERT": 0.33213,
+        "BLOCK": 0.10601
+      },
+      "actions_benign": {
+        "ALLOW": 0.869,
+        "LOG_MONITOR": 0.08725,
+        "ANALYST_REVIEW": 0.04163,
+        "ALERT": 0.00213,
+        "BLOCK": 0.0
+      }
+    },
+    {
+      "family": "WEB",
+      "decision": "dss",
+      "q": 0.02,
+      "tau_guard": -3.4999024868011475,
+      "silent_benign": 0.02402,
+      "benign_review": 0.02813,
+      "guard_review": 0.01887,
+      "unknown_caught": 0.33166,
+      "allow": 0.01913,
+      "actions_unknown": {
+        "ALLOW": 0.01913,
+        "LOG_MONITOR": 0.18647,
+        "ANALYST_REVIEW": 0.35627,
+        "ALERT": 0.33213,
+        "BLOCK": 0.10601
+      },
+      "actions_benign": {
+        "ALLOW": 0.869,
+        "LOG_MONITOR": 0.07863,
+        "ANALYST_REVIEW": 0.05025,
+        "ALERT": 0.00213,
+        "BLOCK": 0.0
+      }
+    },
+    {
+      "family": "WEB",
+      "decision": "dss",
+      "q": 0.05,
+      "tau_guard": -4.853311061859131,
+      "silent_benign": 0.0077,
+      "benign_review": 0.05038,
+      "guard_review": 0.04113,
+      "unknown_caught": 0.34799,
+      "allow": 0.00513,
+      "actions_unknown": {
+        "ALLOW": 0.00513,
+        "LOG_MONITOR": 0.18437,
+        "ANALYST_REVIEW": 0.37236,
+        "ALERT": 0.33213,
+        "BLOCK": 0.10601
+      },
+      "actions_benign": {
+        "ALLOW": 0.85262,
+        "LOG_MONITOR": 0.07425,
+        "ANALYST_REVIEW": 0.071,
+        "ALERT": 0.00213,
+        "BLOCK": 0.0
+      }
+    },
+    {
+      "family": "WEB",
+      "decision": "dss",
+      "q": 0.1,
+      "tau_guard": -9.202194213867188,
+      "silent_benign": 0.00268,
+      "benign_review": 0.08075,
+      "guard_review": 0.0715,
+      "unknown_caught": 0.353,
+      "allow": 0.00105,
+      "actions_unknown": {
+        "ALLOW": 0.00105,
+        "LOG_MONITOR": 0.18344,
+        "ANALYST_REVIEW": 0.37738,
+        "ALERT": 0.33213,
+        "BLOCK": 0.10601
+      },
+      "actions_benign": {
+        "ALLOW": 0.82325,
+        "LOG_MONITOR": 0.07325,
+        "ANALYST_REVIEW": 0.10138,
+        "ALERT": 0.00213,
+        "BLOCK": 0.0
+      }
+    },
+    {
+      "family": "BRUTEFORCE",
+      "decision": "tabm",
+      "q": 0.0,
+      "tau_guard": null,
+      "silent_benign": 0.11643,
+      "benign_review": 0.05175,
+      "guard_review": 0.0,
+      "unknown_caught": 0.35699
+    },
+    {
+      "family": "BRUTEFORCE",
+      "decision": "tabm",
+      "q": 0.005,
+      "tau_guard": -2.673508405685425,
+      "silent_benign": 0.10777,
+      "benign_review": 0.05725,
+      "guard_review": 0.0055,
+      "unknown_caught": 0.36565
+    },
+    {
+      "family": "BRUTEFORCE",
+      "decision": "tabm",
+      "q": 0.01,
+      "tau_guard": -2.7293965816497803,
+      "silent_benign": 0.09935,
+      "benign_review": 0.06263,
+      "guard_review": 0.01087,
+      "unknown_caught": 0.37407
+    },
+    {
+      "family": "BRUTEFORCE",
+      "decision": "tabm",
+      "q": 0.02,
+      "tau_guard": -3.2674927711486816,
+      "silent_benign": 0.0765,
+      "benign_review": 0.07087,
+      "guard_review": 0.01912,
+      "unknown_caught": 0.39692
+    },
+    {
+      "family": "BRUTEFORCE",
+      "decision": "tabm",
+      "q": 0.05,
+      "tau_guard": -4.188041687011719,
+      "silent_benign": 0.03392,
+      "benign_review": 0.09713,
+      "guard_review": 0.04537,
+      "unknown_caught": 0.4395
+    },
+    {
+      "family": "BRUTEFORCE",
+      "decision": "tabm",
+      "q": 0.1,
+      "tau_guard": -6.077851295471191,
+      "silent_benign": 0.00096,
+      "benign_review": 0.14275,
+      "guard_review": 0.091,
+      "unknown_caught": 0.47246
+    },
+    {
+      "family": "BRUTEFORCE",
+      "decision": "dss",
+      "q": 0.0,
+      "tau_guard": null,
+      "silent_benign": 0.12533,
+      "benign_review": 0.05175,
+      "guard_review": 0.0,
+      "unknown_caught": 0.35699,
+      "allow": 0.08708,
+      "actions_unknown": {
+        "ALLOW": 0.08708,
+        "LOG_MONITOR": 0.16839,
+        "ANALYST_REVIEW": 0.36012,
+        "ALERT": 0.34688,
+        "BLOCK": 0.03753
+      },
+      "actions_benign": {
+        "ALLOW": 0.8785,
+        "LOG_MONITOR": 0.0505,
+        "ANALYST_REVIEW": 0.0525,
+        "ALERT": 0.01525,
+        "BLOCK": 0.00325
+      }
+    },
+    {
+      "family": "BRUTEFORCE",
+      "decision": "dss",
+      "q": 0.005,
+      "tau_guard": -2.600243091583252,
+      "silent_benign": 0.11884,
+      "benign_review": 0.056,
+      "guard_review": 0.00425,
+      "unknown_caught": 0.36348,
+      "allow": 0.08612,
+      "actions_unknown": {
+        "ALLOW": 0.08612,
+        "LOG_MONITOR": 0.16286,
+        "ANALYST_REVIEW": 0.36661,
+        "ALERT": 0.34688,
+        "BLOCK": 0.03753
+      },
+      "actions_benign": {
+        "ALLOW": 0.87775,
+        "LOG_MONITOR": 0.047,
+        "ANALYST_REVIEW": 0.05675,
+        "ALERT": 0.01525,
+        "BLOCK": 0.00325
+      }
+    },
+    {
+      "family": "BRUTEFORCE",
+      "decision": "dss",
+      "q": 0.01,
+      "tau_guard": -2.7217018604278564,
+      "silent_benign": 0.10969,
+      "benign_review": 0.06087,
+      "guard_review": 0.00912,
+      "unknown_caught": 0.37262,
+      "allow": 0.08371,
+      "actions_unknown": {
+        "ALLOW": 0.08371,
+        "LOG_MONITOR": 0.15612,
+        "ANALYST_REVIEW": 0.37575,
+        "ALERT": 0.34688,
+        "BLOCK": 0.03753
+      },
+      "actions_benign": {
+        "ALLOW": 0.87538,
+        "LOG_MONITOR": 0.0445,
+        "ANALYST_REVIEW": 0.06162,
+        "ALERT": 0.01525,
+        "BLOCK": 0.00325
+      }
+    },
+    {
+      "family": "BRUTEFORCE",
+      "decision": "dss",
+      "q": 0.02,
+      "tau_guard": -3.2224950790405273,
+      "silent_benign": 0.08925,
+      "benign_review": 0.07062,
+      "guard_review": 0.01887,
+      "unknown_caught": 0.39307,
+      "allow": 0.07457,
+      "actions_unknown": {
+        "ALLOW": 0.07457,
+        "LOG_MONITOR": 0.14554,
+        "ANALYST_REVIEW": 0.39548,
+        "ALERT": 0.34688,
+        "BLOCK": 0.03753
+      },
+      "actions_benign": {
+        "ALLOW": 0.87025,
+        "LOG_MONITOR": 0.03988,
+        "ANALYST_REVIEW": 0.07137,
+        "ALERT": 0.01525,
+        "BLOCK": 0.00325
+      }
+    },
+    {
+      "family": "BRUTEFORCE",
+      "decision": "dss",
+      "q": 0.05,
+      "tau_guard": -4.124326705932617,
+      "silent_benign": 0.04691,
+      "benign_review": 0.0955,
+      "guard_review": 0.04375,
+      "unknown_caught": 0.43541,
+      "allow": 0.03584,
+      "actions_unknown": {
+        "ALLOW": 0.03584,
+        "LOG_MONITOR": 0.14193,
+        "ANALYST_REVIEW": 0.43782,
+        "ALERT": 0.34688,
+        "BLOCK": 0.03753
+      },
+      "actions_benign": {
+        "ALLOW": 0.84675,
+        "LOG_MONITOR": 0.0385,
+        "ANALYST_REVIEW": 0.09625,
+        "ALERT": 0.01525,
+        "BLOCK": 0.00325
+      }
+    },
+    {
+      "family": "BRUTEFORCE",
+      "decision": "dss",
+      "q": 0.1,
+      "tau_guard": -5.7778778076171875,
+      "silent_benign": 0.00072,
+      "benign_review": 0.14225,
+      "guard_review": 0.0905,
+      "unknown_caught": 0.4816,
+      "allow": 0.0,
+      "actions_unknown": {
+        "ALLOW": 0.0,
+        "LOG_MONITOR": 0.13159,
+        "ANALYST_REVIEW": 0.484,
+        "ALERT": 0.34688,
+        "BLOCK": 0.03753
+      },
+      "actions_benign": {
+        "ALLOW": 0.80188,
+        "LOG_MONITOR": 0.03662,
+        "ANALYST_REVIEW": 0.143,
+        "ALERT": 0.01525,
+        "BLOCK": 0.00325
+      }
+    },
+    {
+      "family": "MALWARE",
+      "decision": "tabm",
+      "q": 0.0,
+      "tau_guard": null,
+      "silent_benign": 0.0,
+      "benign_review": 0.03925,
+      "guard_review": 0.0,
+      "unknown_caught": 0.51121
+    },
+    {
+      "family": "MALWARE",
+      "decision": "tabm",
+      "q": 0.005,
+      "tau_guard": -2.7917873859405518,
+      "silent_benign": 0.0,
+      "benign_review": 0.03925,
+      "guard_review": 0.0,
+      "unknown_caught": 0.51121
+    },
+    {
+      "family": "MALWARE",
+      "decision": "tabm",
+      "q": 0.01,
+      "tau_guard": -2.7917873859405518,
+      "silent_benign": 0.0,
+      "benign_review": 0.03925,
+      "guard_review": 0.0,
+      "unknown_caught": 0.51121
+    },
+    {
+      "family": "MALWARE",
+      "decision": "tabm",
+      "q": 0.02,
+      "tau_guard": -2.7917873859405518,
+      "silent_benign": 0.0,
+      "benign_review": 0.03925,
+      "guard_review": 0.0,
+      "unknown_caught": 0.51121
+    },
+    {
+      "family": "MALWARE",
+      "decision": "tabm",
+      "q": 0.05,
+      "tau_guard": -2.7917873859405518,
+      "silent_benign": 0.0,
+      "benign_review": 0.03925,
+      "guard_review": 0.0,
+      "unknown_caught": 0.51121
+    },
+    {
+      "family": "MALWARE",
+      "decision": "tabm",
+      "q": 0.1,
+      "tau_guard": -3.039726734161377,
+      "silent_benign": 0.0,
+      "benign_review": 0.12787,
+      "guard_review": 0.08862,
+      "unknown_caught": 0.51121
+    },
+    {
+      "family": "MALWARE",
+      "decision": "dss",
+      "q": 0.0,
+      "tau_guard": null,
+      "silent_benign": 0.14258,
+      "benign_review": 0.03925,
+      "guard_review": 0.0,
+      "unknown_caught": 0.51121,
+      "allow": 0.0,
+      "actions_unknown": {
+        "ALLOW": 0.0,
+        "LOG_MONITOR": 0.04181,
+        "ANALYST_REVIEW": 0.65379,
+        "ALERT": 0.28994,
+        "BLOCK": 0.01447
+      },
+      "actions_benign": {
+        "ALLOW": 0.83137,
+        "LOG_MONITOR": 0.085,
+        "ANALYST_REVIEW": 0.06325,
+        "ALERT": 0.02038,
+        "BLOCK": 0.0
+      }
+    },
+    {
+      "family": "MALWARE",
+      "decision": "dss",
+      "q": 0.005,
+      "tau_guard": -2.1942107677459717,
+      "silent_benign": 0.0,
+      "benign_review": 0.045,
+      "guard_review": 0.00575,
+      "unknown_caught": 0.65379,
+      "allow": 0.0,
+      "actions_unknown": {
+        "ALLOW": 0.0,
+        "LOG_MONITOR": 0.04181,
+        "ANALYST_REVIEW": 0.65379,
+        "ALERT": 0.28994,
+        "BLOCK": 0.01447
+      },
+      "actions_benign": {
+        "ALLOW": 0.83137,
+        "LOG_MONITOR": 0.08238,
+        "ANALYST_REVIEW": 0.06588,
+        "ALERT": 0.02038,
+        "BLOCK": 0.0
+      }
+    },
+    {
+      "family": "MALWARE",
+      "decision": "dss",
+      "q": 0.01,
+      "tau_guard": -2.3648362159729004,
+      "silent_benign": 0.0,
+      "benign_review": 0.05,
+      "guard_review": 0.01075,
+      "unknown_caught": 0.65379,
+      "allow": 0.0,
+      "actions_unknown": {
+        "ALLOW": 0.0,
+        "LOG_MONITOR": 0.04181,
+        "ANALYST_REVIEW": 0.65379,
+        "ALERT": 0.28994,
+        "BLOCK": 0.01447
+      },
+      "actions_benign": {
+        "ALLOW": 0.83137,
+        "LOG_MONITOR": 0.07812,
+        "ANALYST_REVIEW": 0.07013,
+        "ALERT": 0.02038,
+        "BLOCK": 0.0
+      }
+    },
+    {
+      "family": "MALWARE",
+      "decision": "dss",
+      "q": 0.02,
+      "tau_guard": -2.7917873859405518,
+      "silent_benign": 0.0,
+      "benign_review": 0.05713,
+      "guard_review": 0.01787,
+      "unknown_caught": 0.65379,
+      "allow": 0.0,
+      "actions_unknown": {
+        "ALLOW": 0.0,
+        "LOG_MONITOR": 0.04181,
+        "ANALYST_REVIEW": 0.65379,
+        "ALERT": 0.28994,
+        "BLOCK": 0.01447
+      },
+      "actions_benign": {
+        "ALLOW": 0.83137,
+        "LOG_MONITOR": 0.0725,
+        "ANALYST_REVIEW": 0.07575,
+        "ALERT": 0.02038,
+        "BLOCK": 0.0
+      }
+    },
+    {
+      "family": "MALWARE",
+      "decision": "dss",
+      "q": 0.05,
+      "tau_guard": -2.7917873859405518,
+      "silent_benign": 0.0,
+      "benign_review": 0.05713,
+      "guard_review": 0.01787,
+      "unknown_caught": 0.65379,
+      "allow": 0.0,
+      "actions_unknown": {
+        "ALLOW": 0.0,
+        "LOG_MONITOR": 0.04181,
+        "ANALYST_REVIEW": 0.65379,
+        "ALERT": 0.28994,
+        "BLOCK": 0.01447
+      },
+      "actions_benign": {
+        "ALLOW": 0.83137,
+        "LOG_MONITOR": 0.0725,
+        "ANALYST_REVIEW": 0.07575,
+        "ALERT": 0.02038,
+        "BLOCK": 0.0
+      }
+    },
+    {
+      "family": "MALWARE",
+      "decision": "dss",
+      "q": 0.1,
+      "tau_guard": -2.973945140838623,
+      "silent_benign": 0.0,
+      "benign_review": 0.133,
+      "guard_review": 0.09375,
+      "unknown_caught": 0.65379,
+      "allow": 0.0,
+      "actions_unknown": {
+        "ALLOW": 0.0,
+        "LOG_MONITOR": 0.04181,
+        "ANALYST_REVIEW": 0.65379,
+        "ALERT": 0.28994,
+        "BLOCK": 0.01447
+      },
+      "actions_benign": {
+        "ALLOW": 0.75625,
+        "LOG_MONITOR": 0.07175,
+        "ANALYST_REVIEW": 0.15163,
+        "ALERT": 0.02038,
+        "BLOCK": 0.0
+      }
+    }
+  ],
+  "mean_over_families": [
+    {
+      "decision": "dss",
+      "q": 0.0,
+      "silent_benign": 0.06575,
+      "allow": 0.02136,
+      "benign_review": 0.02953,
+      "guard_review": 0.0,
+      "unknown_caught": 0.47232
+    },
+    {
+      "decision": "dss",
+      "q": 0.005,
+      "silent_benign": 0.03298,
+      "allow": 0.02117,
+      "benign_review": 0.03488,
+      "guard_review": 0.00535,
+      "unknown_caught": 0.50509
+    },
+    {
+      "decision": "dss",
+      "q": 0.01,
+      "silent_benign": 0.02852,
+      "allow": 0.02069,
+      "benign_review": 0.0394,
+      "guard_review": 0.00987,
+      "unknown_caught": 0.50954
+    },
+    {
+      "decision": "dss",
+      "q": 0.02,
+      "silent_benign": 0.02375,
+      "allow": 0.01886,
+      "benign_review": 0.04963,
+      "guard_review": 0.0201,
+      "unknown_caught": 0.51432
+    },
+    {
+      "decision": "dss",
+      "q": 0.05,
+      "silent_benign": 0.01094,
+      "allow": 0.00821,
+      "benign_review": 0.06963,
+      "guard_review": 0.0401,
+      "unknown_caught": 0.52713
+    },
+    {
+      "decision": "dss",
+      "q": 0.1,
+      "silent_benign": 0.0007,
+      "allow": 0.00023,
+      "benign_review": 0.10297,
+      "guard_review": 0.07345,
+      "unknown_caught": 0.53737
+    },
+    {
+      "decision": "tabm",
+      "q": 0.0,
+      "silent_benign": 0.02809,
+      "allow": NaN,
+      "benign_review": 0.02953,
+      "guard_review": 0.0,
+      "unknown_caught": 0.47232
+    },
+    {
+      "decision": "tabm",
+      "q": 0.005,
+      "silent_benign": 0.02519,
+      "allow": NaN,
+      "benign_review": 0.03355,
+      "guard_review": 0.00402,
+      "unknown_caught": 0.47522
+    },
+    {
+      "decision": "tabm",
+      "q": 0.01,
+      "silent_benign": 0.02231,
+      "allow": NaN,
+      "benign_review": 0.03733,
+      "guard_review": 0.0078,
+      "unknown_caught": 0.4781
+    },
+    {
+      "decision": "tabm",
+      "q": 0.02,
+      "silent_benign": 0.01712,
+      "allow": NaN,
+      "benign_review": 0.04412,
+      "guard_review": 0.0146,
+      "unknown_caught": 0.48329
+    },
+    {
+      "decision": "tabm",
+      "q": 0.05,
+      "silent_benign": 0.00747,
+      "allow": NaN,
+      "benign_review": 0.0616,
+      "guard_review": 0.03208,
+      "unknown_caught": 0.49293
+    },
+    {
+      "decision": "tabm",
+      "q": 0.1,
+      "silent_benign": 0.00088,
+      "allow": NaN,
+      "benign_review": 0.08987,
+      "guard_review": 0.06035,
+      "unknown_caught": 0.49953
+    }
+  ],
+  "dss_only_mean": {
+    "allow": 0.02478,
+    "silent_benign": 0.07424
+  },
+  "runtime_seconds": 7172.8
+}
