@@ -1,0 +1,55 @@
+Okunuyor: /kaggle/input/datasets/mohamedamineferrag/edgeiiotset-cyber-security-dataset-of-iot-iiot/Edge-IIoTset dataset/Selected dataset for ML and DL/DNN-EdgeIIoT-dataset.csv
+Hizasız satır (frame.time zaman değil): 122782 {'DDoS_UDP': 121568, 'MITM': 1214} -> atıldı
+Edge-IIoTset: 296506 satır, koşul E_hepsi_cikarildi; aileler ['DDOS', 'RECON', 'WEB', 'BRUTEFORCE', 'MALWARE']; analist bütçeleri q = [0.005, 0.01, 0.02, 0.05, 0.1]
+
+=== DDOS ['DDOS'] (kör oranı 0.0625) — yalnız alarm: yakalanan 0.473, sessiz BENIGN kaçışı 0.008 ===
+  cp_benign_z    q=0.010: kaçış 0.0077 / inceleme 0.0000  q=0.050: kaçış 0.0077 / inceleme 0.0000
+  tabm_disagree  q=0.010: kaçış 0.0077 / inceleme 0.0094  q=0.050: kaçış 0.0077 / inceleme 0.0186
+  tabm_msp       q=0.010: kaçış 0.0077 / inceleme 0.0040  q=0.050: kaçış 0.0077 / inceleme 0.0083
+  tabm_energy    q=0.010: kaçış 0.0077 / inceleme 0.0000  q=0.050: kaçış 0.0077 / inceleme 0.0000
+  knn            q=0.010: kaçış 0.0077 / inceleme 0.0047  q=0.050: kaçış 0.0077 / inceleme 0.0243
+  (358 s)
+
+=== RECON ['RECON'] (kör oranı 0.0625) — yalnız alarm: yakalanan 0.362, sessiz BENIGN kaçışı 0.001 ===
+  cp_benign_z    q=0.010: kaçış 0.0010 / inceleme 0.0000  q=0.050: kaçış 0.0010 / inceleme 0.0000
+  tabm_disagree  q=0.010: kaçış 0.0009 / inceleme 0.0025  q=0.050: kaçış 0.0009 / inceleme 0.0025
+  tabm_msp       q=0.010: kaçış 0.0010 / inceleme 0.0000  q=0.050: kaçış 0.0010 / inceleme 0.0000
+  tabm_energy    q=0.010: kaçış 0.0010 / inceleme 0.0000  q=0.050: kaçış 0.0010 / inceleme 0.0000
+  knn            q=0.010: kaçış 0.0010 / inceleme 0.0067  q=0.050: kaçış 0.0010 / inceleme 0.0088
+  (373 s)
+
+=== WEB ['WEB'] (kör oranı 0.125) — yalnız alarm: yakalanan 0.127, sessiz BENIGN kaçışı 0.108 ===
+  cp_benign_z    q=0.010: kaçış 0.1082 / inceleme 0.0000  q=0.050: kaçış 0.1082 / inceleme 0.0000
+  tabm_disagree  q=0.010: kaçış 0.1082 / inceleme 0.0005  q=0.050: kaçış 0.1082 / inceleme 0.0005
+  tabm_msp       q=0.010: kaçış 0.1082 / inceleme 0.0000  q=0.050: kaçış 0.1082 / inceleme 0.0000
+  tabm_energy    q=0.010: kaçış 0.1082 / inceleme 0.0000  q=0.050: kaçış 0.1082 / inceleme 0.0000
+  knn            q=0.010: kaçış 0.1079 / inceleme 0.0064  q=0.050: kaçış 0.1069 / inceleme 0.0279
+  (300 s)
+
+=== BRUTEFORCE ['BRUTEFORCE'] (kör oranı 0.0625) — yalnız alarm: yakalanan 0.047, sessiz BENIGN kaçışı 0.001 ===
+  cp_benign_z    q=0.010: kaçış 0.0014 / inceleme 0.0057  q=0.050: kaçış 0.0014 / inceleme 0.0077
+  tabm_disagree  q=0.010: kaçış 0.0014 / inceleme 0.0011  q=0.050: kaçış 0.0014 / inceleme 0.0290
+  tabm_msp       q=0.010: kaçış 0.0014 / inceleme 0.0054  q=0.050: kaçış 0.0014 / inceleme 0.0054
+  tabm_energy    q=0.010: kaçış 0.0014 / inceleme 0.0000  q=0.050: kaçış 0.0014 / inceleme 0.0000
+  knn            q=0.010: kaçış 0.0014 / inceleme 0.0059  q=0.050: kaçış 0.0014 / inceleme 0.0269
+  (571 s)
+
+=== MALWARE ['MALWARE'] (kör oranı 0.0625) — yalnız alarm: yakalanan 0.483, sessiz BENIGN kaçışı 0.000 ===
+  cp_benign_z    q=0.010: kaçış 0.0005 / inceleme 0.0000  q=0.050: kaçış 0.0005 / inceleme 0.0000
+  tabm_disagree  q=0.010: kaçış 0.0005 / inceleme 0.0000  q=0.050: kaçış 0.0005 / inceleme 0.0000
+  tabm_msp       q=0.010: kaçış 0.0005 / inceleme 0.0000  q=0.050: kaçış 0.0005 / inceleme 0.0000
+  tabm_energy    q=0.010: kaçış 0.0005 / inceleme 0.0000  q=0.050: kaçış 0.0005 / inceleme 0.0000
+  knn            q=0.010: kaçış 0.0005 / inceleme 0.0061  q=0.050: kaçış 0.0005 / inceleme 0.0061
+  (285 s)
+
+Ailelerin ortalaması (q = analist bütçesi):
+              benign_review                                 silent_benign                                
+q                     0.005   0.010   0.020   0.050   0.100         0.005   0.010   0.020   0.050   0.100
+guard                                                                                                    
+cp_benign_z          0.0004  0.0012  0.0016  0.0016  0.0482        0.0238  0.0238  0.0238  0.0238  0.0074
+knn                  0.0034  0.0060  0.0101  0.0188  0.0211        0.0238  0.0237  0.0237  0.0235  0.0235
+tabm_disagree        0.0016  0.0027  0.0034  0.0101  0.0220        0.0238  0.0238  0.0238  0.0238  0.0174
+tabm_energy          0.0000  0.0000  0.0000  0.0000  0.0459        0.0238  0.0238  0.0238  0.0238  0.0074
+tabm_msp             0.0007  0.0019  0.0027  0.0027  0.0503        0.0238  0.0238  0.0238  0.0238  0.0071
+
+Çıktılar: outputs/dnn_edgeiiot/two_signal  (1928 s)
