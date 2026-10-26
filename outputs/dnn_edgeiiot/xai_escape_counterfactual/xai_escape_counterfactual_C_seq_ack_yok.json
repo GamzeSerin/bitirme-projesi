@@ -52,6 +52,56 @@
       ],
       "decision_source": "dss",
       "model": "outputs/dnn_edgeiiot/xai_unknown_decision/models/TabM_BRUTEFORCE_C_seq_ack_yok.joblib",
+      "twins": {
+        "alarm_unknown": {
+          "n": 1484,
+          "d_median": 0.002890173410260031,
+          "exact_twin_share": 0.1173,
+          "nearest_label_share": {
+            "BENIGN": 0.0802,
+            "DDOS": 0.5081,
+            "MALWARE": 0.0013,
+            "RECON": 0.3538,
+            "WEB": 0.0566
+          },
+          "exact_twin_label_share": {
+            "BENIGN": 0.1437,
+            "DDOS": 0.3908,
+            "RECON": 0.2011,
+            "WEB": 0.2644
+          }
+        },
+        "guard_unknown": {
+          "n": 326,
+          "d_median": 3.959141785445039e-05,
+          "exact_twin_share": 0.2055,
+          "nearest_label_share": {
+            "BENIGN": 0.9018,
+            "DDOS": 0.0798,
+            "RECON": 0.0031,
+            "WEB": 0.0153
+          },
+          "exact_twin_label_share": {
+            "BENIGN": 0.8507,
+            "DDOS": 0.1493
+          }
+        },
+        "silent_unknown": {
+          "n": 195,
+          "d_median": 3.95914066376439e-05,
+          "exact_twin_share": 0.2667,
+          "nearest_label_share": {
+            "BENIGN": 0.959,
+            "DDOS": 0.0154,
+            "RECON": 0.0205,
+            "WEB": 0.0051
+          },
+          "exact_twin_label_share": {
+            "BENIGN": 0.9808,
+            "WEB": 0.0192
+          }
+        }
+      },
       "check_vs_dss_guard": {
         "disagree": 1.0,
         "energy": 1.0,
@@ -2396,7 +2446,7 @@
         }
       ],
       "model_calls": 12576,
-      "seconds": 44.4
+      "seconds": 46.9
     },
     "WEB": {
       "categories": [
@@ -2404,6 +2454,54 @@
       ],
       "decision_source": "dss",
       "model": "outputs/dnn_edgeiiot/xai_unknown_decision/models/TabM_WEB_C_seq_ack_yok.joblib",
+      "twins": {
+        "alarm_unknown": {
+          "n": 2644,
+          "d_median": 0.11215414451581582,
+          "exact_twin_share": 0.0692,
+          "nearest_label_share": {
+            "BENIGN": 0.0393,
+            "BRUTEFORCE": 0.1407,
+            "DDOS": 0.2632,
+            "MALWARE": 0.02,
+            "RECON": 0.5367
+          },
+          "exact_twin_label_share": {
+            "BENIGN": 0.1858,
+            "BRUTEFORCE": 0.3224,
+            "DDOS": 0.4536,
+            "RECON": 0.0383
+          }
+        },
+        "guard_unknown": {
+          "n": 340,
+          "d_median": 2.969944602229645e-05,
+          "exact_twin_share": 0.1853,
+          "nearest_label_share": {
+            "BENIGN": 0.8912,
+            "DDOS": 0.1088
+          },
+          "exact_twin_label_share": {
+            "BENIGN": 0.873,
+            "DDOS": 0.127
+          }
+        },
+        "silent_unknown": {
+          "n": 66,
+          "d_median": 3.959925762487301e-05,
+          "exact_twin_share": 0.2273,
+          "nearest_label_share": {
+            "BENIGN": 0.7576,
+            "BRUTEFORCE": 0.0606,
+            "DDOS": 0.1818
+          },
+          "exact_twin_label_share": {
+            "BENIGN": 0.5333,
+            "BRUTEFORCE": 0.2,
+            "DDOS": 0.2667
+          }
+        }
+      },
       "check_vs_dss_guard": {
         "disagree": 1.0,
         "energy": 1.0,
@@ -4737,8 +4835,8 @@
         }
       ],
       "model_calls": 12686,
-      "seconds": 42.0
+      "seconds": 44.5
     }
   },
-  "runtime_seconds": 124.7
+  "runtime_seconds": 129.8
 }

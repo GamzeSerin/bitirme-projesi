@@ -9,7 +9,8 @@ Edge-IIoTset: 296506 satır, koşul C_seq_ack_yok, 32 özellik (port: ['tcp.dstp
   en sık değişen: [('tcp.connection.syn', 40), ('tcp.connection.rst', 7), ('tcp.flags.ack', 2), ('tcp.flags', 1)]  tetik: {'alarm+energy': 38, 'alarm': 12}  port payı: 0.0
   yalnız enerji: yakalanma [1.0, 1.0, 1.0, 1.0, 1.0] (rastgele [0.089, 0.169, 0.224, 0.287, 0.356])  en sık [('tcp.len', 35), ('tcp.connection.rst', 12), ('tcp.dstport', 3)]  port payı 0.06
   XAI-2 ile tutarlılık: {'spearman_gain_vs_abs_shap_median': -0.2959320151246863, 'shap_rank_of_changed_median': 17.0, 'changed_in_shap_top5_share': 0.2}
-  gerçekçilik: 1.000000002449188 / gerçek 0.000  (44 s, 12,576 model satırı)
+  gerçekçilik: 1.000000002449188 / gerçek 0.000  (46 s, 12,576 model satırı)
+  eş kontrolü: alarm_unknown: n=1484, birebir eş %12, en yakın etiket {'BENIGN': 0.0802, 'DDOS': 0.5081, 'MALWARE': 0.0013, 'RECON': 0.3538, 'WEB': 0.0566}; guard_unknown: n=326, birebir eş %21, en yakın etiket {'BENIGN': 0.9018, 'DDOS': 0.0798, 'RECON': 0.0031, 'WEB': 0.0153}; silent_unknown: n=195, birebir eş %27, en yakın etiket {'BENIGN': 0.959, 'DDOS': 0.0154, 'RECON': 0.0205, 'WEB': 0.0051}
 
 === WEB: eğitim 182616, kalibrasyon 20291, test 59302 (bilinmeyen 8575) ===
   dss_guard ile karşılaştırma (kayıtlı TabM): {'disagree': 1.0, 'energy': 1.0, 'alarm_agreement': 1.0}
@@ -18,6 +19,7 @@ Edge-IIoTset: 296506 satır, koşul C_seq_ack_yok, 32 özellik (port: ['tcp.dstp
   en sık değişen: [('tcp.len', 34), ('icmp.seq_le', 15), ('http.response', 1)]  tetik: {'alarm+energy': 35, 'alarm': 15}  port payı: 0.0
   yalnız enerji: yakalanma [1.0, 1.0, 1.0, 1.0, 1.0] (rastgele [0.095, 0.178, 0.249, 0.319, 0.383])  en sık [('tcp.len', 34), ('tcp.dstport', 16)]  port payı 0.32
   XAI-2 ile tutarlılık: {'spearman_gain_vs_abs_shap_median': -0.38297084310253526, 'shap_rank_of_changed_median': 5.0, 'changed_in_shap_top5_share': 0.68}
-  gerçekçilik: 1.6812070336255946 / gerçek 0.000  (42 s, 12,686 model satırı)
+  gerçekçilik: 1.6812070336255946 / gerçek 0.000  (43 s, 12,686 model satırı)
+  eş kontrolü: alarm_unknown: n=2644, birebir eş %7, en yakın etiket {'BENIGN': 0.0393, 'BRUTEFORCE': 0.1407, 'DDOS': 0.2632, 'MALWARE': 0.02, 'RECON': 0.5367}; guard_unknown: n=340, birebir eş %19, en yakın etiket {'BENIGN': 0.8912, 'DDOS': 0.1088}; silent_unknown: n=66, birebir eş %23, en yakın etiket {'BENIGN': 0.7576, 'BRUTEFORCE': 0.0606, 'DDOS': 0.1818}
 
-Çıktı: outputs/dnn_edgeiiot/xai_escape_counterfactual/xai_escape_counterfactual_C_seq_ack_yok.json  (125 s)
+Çıktı: outputs/dnn_edgeiiot/xai_escape_counterfactual/xai_escape_counterfactual_C_seq_ack_yok.json  (130 s)
