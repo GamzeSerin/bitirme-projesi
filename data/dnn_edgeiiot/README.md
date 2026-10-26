@@ -578,6 +578,24 @@ Soru: Derin öğrenme karşılaştırmasında MC-dropout'un eğitimi daha ucuz �
 - **Cihazlar:** Kaggle GPU ve CPU. Her ölçüm 5 kez, ısınma turundan sonra medyan.
 - **Not:** süreler donanıma bağlı; anlamlı olan modeller arası oran.
 
+## Tahmin süresi: sonuçlar (26.10.2026)
+
+Çıktı: `outputs/dnn_edgeiiot/inference_time/inference_time_WEB_C_seq_ack_yok.json`, kayıt `logs/log_inference_time_WEB_C.txt`. Kaggle, GPU Tesla T4 ve CPU (2 iş parçacığı); 10.000 test satırı, 5 tekrarın medyanı (tekrarlar arası oynama < %2).
+
+| | Parametre | GPU toplu (satır/sn) | GPU tek satır (ms) | CPU toplu (satır/sn) | CPU tek satır (ms) |
+|---|---|---|---|---|---|
+| TabM (k = 32, tek geçiş) | 655 bin | 88.000 | 0,64 | 2.300 | 1,15 |
+| MLP (k = 1) | 483 bin | 1.965.000 | 0,66 | 132.000 | 0,51 |
+| MC-dropout, sıralı (32 geçiş) | 483 bin | 53.000 | 21,3 | 1.500 | 18,1 |
+| MC-dropout, vektörel (32 kopya tek geçişte) | 483 bin | 54.000 | 0,79 | 800 | 1,92 |
+
+**Yorum:**
+1. **Tahminde TabM, MC-dropout'tan her durumda daha hızlı:** toplu işlemde GPU'da 1,6 kat, CPU'da 1,5–2,8 kat; tek satır gecikmesinde vektörel MC-dropout'a göre 1,2–1,7 kat, sıralıya göre 16–33 kat. MC-dropout'un eğitimdeki avantajı (≈ 30 sn'ye karşı ≈ 100–190 sn) tahminde tersine dönüyor; bir IDS'te maliyetin çoğu tahminde.
+2. **TabM'in 32 üyesi paylaşılan ağırlıklarla tek geçişte çalışıyor:** parametre sayısı tek ağın yalnız 1,35 katı.
+3. **Belirsizliğin bedeli:** tek MLP, TabM'den toplu işlemde 22 (GPU) – 57 (CPU) kat hızlı; ama alarmı görülmemiş saldırıların yalnız %10'unu yakalıyor (TabM %49). Tek satır gecikmesinde fark küçük (0,5–1,2 ms), çünkü orada süreyi çağrı yükü belirliyor.
+4. **Pratik not:** TabM, 2 iş parçacıklı CPU'da saniyede ≈ 2.300 paket değerlendiriyor; GPU'da ≈ 88.000. Yüksek hızlı ağlarda CPU'da paket örneklemesi ya da akış düzeyinde değerlendirme gerekebilir (gelecek çalışma).
+5. **Derin öğrenme karşılaştırmasıyla birlikte sonuç:** TabM, alarmda en yüksek ve en kararlı ayırma gücünü (AUROC 0,862 ± 0,001) en düşük tahmin maliyetli belirsizlik yöntemiyle veriyor. MC-dropout eğitimi ucuz bir alternatif, ama tahminde daha pahalı.
+
 ## Sütun hizası ve değer aralığı denetimi (19.10.2026)
 
 Kod: `src/audit_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/audit/audit.json`. Ham verideki 15 etiketin her biri için 6 kontrol (zaman damgası, IP, port 0–65535, 0/1 bayrak, ARP alanları, sayısal sütunlarda metin). İhlal yalnızca DDoS_UDP (zaman %100) ve MITM'de (zaman %100, port %30, bayrak %19); Normal'de %0,11 bayrak ihlali (önemsiz); diğer 12 saldırı türünde %0. Bu iki tür bulgu 7 gereği atıldı.
