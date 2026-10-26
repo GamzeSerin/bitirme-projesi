@@ -1,0 +1,2633 @@
+{
+  "dataset_id": "dnn_edgeiiot",
+  "condition": "C_seq_ack_yok",
+  "dropped_features": [
+    "tcp.seq",
+    "tcp.ack"
+  ],
+  "status": "Analiz planı sonuçlardan önce yazıldı (README, XAI-2); eşik yok",
+  "settings": {
+    "dataset": "dnn_edgeiiot",
+    "data_file": "/kaggle/input/datasets/mohamedamineferrag/edgeiiotset-cyber-security-dataset-of-iot-iiot/Edge-IIoTset dataset/Selected dataset for ML and DL/DNN-EdgeIIoT-dataset.csv",
+    "run_dir": null,
+    "params_from": "metrics",
+    "manifest": "outputs/dnn_edgeiiot/manifest.json",
+    "rows_dir": "outputs/dnn_edgeiiot/dss_guard",
+    "out_dir": "outputs/dnn_edgeiiot/xai_guard",
+    "condition": "C_seq_ack_yok",
+    "families": "BRUTEFORCE,WEB",
+    "cap": 40000,
+    "seed": 42,
+    "model_seed": null,
+    "cal_size": 0.1,
+    "target": 0.95,
+    "q": 0.05,
+    "per_group": 50,
+    "n_background": 50,
+    "n_perm": 10,
+    "n_delete_bg": 20,
+    "n_random": 20,
+    "k_max": 10,
+    "n_jobs": -1,
+    "quick": false
+  },
+  "model_seed": 42,
+  "tabm_params_from": {
+    "TabM": "metrics.json[TabM].params"
+  },
+  "port_columns": [
+    "tcp.dstport",
+    "udp.port"
+  ],
+  "families": {
+    "BRUTEFORCE": {
+      "categories": [
+        "BRUTEFORCE"
+      ],
+      "decision_source": "dss",
+      "check_vs_dss_guard": {
+        "disagree": 1.0,
+        "energy": 1.0,
+        "alarm_agreement": 1.0
+      },
+      "tau_alarm": 0.004626806825399399,
+      "tau_guard": -4.124326705932617,
+      "group_sizes": {
+        "alarm_unknown": 1484,
+        "guard_unknown": 326,
+        "silent_unknown": 195,
+        "alarm_benign": 414,
+        "guard_benign": 350
+      },
+      "background": "bilinen normal (BENIGN) eğitim trafiği",
+      "background_mean_score": {
+        "disagree": 0.00213,
+        "energy": -14.058996
+      },
+      "groups": {
+        "alarm_unknown": {
+          "n_available": 1484,
+          "n_explained": 50,
+          "explained_score": "disagree",
+          "top_disagree": [
+            {
+              "feature": "tcp.dstport",
+              "mean_abs_shap": 0.060923,
+              "mean_shap": 0.02836
+            },
+            {
+              "feature": "http.content_length",
+              "mean_abs_shap": 0.044276,
+              "mean_shap": 0.044276
+            },
+            {
+              "feature": "tcp.len",
+              "mean_abs_shap": 0.027241,
+              "mean_shap": -0.001248
+            },
+            {
+              "feature": "http.response",
+              "mean_abs_shap": 0.018732,
+              "mean_shap": 0.001258
+            },
+            {
+              "feature": "tcp.flags",
+              "mean_abs_shap": 0.011963,
+              "mean_shap": -0.010234
+            },
+            {
+              "feature": "udp.port",
+              "mean_abs_shap": 0.004702,
+              "mean_shap": 0.004639
+            },
+            {
+              "feature": "mqtt.msgtype",
+              "mean_abs_shap": 0.00454,
+              "mean_shap": -0.002858
+            },
+            {
+              "feature": "tcp.flags.ack",
+              "mean_abs_shap": 0.004188,
+              "mean_shap": 2.8e-05
+            },
+            {
+              "feature": "tcp.connection.rst",
+              "mean_abs_shap": 0.003365,
+              "mean_shap": -0.002071
+            },
+            {
+              "feature": "mqtt.hdrflags",
+              "mean_abs_shap": 0.003256,
+              "mean_shap": -0.000191
+            }
+          ],
+          "port_share_disagree": 0.4079,
+          "efficiency_gap_disagree": 0.0,
+          "top_energy": [
+            {
+              "feature": "tcp.dstport",
+              "mean_abs_shap": 6.107547,
+              "mean_shap": 6.107547
+            },
+            {
+              "feature": "tcp.len",
+              "mean_abs_shap": 1.859357,
+              "mean_shap": 1.541921
+            },
+            {
+              "feature": "mqtt.msgtype",
+              "mean_abs_shap": 0.576747,
+              "mean_shap": 0.576747
+            },
+            {
+              "feature": "http.content_length",
+              "mean_abs_shap": 0.535688,
+              "mean_shap": 0.535688
+            },
+            {
+              "feature": "http.response",
+              "mean_abs_shap": 0.444368,
+              "mean_shap": 0.444368
+            },
+            {
+              "feature": "mqtt.hdrflags",
+              "mean_abs_shap": 0.350123,
+              "mean_shap": 0.350123
+            },
+            {
+              "feature": "tcp.connection.synack",
+              "mean_abs_shap": 0.286627,
+              "mean_shap": -0.114692
+            },
+            {
+              "feature": "udp.port",
+              "mean_abs_shap": 0.214554,
+              "mean_shap": 0.214554
+            },
+            {
+              "feature": "mqtt.len",
+              "mean_abs_shap": 0.187225,
+              "mean_shap": 0.187225
+            },
+            {
+              "feature": "tcp.connection.rst",
+              "mean_abs_shap": 0.158942,
+              "mean_shap": -0.015923
+            }
+          ],
+          "port_share_energy": 0.5607,
+          "efficiency_gap_energy": 1e-06,
+          "faithfulness": {
+            "score": "disagree",
+            "ks": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            "scale": "düşüş / kalibrasyon IQR",
+            "iqr": 0.000668,
+            "mean_drop_iqr_shap": [
+              60.9995,
+              36.501,
+              18.2001,
+              -11.5084,
+              5.5712,
+              5.7144,
+              7.7682,
+              8.7834,
+              8.7888,
+              9.8101
+            ],
+            "mean_drop_iqr_random": [
+              -17.5097,
+              -34.4945,
+              -51.4497,
+              -63.7748,
+              -72.1928,
+              -82.314,
+              -89.3098,
+              -94.8861,
+              -96.0114,
+              -99.4811
+            ],
+            "relative": {
+              "n_rows": 50,
+              "mean_rel_drop_shap": [
+                0.5424,
+                -0.1107,
+                -0.7143,
+                -2.4787,
+                -1.8362,
+                -1.7864,
+                -1.5674,
+                -1.5617,
+                -1.5644,
+                -1.562
+              ],
+              "mean_rel_drop_random": [
+                -1.1801,
+                -2.4545,
+                -3.5599,
+                -4.4118,
+                -5.1226,
+                -5.8048,
+                -6.4096,
+                -6.806,
+                -6.9579,
+                -7.2241
+              ]
+            },
+            "auc_shap_mean": 15.0628,
+            "auc_random_mean": -70.1424,
+            "paired_diff_median": 62.369,
+            "paired_diff_mean": 85.2052,
+            "frac_rows_shap_better": 0.94,
+            "wilcoxon_statistic": 46.0,
+            "wilcoxon_p": 3.40367733997482e-11
+          },
+          "analyst_cards": [
+            {
+              "test_row": 166321,
+              "category": "BRUTEFORCE",
+              "score": "disagree",
+              "score_value": 0.02795,
+              "reasons": [
+                {
+                  "feature": "tcp.dstport",
+                  "value": 48008.0,
+                  "shap": 0.106816,
+                  "percentile_in_known": 66.7
+                },
+                {
+                  "feature": "tcp.len",
+                  "value": 0.0,
+                  "shap": 0.011977,
+                  "percentile_in_known": 0.0
+                },
+                {
+                  "feature": "udp.port",
+                  "value": 0.0,
+                  "shap": 0.007189,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            },
+            {
+              "test_row": 161588,
+              "category": "BRUTEFORCE",
+              "score": "disagree",
+              "score_value": 0.14286,
+              "reasons": [
+                {
+                  "feature": "http.content_length",
+                  "value": 1415.0,
+                  "shap": 0.255272,
+                  "percentile_in_known": 100.0
+                },
+                {
+                  "feature": "mqtt.hdrflags",
+                  "value": 0.0,
+                  "shap": 0.005401,
+                  "percentile_in_known": 0.0
+                },
+                {
+                  "feature": "tcp.flags",
+                  "value": 24.0,
+                  "shap": 0.004504,
+                  "percentile_in_known": 72.9
+                }
+              ]
+            },
+            {
+              "test_row": 163361,
+              "category": "BRUTEFORCE",
+              "score": "disagree",
+              "score_value": 0.0129,
+              "reasons": [
+                {
+                  "feature": "http.response",
+                  "value": 1.0,
+                  "shap": 0.217489,
+                  "percentile_in_known": 89.4
+                },
+                {
+                  "feature": "udp.port",
+                  "value": 0.0,
+                  "shap": 0.006166,
+                  "percentile_in_known": 0.0
+                },
+                {
+                  "feature": "mqtt.len",
+                  "value": 0.0,
+                  "shap": 0.005466,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            }
+          ]
+        },
+        "guard_unknown": {
+          "n_available": 326,
+          "n_explained": 50,
+          "explained_score": "energy",
+          "top_disagree": [
+            {
+              "feature": "tcp.dstport",
+              "mean_abs_shap": 0.011985,
+              "mean_shap": 0.011985
+            },
+            {
+              "feature": "tcp.flags",
+              "mean_abs_shap": 0.011185,
+              "mean_shap": -0.011185
+            },
+            {
+              "feature": "tcp.len",
+              "mean_abs_shap": 0.009803,
+              "mean_shap": -0.009558
+            },
+            {
+              "feature": "tcp.flags.ack",
+              "mean_abs_shap": 0.005908,
+              "mean_shap": 0.005908
+            },
+            {
+              "feature": "udp.port",
+              "mean_abs_shap": 0.004961,
+              "mean_shap": 0.004961
+            },
+            {
+              "feature": "tcp.connection.rst",
+              "mean_abs_shap": 0.004388,
+              "mean_shap": -0.004388
+            },
+            {
+              "feature": "mqtt.hdrflags",
+              "mean_abs_shap": 0.002481,
+              "mean_shap": 0.001827
+            },
+            {
+              "feature": "mqtt.msgtype",
+              "mean_abs_shap": 0.002164,
+              "mean_shap": 0.001745
+            },
+            {
+              "feature": "mqtt.len",
+              "mean_abs_shap": 0.001865,
+              "mean_shap": 0.000271
+            },
+            {
+              "feature": "tcp.connection.fin",
+              "mean_abs_shap": 0.001451,
+              "mean_shap": 0.00142
+            }
+          ],
+          "port_share_disagree": 0.2827,
+          "efficiency_gap_disagree": 0.0,
+          "top_energy": [
+            {
+              "feature": "tcp.dstport",
+              "mean_abs_shap": 6.449865,
+              "mean_shap": 6.449865
+            },
+            {
+              "feature": "tcp.len",
+              "mean_abs_shap": 2.314038,
+              "mean_shap": 2.314038
+            },
+            {
+              "feature": "mqtt.msgtype",
+              "mean_abs_shap": 0.683536,
+              "mean_shap": 0.683536
+            },
+            {
+              "feature": "mqtt.hdrflags",
+              "mean_abs_shap": 0.403471,
+              "mean_shap": 0.403471
+            },
+            {
+              "feature": "tcp.connection.fin",
+              "mean_abs_shap": 0.243579,
+              "mean_shap": 0.243579
+            },
+            {
+              "feature": "udp.port",
+              "mean_abs_shap": 0.23709,
+              "mean_shap": 0.23709
+            },
+            {
+              "feature": "mqtt.len",
+              "mean_abs_shap": 0.20847,
+              "mean_shap": 0.20847
+            },
+            {
+              "feature": "tcp.connection.synack",
+              "mean_abs_shap": 0.190758,
+              "mean_shap": 0.190758
+            },
+            {
+              "feature": "tcp.flags.ack",
+              "mean_abs_shap": 0.153168,
+              "mean_shap": 0.153168
+            },
+            {
+              "feature": "tcp.connection.rst",
+              "mean_abs_shap": 0.111484,
+              "mean_shap": -0.111484
+            }
+          ],
+          "port_share_energy": 0.5952,
+          "efficiency_gap_energy": 1e-06,
+          "faithfulness": {
+            "score": "energy",
+            "ks": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            "scale": "düşüş / kalibrasyon IQR",
+            "iqr": 8.77407,
+            "mean_drop_iqr_shap": [
+              0.1831,
+              0.346,
+              0.5276,
+              0.7313,
+              0.7945,
+              0.8668,
+              0.9284,
+              0.9378,
+              0.9387,
+              0.9387
+            ],
+            "mean_drop_iqr_random": [
+              0.0173,
+              0.0371,
+              0.0556,
+              0.0723,
+              0.0936,
+              0.1145,
+              0.1391,
+              0.165,
+              0.1892,
+              0.2129
+            ],
+            "relative": {
+              "n_rows": 50,
+              "mean_rel_drop_shap": [
+                0.1903,
+                0.3636,
+                0.5551,
+                0.772,
+                0.8416,
+                0.917,
+                0.9839,
+                0.9943,
+                0.9953,
+                0.9953
+              ],
+              "mean_rel_drop_random": [
+                0.0181,
+                0.0388,
+                0.0583,
+                0.0761,
+                0.0986,
+                0.1207,
+                0.1464,
+                0.1738,
+                0.1992,
+                0.2245
+              ]
+            },
+            "auc_shap_mean": 0.7193,
+            "auc_random_mean": 0.1097,
+            "paired_diff_median": 0.6198,
+            "paired_diff_mean": 0.6096,
+            "frac_rows_shap_better": 1.0,
+            "wilcoxon_statistic": 0.0,
+            "wilcoxon_p": 1.7763568394002505e-15
+          },
+          "analyst_cards": [
+            {
+              "test_row": 161523,
+              "category": "BRUTEFORCE",
+              "score": "energy",
+              "score_value": -3.57363,
+              "reasons": [
+                {
+                  "feature": "tcp.dstport",
+                  "value": 57528.0,
+                  "shap": 5.813908,
+                  "percentile_in_known": 83.9
+                },
+                {
+                  "feature": "tcp.len",
+                  "value": 0.0,
+                  "shap": 2.188079,
+                  "percentile_in_known": 0.0
+                },
+                {
+                  "feature": "tcp.connection.fin",
+                  "value": 1.0,
+                  "shap": 0.720223,
+                  "percentile_in_known": 95.9
+                }
+              ]
+            },
+            {
+              "test_row": 158311,
+              "category": "BRUTEFORCE",
+              "score": "energy",
+              "score_value": -3.34571,
+              "reasons": [
+                {
+                  "feature": "tcp.dstport",
+                  "value": 54082.0,
+                  "shap": 6.563708,
+                  "percentile_in_known": 78.7
+                },
+                {
+                  "feature": "tcp.len",
+                  "value": 0.0,
+                  "shap": 2.35521,
+                  "percentile_in_known": 0.0
+                },
+                {
+                  "feature": "mqtt.msgtype",
+                  "value": 0.0,
+                  "shap": 0.692029,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            },
+            {
+              "test_row": 166897,
+              "category": "BRUTEFORCE",
+              "score": "energy",
+              "score_value": -3.39765,
+              "reasons": [
+                {
+                  "feature": "tcp.dstport",
+                  "value": 54034.0,
+                  "shap": 6.555046,
+                  "percentile_in_known": 78.7
+                },
+                {
+                  "feature": "tcp.len",
+                  "value": 0.0,
+                  "shap": 2.37496,
+                  "percentile_in_known": 0.0
+                },
+                {
+                  "feature": "mqtt.msgtype",
+                  "value": 0.0,
+                  "shap": 0.676126,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            }
+          ]
+        },
+        "silent_unknown": {
+          "n_available": 195,
+          "n_explained": 50,
+          "explained_score": null,
+          "top_disagree": [
+            {
+              "feature": "tcp.dstport",
+              "mean_abs_shap": 0.012828,
+              "mean_shap": 0.012461
+            },
+            {
+              "feature": "tcp.len",
+              "mean_abs_shap": 0.011951,
+              "mean_shap": -0.011689
+            },
+            {
+              "feature": "tcp.flags",
+              "mean_abs_shap": 0.008547,
+              "mean_shap": -0.008547
+            },
+            {
+              "feature": "tcp.flags.ack",
+              "mean_abs_shap": 0.005458,
+              "mean_shap": 0.005458
+            },
+            {
+              "feature": "tcp.connection.rst",
+              "mean_abs_shap": 0.00488,
+              "mean_shap": -0.00488
+            },
+            {
+              "feature": "udp.port",
+              "mean_abs_shap": 0.004808,
+              "mean_shap": 0.004808
+            },
+            {
+              "feature": "tcp.connection.fin",
+              "mean_abs_shap": 0.001683,
+              "mean_shap": 0.00167
+            },
+            {
+              "feature": "mqtt.len",
+              "mean_abs_shap": 0.001682,
+              "mean_shap": 0.001215
+            },
+            {
+              "feature": "mqtt.msgtype",
+              "mean_abs_shap": 0.001675,
+              "mean_shap": 0.000944
+            },
+            {
+              "feature": "mqtt.hdrflags",
+              "mean_abs_shap": 0.001535,
+              "mean_shap": 0.00061
+            }
+          ],
+          "port_share_disagree": 0.2875,
+          "efficiency_gap_disagree": 0.0,
+          "top_energy": [
+            {
+              "feature": "tcp.dstport",
+              "mean_abs_shap": 5.420141,
+              "mean_shap": 5.420141
+            },
+            {
+              "feature": "tcp.len",
+              "mean_abs_shap": 2.31892,
+              "mean_shap": 2.31892
+            },
+            {
+              "feature": "mqtt.msgtype",
+              "mean_abs_shap": 0.657798,
+              "mean_shap": 0.657798
+            },
+            {
+              "feature": "mqtt.hdrflags",
+              "mean_abs_shap": 0.380247,
+              "mean_shap": 0.380247
+            },
+            {
+              "feature": "tcp.connection.fin",
+              "mean_abs_shap": 0.361375,
+              "mean_shap": 0.361375
+            },
+            {
+              "feature": "udp.port",
+              "mean_abs_shap": 0.232306,
+              "mean_shap": 0.232306
+            },
+            {
+              "feature": "mqtt.len",
+              "mean_abs_shap": 0.194724,
+              "mean_shap": 0.194724
+            },
+            {
+              "feature": "tcp.connection.synack",
+              "mean_abs_shap": 0.177344,
+              "mean_shap": 0.177344
+            },
+            {
+              "feature": "tcp.flags.ack",
+              "mean_abs_shap": 0.140245,
+              "mean_shap": 0.140245
+            },
+            {
+              "feature": "tcp.connection.rst",
+              "mean_abs_shap": 0.13132,
+              "mean_shap": -0.13132
+            }
+          ],
+          "port_share_energy": 0.5524,
+          "efficiency_gap_energy": 1e-06,
+          "analyst_cards": [
+            {
+              "test_row": 172474,
+              "category": "BRUTEFORCE",
+              "score": "energy",
+              "score_value": -4.32771,
+              "reasons": [
+                {
+                  "feature": "tcp.dstport",
+                  "value": 52454.0,
+                  "shap": 4.967292,
+                  "percentile_in_known": 77.7
+                },
+                {
+                  "feature": "tcp.len",
+                  "value": 0.0,
+                  "shap": 2.108426,
+                  "percentile_in_known": 0.0
+                },
+                {
+                  "feature": "tcp.connection.fin",
+                  "value": 1.0,
+                  "shap": 0.960731,
+                  "percentile_in_known": 95.9
+                }
+              ]
+            },
+            {
+              "test_row": 157910,
+              "category": "BRUTEFORCE",
+              "score": "energy",
+              "score_value": -4.28751,
+              "reasons": [
+                {
+                  "feature": "tcp.dstport",
+                  "value": 50228.0,
+                  "shap": 5.5265,
+                  "percentile_in_known": 73.7
+                },
+                {
+                  "feature": "tcp.len",
+                  "value": 0.0,
+                  "shap": 2.668471,
+                  "percentile_in_known": 0.0
+                },
+                {
+                  "feature": "mqtt.msgtype",
+                  "value": 0.0,
+                  "shap": 0.653417,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            },
+            {
+              "test_row": 166603,
+              "category": "BRUTEFORCE",
+              "score": "energy",
+              "score_value": -4.46873,
+              "reasons": [
+                {
+                  "feature": "tcp.dstport",
+                  "value": 50920.0,
+                  "shap": 5.439751,
+                  "percentile_in_known": 76.1
+                },
+                {
+                  "feature": "tcp.len",
+                  "value": 0.0,
+                  "shap": 2.571499,
+                  "percentile_in_known": 0.0
+                },
+                {
+                  "feature": "mqtt.msgtype",
+                  "value": 0.0,
+                  "shap": 0.636648,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            }
+          ]
+        },
+        "alarm_benign": {
+          "n_available": 414,
+          "n_explained": 50,
+          "explained_score": "disagree",
+          "top_disagree": [
+            {
+              "feature": "tcp.connection.rst",
+              "mean_abs_shap": 0.03021,
+              "mean_shap": 0.02255
+            },
+            {
+              "feature": "tcp.flags.ack",
+              "mean_abs_shap": 0.024326,
+              "mean_shap": -0.01284
+            },
+            {
+              "feature": "tcp.dstport",
+              "mean_abs_shap": 0.018114,
+              "mean_shap": 0.011489
+            },
+            {
+              "feature": "tcp.flags",
+              "mean_abs_shap": 0.017003,
+              "mean_shap": -0.014661
+            },
+            {
+              "feature": "tcp.len",
+              "mean_abs_shap": 0.016309,
+              "mean_shap": -0.00707
+            },
+            {
+              "feature": "udp.port",
+              "mean_abs_shap": 0.004671,
+              "mean_shap": 0.004671
+            },
+            {
+              "feature": "mqtt.hdrflags",
+              "mean_abs_shap": 0.002928,
+              "mean_shap": 0.00266
+            },
+            {
+              "feature": "mqtt.len",
+              "mean_abs_shap": 0.002022,
+              "mean_shap": 0.00168
+            },
+            {
+              "feature": "mqtt.msgtype",
+              "mean_abs_shap": 0.001935,
+              "mean_shap": 0.000187
+            },
+            {
+              "feature": "udp.time_delta",
+              "mean_abs_shap": 0.000795,
+              "mean_shap": -0.000488
+            }
+          ],
+          "port_share_disagree": 0.2389,
+          "efficiency_gap_disagree": 0.0,
+          "top_energy": [
+            {
+              "feature": "tcp.dstport",
+              "mean_abs_shap": 5.011134,
+              "mean_shap": 5.011134
+            },
+            {
+              "feature": "tcp.len",
+              "mean_abs_shap": 3.070928,
+              "mean_shap": 3.070928
+            },
+            {
+              "feature": "tcp.connection.rst",
+              "mean_abs_shap": 1.243503,
+              "mean_shap": 1.07557
+            },
+            {
+              "feature": "mqtt.msgtype",
+              "mean_abs_shap": 0.675778,
+              "mean_shap": 0.675778
+            },
+            {
+              "feature": "mqtt.hdrflags",
+              "mean_abs_shap": 0.406166,
+              "mean_shap": 0.406166
+            },
+            {
+              "feature": "tcp.flags.ack",
+              "mean_abs_shap": 0.328209,
+              "mean_shap": -0.073843
+            },
+            {
+              "feature": "udp.port",
+              "mean_abs_shap": 0.231962,
+              "mean_shap": 0.231962
+            },
+            {
+              "feature": "mqtt.len",
+              "mean_abs_shap": 0.212543,
+              "mean_shap": 0.212543
+            },
+            {
+              "feature": "tcp.flags",
+              "mean_abs_shap": 0.179612,
+              "mean_shap": -0.156673
+            },
+            {
+              "feature": "tcp.connection.synack",
+              "mean_abs_shap": 0.152632,
+              "mean_shap": 0.152632
+            }
+          ],
+          "port_share_energy": 0.4537,
+          "efficiency_gap_energy": 1e-06,
+          "faithfulness": {
+            "score": "disagree",
+            "ks": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            "scale": "düşüş / kalibrasyon IQR",
+            "iqr": 0.000668,
+            "mean_drop_iqr_shap": [
+              -20.9101,
+              -28.3091,
+              -47.2167,
+              -59.6881,
+              -53.3371,
+              -38.0002,
+              -32.369,
+              -31.7866,
+              -32.5573,
+              -32.3985
+            ],
+            "mean_drop_iqr_random": [
+              -12.5817,
+              -24.2944,
+              -35.9986,
+              -48.7694,
+              -59.3525,
+              -64.1868,
+              -69.1851,
+              -74.3761,
+              -74.9944,
+              -76.8297
+            ],
+            "relative": {
+              "n_rows": 50,
+              "mean_rel_drop_shap": [
+                -2.1779,
+                -2.8479,
+                -5.1094,
+                -6.7587,
+                -5.7942,
+                -4.5095,
+                -3.9482,
+                -3.868,
+                -3.9302,
+                -3.9312
+              ],
+              "mean_rel_drop_random": [
+                -1.4406,
+                -2.8346,
+                -4.168,
+                -5.5547,
+                -6.728,
+                -7.3164,
+                -7.878,
+                -8.394,
+                -8.4806,
+                -8.7337
+              ]
+            },
+            "auc_shap_mean": -37.6573,
+            "auc_random_mean": -54.0569,
+            "paired_diff_median": 12.489,
+            "paired_diff_mean": 16.3996,
+            "frac_rows_shap_better": 0.72,
+            "wilcoxon_statistic": 255.0,
+            "wilcoxon_p": 0.0001302957841744501
+          },
+          "analyst_cards": [
+            {
+              "test_row": 5188,
+              "category": "BENIGN",
+              "score": "disagree",
+              "score_value": 0.01001,
+              "reasons": [
+                {
+                  "feature": "tcp.dstport",
+                  "value": 56603.0,
+                  "shap": 0.018674,
+                  "percentile_in_known": 83.2
+                },
+                {
+                  "feature": "udp.port",
+                  "value": 0.0,
+                  "shap": 0.004433,
+                  "percentile_in_known": 0.0
+                },
+                {
+                  "feature": "mqtt.len",
+                  "value": 0.0,
+                  "shap": 0.002837,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            },
+            {
+              "test_row": 8211,
+              "category": "BENIGN",
+              "score": "disagree",
+              "score_value": 0.01637,
+              "reasons": [
+                {
+                  "feature": "tcp.connection.rst",
+                  "value": 1.0,
+                  "shap": 0.144889,
+                  "percentile_in_known": 87.3
+                },
+                {
+                  "feature": "mqtt.len",
+                  "value": 0.0,
+                  "shap": 0.004151,
+                  "percentile_in_known": 0.0
+                },
+                {
+                  "feature": "udp.port",
+                  "value": 0.0,
+                  "shap": 0.001638,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            },
+            {
+              "test_row": 6165,
+              "category": "BENIGN",
+              "score": "disagree",
+              "score_value": 0.00486,
+              "reasons": [
+                {
+                  "feature": "tcp.connection.rst",
+                  "value": 1.0,
+                  "shap": 0.097978,
+                  "percentile_in_known": 87.3
+                },
+                {
+                  "feature": "tcp.dstport",
+                  "value": 58096.0,
+                  "shap": 0.020297,
+                  "percentile_in_known": 84.2
+                },
+                {
+                  "feature": "udp.port",
+                  "value": 0.0,
+                  "shap": 0.006147,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            }
+          ]
+        },
+        "guard_benign": {
+          "n_available": 350,
+          "n_explained": 50,
+          "explained_score": "energy",
+          "top_disagree": [
+            {
+              "feature": "tcp.dstport",
+              "mean_abs_shap": 0.013267,
+              "mean_shap": 0.013234
+            },
+            {
+              "feature": "tcp.len",
+              "mean_abs_shap": 0.012834,
+              "mean_shap": -0.01269
+            },
+            {
+              "feature": "tcp.flags",
+              "mean_abs_shap": 0.011526,
+              "mean_shap": -0.011526
+            },
+            {
+              "feature": "tcp.connection.rst",
+              "mean_abs_shap": 0.011482,
+              "mean_shap": 0.004035
+            },
+            {
+              "feature": "tcp.flags.ack",
+              "mean_abs_shap": 0.010671,
+              "mean_shap": -6.3e-05
+            },
+            {
+              "feature": "udp.port",
+              "mean_abs_shap": 0.004918,
+              "mean_shap": 0.004918
+            },
+            {
+              "feature": "mqtt.hdrflags",
+              "mean_abs_shap": 0.00241,
+              "mean_shap": 0.001942
+            },
+            {
+              "feature": "mqtt.msgtype",
+              "mean_abs_shap": 0.002203,
+              "mean_shap": 0.001036
+            },
+            {
+              "feature": "mqtt.len",
+              "mean_abs_shap": 0.001852,
+              "mean_shap": 0.001028
+            },
+            {
+              "feature": "dns.retransmission",
+              "mean_abs_shap": 0.000861,
+              "mean_shap": -0.000861
+            }
+          ],
+          "port_share_disagree": 0.2784,
+          "efficiency_gap_disagree": 0.0,
+          "top_energy": [
+            {
+              "feature": "tcp.dstport",
+              "mean_abs_shap": 6.29259,
+              "mean_shap": 6.29259
+            },
+            {
+              "feature": "tcp.len",
+              "mean_abs_shap": 2.296162,
+              "mean_shap": 2.296162
+            },
+            {
+              "feature": "mqtt.msgtype",
+              "mean_abs_shap": 0.676993,
+              "mean_shap": 0.676993
+            },
+            {
+              "feature": "mqtt.hdrflags",
+              "mean_abs_shap": 0.402241,
+              "mean_shap": 0.402241
+            },
+            {
+              "feature": "tcp.connection.rst",
+              "mean_abs_shap": 0.383967,
+              "mean_shap": 0.180357
+            },
+            {
+              "feature": "udp.port",
+              "mean_abs_shap": 0.238211,
+              "mean_shap": 0.238211
+            },
+            {
+              "feature": "mqtt.len",
+              "mean_abs_shap": 0.210981,
+              "mean_shap": 0.210981
+            },
+            {
+              "feature": "tcp.flags.ack",
+              "mean_abs_shap": 0.1941,
+              "mean_shap": 0.085334
+            },
+            {
+              "feature": "tcp.connection.synack",
+              "mean_abs_shap": 0.186064,
+              "mean_shap": 0.186064
+            },
+            {
+              "feature": "tcp.connection.fin",
+              "mean_abs_shap": 0.150361,
+              "mean_shap": 0.150361
+            }
+          ],
+          "port_share_energy": 0.5808,
+          "efficiency_gap_energy": 1e-06,
+          "faithfulness": {
+            "score": "energy",
+            "ks": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            "scale": "düşüş / kalibrasyon IQR",
+            "iqr": 8.77407,
+            "mean_drop_iqr_shap": [
+              0.1658,
+              0.34,
+              0.5338,
+              0.7334,
+              0.7897,
+              0.8726,
+              0.9247,
+              0.9355,
+              0.9357,
+              0.9357
+            ],
+            "mean_drop_iqr_random": [
+              0.0153,
+              0.0292,
+              0.0468,
+              0.0661,
+              0.0818,
+              0.102,
+              0.1236,
+              0.1478,
+              0.1709,
+              0.1946
+            ],
+            "relative": {
+              "n_rows": 50,
+              "mean_rel_drop_shap": [
+                0.1736,
+                0.3608,
+                0.5681,
+                0.7821,
+                0.8439,
+                0.9319,
+                0.9884,
+                1.0003,
+                1.0005,
+                1.0005
+              ],
+              "mean_rel_drop_random": [
+                0.0164,
+                0.031,
+                0.0497,
+                0.07,
+                0.0867,
+                0.108,
+                0.1309,
+                0.1565,
+                0.1811,
+                0.2065
+              ]
+            },
+            "auc_shap_mean": 0.7167,
+            "auc_random_mean": 0.0978,
+            "paired_diff_median": 0.6128,
+            "paired_diff_mean": 0.6189,
+            "frac_rows_shap_better": 1.0,
+            "wilcoxon_statistic": 0.0,
+            "wilcoxon_p": 1.7763568394002505e-15
+          },
+          "analyst_cards": [
+            {
+              "test_row": 5564,
+              "category": "BENIGN",
+              "score": "energy",
+              "score_value": -2.60438,
+              "reasons": [
+                {
+                  "feature": "tcp.dstport",
+                  "value": 57202.0,
+                  "shap": 7.256767,
+                  "percentile_in_known": 83.8
+                },
+                {
+                  "feature": "tcp.len",
+                  "value": 0.0,
+                  "shap": 2.305341,
+                  "percentile_in_known": 0.0
+                },
+                {
+                  "feature": "mqtt.msgtype",
+                  "value": 0.0,
+                  "shap": 0.698888,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            },
+            {
+              "test_row": 4074,
+              "category": "BENIGN",
+              "score": "energy",
+              "score_value": -2.86085,
+              "reasons": [
+                {
+                  "feature": "tcp.dstport",
+                  "value": 54805.0,
+                  "shap": 6.848247,
+                  "percentile_in_known": 79.3
+                },
+                {
+                  "feature": "tcp.len",
+                  "value": 0.0,
+                  "shap": 2.492377,
+                  "percentile_in_known": 0.0
+                },
+                {
+                  "feature": "mqtt.msgtype",
+                  "value": 0.0,
+                  "shap": 0.701569,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            },
+            {
+              "test_row": 3985,
+              "category": "BENIGN",
+              "score": "energy",
+              "score_value": -2.87099,
+              "reasons": [
+                {
+                  "feature": "tcp.dstport",
+                  "value": 54689.0,
+                  "shap": 6.804811,
+                  "percentile_in_known": 79.2
+                },
+                {
+                  "feature": "tcp.len",
+                  "value": 0.0,
+                  "shap": 2.482576,
+                  "percentile_in_known": 0.0
+                },
+                {
+                  "feature": "mqtt.msgtype",
+                  "value": 0.0,
+                  "shap": 0.692991,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "model_calls": 4965320,
+      "seconds": 309.5
+    },
+    "WEB": {
+      "categories": [
+        "WEB"
+      ],
+      "decision_source": "dss",
+      "check_vs_dss_guard": {
+        "disagree": 1.0,
+        "energy": 1.0,
+        "alarm_agreement": 1.0
+      },
+      "tau_alarm": 0.00918639451265335,
+      "tau_guard": -4.853311061859131,
+      "group_sizes": {
+        "alarm_unknown": 2644,
+        "guard_unknown": 340,
+        "silent_unknown": 66,
+        "alarm_benign": 74,
+        "guard_benign": 329
+      },
+      "background": "bilinen normal (BENIGN) eğitim trafiği",
+      "background_mean_score": {
+        "disagree": 0.000441,
+        "energy": -10.921916
+      },
+      "groups": {
+        "alarm_unknown": {
+          "n_available": 2644,
+          "n_explained": 50,
+          "explained_score": "disagree",
+          "top_disagree": [
+            {
+              "feature": "http.response",
+              "mean_abs_shap": 0.120036,
+              "mean_shap": 0.120036
+            },
+            {
+              "feature": "tcp.dstport",
+              "mean_abs_shap": 0.083021,
+              "mean_shap": -0.022573
+            },
+            {
+              "feature": "tcp.flags",
+              "mean_abs_shap": 0.043937,
+              "mean_shap": -0.025578
+            },
+            {
+              "feature": "tcp.len",
+              "mean_abs_shap": 0.03551,
+              "mean_shap": -0.000379
+            },
+            {
+              "feature": "tcp.connection.rst",
+              "mean_abs_shap": 0.011249,
+              "mean_shap": 0.006631
+            },
+            {
+              "feature": "mqtt.len",
+              "mean_abs_shap": 0.008483,
+              "mean_shap": -0.008138
+            },
+            {
+              "feature": "http.content_length",
+              "mean_abs_shap": 0.007147,
+              "mean_shap": 0.007147
+            },
+            {
+              "feature": "mqtt.msgtype",
+              "mean_abs_shap": 0.004833,
+              "mean_shap": -0.00287
+            },
+            {
+              "feature": "mqtt.hdrflags",
+              "mean_abs_shap": 0.004144,
+              "mean_shap": -0.002395
+            },
+            {
+              "feature": "tcp.flags.ack",
+              "mean_abs_shap": 0.004036,
+              "mean_shap": -0.002336
+            }
+          ],
+          "port_share_disagree": 0.3084,
+          "efficiency_gap_disagree": 0.0,
+          "top_energy": [
+            {
+              "feature": "tcp.dstport",
+              "mean_abs_shap": 4.795575,
+              "mean_shap": 4.743861
+            },
+            {
+              "feature": "http.response",
+              "mean_abs_shap": 0.618508,
+              "mean_shap": 0.604652
+            },
+            {
+              "feature": "tcp.flags",
+              "mean_abs_shap": 0.383662,
+              "mean_shap": 0.320128
+            },
+            {
+              "feature": "tcp.len",
+              "mean_abs_shap": 0.376516,
+              "mean_shap": 0.330736
+            },
+            {
+              "feature": "tcp.connection.synack",
+              "mean_abs_shap": 0.330879,
+              "mean_shap": -0.248176
+            },
+            {
+              "feature": "tcp.connection.rst",
+              "mean_abs_shap": 0.32448,
+              "mean_shap": 0.227128
+            },
+            {
+              "feature": "mqtt.len",
+              "mean_abs_shap": 0.275398,
+              "mean_shap": 0.275398
+            },
+            {
+              "feature": "mqtt.hdrflags",
+              "mean_abs_shap": 0.180477,
+              "mean_shap": 0.180477
+            },
+            {
+              "feature": "mqtt.msgtype",
+              "mean_abs_shap": 0.138709,
+              "mean_shap": 0.138709
+            },
+            {
+              "feature": "tcp.flags.ack",
+              "mean_abs_shap": 0.120798,
+              "mean_shap": -0.022654
+            }
+          ],
+          "port_share_energy": 0.6225,
+          "efficiency_gap_energy": 1e-06,
+          "faithfulness": {
+            "score": "disagree",
+            "ks": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            "scale": "düşüş / kalibrasyon IQR",
+            "iqr": 0.001583,
+            "mean_drop_iqr_shap": [
+              -24.4078,
+              -8.7646,
+              -20.3573,
+              -28.6564,
+              -31.7017,
+              -32.6621,
+              -32.5007,
+              -32.2859,
+              -32.285,
+              -32.285
+            ],
+            "mean_drop_iqr_random": [
+              -12.9629,
+              -27.1205,
+              -41.299,
+              -52.7264,
+              -62.2729,
+              -68.3301,
+              -76.2376,
+              -82.8919,
+              -86.7905,
+              -91.8622
+            ],
+            "relative": {
+              "n_rows": 50,
+              "mean_rel_drop_shap": [
+                -0.6735,
+                -0.5153,
+                -0.9528,
+                -1.4735,
+                -1.7139,
+                -1.8614,
+                -1.89,
+                -1.8855,
+                -1.8854,
+                -1.8854
+              ],
+              "mean_rel_drop_random": [
+                -0.6974,
+                -1.3853,
+                -2.025,
+                -2.5642,
+                -2.9897,
+                -3.2819,
+                -3.6412,
+                -3.8533,
+                -3.9417,
+                -4.2811
+              ]
+            },
+            "auc_shap_mean": -27.5906,
+            "auc_random_mean": -60.2494,
+            "paired_diff_median": 36.356,
+            "paired_diff_mean": 32.6588,
+            "frac_rows_shap_better": 0.84,
+            "wilcoxon_statistic": 83.0,
+            "wilcoxon_p": 1.9326371614170057e-09
+          },
+          "analyst_cards": [
+            {
+              "test_row": 42295,
+              "category": "WEB",
+              "score": "disagree",
+              "score_value": 0.0992,
+              "reasons": [
+                {
+                  "feature": "http.response",
+                  "value": 1.0,
+                  "shap": 0.21876,
+                  "percentile_in_known": 90.1
+                },
+                {
+                  "feature": "tcp.flags",
+                  "value": 24.0,
+                  "shap": 0.018723,
+                  "percentile_in_known": 72.5
+                },
+                {
+                  "feature": "udp.port",
+                  "value": 0.0,
+                  "shap": 0.002661,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            },
+            {
+              "test_row": 255998,
+              "category": "WEB",
+              "score": "disagree",
+              "score_value": 0.02024,
+              "reasons": [
+                {
+                  "feature": "http.content_length",
+                  "value": 303.0,
+                  "shap": 0.121724,
+                  "percentile_in_known": 98.9
+                },
+                {
+                  "feature": "tcp.len",
+                  "value": 484.0,
+                  "shap": 0.009314,
+                  "percentile_in_known": 83.6
+                },
+                {
+                  "feature": "http.response",
+                  "value": 1.0,
+                  "shap": 0.007499,
+                  "percentile_in_known": 90.1
+                }
+              ]
+            },
+            {
+              "test_row": 80684,
+              "category": "WEB",
+              "score": "disagree",
+              "score_value": 0.01557,
+              "reasons": [
+                {
+                  "feature": "tcp.dstport",
+                  "value": 43966.0,
+                  "shap": 0.044813,
+                  "percentile_in_known": 62.0
+                },
+                {
+                  "feature": "udp.port",
+                  "value": 0.0,
+                  "shap": 0.006783,
+                  "percentile_in_known": 0.0
+                },
+                {
+                  "feature": "tcp.connection.synack",
+                  "value": 1.0,
+                  "shap": 0.004158,
+                  "percentile_in_known": 99.0
+                }
+              ]
+            }
+          ]
+        },
+        "guard_unknown": {
+          "n_available": 340,
+          "n_explained": 50,
+          "explained_score": "energy",
+          "top_disagree": [
+            {
+              "feature": "tcp.dstport",
+              "mean_abs_shap": 0.049818,
+              "mean_shap": 0.049818
+            },
+            {
+              "feature": "tcp.flags",
+              "mean_abs_shap": 0.036007,
+              "mean_shap": -0.035891
+            },
+            {
+              "feature": "tcp.connection.rst",
+              "mean_abs_shap": 0.035642,
+              "mean_shap": 0.030143
+            },
+            {
+              "feature": "tcp.flags.ack",
+              "mean_abs_shap": 0.035612,
+              "mean_shap": -0.028126
+            },
+            {
+              "feature": "tcp.len",
+              "mean_abs_shap": 0.019634,
+              "mean_shap": -0.019344
+            },
+            {
+              "feature": "udp.port",
+              "mean_abs_shap": 0.00447,
+              "mean_shap": 0.00447
+            },
+            {
+              "feature": "tcp.connection.fin",
+              "mean_abs_shap": 0.003926,
+              "mean_shap": -0.003722
+            },
+            {
+              "feature": "mqtt.hdrflags",
+              "mean_abs_shap": 0.003796,
+              "mean_shap": 0.003146
+            },
+            {
+              "feature": "mqtt.msgtype",
+              "mean_abs_shap": 0.00373,
+              "mean_shap": 0.002449
+            },
+            {
+              "feature": "mqtt.len",
+              "mean_abs_shap": 0.003147,
+              "mean_shap": -0.001485
+            }
+          ],
+          "port_share_disagree": 0.3341,
+          "efficiency_gap_disagree": 0.0,
+          "top_energy": [
+            {
+              "feature": "tcp.dstport",
+              "mean_abs_shap": 6.189327,
+              "mean_shap": 6.189327
+            },
+            {
+              "feature": "tcp.connection.rst",
+              "mean_abs_shap": 0.835126,
+              "mean_shap": 0.751865
+            },
+            {
+              "feature": "tcp.len",
+              "mean_abs_shap": 0.665385,
+              "mean_shap": 0.665385
+            },
+            {
+              "feature": "tcp.flags.ack",
+              "mean_abs_shap": 0.645844,
+              "mean_shap": -0.481499
+            },
+            {
+              "feature": "tcp.flags",
+              "mean_abs_shap": 0.38982,
+              "mean_shap": -0.383569
+            },
+            {
+              "feature": "mqtt.len",
+              "mean_abs_shap": 0.38123,
+              "mean_shap": 0.38123
+            },
+            {
+              "feature": "mqtt.hdrflags",
+              "mean_abs_shap": 0.266732,
+              "mean_shap": 0.266732
+            },
+            {
+              "feature": "mqtt.msgtype",
+              "mean_abs_shap": 0.192364,
+              "mean_shap": 0.192364
+            },
+            {
+              "feature": "tcp.connection.synack",
+              "mean_abs_shap": 0.172677,
+              "mean_shap": 0.172677
+            },
+            {
+              "feature": "udp.port",
+              "mean_abs_shap": 0.14341,
+              "mean_shap": 0.14341
+            }
+          ],
+          "port_share_energy": 0.6482,
+          "efficiency_gap_energy": 0.0,
+          "faithfulness": {
+            "score": "energy",
+            "ks": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            "scale": "düşüş / kalibrasyon IQR",
+            "iqr": 8.27633,
+            "mean_drop_iqr_shap": [
+              0.5002,
+              0.6525,
+              0.7357,
+              0.8136,
+              0.882,
+              0.9395,
+              0.9554,
+              0.961,
+              0.9612,
+              0.9614
+            ],
+            "mean_drop_iqr_random": [
+              0.0174,
+              0.0362,
+              0.0537,
+              0.0656,
+              0.0857,
+              0.107,
+              0.1288,
+              0.1529,
+              0.1773,
+              0.1974
+            ],
+            "relative": {
+              "n_rows": 50,
+              "mean_rel_drop_shap": [
+                0.5658,
+                0.7578,
+                0.8553,
+                0.9464,
+                1.0268,
+                1.0944,
+                1.1167,
+                1.1236,
+                1.1238,
+                1.1241
+              ],
+              "mean_rel_drop_random": [
+                0.0183,
+                0.0389,
+                0.0576,
+                0.0689,
+                0.091,
+                0.1148,
+                0.139,
+                0.1661,
+                0.1935,
+                0.2161
+              ]
+            },
+            "auc_shap_mean": 0.8363,
+            "auc_random_mean": 0.1022,
+            "paired_diff_median": 0.7265,
+            "paired_diff_mean": 0.7341,
+            "frac_rows_shap_better": 1.0,
+            "wilcoxon_statistic": 0.0,
+            "wilcoxon_p": 1.7763568394002505e-15
+          },
+          "analyst_cards": [
+            {
+              "test_row": 43207,
+              "category": "WEB",
+              "score": "energy",
+              "score_value": -2.20643,
+              "reasons": [
+                {
+                  "feature": "tcp.dstport",
+                  "value": 59748.0,
+                  "shap": 6.772767,
+                  "percentile_in_known": 87.1
+                },
+                {
+                  "feature": "tcp.len",
+                  "value": 0.0,
+                  "shap": 0.859029,
+                  "percentile_in_known": 0.0
+                },
+                {
+                  "feature": "mqtt.len",
+                  "value": 0.0,
+                  "shap": 0.379837,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            },
+            {
+              "test_row": 43764,
+              "category": "WEB",
+              "score": "energy",
+              "score_value": -4.28332,
+              "reasons": [
+                {
+                  "feature": "tcp.dstport",
+                  "value": 59988.0,
+                  "shap": 5.520919,
+                  "percentile_in_known": 87.3
+                },
+                {
+                  "feature": "tcp.connection.rst",
+                  "value": 1.0,
+                  "shap": 2.655949,
+                  "percentile_in_known": 88.8
+                },
+                {
+                  "feature": "mqtt.len",
+                  "value": 0.0,
+                  "shap": 0.375126,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            },
+            {
+              "test_row": 252714,
+              "category": "WEB",
+              "score": "energy",
+              "score_value": -2.55345,
+              "reasons": [
+                {
+                  "feature": "tcp.dstport",
+                  "value": 59878.0,
+                  "shap": 6.610094,
+                  "percentile_in_known": 87.2
+                },
+                {
+                  "feature": "tcp.len",
+                  "value": 0.0,
+                  "shap": 0.757064,
+                  "percentile_in_known": 0.0
+                },
+                {
+                  "feature": "mqtt.len",
+                  "value": 0.0,
+                  "shap": 0.389874,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            }
+          ]
+        },
+        "silent_unknown": {
+          "n_available": 66,
+          "n_explained": 50,
+          "explained_score": null,
+          "top_disagree": [
+            {
+              "feature": "tcp.flags.ack",
+              "mean_abs_shap": 0.095204,
+              "mean_shap": -0.090995
+            },
+            {
+              "feature": "tcp.connection.rst",
+              "mean_abs_shap": 0.086942,
+              "mean_shap": 0.083621
+            },
+            {
+              "feature": "tcp.dstport",
+              "mean_abs_shap": 0.054391,
+              "mean_shap": 0.046744
+            },
+            {
+              "feature": "tcp.flags",
+              "mean_abs_shap": 0.039877,
+              "mean_shap": -0.034397
+            },
+            {
+              "feature": "tcp.len",
+              "mean_abs_shap": 0.022065,
+              "mean_shap": -0.020742
+            },
+            {
+              "feature": "mqtt.hdrflags",
+              "mean_abs_shap": 0.005125,
+              "mean_shap": 0.005091
+            },
+            {
+              "feature": "udp.port",
+              "mean_abs_shap": 0.004628,
+              "mean_shap": 0.004628
+            },
+            {
+              "feature": "mqtt.msgtype",
+              "mean_abs_shap": 0.003753,
+              "mean_shap": 0.003376
+            },
+            {
+              "feature": "mqtt.len",
+              "mean_abs_shap": 0.00285,
+              "mean_shap": 0.002042
+            },
+            {
+              "feature": "tcp.connection.synack",
+              "mean_abs_shap": 0.002704,
+              "mean_shap": 0.002666
+            }
+          ],
+          "port_share_disagree": 0.2296,
+          "efficiency_gap_disagree": 0.0,
+          "top_energy": [
+            {
+              "feature": "tcp.dstport",
+              "mean_abs_shap": 3.351594,
+              "mean_shap": 2.296686
+            },
+            {
+              "feature": "tcp.connection.rst",
+              "mean_abs_shap": 2.358005,
+              "mean_shap": 2.248555
+            },
+            {
+              "feature": "tcp.flags.ack",
+              "mean_abs_shap": 1.575704,
+              "mean_shap": -1.467286
+            },
+            {
+              "feature": "tcp.flags",
+              "mean_abs_shap": 0.837506,
+              "mean_shap": -0.828943
+            },
+            {
+              "feature": "tcp.len",
+              "mean_abs_shap": 0.795725,
+              "mean_shap": 0.795725
+            },
+            {
+              "feature": "mqtt.len",
+              "mean_abs_shap": 0.400316,
+              "mean_shap": 0.400316
+            },
+            {
+              "feature": "mqtt.hdrflags",
+              "mean_abs_shap": 0.283197,
+              "mean_shap": 0.283197
+            },
+            {
+              "feature": "mqtt.msgtype",
+              "mean_abs_shap": 0.20395,
+              "mean_shap": 0.20395
+            },
+            {
+              "feature": "tcp.connection.synack",
+              "mean_abs_shap": 0.146652,
+              "mean_shap": 0.146652
+            },
+            {
+              "feature": "udp.port",
+              "mean_abs_shap": 0.145043,
+              "mean_shap": 0.145043
+            }
+          ],
+          "port_share_energy": 0.3445,
+          "efficiency_gap_energy": 1e-06,
+          "analyst_cards": [
+            {
+              "test_row": 255260,
+              "category": "WEB",
+              "score": "energy",
+              "score_value": -5.08571,
+              "reasons": [
+                {
+                  "feature": "tcp.dstport",
+                  "value": 60902.0,
+                  "shap": 4.159765,
+                  "percentile_in_known": 90.6
+                },
+                {
+                  "feature": "tcp.connection.rst",
+                  "value": 1.0,
+                  "shap": 2.838313,
+                  "percentile_in_known": 88.8
+                },
+                {
+                  "feature": "tcp.len",
+                  "value": 0.0,
+                  "shap": 0.596783,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            },
+            {
+              "test_row": 45335,
+              "category": "WEB",
+              "score": "energy",
+              "score_value": -4.91197,
+              "reasons": [
+                {
+                  "feature": "tcp.dstport",
+                  "value": 60622.0,
+                  "shap": 4.344585,
+                  "percentile_in_known": 90.3
+                },
+                {
+                  "feature": "tcp.connection.rst",
+                  "value": 1.0,
+                  "shap": 3.201341,
+                  "percentile_in_known": 88.8
+                },
+                {
+                  "feature": "tcp.len",
+                  "value": 0.0,
+                  "shap": 0.597953,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            },
+            {
+              "test_row": 255477,
+              "category": "WEB",
+              "score": "energy",
+              "score_value": -10.05841,
+              "reasons": [
+                {
+                  "feature": "tcp.len",
+                  "value": 0.0,
+                  "shap": 1.408904,
+                  "percentile_in_known": 0.0
+                },
+                {
+                  "feature": "mqtt.len",
+                  "value": 0.0,
+                  "shap": 0.4068,
+                  "percentile_in_known": 0.0
+                },
+                {
+                  "feature": "mqtt.hdrflags",
+                  "value": 0.0,
+                  "shap": 0.307501,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            }
+          ]
+        },
+        "alarm_benign": {
+          "n_available": 74,
+          "n_explained": 50,
+          "explained_score": "disagree",
+          "top_disagree": [
+            {
+              "feature": "tcp.dstport",
+              "mean_abs_shap": 0.069501,
+              "mean_shap": 0.069501
+            },
+            {
+              "feature": "tcp.connection.rst",
+              "mean_abs_shap": 0.031583,
+              "mean_shap": 0.027822
+            },
+            {
+              "feature": "tcp.flags.ack",
+              "mean_abs_shap": 0.031058,
+              "mean_shap": -0.024276
+            },
+            {
+              "feature": "tcp.flags",
+              "mean_abs_shap": 0.028071,
+              "mean_shap": -0.027337
+            },
+            {
+              "feature": "tcp.len",
+              "mean_abs_shap": 0.022243,
+              "mean_shap": -0.022243
+            },
+            {
+              "feature": "udp.port",
+              "mean_abs_shap": 0.004917,
+              "mean_shap": 0.004917
+            },
+            {
+              "feature": "mqtt.hdrflags",
+              "mean_abs_shap": 0.004269,
+              "mean_shap": 0.00257
+            },
+            {
+              "feature": "mqtt.len",
+              "mean_abs_shap": 0.003333,
+              "mean_shap": -0.001184
+            },
+            {
+              "feature": "mqtt.msgtype",
+              "mean_abs_shap": 0.003209,
+              "mean_shap": 0.000789
+            },
+            {
+              "feature": "tcp.connection.fin",
+              "mean_abs_shap": 0.002708,
+              "mean_shap": -0.001907
+            }
+          ],
+          "port_share_disagree": 0.4198,
+          "efficiency_gap_disagree": 0.0,
+          "top_energy": [
+            {
+              "feature": "tcp.dstport",
+              "mean_abs_shap": 5.469888,
+              "mean_shap": 5.469888
+            },
+            {
+              "feature": "tcp.connection.rst",
+              "mean_abs_shap": 0.966447,
+              "mean_shap": 0.885885
+            },
+            {
+              "feature": "tcp.len",
+              "mean_abs_shap": 0.643289,
+              "mean_shap": 0.643289
+            },
+            {
+              "feature": "tcp.flags.ack",
+              "mean_abs_shap": 0.598645,
+              "mean_shap": -0.418185
+            },
+            {
+              "feature": "mqtt.len",
+              "mean_abs_shap": 0.380165,
+              "mean_shap": 0.380165
+            },
+            {
+              "feature": "tcp.flags",
+              "mean_abs_shap": 0.305052,
+              "mean_shap": -0.293217
+            },
+            {
+              "feature": "mqtt.hdrflags",
+              "mean_abs_shap": 0.270057,
+              "mean_shap": 0.270057
+            },
+            {
+              "feature": "mqtt.msgtype",
+              "mean_abs_shap": 0.189374,
+              "mean_shap": 0.189374
+            },
+            {
+              "feature": "tcp.connection.synack",
+              "mean_abs_shap": 0.186743,
+              "mean_shap": 0.115872
+            },
+            {
+              "feature": "udp.port",
+              "mean_abs_shap": 0.143315,
+              "mean_shap": 0.143315
+            }
+          ],
+          "port_share_energy": 0.6278,
+          "efficiency_gap_energy": 1e-06,
+          "faithfulness": {
+            "score": "disagree",
+            "ks": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            "scale": "düşüş / kalibrasyon IQR",
+            "iqr": 0.001583,
+            "mean_drop_iqr_shap": [
+              -6.0506,
+              0.0221,
+              -7.6059,
+              -14.0223,
+              -17.4266,
+              -14.5817,
+              -13.1901,
+              -11.7875,
+              -11.7902,
+              -11.7909
+            ],
+            "mean_drop_iqr_random": [
+              -8.4205,
+              -16.4,
+              -24.2921,
+              -31.3881,
+              -37.3459,
+              -41.2067,
+              -45.3505,
+              -49.7413,
+              -51.4652,
+              -52.1061
+            ],
+            "relative": {
+              "n_rows": 50,
+              "mean_rel_drop_shap": [
+                -2.519,
+                -0.8158,
+                -1.4206,
+                -1.8986,
+                -2.1757,
+                -1.8653,
+                -1.7107,
+                -1.5503,
+                -1.5507,
+                -1.5508
+              ],
+              "mean_rel_drop_random": [
+                -0.9061,
+                -1.8304,
+                -2.7085,
+                -3.4745,
+                -4.1703,
+                -4.603,
+                -5.0603,
+                -5.5701,
+                -5.7531,
+                -5.7821
+              ]
+            },
+            "auc_shap_mean": -10.8224,
+            "auc_random_mean": -35.7716,
+            "paired_diff_median": 24.9191,
+            "paired_diff_mean": 24.9493,
+            "frac_rows_shap_better": 1.0,
+            "wilcoxon_statistic": 0.0,
+            "wilcoxon_p": 1.7763568394002505e-15
+          },
+          "analyst_cards": [
+            {
+              "test_row": 39798,
+              "category": "BENIGN",
+              "score": "disagree",
+              "score_value": 0.06635,
+              "reasons": [
+                {
+                  "feature": "tcp.dstport",
+                  "value": 502.0,
+                  "shap": 0.093642,
+                  "percentile_in_known": 37.9
+                },
+                {
+                  "feature": "mqtt.msgtype",
+                  "value": 0.0,
+                  "shap": 0.00739,
+                  "percentile_in_known": 0.0
+                },
+                {
+                  "feature": "udp.port",
+                  "value": 0.0,
+                  "shap": 0.003725,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            },
+            {
+              "test_row": 7537,
+              "category": "BENIGN",
+              "score": "disagree",
+              "score_value": 0.08275,
+              "reasons": [
+                {
+                  "feature": "tcp.dstport",
+                  "value": 60296.0,
+                  "shap": 0.09583,
+                  "percentile_in_known": 90.0
+                },
+                {
+                  "feature": "tcp.flags.ack",
+                  "value": 1.0,
+                  "shap": 0.005198,
+                  "percentile_in_known": 30.5
+                },
+                {
+                  "feature": "mqtt.msgtype",
+                  "value": 0.0,
+                  "shap": 0.00344,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            },
+            {
+              "test_row": 7720,
+              "category": "BENIGN",
+              "score": "disagree",
+              "score_value": 0.01477,
+              "reasons": [
+                {
+                  "feature": "tcp.dstport",
+                  "value": 60603.0,
+                  "shap": 0.065149,
+                  "percentile_in_known": 90.3
+                },
+                {
+                  "feature": "udp.port",
+                  "value": 0.0,
+                  "shap": 0.006272,
+                  "percentile_in_known": 0.0
+                },
+                {
+                  "feature": "tcp.flags.ack",
+                  "value": 1.0,
+                  "shap": 0.003631,
+                  "percentile_in_known": 30.5
+                }
+              ]
+            }
+          ]
+        },
+        "guard_benign": {
+          "n_available": 329,
+          "n_explained": 50,
+          "explained_score": "energy",
+          "top_disagree": [
+            {
+              "feature": "tcp.connection.rst",
+              "mean_abs_shap": 0.043525,
+              "mean_shap": 0.037705
+            },
+            {
+              "feature": "tcp.dstport",
+              "mean_abs_shap": 0.038961,
+              "mean_shap": 0.038961
+            },
+            {
+              "feature": "tcp.flags.ack",
+              "mean_abs_shap": 0.03666,
+              "mean_shap": -0.029127
+            },
+            {
+              "feature": "tcp.flags",
+              "mean_abs_shap": 0.032584,
+              "mean_shap": -0.032584
+            },
+            {
+              "feature": "tcp.len",
+              "mean_abs_shap": 0.021302,
+              "mean_shap": -0.020214
+            },
+            {
+              "feature": "udp.port",
+              "mean_abs_shap": 0.004585,
+              "mean_shap": 0.004585
+            },
+            {
+              "feature": "mqtt.hdrflags",
+              "mean_abs_shap": 0.004019,
+              "mean_shap": 0.003312
+            },
+            {
+              "feature": "mqtt.len",
+              "mean_abs_shap": 0.003644,
+              "mean_shap": -0.002232
+            },
+            {
+              "feature": "mqtt.msgtype",
+              "mean_abs_shap": 0.003488,
+              "mean_shap": 0.002499
+            },
+            {
+              "feature": "dns.retransmission",
+              "mean_abs_shap": 0.001746,
+              "mean_shap": -0.001695
+            }
+          ],
+          "port_share_disagree": 0.2866,
+          "efficiency_gap_disagree": 0.0,
+          "top_energy": [
+            {
+              "feature": "tcp.dstport",
+              "mean_abs_shap": 5.75609,
+              "mean_shap": 5.75609
+            },
+            {
+              "feature": "tcp.connection.rst",
+              "mean_abs_shap": 1.004107,
+              "mean_shap": 0.920402
+            },
+            {
+              "feature": "tcp.flags.ack",
+              "mean_abs_shap": 0.720684,
+              "mean_shap": -0.573835
+            },
+            {
+              "feature": "tcp.len",
+              "mean_abs_shap": 0.637749,
+              "mean_shap": 0.637749
+            },
+            {
+              "feature": "tcp.flags",
+              "mean_abs_shap": 0.516678,
+              "mean_shap": -0.516454
+            },
+            {
+              "feature": "mqtt.len",
+              "mean_abs_shap": 0.352479,
+              "mean_shap": 0.352479
+            },
+            {
+              "feature": "mqtt.hdrflags",
+              "mean_abs_shap": 0.245716,
+              "mean_shap": 0.245716
+            },
+            {
+              "feature": "mqtt.msgtype",
+              "mean_abs_shap": 0.171488,
+              "mean_shap": 0.171488
+            },
+            {
+              "feature": "tcp.connection.synack",
+              "mean_abs_shap": 0.167921,
+              "mean_shap": 0.167921
+            },
+            {
+              "feature": "udp.port",
+              "mean_abs_shap": 0.137291,
+              "mean_shap": 0.137291
+            }
+          ],
+          "port_share_energy": 0.6245,
+          "efficiency_gap_energy": 0.0,
+          "faithfulness": {
+            "score": "energy",
+            "ks": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            "scale": "düşüş / kalibrasyon IQR",
+            "iqr": 8.27633,
+            "mean_drop_iqr_shap": [
+              0.4335,
+              0.5995,
+              0.6838,
+              0.7622,
+              0.8249,
+              0.8859,
+              0.9082,
+              0.9148,
+              0.9148,
+              0.9149
+            ],
+            "mean_drop_iqr_random": [
+              0.0129,
+              0.0203,
+              0.0316,
+              0.0501,
+              0.0607,
+              0.0749,
+              0.0954,
+              0.1207,
+              0.1408,
+              0.1597
+            ],
+            "relative": {
+              "n_rows": 50,
+              "mean_rel_drop_shap": [
+                0.5282,
+                0.7504,
+                0.8568,
+                0.9552,
+                1.0347,
+                1.1112,
+                1.143,
+                1.1517,
+                1.1517,
+                1.1518
+              ],
+              "mean_rel_drop_random": [
+                0.0144,
+                0.023,
+                0.0359,
+                0.0578,
+                0.07,
+                0.0868,
+                0.1116,
+                0.1412,
+                0.1651,
+                0.1876
+              ]
+            },
+            "auc_shap_mean": 0.7842,
+            "auc_random_mean": 0.0767,
+            "paired_diff_median": 0.7237,
+            "paired_diff_mean": 0.7075,
+            "frac_rows_shap_better": 1.0,
+            "wilcoxon_statistic": 0.0,
+            "wilcoxon_p": 1.7763568394002505e-15
+          },
+          "analyst_cards": [
+            {
+              "test_row": 7374,
+              "category": "BENIGN",
+              "score": "energy",
+              "score_value": -2.11388,
+              "reasons": [
+                {
+                  "feature": "tcp.dstport",
+                  "value": 60070.0,
+                  "shap": 6.740449,
+                  "percentile_in_known": 87.4
+                },
+                {
+                  "feature": "tcp.len",
+                  "value": 0.0,
+                  "shap": 0.91931,
+                  "percentile_in_known": 0.0
+                },
+                {
+                  "feature": "mqtt.len",
+                  "value": 0.0,
+                  "shap": 0.390367,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            },
+            {
+              "test_row": 4074,
+              "category": "BENIGN",
+              "score": "energy",
+              "score_value": -2.89381,
+              "reasons": [
+                {
+                  "feature": "tcp.dstport",
+                  "value": 54805.0,
+                  "shap": 6.192537,
+                  "percentile_in_known": 79.8
+                },
+                {
+                  "feature": "tcp.len",
+                  "value": 0.0,
+                  "shap": 0.874892,
+                  "percentile_in_known": 0.0
+                },
+                {
+                  "feature": "mqtt.len",
+                  "value": 0.0,
+                  "shap": 0.3414,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            },
+            {
+              "test_row": 4472,
+              "category": "BENIGN",
+              "score": "energy",
+              "score_value": -4.45568,
+              "reasons": [
+                {
+                  "feature": "tcp.dstport",
+                  "value": 55422.0,
+                  "shap": 5.34791,
+                  "percentile_in_known": 80.6
+                },
+                {
+                  "feature": "tcp.connection.rst",
+                  "value": 1.0,
+                  "shap": 2.559147,
+                  "percentile_in_known": 88.8
+                },
+                {
+                  "feature": "mqtt.len",
+                  "value": 0.0,
+                  "shap": 0.356922,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "model_calls": 4965320,
+      "seconds": 229.8
+    }
+  },
+  "runtime_seconds": 578.6
+}
