@@ -354,7 +354,7 @@ Gülsü'nün aracı `src/alarm_tiers.py` (dss_guard satır dosyalarından, yeni 
 - **Ciddiyet varyantının riski burada daha belirgin:** görülmemiş DDOS'un analiste gitme oranı tek kademede %49, skor varyantında %46,5, ciddiyet varyantında **%3,2** (RECON sanılan DDoS satırları alt kademeye kayıyor; DSS'ten ALERT aldıkları için ALLOW olmuyorlar ama insan incelemesine gitmiyorlar). Bu yüzden skor varyantı tercih edilir; ciddiyet karşılaştırma için raporlanır.
 - Satır dosyaları (`rows_*.npz`) Kaggle çıktısından indirilip `-f` ile eklendi (`.gitignore` `*.npz`'i yok sayıyor).
 
-## XAI-2: Bekçinin kararının açıklanması, analiz planı (sonuçlardan ÖNCE yazıldı, 26.10.2026)
+## Bilinmeyen Kararının Açıklanması (XAI-2), analiz planı (sonuçlardan ÖNCE yazıldı, 26.10.2026)
 
 Soru: TabM bekçisi (alarm = üye anlaşmazlığı, kontrol = enerji) bir trafiği neden şüpheli buluyor ve bu açıklama doğru mu? Başarı eşiği konmadı; aşağıdaki ölçümlerin **tamamı** raporlanır (seçici raporlama yok).
 
@@ -362,10 +362,24 @@ Soru: TabM bekçisi (alarm = üye anlaşmazlığı, kontrol = enerji) bir trafi�
 - **Aileler:** BRUTEFORCE ve WEB (Edge-IIoTset). Aynı komut diğer veri setlerinde de çalışır.
 - **Açıklanan satırlar** (her grupta en fazla 50, rastgele, seed 42): (1) alarm alan görülmemiş saldırı, (2) alarm almamış, DSS'in BENIGN dediği ve kontrolde yakalanan görülmemiş saldırı (q = %5), (3) aynı durumda kontrolden geçen (kaçan) görülmemiş saldırı, (4) alarmla analiste giden normal trafik, (5) kontrolle analiste giden normal trafik.
 - **Açıklama:** anlaşmazlık ve enerji skorları için permütasyon Shapley değerleri (kütüphanesiz uygulama; antitetik permütasyonlar), karşılaştırma tabanı bilinen eğitim trafiğinden rastgele satırlar.
+- **Plandan sapma (kod yazılırken, sonuçlardan ÖNCE):** karşılaştırma tabanı bilinen eğitim trafiğinin tamamı yerine yalnız bilinen **normal (BENIGN)** eğitim satırları. Neden: tüm bilinen trafik tabanında saldırı satırları da olduğu için bazı satırlarda taban skoru açıklanan satırın skorundan yüksek çıkıyor, göreli düşüş tanımsızlaşıyordu (payda ≤ 0). Normal taban "bu satırı normalden ayıran ne?" sorusuna da doğrudan karşılık geliyor. Bu yüzden ham düşüş bilinen trafiğin çeyrekler açıklığı (IQR) biriminde verilir; göreli düşüş yalnız satırın skoru tabanı en az 0,1 IQR aştığında hesaplanır.
 - **Sadakat:** bir satırı şüpheli yapan skor için (gruplar 1 ve 4: anlaşmazlık; 2 ve 5: enerji) Shapley değerine göre en çok artıran k özellik, bilinen trafikten alınan değerlerle değiştirilir; k = 1–10 için skordaki düşüş (ham ve satırın taban skoruna göre göreli). Aynısı rastgele k özellikle (20 tekrar). Raporlanan: ortalama silme eğrileri, eğri altı alan (AUC), satır başına eşleştirilmiş fark (SHAP − rastgele), SHAP'ın rastgeleden iyi olduğu satır oranı, Wilcoxon işaretli sıra testi.
 - **Yan bulgu (port sorusu):** koşul C'de portlar (`tcp.dstport`, `udp.port`) veride duruyor. Her grup ve skor için toplam |Shapley| içinde port özelliklerinin payı raporlanır: bekçi bilinmeyeni davranıştan mı tanıyor, kısayoldan mı?
 - **Çıktı:** en önemli özellikler (grup ve skor başına), sadakat tabloları ve eğrileri, örnek analist kartları (en çok katkı veren 3 özellik, değeri ve bilinen trafikteki yüzdelik konumu).
 - **Kaçan satırlar (grup 3)** için skor zaten düşük olduğundan sadakat testi anlamlı değil; bu grup yalnız "neden şüphelenilmedi" karşılaştırması için açıklanır.
+
+## Kaçışların Karşı-Olgusal Açıklaması (XAI-3), analiz planı (sonuçlardan ÖNCE yazıldı, 26.10.2026)
+
+Soru: Bekçiden sessizce geçen (alarm yok, DSS BENIGN dedi, enerji kontrolünden de geçti) görülmemiş saldırı satırı **hangi özellikleri ne kadar farklı olsaydı yakalanırdı?** Bilinmeyen Kararının Açıklanması (XAI-2) "neden şüphelenildi?" sorusunu cevaplıyor; bu iş "neden şüphelenilmedi, ne olsaydı şüphelenilirdi?" sorusunu cevaplıyor. Amaç bekçinin kör noktalarının haritası: kaçışlar hangi özelliklerde normal trafiğe benziyor? Başarı eşiği konmadı; aşağıdaki ölçümlerin **tamamı** raporlanır.
+
+- **Kod (planlanan):** `src/xai_escape_counterfactual.py` (ortak araç, `--dataset`). Bölme, TabM modeli, eşikler ve satır grupları Bilinmeyen Kararının Açıklanması (XAI-2) koşusuyla aynı; kaydedilen TabM modelleri yeniden kullanılır (yeniden eğitim yok).
+- **Aileler:** BRUTEFORCE ve WEB (Edge-IIoTset), koşul C, tohum 42, q = %5.
+- **Açıklanan satırlar:** sessiz kaçan görülmemiş saldırı satırları (XAI-2'deki grup 3), en fazla 50, rastgele, seed 42.
+- **"Yakalandı" tanımı:** anlaşmazlık ≥ alarm eşiği **veya** enerji ≥ q = %5 kontrol eşiği (iki eşik de bilinen kalibrasyon verisinden, XAI-2 ile aynı). Değişen satırda DSS kararı yeniden hesaplanmaz; DSS'in BENIGN demeye devam ettiği varsayılır (sınırlılık olarak yazılır).
+- **Arama (kütüphanesiz, açgözlü):** her adımda tek bir özelliğin değeri, bilinen eğitim trafiğindeki o özelliğin yüzdeliklerinden (%5, %15, …, %95; 10 değer) biriyle değiştirilir; yakalanma payını en çok artıran değişiklik seçilir. Pay = max(anlaşmazlık / alarm eşiği, enerji / kontrol eşiği); 1'e ulaşınca satır yakalanmış olur. En fazla k = 5 özellik değiştirilir. Böylece önerilen değerler veride gerçekten görülen değerlerdir (uydurma değer yok).
+- **Raporlanan:** (1) başlangıç payı dağılımı (kaçışlar eşiğe ne kadar yakındı); (2) k = 1–5 için yakalanma oranı eğrisi; (3) yakalanan satırlarda gereken özellik sayısı ve değişim büyüklüğü (IQR biriminde); (4) karşı-olgularda en sık değişen özellikler (aile başına "kör nokta" listesi) ve hangi sinyali tetiklediği (alarm mı enerji mi); (5) **rastgele taban:** aynı k ile rastgele özellik ve rastgele yüzdelik değer (20 tekrar); aynı yakalanma oranı eğrisi; (6) **XAI-2 ile tutarlılık:** karşı-olguda değişen özellikler, aynı satırın XAI-2 Shapley sıralamasında kaçıncı sırada (sıra korelasyonu ve ilk-5 örtüşmesi); (7) **gerçekçilik:** karşı-olgu satırının bilinen eğitim trafiğindeki en yakın komşusuna uzaklığı, gerçek bilinen satırların kendi en yakın komşularına uzaklığıyla karşılaştırılır (oran ve yüzdelik); (8) port payı: karşı-olgularda `tcp.dstport` / `udp.port` değişikliklerinin oranı (XAI-2 port sorusunun devamı).
+- **Yorumda dikkat:** karşı-olgu "saldırganın bekçiyi atlatmak için ne yapması gerekir" sorusuna da ters yönden ipucu verir; tezde savunma amaçlı (kör nokta) çerçevesinde yazılır.
+- **Literatür konumu:** ağ saldırı tespitinde karşı-olgusal açıklamalar kapalı küme sınıflandırma için çalışılmış (ör. arXiv 2507.17161, 2025); görülmemiş saldırı bekçisinin **kaçışlarına** uygulanmasına kısa aramada rastlanmadı. Tez yazılmadan önce ayrıntılı literatür taraması yapılacak; "ilk" iddiası ancak ondan sonra.
 
 ## Sütun hizası ve değer aralığı denetimi (19.10.2026)
 

@@ -138,7 +138,7 @@ DATASETS = {
         "default_condition": "C_seq_ack_yok",
         # ablation tek-özellik testi: yalnızca şüpheli kimlik alanları (yoksa bütün sütunlar)
         "leak_test_columns": _EDGE_COUNTERS,
-        "port_columns": _EDGE_PORTS,  # XAI-2 yan bulgu: koşul C'de duran port sütunlarının açıklamadaki payı
+        "port_columns": _EDGE_PORTS,  # Bilinmeyen Kararının Açıklanması (XAI-2) yan bulgu: koşul C'de duran port sütunlarının açıklamadaki payı
         "model_files": _edge_model_files,
         "dss_voters": ["DT", "RF", "XGB", "LGBM", "TabM"],
         "protocol_drop": [],

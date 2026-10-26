@@ -25,7 +25,7 @@ Karşılaştırılan kontrol skorları (aynı q bütçesinde):
   benign_review       gerçek BENIGN test trafiğinin analiste gönderilen oranı (maliyet)
   unknown_caught      bilinmeyenlerin alarm ya da kontrolle durdurulan oranı
 
-Satır bazında skorlar da kaydedilir (XAI-2 ve sonraki analizler için).
+Satır bazında skorlar da kaydedilir (Bilinmeyen Kararının Açıklanması / XAI-2 ve sonraki analizler için).
 
 Çalıştırma:
   python src/two_signal.py --dataset dnn_edgeiiot --data-file <csv> --cp-config outputs/dnn_edgeiiot/cp_tune/cp_tune_C_seq_ack_yok.json
