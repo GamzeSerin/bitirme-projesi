@@ -423,6 +423,42 @@ Soru: Bekçiden sessizce geçen (alarm yok, DSS BENIGN dedi, enerji kontrolünde
 - **Yorumda dikkat:** karşı-olgu "saldırganın bekçiyi atlatmak için ne yapması gerekir" sorusuna da ters yönden ipucu verir; tezde savunma amaçlı (kör nokta) çerçevesinde yazılır.
 - **Literatür konumu:** ağ saldırı tespitinde karşı-olgusal açıklamalar kapalı küme sınıflandırma için çalışılmış (ör. arXiv 2507.17161, 2025); görülmemiş saldırı bekçisinin **kaçışlarına** uygulanmasına kısa aramada rastlanmadı. Tez yazılmadan önce ayrıntılı literatür taraması yapılacak; "ilk" iddiası ancak ondan sonra.
 
+## Kaçışların Karşı-Olgusal Açıklaması (XAI-3): sonuçlar (26.10.2026)
+
+Kod: `src/xai_escape_counterfactual.py`. Çıktı: `outputs/dnn_edgeiiot/xai_escape_counterfactual/`, kayıt: `outputs/dnn_edgeiiot/logs/log_xai_escape_counterfactual_C.txt`. Koşul C, tohum 42, q = %5; XAI-2'nin kayıtlı TabM'i (dss_guard ile uyum 1,0) ve aynı 50'şer sessiz kaçan satır. Kaggle GPU, 2 dk.
+
+![Kaçışların karşı-olgusal açıklaması](../../outputs/dnn_edgeiiot/xai_escape_counterfactual/fig_xai_escape_counterfactual_dnn_edgeiiot_C_seq_ack_yok.png)
+
+| | BRUTEFORCE | WEB |
+|---|---|---|
+| Sessiz kaçan (açıklanan) | 195 (50) | 66 (50) |
+| (1) Başlangıç payı, medyan [%10–%90] (IQR) | −0,020 [−0,026, −0,008] | −0,018 [−0,63, −0,006] |
+| Alarm eşiğine uzaklık / enerji eşiğine uzaklık, medyan | −4,65 / −0,020 | −2,64 / −0,018 |
+| (2) Yakalanma k = 1…5, alarm veya enerji: karşı-olgu | %100 (k = 1'de) | %100 (k = 1'de) |
+| … rastgele | %14 → %28 → %39 → %48 → %56 | %16 → %30 → %41 → %50 → %59 |
+| Ek: yalnız enerji: karşı-olgu | %100 (k = 1'de) | %100 (k = 1'de) |
+| … rastgele | %9 → %17 → %22 → %29 → %36 | %10 → %18 → %25 → %32 → %38 |
+| (3) Değişim büyüklüğü, medyan (özellik IQR'si) | 1,0 (yalnız enerji: 0,71) | 2,1 (yalnız enerji: 2,1) |
+| (4) En sık değişen, alarm veya enerji | `tcp.connection.syn` 0→1 (40/50), `tcp.connection.rst` 0→1 (7) | `tcp.len` 0→495 (34), `icmp.seq_le` 0→44615 (15) |
+| … tetiklenen sinyal | alarm + enerji 38, yalnız alarm 12 | alarm + enerji 35, yalnız alarm 15 |
+| (4) En sık değişen, yalnız enerji | `tcp.len` 0→108 (35), `tcp.connection.rst` 0→1 (12), `tcp.dstport` (3) | `tcp.len` 0→495 (34), `tcp.dstport` ~60 900→4321 (16) |
+| (6) XAI-2 ile tutarlılık: kazanç–\|Shapley\| sıra korelasyonu, medyan | −0,30 | −0,38 |
+| … değişen özelliğin \|Shapley\| sırası (medyan) / ilk-5'te olma | 17 / %20 | 5 / %68 |
+| (7) Gerçekçilik: en yakın bilinen satıra uzaklık, özgün kaçış / karşı-olgu (medyan) | 0,00007 / 1,0 | 0,00006 / 1,7 |
+| (8) Port değişikliği payı: alarm veya enerji / yalnız enerji | %0 / %6 | %0 / %32 |
+
+**Yorum:**
+
+1. **Kaçışlar enerji eşiğinin hemen altında, "kıl payı" kaçışlar.** Enerji eşiğine uzaklık medyanı −0,02 IQR; alarm eşiğinden ise çok uzaklar (−2,6 ile −4,6 IQR). Yani bu satırları sessiz bırakan karar, alarm değil enerji kontrolünün sınırı. Bu yüzden tek bir değişiklik her satırı yakalatıyor (karşı-olgu k = 1'de %100); rastgele tek değişiklik bile %9–16'sını yakalatıyor. Yakalanma oranı eğrisi bu yüzden bu veride ayırt edici değil; asıl bilgi **hangi** değişikliğin seçildiğinde.
+2. **"Alarm veya enerji" karşı-olguları büyük ölçüde gerçek dışı.** BRUTEFORCE'ta mevcut pakete SYN bayrağı eklemek, WEB'de HTTP paketine ICMP sıra numarası yazmak gibi, veride birlikte görülmeyen değerler. Satırların hepsinde alarm da tetikleniyor ve karşı-olgular bilinen trafiğe 1,0–1,7 IQR uzaklıkta (özgün kaçışlar ise ≈ 0). Bu, XAI-2'deki bulguyla aynı: anlaşmazlık gerçek dışı karışımlarla kolayca yükseliyor. Bu kısım kör nokta hakkında bilgi vermiyor; sınırlılık olarak raporlanır.
+3. **Asıl kör nokta haritası "yalnız enerji" analizinden geliyor: yükü olmayan (payload'suz) TCP paketleri.** Kaçan satırların çoğunda `tcp.len` = 0; paket boyu normal trafikte görülen bir değere (108 ya da 495 bayt) çekilince enerji kontrolü yakalıyor (BRUTEFORCE'ta 35/50, WEB'de 34/50). Kalanlarda RST bayrağı (BRUTEFORCE 12/50) ve hedef port (WEB 16/50). Yorum: saldırı oturumlarının yük taşımayan kontrol paketleri (ACK gibi) paket düzeyindeki özelliklerde normal trafiğin kontrol paketleriyle aynı görünüyor.
+4. **Kaçışlar bilinen eğitim trafiğinde neredeyse birebir eşine sahip** (en yakın komşu uzaklığı ≈ 0; satırların %12–24'ünde tam olarak 0). Bu özelliklerle hiçbir paket düzeyindeki dedektör bu satırları ayıramaz; bu, yöntemin değil özellik temsilinin sınırı. Akış veya oturum düzeyindeki özellikler (aynı bağlantının diğer paketleri) bu kör noktayı kapatmanın doğal yolu; tezde gelecek çalışma olarak yazılır.
+5. **Port kör noktanın ana sebebi değil.** Gerçekçi (yalnız enerji) karşı-olgularda port payı BRUTEFORCE'ta %6, WEB'de %32; asıl özellik paket boyu. XAI-2'nin "bekçi porta çok bakıyor" bulgusu geçerli, ama kaçışları açıklayan şey port değil.
+6. **XAI-2 ile tutarlılık düşük, ve bu beklenen bir ayrım.** Shapley değeri "mevcut değerler satırı normalden ne kadar ayırıyor" sorusunu, karşı-olgu ise "hangi değişiklik eşiği aştırır" sorusunu cevaplıyor. Kaçışta `tcp.len` = 0 veya bayrak = 0 olduğunda normal tabanla aynı değerde olduğu için Shapley değeri ≈ 0; ama değiştirilince etkisi büyük. İki açıklama birbirini tamamlıyor; analist kartında ikisi ayrı sorular olarak gösterilmeli.
+7. **Gerçekçilik ölçümü (7) planlandığı gibi yorumlanamıyor:** gerçek bilinen satırların kendi en yakın komşularına uzaklığı medyanı 0 (koşul C'de çok sayıda satır özellik uzayında tekrarlanıyor), bu yüzden "oran" tanımsız büyüklükte. Bunun yerine özgün kaçışın uzaklığı (≈ 0) ile karşı-olgunun uzaklığı (1,0–1,7) karşılaştırıldı (sonuçlardan sonra yapılan değişiklik; ham sayılar JSON'da).
+
+**Sonradan önerilen kontrol (ön kayıtlı değil):** kaçan satırların en yakın bilinen eşinin etiketi. Beklenti: çoğunlukla BENIGN (DSS de BENIGN dedi). Doğrulanırsa 4. madde "kaçışlar normal trafikle ayırt edilemez" olarak kesinleşir.
+
 ## Sütun hizası ve değer aralığı denetimi (19.10.2026)
 
 Kod: `src/audit_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/audit/audit.json`. Ham verideki 15 etiketin her biri için 6 kontrol (zaman damgası, IP, port 0–65535, 0/1 bayrak, ARP alanları, sayısal sütunlarda metin). İhlal yalnızca DDoS_UDP (zaman %100) ve MITM'de (zaman %100, port %30, bayrak %19); Normal'de %0,11 bayrak ihlali (önemsiz); diğer 12 saldırı türünde %0. Bu iki tür bulgu 7 gereği atıldı.

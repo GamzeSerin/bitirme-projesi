@@ -433,14 +433,24 @@ def plot(out, path):
         ax.spines[["top", "right"]].set_visible(False)
         ax.tick_params(labelsize=7)
         ax2 = axes[1, c]
-        top = s["top_changed_features"][:8][::-1]
-        if top:
-            ax2.barh([t["feature"] for t in top], [t["share_of_changes"] * 100 for t in top], color="#2a78d6")
+        sh_any = {t["feature"]: t["share_of_changes"] * 100 for t in s["top_changed_features"]}
+        sh_e = {t["feature"]: t["share_of_changes"] * 100 for t in s["energy_only"]["top_changed_features"]}
+        feats = sorted(set(sh_any) | set(sh_e), key=lambda k: max(sh_any.get(k, 0), sh_e.get(k, 0)))[-8:]
+        yy = np.arange(len(feats))
+        ax2.barh(yy + 0.2, [sh_any.get(k, 0) for k in feats], 0.4, color="#2a78d6", label="alarm veya enerji")
+        ax2.barh(yy - 0.2, [sh_e.get(k, 0) for k in feats], 0.4, color="#d6762a", label="yalnız enerji")
+        ax2.set_yticks(yy)
+        ax2.set_yticklabels(feats)
         ax2.set_xlabel("değişikliklerin payı (%)", fontsize=8)
-        ax2.set_title("en sık değişen özellikler", fontsize=9)
+        ax2.set_title("karşı-olguda değişen özellikler", fontsize=9)
         ax2.spines[["top", "right"]].set_visible(False)
         ax2.tick_params(labelsize=7)
-    axes[0, 0].legend(frameon=False, fontsize=7)
+        if c == 0:
+            ax2.legend(frameon=False, fontsize=7)
+        if cc["greedy"] == ce["greedy"]:
+            ax.text(0.98, 0.9, "iki karşı-olgu eğrisi üst üste", transform=ax.transAxes, ha="right", fontsize=7,
+                    color="#555")
+    axes[0, 0].legend(frameon=False, fontsize=7, loc="upper left", bbox_to_anchor=(0.0, 0.93))
     fig.suptitle(f"{out['dataset_id']}: kaçışların karşı-olgusal açıklaması", fontsize=10)
     fig.tight_layout()
     fig.savefig(path, dpi=200)
