@@ -1,0 +1,177 @@
+{
+  "dataset_id": "dnn_edgeiiot",
+  "family": "WEB",
+  "condition": "C_seq_ack_yok",
+  "tabm_model": "outputs/dnn_edgeiiot/xai_unknown_decision/models/TabM_WEB_C_seq_ack_yok.joblib",
+  "status": "Analiz planı sonuçlardan önce yazıldı (README, Tahmin süresi); eşik yok",
+  "n_rows": 10000,
+  "n_latency": 200,
+  "passes": 32,
+  "reps": 5,
+  "n_params": {
+    "TabM": 654544,
+    "MLP": 483269
+  },
+  "mlp_train_seconds": 21.7,
+  "torch": "2.11.0+cu128",
+  "cuda_device": "Tesla T4",
+  "cpu_threads": 2,
+  "results": {
+    "cuda": {
+      "TabM": {
+        "throughput_rows_per_s": 87973.2,
+        "batch_seconds": 0.11367,
+        "latency_ms_per_row": 0.6377,
+        "reps_batch": [
+          0.1136,
+          0.11291,
+          0.11368,
+          0.1137,
+          0.11367
+        ],
+        "reps_latency": [
+          0.12855,
+          0.1257,
+          0.12616,
+          0.13357,
+          0.12754
+        ]
+      },
+      "MLP": {
+        "throughput_rows_per_s": 1965389.5,
+        "batch_seconds": 0.00509,
+        "latency_ms_per_row": 0.6575,
+        "reps_batch": [
+          0.00511,
+          0.0051,
+          0.00509,
+          0.00507,
+          0.00509
+        ],
+        "reps_latency": [
+          0.13568,
+          0.13226,
+          0.12644,
+          0.12261,
+          0.13149
+        ]
+      },
+      "MCDropout_sirali": {
+        "throughput_rows_per_s": 53072.4,
+        "batch_seconds": 0.18842,
+        "latency_ms_per_row": 21.259,
+        "reps_batch": [
+          0.18782,
+          0.18924,
+          0.18842,
+          0.18774,
+          0.18892
+        ],
+        "reps_latency": [
+          4.30392,
+          4.2518,
+          4.30493,
+          4.24487,
+          4.237
+        ]
+      },
+      "MCDropout_vektorel": {
+        "throughput_rows_per_s": 54062.9,
+        "batch_seconds": 0.18497,
+        "latency_ms_per_row": 0.7907,
+        "reps_batch": [
+          0.18383,
+          0.18433,
+          0.18497,
+          0.18576,
+          0.18629
+        ],
+        "reps_latency": [
+          0.15656,
+          0.15812,
+          0.15839,
+          0.15815,
+          0.15925
+        ]
+      }
+    },
+    "cpu": {
+      "TabM": {
+        "throughput_rows_per_s": 2296.3,
+        "batch_seconds": 4.35492,
+        "latency_ms_per_row": 1.1453,
+        "reps_batch": [
+          4.42372,
+          4.3402,
+          4.3524,
+          4.3867,
+          4.35492
+        ],
+        "reps_latency": [
+          0.2363,
+          0.23586,
+          0.22692,
+          0.22824,
+          0.22906
+        ]
+      },
+      "MLP": {
+        "throughput_rows_per_s": 131604.0,
+        "batch_seconds": 0.07599,
+        "latency_ms_per_row": 0.5129,
+        "reps_batch": [
+          0.07474,
+          0.07816,
+          0.07599,
+          0.07631,
+          0.0758
+        ],
+        "reps_latency": [
+          0.10085,
+          0.10258,
+          0.13787,
+          0.10997,
+          0.09195
+        ]
+      },
+      "MCDropout_sirali": {
+        "throughput_rows_per_s": 1532.6,
+        "batch_seconds": 6.52496,
+        "latency_ms_per_row": 18.0749,
+        "reps_batch": [
+          6.55008,
+          6.54244,
+          6.50653,
+          6.52496,
+          6.47305
+        ],
+        "reps_latency": [
+          3.61498,
+          3.63372,
+          3.60369,
+          3.6031,
+          3.75219
+        ]
+      },
+      "MCDropout_vektorel": {
+        "throughput_rows_per_s": 811.0,
+        "batch_seconds": 12.32972,
+        "latency_ms_per_row": 1.9196,
+        "reps_batch": [
+          12.32029,
+          12.31231,
+          12.3735,
+          12.34096,
+          12.32972
+        ],
+        "reps_latency": [
+          0.3787,
+          0.38435,
+          0.38392,
+          0.38202,
+          0.39258
+        ]
+      }
+    }
+  }
+}

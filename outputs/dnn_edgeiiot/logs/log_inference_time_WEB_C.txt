@@ -1,0 +1,12 @@
+Okunuyor: /kaggle/input/datasets/mohamedamineferrag/edgeiiotset-cyber-security-dataset-of-iot-iiot/Edge-IIoTset dataset/Selected dataset for ML and DL/DNN-EdgeIIoT-dataset.csv
+Hizasız satır (frame.time zaman değil): 122782 {'DDoS_UDP': 121568, 'MITM': 1214} -> atıldı
+Edge-IIoTset WEB, koşul C_seq_ack_yok: 10000 satır; parametre {'TabM': 654544, 'MLP': 483269}; MLP eğitimi 22 s (bu cihazda)
+  [cuda] TabM                 toplu:       87,973 satır/sn   tek satır:    0.638 ms
+  [cuda] MLP                  toplu:    1,965,389 satır/sn   tek satır:    0.657 ms
+  [cuda] MCDropout_sirali     toplu:       53,072 satır/sn   tek satır:   21.259 ms
+  [cuda] MCDropout_vektorel   toplu:       54,063 satır/sn   tek satır:    0.791 ms
+  [cpu] TabM                 toplu:        2,296 satır/sn   tek satır:    1.145 ms
+  [cpu] MLP                  toplu:      131,604 satır/sn   tek satır:    0.513 ms
+  [cpu] MCDropout_sirali     toplu:        1,533 satır/sn   tek satır:   18.075 ms
+  [cpu] MCDropout_vektorel   toplu:          811 satır/sn   tek satır:    1.920 ms
+Çıktı: outputs/dnn_edgeiiot/inference_time/inference_time_WEB_C_seq_ack_yok.json
