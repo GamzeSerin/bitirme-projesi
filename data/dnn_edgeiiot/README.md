@@ -474,6 +474,46 @@ Kod: `src/xai_escape_counterfactual.py`. Çıktı: `outputs/dnn_edgeiiot/xai_esc
 - Soru: port olmadan bekçinin katkısı (kontrolsüz → kontrollü sessiz kaçış düşüşü) ne kadar kalıyor?
 - Not: koşul E, port dışında iki sayacı da çıkardığı için portun etkisini tek başına ayırmaz; fark "port + sayaçlar" olarak yorumlanır.
 
+## Ek kontroller: sonuçlar (26.10.2026)
+
+### 1. Kaçışların eşi
+
+XAI-3 aynı ayarlarla yeniden koştu; önceki sayıların hepsi aynı çıktı. Görülmemiş saldırı gruplarının tamamı, bilinen eğitim trafiğindeki en yakın satır (ölçekli uzay):
+
+| Aile · grup | n | Uzaklık medyanı | Birebir eş | En yakın eş BENIGN | Birebir eşlerde BENIGN |
+|---|---|---|---|---|---|
+| BRUTEFORCE · alarm alan | 1484 | 0,003 | %12 | %8 (DDOS %51, RECON %35) | %14 |
+| BRUTEFORCE · kontrolde yakalanan | 326 | 0 | %21 | %90 | %85 |
+| BRUTEFORCE · sessiz kaçan | 195 | 0 | %27 | **%96** | **%98** |
+| WEB · alarm alan | 2644 | 0,11 | %7 | %4 (RECON %54, DDOS %26) | %19 |
+| WEB · kontrolde yakalanan | 340 | 0 | %19 | %89 | %87 |
+| WEB · sessiz kaçan | 66 | 0 | %23 | **%76** | %53 (DDOS %27, BRUTEFORCE %20) |
+
+**Yorum:**
+- Üç grup üç farklı görünümde: **alarm alanlar başka bilinen saldırılara benziyor** (en yakın eş çoğunlukla DDOS/RECON; konsey "hangi saldırı?" diye ayrışıyor). **Kontrolde yakalananlar ve sessiz kaçanlar ise normal trafiğe benziyor** (en yakın eş %76–96 BENIGN).
+- Sessiz kaçanların %23–27'sinin bilinen eğitim trafiğinde **birebir aynısı** var ve bunlar BRUTEFORCE'ta %98 BENIGN. Bu satırlar için paket düzeyindeki özelliklerle çalışan hiçbir deterministik dedektör saldırıyı işaretleyip normal eşini işaretlememeyi başaramaz. XAI-3'ün 4. maddesi ("kaçışlar normal trafikle ayırt edilemez") birebir eşler için doğrulandı.
+- Dikkat: kontrolde **yakalananların** da en yakın eşi çoğunlukla BENIGN (%89–90). Yani yakalanan ile kaçan arasındaki fark "normal eşi var mı" değil; enerji kontrolü normal trafiğin daha az rastlanan görünümlerini işaretliyor gibi görünüyor (eşin sıklığı ölçülmedi). Bunun bedeli, aynı görünümdeki normal trafiğin de analiste gitmesi (analist yükü).
+
+### 2. Portsuz bekçi (koşul E)
+
+`outputs/dnn_edgeiiot/two_signal/two_signal_E_hepsi_cikarildi.json`, kayıt `logs/log_two_signal_E.txt`. Ana kontrol `tabm_energy`, 5 aile ortalaması, tohum 42:
+
+| q | C: sessiz kaçış (kontrolsüz → kontrollü) | C: normal trafik analiste | E: sessiz kaçış (kontrolsüz → kontrollü) | E: normal trafik analiste |
+|---|---|---|---|---|
+| %0,5 | %2,81 → %2,52 | %0,4 | %2,38 → %2,38 | **%0** |
+| %1 | %2,81 → %2,23 | %0,8 | %2,38 → %2,38 | **%0** |
+| %2 | %2,81 → %1,71 | %1,5 | %2,38 → %2,38 | **%0** |
+| %5 | %2,81 → %0,75 | %3,2 | %2,38 → %2,38 | **%0** |
+| %10 | %2,81 → %0,09 | %6,0 | %2,38 → %0,74 | %4,6 |
+
+Aile başına kontrolsüz sessiz kaçış, C → E: DDOS %0,05 → %0,8; RECON %0,05 → %0,1; WEB %2,3 → **%10,8**; BRUTEFORCE **%11,6** → %0,1; MALWARE %0 → %0,05.
+
+**Yorum:**
+1. **Portsuz koşulda enerji kontrolü q ≤ %5'te hiç çalışmıyor:** analiste giden normal trafik tam %0 ve sessiz kaçış hiç azalmıyor. Neden: kalibrasyondaki normal trafiğin enerji skorlarında çok büyük bir **eşitlik (bağ)** var. Portlar çıkınca birçok normal paket özellik uzayında birebir aynı oluyor, dolayısıyla skorları da aynı. (1 − q) yüzdeliği bu ortak değere denk geliyor ve "eşikten büyük" kuralı hiçbir satırı işaretlemiyor. Aynı plato diğer kontrol skorlarında da görülüyor (ör. kNN'de q = %5 ve %10 aynı sonuç). q = %10'da eşik bağın üstüne çıkınca kontrol yeniden çalışıyor (%2,38 → %0,74, analist yükü %4,6).
+2. **Port sorusunun cevabı:** bekçinin q bütçesini kullanabilmesi, normal trafiği ince ayrıntıda sıralayabilmesine bağlı; koşul C'de bu ayrıntıyı büyük ölçüde (geçici) port numaraları sağlıyor. Port çıkınca bekçi düşük bütçede kör kalıyor, yüksek bütçede kısmen çalışıyor (q = %10'da kaçışın %69'unu durduruyor; C'de %97). XAI-2'deki "enerji kararının yarısından fazlası porta dayanıyor" bulgusuyla tutarlı. Koşul E sayaçları da çıkardığı için etki "port + sayaçlar" olarak okunmalı.
+3. **Hangi saldırının normal göründüğü portlara bağlı:** port çıkınca BRUTEFORCE'un sessiz kaçışı neredeyse sıfırlanıyor (alarm da yalnız %5'ini yakalıyor; satırlar başka bir saldırı sanılıp ALERT alıyor), WEB'inki ise %2,3'ten %10,8'e çıkıyor. Ortalama benzer (%2,8 / %2,4), ama kaçışın hangi aileden geldiği değişiyor.
+4. **Yöntem notu:** skor bağları, eşik kuralının bütçeyi gerçekleştirememesine yol açabiliyor; tezde ayrıca yazılır. Bağ durumunda rastgele seçim gibi bir düzeltme bütçeyi doldurur ama bağlı satırlar arasında ayrım yapamaz (birebir eş sorunu ile aynı kök).
+
 ## Sütun hizası ve değer aralığı denetimi (19.10.2026)
 
 Kod: `src/audit_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/audit/audit.json`. Ham verideki 15 etiketin her biri için 6 kontrol (zaman damgası, IP, port 0–65535, 0/1 bayrak, ARP alanları, sayısal sütunlarda metin). İhlal yalnızca DDoS_UDP (zaman %100) ve MITM'de (zaman %100, port %30, bayrak %19); Normal'de %0,11 bayrak ihlali (önemsiz); diğer 12 saldırı türünde %0. Bu iki tür bulgu 7 gereği atıldı.
