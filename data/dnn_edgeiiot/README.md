@@ -354,6 +354,19 @@ Gülsü'nün aracı `src/alarm_tiers.py` (dss_guard satır dosyalarından, yeni 
 - **Ciddiyet varyantının riski burada daha belirgin:** görülmemiş DDOS'un analiste gitme oranı tek kademede %49, skor varyantında %46,5, ciddiyet varyantında **%3,2** (RECON sanılan DDoS satırları alt kademeye kayıyor; DSS'ten ALERT aldıkları için ALLOW olmuyorlar ama insan incelemesine gitmiyorlar). Bu yüzden skor varyantı tercih edilir; ciddiyet karşılaştırma için raporlanır.
 - Satır dosyaları (`rows_*.npz`) Kaggle çıktısından indirilip `-f` ile eklendi (`.gitignore` `*.npz`'i yok sayıyor).
 
+## XAI-2: Bekçinin kararının açıklanması, analiz planı (sonuçlardan ÖNCE yazıldı, 26.10.2026)
+
+Soru: TabM bekçisi (alarm = üye anlaşmazlığı, kontrol = enerji) bir trafiği neden şüpheli buluyor ve bu açıklama doğru mu? Başarı eşiği konmadı; aşağıdaki ölçümlerin **tamamı** raporlanır (seçici raporlama yok).
+
+- **Kod:** `src/xai_guard.py` (ortak araç, `--dataset`). Koşul C, tohum 42; LOFO bölmesi `dss_guard.py` ile aynı. TabM her ailede bir kez eğitilip kaydedilir; skorlar `dss_guard` satır dosyalarıyla karşılaştırılarak doğrulanır (sıra korelasyonu raporlanır).
+- **Aileler:** BRUTEFORCE ve WEB (Edge-IIoTset). Aynı komut diğer veri setlerinde de çalışır.
+- **Açıklanan satırlar** (her grupta en fazla 50, rastgele, seed 42): (1) alarm alan görülmemiş saldırı, (2) alarm almamış, DSS'in BENIGN dediği ve kontrolde yakalanan görülmemiş saldırı (q = %5), (3) aynı durumda kontrolden geçen (kaçan) görülmemiş saldırı, (4) alarmla analiste giden normal trafik, (5) kontrolle analiste giden normal trafik.
+- **Açıklama:** anlaşmazlık ve enerji skorları için permütasyon Shapley değerleri (kütüphanesiz uygulama; antitetik permütasyonlar), karşılaştırma tabanı bilinen eğitim trafiğinden rastgele satırlar.
+- **Sadakat:** bir satırı şüpheli yapan skor için (gruplar 1 ve 4: anlaşmazlık; 2 ve 5: enerji) Shapley değerine göre en çok artıran k özellik, bilinen trafikten alınan değerlerle değiştirilir; k = 1–10 için skordaki düşüş (ham ve satırın taban skoruna göre göreli). Aynısı rastgele k özellikle (20 tekrar). Raporlanan: ortalama silme eğrileri, eğri altı alan (AUC), satır başına eşleştirilmiş fark (SHAP − rastgele), SHAP'ın rastgeleden iyi olduğu satır oranı, Wilcoxon işaretli sıra testi.
+- **Yan bulgu (port sorusu):** koşul C'de portlar (`tcp.dstport`, `udp.port`) veride duruyor. Her grup ve skor için toplam |Shapley| içinde port özelliklerinin payı raporlanır: bekçi bilinmeyeni davranıştan mı tanıyor, kısayoldan mı?
+- **Çıktı:** en önemli özellikler (grup ve skor başına), sadakat tabloları ve eğrileri, örnek analist kartları (en çok katkı veren 3 özellik, değeri ve bilinen trafikteki yüzdelik konumu).
+- **Kaçan satırlar (grup 3)** için skor zaten düşük olduğundan sadakat testi anlamlı değil; bu grup yalnız "neden şüphelenilmedi" karşılaştırması için açıklanır.
+
 ## Sütun hizası ve değer aralığı denetimi (19.10.2026)
 
 Kod: `src/audit_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/audit/audit.json`. Ham verideki 15 etiketin her biri için 6 kontrol (zaman damgası, IP, port 0–65535, 0/1 bayrak, ARP alanları, sayısal sütunlarda metin). İhlal yalnızca DDoS_UDP (zaman %100) ve MITM'de (zaman %100, port %30, bayrak %19); Normal'de %0,11 bayrak ihlali (önemsiz); diğer 12 saldırı türünde %0. Bu iki tür bulgu 7 gereği atıldı.
