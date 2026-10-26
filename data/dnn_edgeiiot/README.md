@@ -459,6 +459,21 @@ Kod: `src/xai_escape_counterfactual.py`. Çıktı: `outputs/dnn_edgeiiot/xai_esc
 
 **Sonradan önerilen kontrol (ön kayıtlı değil):** kaçan satırların en yakın bilinen eşinin etiketi. Beklenti: çoğunlukla BENIGN (DSS de BENIGN dedi). Doğrulanırsa 4. madde "kaçışlar normal trafikle ayırt edilemez" olarak kesinleşir.
 
+## Ek kontroller: kaçışların eşi ve portsuz bekçi, analiz planı (sonuçlardan ÖNCE yazıldı, 26.10.2026)
+
+İki soru XAI-2 ve XAI-3 sonuçlarından doğdu; ikisi de **sonradan önerilen** (ön kayıtlı ana analizlerin parçası değil), ama ne ölçüleceği koşudan önce burada yazıldı. Eşik yok, tamamı raporlanır.
+
+**1. Eş kontrolü** (`src/xai_escape_counterfactual.py`, 7. madde; XAI-3 aynı ayarlarla yeniden koşar, önceki sayılar değişmemeli):
+- Görülmemiş saldırı gruplarının **tamamı** için (alarm alan, kontrolde yakalanan, sessiz kaçan; örneklem değil), bilinen eğitim trafiğindeki en yakın satır (ölçekli uzay, tüm eğitim satırları).
+- Raporlanan: uzaklık medyanı, birebir eş (uzaklık 0) oranı, en yakın eşin kategori dağılımı ve birebir eşlerin kategori dağılımı.
+- Soru: sessiz kaçanların eşleri çoğunlukla BENIGN mi? Yakalanan gruplarla farkı ne?
+
+**2. Portsuz bekçi** (`src/two_signal.py --condition E_hepsi_cikarildi`, tohum 42; CP ayarı koşul C'den aktarılır, ana kontrol yine `tabm_energy`):
+- Koşul E: C'de çıkarılanlara ek olarak portlar (`tcp.dstport`, `udp.port`) ve sayaçlar (`mbtcp.trans_id`, `icmp.transmit_timestamp`) da çıkarılır.
+- Raporlanan, koşul C'nin tohum 42 koşusuyla yan yana, q = %0,5 / 1 / 2 / 5 / 10 için ve 5 aile ortalaması ile aile başına: kontrolsüz (yalnız alarm) sessiz kaçış, kontrollü sessiz kaçış, normal trafiğin analiste gitme oranı, yakalanan bilinmeyen oranı.
+- Soru: port olmadan bekçinin katkısı (kontrolsüz → kontrollü sessiz kaçış düşüşü) ne kadar kalıyor?
+- Not: koşul E, port dışında iki sayacı da çıkardığı için portun etkisini tek başına ayırmaz; fark "port + sayaçlar" olarak yorumlanır.
+
 ## Sütun hizası ve değer aralığı denetimi (19.10.2026)
 
 Kod: `src/audit_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/audit/audit.json`. Ham verideki 15 etiketin her biri için 6 kontrol (zaman damgası, IP, port 0–65535, 0/1 bayrak, ARP alanları, sayısal sütunlarda metin). İhlal yalnızca DDoS_UDP (zaman %100) ve MITM'de (zaman %100, port %30, bayrak %19); Normal'de %0,11 bayrak ihlali (önemsiz); diğer 12 saldırı türünde %0. Bu iki tür bulgu 7 gereği atıldı.
@@ -486,6 +501,8 @@ python src/xai_faithfulness_summary_dnn_edgeiiot.py
 python src/xai_unknown_decision.py --dataset dnn_edgeiiot --data-file <csv> --params-from metrics --families BRUTEFORCE,WEB
 # Kaçışların Karşı-Olgusal Açıklaması (XAI-3); önce xai_unknown_decision.py (kayıtlı TabM ve Shapley değerleri)
 python src/xai_escape_counterfactual.py --dataset dnn_edgeiiot --data-file <csv> --families BRUTEFORCE,WEB
+# Portsuz bekçi (koşul E)
+python src/two_signal.py --dataset dnn_edgeiiot --data-file <csv> --condition E_hepsi_cikarildi --cp-config outputs/dnn_edgeiiot/cp_tune/cp_tune_C_seq_ack_yok.json
 # Görülmemiş saldırı deneyi (koşullar: A_tam, C_seq_ack_yok, E_hepsi_cikarildi)
 python src/open_set_lofo_dnn_edgeiiot.py --data-file <csv> --models RF,TabM --condition C_seq_ack_yok
 python src/open_set_summary_dnn_edgeiiot.py

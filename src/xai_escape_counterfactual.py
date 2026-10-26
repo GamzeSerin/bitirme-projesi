@@ -20,6 +20,9 @@ Her ailede (LOFO; bölme, TabM, eşikler ve satır grupları Bilinmeyen Kararın
      tutarlılık (ilk adımdaki özellik kazançları ile |Shapley| arasında sıra korelasyonu, değişen özelliklerin |Shapley|
      sırası ve ilk-5 örtüşmesi); gerçekçilik (karşı-olgunun bilinen eğitim trafiğinde en yakın komşu uzaklığı, gerçek
      bilinen satırlarınkine göre); port değişikliklerinin oranı.
+  7. Eş kontrolü (sonradan önerildi, sonuçlardan önce plan README'de; 26.10.2026): görülmemiş saldırı gruplarının
+     (alarm alan, kontrolde yakalanan, sessiz kaçan) TAMAMI için bilinen eğitim trafiğindeki en yakın satır (ölçekli
+     uzay, tüm eğitim satırları): uzaklık, birebir eş (uzaklık 0) oranı ve en yakın eşin kategorisi.
 
 Çalıştırma (önce xai_unknown_decision.py koşmuş olmalı):
   python src/xai_escape_counterfactual.py --dataset dnn_edgeiiot --data-file <csv> --families BRUTEFORCE,WEB
@@ -390,7 +393,25 @@ def main():
             print(f"  XAI-2 ile tutarlılık: {summ['consistency_with_xai2']}")
         print(f"  gerçekçilik: {summ['realism']['d_nn_cf_median']} / gerçek {summ['realism']['d_nn_real_known_median']:.3f}"
               f"  ({time.perf_counter() - t0:.0f} s, {f.calls:,} model satırı)")
-        out_fam[fam] = {"categories": fam_cats, "decision_source": source, "model": model_src,
+        # 7) eş kontrolü: bilinmeyen grupların tamamı için en yakın bilinen eğitim satırı ve etiketi
+        nn_full = NearestNeighbors(n_neighbors=1).fit(Xs)
+        cat_fit = category[tr_fit]
+        twins = {}
+        for g, m in (("alarm_unknown", alarm_te & is_unk), ("guard_unknown", flag & is_unk), ("silent_unknown", silent)):
+            gi = np.where(m)[0]
+            if len(gi) == 0:
+                twins[g] = {"n": 0}
+                continue
+            dist, nb = nn_full.kneighbors(Xte_np[gi] / scale)
+            dist, lab = dist[:, 0], cat_fit[nb[:, 0]]
+            exact = dist < 1e-9
+            share = lambda labs: {str(k): round(float(v) / len(labs), 4)
+                                  for k, v in zip(*np.unique(labs, return_counts=True))} if len(labs) else {}
+            twins[g] = {"n": int(len(gi)), "d_median": float(np.median(dist)), "exact_twin_share": round(float(exact.mean()), 4),
+                        "nearest_label_share": share(lab), "exact_twin_label_share": share(lab[exact])}
+        print("  eş kontrolü: " + "; ".join(f"{g}: n={t['n']}, birebir eş %{100 * t.get('exact_twin_share', 0):.0f}, "
+                                            f"en yakın etiket {t.get('nearest_label_share', {})}" for g, t in twins.items()))
+        out_fam[fam] = {"categories": fam_cats, "decision_source": source, "model": model_src, "twins": twins,
                         "check_vs_dss_guard": check, "tau_alarm": tau_alarm, "tau_guard": tau_guard,
                         "score_iqr": iqr, "summary": summ, "rows": rows, "model_calls": f.calls,
                         "seconds": round(time.perf_counter() - t0, 1)}
