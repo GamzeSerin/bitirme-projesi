@@ -1,0 +1,48 @@
+Okunuyor: /kaggle/input/datasets/mohamedamineferrag/edgeiiotset-cyber-security-dataset-of-iot-iiot/Edge-IIoTset dataset/Selected dataset for ML and DL/DNN-EdgeIIoT-dataset.csv
+Hizasız satır (frame.time zaman değil): 122782 {'DDoS_UDP': 121568, 'MITM': 1214} -> atıldı
+Edge-IIoTset: 296506 satır, koşul C_seq_ack_yok; aileler ['DDOS', 'RECON', 'WEB', 'BRUTEFORCE', 'MALWARE']; analist bütçeleri q = [0.005, 0.01, 0.02, 0.05, 0.1]
+
+=== DDOS ['DDOS'] (kör oranı 0.0625) — yalnız alarm: yakalanan 0.018, sessiz BENIGN kaçışı 0.001 ===
+  MLP: alarm AUROC 0.7146, enerji AUROC 0.6498, bilinen macro-F1 0.8867, eğitim 18 s
+  mlp_msp        q=0.010: kaçış 0.0007 / inceleme 0.0106  q=0.050: kaçış 0.0005 / inceleme 0.0355
+  mlp_energy     q=0.010: kaçış 0.0008 / inceleme 0.0080  q=0.050: kaçış 0.0004 / inceleme 0.0462
+  knn            q=0.010: kaçış 0.0006 / inceleme 0.0099  q=0.050: kaçış 0.0005 / inceleme 0.0352
+  (30 s)
+
+=== RECON ['RECON'] (kör oranı 0.0625) — yalnız alarm: yakalanan 0.001, sessiz BENIGN kaçışı 0.001 ===
+  MLP: alarm AUROC 0.6033, enerji AUROC 0.6159, bilinen macro-F1 0.8465, eğitim 31 s
+  mlp_msp        q=0.010: kaçış 0.0006 / inceleme 0.0118  q=0.050: kaçış 0.0001 / inceleme 0.0457
+  mlp_energy     q=0.010: kaçış 0.0006 / inceleme 0.0095  q=0.050: kaçış 0.0001 / inceleme 0.0444
+  knn            q=0.010: kaçış 0.0004 / inceleme 0.0109  q=0.050: kaçış 0.0004 / inceleme 0.0393
+  (44 s)
+
+=== WEB ['WEB'] (kör oranı 0.125) — yalnız alarm: yakalanan 0.057, sessiz BENIGN kaçışı 0.028 ===
+  MLP: alarm AUROC 0.8292, enerji AUROC 0.8501, bilinen macro-F1 0.8848, eğitim 35 s
+  mlp_msp        q=0.010: kaçış 0.0046 / inceleme 0.0066  q=0.050: kaçış 0.0002 / inceleme 0.0425
+  mlp_energy     q=0.010: kaçış 0.0194 / inceleme 0.0114  q=0.050: kaçış 0.0002 / inceleme 0.0431
+  knn            q=0.010: kaçış 0.0237 / inceleme 0.0106  q=0.050: kaçış 0.0198 / inceleme 0.0445
+  (48 s)
+
+=== BRUTEFORCE ['BRUTEFORCE'] (kör oranı 0.0625) — yalnız alarm: yakalanan 0.165, sessiz BENIGN kaçışı 0.109 ===
+  MLP: alarm AUROC 0.8171, enerji AUROC 0.8338, bilinen macro-F1 0.935, eğitim 62 s
+  mlp_msp        q=0.010: kaçış 0.0837 / inceleme 0.0127  q=0.050: kaçış 0.0464 / inceleme 0.0426
+  mlp_energy     q=0.010: kaçış 0.0868 / inceleme 0.0097  q=0.050: kaçış 0.0308 / inceleme 0.0479
+  knn            q=0.010: kaçış 0.1046 / inceleme 0.0134  q=0.050: kaçış 0.1015 / inceleme 0.0424
+  (75 s)
+
+=== MALWARE ['MALWARE'] (kör oranı 0.0625) — yalnız alarm: yakalanan 0.144, sessiz BENIGN kaçışı 0.002 ===
+  MLP: alarm AUROC 0.7595, enerji AUROC 0.877, bilinen macro-F1 0.8197, eğitim 29 s
+  mlp_msp        q=0.010: kaçış 0.0000 / inceleme 0.0103  q=0.050: kaçış 0.0000 / inceleme 0.0469
+  mlp_energy     q=0.010: kaçış 0.0000 / inceleme 0.0070  q=0.050: kaçış 0.0000 / inceleme 0.0461
+  knn            q=0.010: kaçış 0.0000 / inceleme 0.0099  q=0.050: kaçış 0.0000 / inceleme 0.0365
+  (42 s)
+
+Ailelerin ortalaması (q = analist bütçesi):
+           benign_review                                 silent_benign                                
+q                  0.005   0.010   0.020   0.050   0.100         0.005   0.010   0.020   0.050   0.100
+guard                                                                                                 
+knn               0.0064  0.0109  0.0178  0.0396  0.0805        0.0259  0.0259  0.0259  0.0244  0.0177
+mlp_energy        0.0053  0.0091  0.0179  0.0456  0.0697        0.0239  0.0215  0.0171  0.0063  0.0002
+mlp_msp           0.0054  0.0104  0.0170  0.0426  0.0654        0.0214  0.0179  0.0150  0.0094  0.0001
+
+Çıktılar: outputs/dnn_edgeiiot/two_signal/s1  (280 s)
