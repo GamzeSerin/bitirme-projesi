@@ -604,6 +604,31 @@ Bilinmeyen Kararının Açıklanması (XAI-2) ve Kaçışların Karşı-Olgusal 
 - Aynı ölçümler raporlanır. Beklenen sınırlılık: bazı gruplar küçük ya da boş olabilir (ör. MALWARE'de sessiz kaçış %0); grup boşsa o ölçüm "yok" olarak yazılır. Sessiz kaçanı olmayan ailede XAI-3 ve eş kontrolü atlanır.
 - Karşılaştırılacak sorular: (1) enerji açıklamasının sadakati (SHAP ≫ rastgele) diğer ailelerde de geçerli mi; (2) anlaşmazlık için silme testindeki bulanıklık tekrarlanıyor mu; (3) enerji kararında port payı; (4) sessiz kaçanlar yine kıl payı mı ve en yakın eşleri yine normal trafik mi.
 
+## XAI sağlaması: sonuçlar (26.10.2026)
+
+Çıktılar `outputs/dnn_edgeiiot/xai_unknown_decision/*_ek_aileler.*` ve `outputs/dnn_edgeiiot/xai_escape_counterfactual/*_ek_aileler.*`, kayıtlar `logs/log_*_C_ek_aileler.txt`. Ayarlar ilk iki aileyle aynı; üç ailede de yeniden eğitilen TabM dss_guard'daki ile birebir aynı (uyum 1,0).
+
+**Bilinmeyen Kararının Açıklanması (XAI-2), beş ailenin tamamı** (her grupta 50 satır):
+
+| Aile | Enerji: göreli düşüş k = 5, SHAP / rastgele | Enerji: SHAP daha iyi | Anlaşmazlık: SHAP daha iyi | Anlaşmazlık: SHAP sırasıyla silmede skor düşüyor mu? | Enerjide port payı |
+|---|---|---|---|---|---|
+| BRUTEFORCE | %84 / %10 | %100 | %72–94 | alarm alanda ilk 3 adımda evet, sonra hayır; normalde hayır | %45–60 |
+| WEB | %103 / %7–9 | %100 | %84–100 | hayır (skor artıyor) | %62–65 |
+| DDOS | %86–89 / %5–9 | %100 | %94–98 | alarm alanda evet (k ≥ 2); normalde hayır | %62–73 |
+| RECON | %83–84 / %0–5 | %100 | %92–100 | alarm alanda hayır; normalde evet (k ≥ 2) | %51–59 |
+| MALWARE | %87–88 / %4–5 | %100 | %90–100 | alarm alanda evet; normalde hayır | %45–48 |
+
+(Enerji grupları: kontrolde yakalanan bilinmeyen ve kontrolle analiste giden normal trafik; anlaşmazlık grupları: alarm alan bilinmeyen ve alarmla analiste giden normal trafik. Tüm Wilcoxon p < 1e-7.)
+
+**Kaçışların Karşı-Olgusal Açıklaması (XAI-3) ve eş kontrolü:** DDOS ve MALWARE'de sessiz kaçan **yok**, RECON'da **1** satır (5.932 bilinmeyenden). Bu ailelerde karşı-olgu analizi yapılacak örnek yok; planda öngörüldüğü gibi atlandı (sessiz kaçanı olmayan ailede eş kontrolü de atlanıyor). RECON'da eş kontrolü: kontrolde yakalanan 66 bilinmeyenin en yakın eşi %100 BENIGN (birebir eş %26); alarm alan 7.617 bilinmeyenin en yakın eşi çoğunlukla başka bir saldırı (WEB %83, DDOS %15).
+
+**Yorum:**
+1. **Enerji açıklamasının sadakati beş ailede de tekrarlandı:** SHAP'ın gösterdiği 5 özellik skorun tabanı aşan kısmının %83–103'ünü geri alıyor, rastgele 5 özellik %0–10'unu; 500 satırın 500'ünde SHAP daha iyi. Bu bulgu artık iki aileye değil, bekçinin genel davranışına ait.
+2. **Anlaşmazlık açıklaması her ailede rastgeleden iyi (%72–100), ama silme testindeki bulanıklık ailelere göre değişiyor:** bazı gruplarda SHAP sırasıyla silmek skoru düşürüyor (DDOS ve MALWARE'de alarm alan bilinmeyenler), bazılarında artırıyor. Sınırlılık geçerli: bu skor için silme testi güvenilir bir mutlak ölçü değil.
+3. **Port bağımlılığı beş ailede de var:** enerji kararında en önemli özellik her ailede `tcp.dstport`, payı %45–73.
+4. **Sessiz kaçış neredeyse yalnız BRUTEFORCE ve WEB'de:** diğer üç ailede DSS + bekçi altında sessiz kaçan 0–1 satır. XAI-3'ün bulguları (kıl payı kaçış, yük taşımayan paketler, normal ikiz) bu iki aileye ait; genelleme bu çerçevede yapılmalı.
+5. **Eş kontrolündeki üç grup ayrımı RECON'da da tekrarlandı:** kontrolde yakalananlar normal trafiğe, alarm alanlar başka saldırılara benziyor.
+
 ## Sütun hizası ve değer aralığı denetimi (19.10.2026)
 
 Kod: `src/audit_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/audit/audit.json`. Ham verideki 15 etiketin her biri için 6 kontrol (zaman damgası, IP, port 0–65535, 0/1 bayrak, ARP alanları, sayısal sütunlarda metin). İhlal yalnızca DDoS_UDP (zaman %100) ve MITM'de (zaman %100, port %30, bayrak %19); Normal'de %0,11 bayrak ihlali (önemsiz); diğer 12 saldırı türünde %0. Bu iki tür bulgu 7 gereği atıldı.
