@@ -596,6 +596,14 @@ Soru: Derin öğrenme karşılaştırmasında MC-dropout'un eğitimi daha ucuz �
 4. **Pratik not:** TabM, 2 iş parçacıklı CPU'da saniyede ≈ 2.300 paket değerlendiriyor; GPU'da ≈ 88.000. Yüksek hızlı ağlarda CPU'da paket örneklemesi ya da akış düzeyinde değerlendirme gerekebilir (gelecek çalışma).
 5. **Derin öğrenme karşılaştırmasıyla birlikte sonuç:** TabM, alarmda en yüksek ve en kararlı ayırma gücünü (AUROC 0,862 ± 0,001) en düşük tahmin maliyetli belirsizlik yöntemiyle veriyor. MC-dropout eğitimi ucuz bir alternatif, ama tahminde daha pahalı.
 
+## XAI sağlaması: kalan üç aile, plan (sonuçlardan ÖNCE yazıldı, 26.10.2026)
+
+Bilinmeyen Kararının Açıklanması (XAI-2) ve Kaçışların Karşı-Olgusal Açıklaması (XAI-3, eş kontrolü dahil) ilk olarak yalnız BRUTEFORCE ve WEB'de koştu. Aynı planlar, **hiçbir ayar değiştirilmeden**, kalan üç ailede (DDOS, RECON, MALWARE) tekrarlanır; amaç bulguların bu iki aileye özgü olup olmadığını görmek.
+
+- Komutlar: `xai_unknown_decision.py --families DDOS,RECON,MALWARE --tag ek_aileler`, ardından `xai_escape_counterfactual.py` aynı ailelerle (çıktılar `*_ek_aileler.json`; ilk iki ailenin dosyaları değişmez).
+- Aynı ölçümler raporlanır. Beklenen sınırlılık: bazı gruplar küçük ya da boş olabilir (ör. MALWARE'de sessiz kaçış %0); grup boşsa o ölçüm "yok" olarak yazılır. Sessiz kaçanı olmayan ailede XAI-3 ve eş kontrolü atlanır.
+- Karşılaştırılacak sorular: (1) enerji açıklamasının sadakati (SHAP ≫ rastgele) diğer ailelerde de geçerli mi; (2) anlaşmazlık için silme testindeki bulanıklık tekrarlanıyor mu; (3) enerji kararında port payı; (4) sessiz kaçanlar yine kıl payı mı ve en yakın eşleri yine normal trafik mi.
+
 ## Sütun hizası ve değer aralığı denetimi (19.10.2026)
 
 Kod: `src/audit_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/audit/audit.json`. Ham verideki 15 etiketin her biri için 6 kontrol (zaman damgası, IP, port 0–65535, 0/1 bayrak, ARP alanları, sayısal sütunlarda metin). İhlal yalnızca DDoS_UDP (zaman %100) ve MITM'de (zaman %100, port %30, bayrak %19); Normal'de %0,11 bayrak ihlali (önemsiz); diğer 12 saldırı türünde %0. Bu iki tür bulgu 7 gereği atıldı.

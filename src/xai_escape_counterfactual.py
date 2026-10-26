@@ -146,6 +146,7 @@ def main():
     p.add_argument("--n-random", type=int, default=20)
     p.add_argument("--n-real-ref", type=int, default=1000, help="Gerçekçilik için gerçek bilinen satır sayısı")
     p.add_argument("--n-jobs", type=int, default=-1)
+    p.add_argument("--tag", default="", help="Çıktı adı eki (ör. ek aileler); boşsa yalnız koşul adı")
     p.add_argument("--quick", action="store_true")
     args = p.parse_args()
     if args.quick:
@@ -421,10 +422,11 @@ def main():
            "settings": {k: v for k, v in vars(args).items()}, "port_columns": ports,
            "grid_percentiles": QUANTS.tolist(), "families": out_fam,
            "runtime_seconds": round(time.perf_counter() - t_start, 1)}
-    path = os.path.join(args.out_dir, f"xai_escape_counterfactual_{args.condition}.json")
+    sfx = args.condition + (f"_{args.tag}" if args.tag else "")
+    path = os.path.join(args.out_dir, f"xai_escape_counterfactual_{sfx}.json")
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(out, fh, indent=2, ensure_ascii=False, default=lambda o: o.item() if hasattr(o, "item") else str(o))
-    plot(out, os.path.join(args.out_dir, f"fig_xai_escape_counterfactual_{args.dataset}_{args.condition}.png"))
+    plot(out, os.path.join(args.out_dir, f"fig_xai_escape_counterfactual_{args.dataset}_{sfx}.png"))
     print(f"\nÇıktı: {path}  ({out['runtime_seconds']:.0f} s)")
 
 

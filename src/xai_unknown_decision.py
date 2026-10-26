@@ -138,6 +138,7 @@ def main():
     p.add_argument("--n-random", type=int, default=20, help="Rastgele sıra tekrarı")
     p.add_argument("--k-max", type=int, default=10)
     p.add_argument("--n-jobs", type=int, default=-1)
+    p.add_argument("--tag", default="", help="Çıktı adı eki (ör. ek aileler); boşsa yalnız koşul adı")
     p.add_argument("--quick", action="store_true")
     args = p.parse_args()
     if args.quick:
@@ -340,10 +341,11 @@ def main():
            "status": "Analiz planı sonuçlardan önce yazıldı (README, Bilinmeyen Kararının Açıklanması / XAI-2); eşik yok",
            "settings": {k: v for k, v in vars(args).items()}, "model_seed": mseed, "tabm_params_from": params_src,
            "port_columns": ports, "families": out_fam, "runtime_seconds": round(time.perf_counter() - t_start, 1)}
-    path = os.path.join(args.out_dir, f"xai_unknown_decision_{args.condition}.json")
+    sfx = args.condition + (f"_{args.tag}" if args.tag else "")
+    path = os.path.join(args.out_dir, f"xai_unknown_decision_{sfx}.json")
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(out, fh, indent=2, ensure_ascii=False, default=lambda o: o.item() if hasattr(o, "item") else str(o))
-    plot(out, os.path.join(args.out_dir, f"fig_xai_unknown_decision_{args.dataset}_{args.condition}.png"))
+    plot(out, os.path.join(args.out_dir, f"fig_xai_unknown_decision_{args.dataset}_{sfx}.png"))
     print(f"\nÇıktı: {path}  ({out['runtime_seconds']:.0f} s)")
 
 
