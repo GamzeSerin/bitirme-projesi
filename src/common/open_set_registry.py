@@ -20,6 +20,7 @@ veri setine özel hiçbir şey bilmez. Yeni bir veri seti eklemek için gereken 
       asıl deneyin kaydettiği RESMİ model dosyaları (eski sürümler aynı klasörde dursa da)
   protocol_drop     : asıl deneyde her zaman atılan sütunlar (çalıştırmanın config.json'u ile denetlenir)
   hardware_note     : maliyet ölçümlerinin donanımı (raporlama için)
+  port_columns      : (isteğe bağlı) port sütunları; xai_guard.py açıklamadaki paylarını raporlar
   dss_voters        : asıl DSS'in oylayan modelleri (main.py kuralıyla seçilmiş hâli; dss_guard.py bunları sabit kullanır)
 
 Koşul sütunları veri yüklendikten SONRA çıkarılır; böylece her koşulda satırlar birebir aynıdır.
@@ -137,6 +138,7 @@ DATASETS = {
         "default_condition": "C_seq_ack_yok",
         # ablation tek-özellik testi: yalnızca şüpheli kimlik alanları (yoksa bütün sütunlar)
         "leak_test_columns": _EDGE_COUNTERS,
+        "port_columns": _EDGE_PORTS,  # XAI-2 yan bulgu: koşul C'de duran port sütunlarının açıklamadaki payı
         "model_files": _edge_model_files,
         "dss_voters": ["DT", "RF", "XGB", "LGBM", "TabM"],
         "protocol_drop": [],
