@@ -1,0 +1,54 @@
+Okunuyor: /kaggle/input/datasets/mohamedamineferrag/edgeiiotset-cyber-security-dataset-of-iot-iiot/Edge-IIoTset dataset/Selected dataset for ML and DL/DNN-EdgeIIoT-dataset.csv
+Hizasız satır (frame.time zaman değil): 122782 {'DDoS_UDP': 121568, 'MITM': 1214} -> atıldı
+Edge-IIoTset: 296506 satır, koşul C_seq_ack_yok; aileler ['DDOS', 'RECON', 'WEB', 'BRUTEFORCE', 'MALWARE']; analist bütçeleri q = [0.005, 0.01, 0.02, 0.05, 0.1]
+
+=== DDOS ['DDOS'] (kör oranı 0.0625) — yalnız alarm: yakalanan 0.566, sessiz BENIGN kaçışı 0.000 ===
+  MCDropout: alarm AUROC 0.7732, enerji AUROC 0.6491, bilinen macro-F1 0.8863, eğitim 18 s
+  mcd_disagree   q=0.010: kaçış 0.0004 / inceleme 0.0079  q=0.050: kaçış 0.0001 / inceleme 0.0408
+  mcd_msp        q=0.010: kaçış 0.0004 / inceleme 0.0091  q=0.050: kaçış 0.0003 / inceleme 0.0415
+  mcd_energy     q=0.010: kaçış 0.0002 / inceleme 0.0112  q=0.050: kaçış 0.0001 / inceleme 0.0384
+  knn            q=0.010: kaçış 0.0003 / inceleme 0.0077  q=0.050: kaçış 0.0002 / inceleme 0.0369
+  (32 s)
+
+=== RECON ['RECON'] (kör oranı 0.0625) — yalnız alarm: yakalanan 0.390, sessiz BENIGN kaçışı 0.000 ===
+  MCDropout: alarm AUROC 0.8316, enerji AUROC 0.6144, bilinen macro-F1 0.8463, eğitim 32 s
+  mcd_disagree   q=0.010: kaçış 0.0003 / inceleme 0.0089  q=0.050: kaçış 0.0001 / inceleme 0.0445
+  mcd_msp        q=0.010: kaçış 0.0003 / inceleme 0.0063  q=0.050: kaçış 0.0001 / inceleme 0.0445
+  mcd_energy     q=0.010: kaçış 0.0003 / inceleme 0.0067  q=0.050: kaçış 0.0001 / inceleme 0.0464
+  knn            q=0.010: kaçış 0.0003 / inceleme 0.0100  q=0.050: kaçış 0.0003 / inceleme 0.0396
+  (47 s)
+
+=== WEB ['WEB'] (kör oranı 0.125) — yalnız alarm: yakalanan 0.272, sessiz BENIGN kaçışı 0.004 ===
+  MCDropout: alarm AUROC 0.882, enerji AUROC 0.8502, bilinen macro-F1 0.8849, eğitim 36 s
+  mcd_disagree   q=0.010: kaçış 0.0002 / inceleme 0.0103  q=0.050: kaçış 0.0002 / inceleme 0.0476
+  mcd_msp        q=0.010: kaçış 0.0002 / inceleme 0.0121  q=0.050: kaçış 0.0001 / inceleme 0.0488
+  mcd_energy     q=0.010: kaçış 0.0002 / inceleme 0.0107  q=0.050: kaçış 0.0002 / inceleme 0.0473
+  knn            q=0.010: kaçış 0.0042 / inceleme 0.0123  q=0.050: kaçış 0.0035 / inceleme 0.0462
+  (51 s)
+
+=== BRUTEFORCE ['BRUTEFORCE'] (kör oranı 0.0625) — yalnız alarm: yakalanan 0.392, sessiz BENIGN kaçışı 0.089 ===
+  MCDropout: alarm AUROC 0.874, enerji AUROC 0.8347, bilinen macro-F1 0.9349, eğitim 62 s
+  mcd_disagree   q=0.010: kaçış 0.0755 / inceleme 0.0107  q=0.050: kaçış 0.0354 / inceleme 0.0457
+  mcd_msp        q=0.010: kaçış 0.0659 / inceleme 0.0092  q=0.050: kaçış 0.0103 / inceleme 0.0447
+  mcd_energy     q=0.010: kaçış 0.0714 / inceleme 0.0066  q=0.050: kaçış 0.0120 / inceleme 0.0459
+  knn            q=0.010: kaçış 0.0883 / inceleme 0.0135  q=0.050: kaçış 0.0804 / inceleme 0.0440
+  (78 s)
+
+=== MALWARE ['MALWARE'] (kör oranı 0.0625) — yalnız alarm: yakalanan 0.565, sessiz BENIGN kaçışı 0.000 ===
+  MCDropout: alarm AUROC 0.9139, enerji AUROC 0.8779, bilinen macro-F1 0.8195, eğitim 30 s
+  mcd_disagree   q=0.010: kaçış 0.0000 / inceleme 0.0146  q=0.050: kaçış 0.0000 / inceleme 0.0437
+  mcd_msp        q=0.010: kaçış 0.0000 / inceleme 0.0105  q=0.050: kaçış 0.0000 / inceleme 0.0391
+  mcd_energy     q=0.010: kaçış 0.0000 / inceleme 0.0084  q=0.050: kaçış 0.0000 / inceleme 0.0376
+  knn            q=0.010: kaçış 0.0000 / inceleme 0.0089  q=0.050: kaçış 0.0000 / inceleme 0.0359
+  (45 s)
+
+Ailelerin ortalaması (q = analist bütçesi):
+             benign_review                                 silent_benign                                
+q                    0.005   0.010   0.020   0.050   0.100         0.005   0.010   0.020   0.050   0.100
+guard                                                                                                   
+knn                 0.0064  0.0105  0.0172  0.0405  0.0805        0.0187  0.0186  0.0186  0.0169  0.0131
+mcd_disagree        0.0064  0.0105  0.0189  0.0445  0.0865        0.0162  0.0153  0.0130  0.0072  0.0016
+mcd_energy          0.0045  0.0088  0.0186  0.0431  0.0848        0.0158  0.0144  0.0112  0.0025  0.0002
+mcd_msp             0.0045  0.0094  0.0188  0.0437  0.0870        0.0147  0.0134  0.0100  0.0022  0.0001
+
+Çıktılar: outputs/dnn_edgeiiot/two_signal/s1  (294 s)
