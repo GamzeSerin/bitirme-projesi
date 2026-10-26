@@ -565,6 +565,19 @@ Aile başına alarm AUROC (TabM / MLP / MC-dropout): DDOS 0,78 / 0,66 / 0,76; RE
 5. **Enerji kontrolü tek ağda biraz daha iyi ayırıyor** (AUROC 0,767'ye karşı 0,744): enerji topluluk ortalamasından değil, tek ağın logitlerinden daha keskin çıkıyor.
 6. **Tez için sonuç:** yöntemin özü "anlaşmazlık alarmı + BENIGN enerji kontrolü" kuralı; TabM bunu sağlamanın iyi bir yolu, MC-dropout ise daha ucuz eğitimle benzer (alarmda biraz düşük, sessiz kaçışta biraz iyi) sonuç veren bir alternatif. Kural belirli bir modele bağlı değil.
 
+## Tahmin süresi: TabM / MLP / MC-dropout, ölçüm planı (sonuçlardan ÖNCE yazıldı, 26.10.2026)
+
+Soru: Derin öğrenme karşılaştırmasında MC-dropout'un eğitimi daha ucuz çıktı; peki **tahmin** (her paketin değerlendirilmesi) maliyeti nasıl? Bir IDS'te model bir kez eğitilir ama sürekli tahmin yapar. Eşik yok; aşağıdakilerin tamamı raporlanır.
+
+- **Kod:** `src/inference_time.py`. WEB ailesi, koşul C, tohum 42. TabM: XAI-2'de kaydedilen model. MLP: aynı mimari, k = 1, aynı tohumla eğitilir.
+- **Ölçülen:** yalnız ağın ileri geçişi (ön işleme üç modelde aynı); aynı 10.000 test satırı.
+  - Toplu işlem: batch 8192, saniyede değerlendirilen satır.
+  - Tek satır gecikmesi: batch 1, 200 satır, satır başına ms.
+  - Parametre sayısı.
+- **Modeller:** TabM (32 üye tek geçişte), MLP (tek geçiş), MC-dropout iki uygulamayla: (a) sıralı, 32 ayrı geçiş (karşılaştırmada kullanılan uygulama); (b) vektörel, her satır 32 kez çoğaltılıp tek geçişte.
+- **Cihazlar:** Kaggle GPU ve CPU. Her ölçüm 5 kez, ısınma turundan sonra medyan.
+- **Not:** süreler donanıma bağlı; anlamlı olan modeller arası oran.
+
 ## Sütun hizası ve değer aralığı denetimi (19.10.2026)
 
 Kod: `src/audit_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/audit/audit.json`. Ham verideki 15 etiketin her biri için 6 kontrol (zaman damgası, IP, port 0–65535, 0/1 bayrak, ARP alanları, sayısal sütunlarda metin). İhlal yalnızca DDoS_UDP (zaman %100) ve MITM'de (zaman %100, port %30, bayrak %19); Normal'de %0,11 bayrak ihlali (önemsiz); diğer 12 saldırı türünde %0. Bu iki tür bulgu 7 gereği atıldı.
@@ -592,6 +605,10 @@ python src/xai_faithfulness_summary_dnn_edgeiiot.py
 python src/xai_unknown_decision.py --dataset dnn_edgeiiot --data-file <csv> --params-from metrics --families BRUTEFORCE,WEB
 # Kaçışların Karşı-Olgusal Açıklaması (XAI-3); önce xai_unknown_decision.py (kayıtlı TabM ve Shapley değerleri)
 python src/xai_escape_counterfactual.py --dataset dnn_edgeiiot --data-file <csv> --families BRUTEFORCE,WEB
+# Derin öğrenme karşılaştırması ve tahmin süresi
+python src/two_signal.py --dataset dnn_edgeiiot --data-file <csv> --classifier MCDropout --model-seed 1   # MLP / MCDropout, tohum 42, 1, 2
+python src/dl_compare.py --dataset dnn_edgeiiot
+python src/inference_time.py --dataset dnn_edgeiiot --data-file <csv>
 # Portsuz bekçi (koşul E)
 python src/two_signal.py --dataset dnn_edgeiiot --data-file <csv> --condition E_hepsi_cikarildi --cp-config outputs/dnn_edgeiiot/cp_tune/cp_tune_C_seq_ack_yok.json
 # Görülmemiş saldırı deneyi (koşullar: A_tam, C_seq_ack_yok, E_hepsi_cikarildi)
