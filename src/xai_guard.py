@@ -206,7 +206,9 @@ def main():
         # karar kaynağı: dss_guard satırları (DSS) varsa onlar, yoksa TabM
         rows_path = os.path.join(args.rows_dir, f"rows_{fam}_{args.condition}.npz")
         check = {}
-        if os.path.exists(rows_path):
+        if args.quick and os.path.exists(rows_path):
+            print("  --quick: örneklem farklı olduğu için dss_guard satırları kullanılmıyor (gruplar TabM kararıyla)")
+        if os.path.exists(rows_path) and not args.quick:
             z = np.load(rows_path, allow_pickle=True)
             if not (np.array_equal(z["test_index"], idx_te) and np.array_equal(z["cal_index"], tr_cal)):
                 raise SystemExit(f"{rows_path}: bölme bu çalıştırmayla aynı değil")
