@@ -514,6 +514,25 @@ Aile başına kontrolsüz sessiz kaçış, C → E: DDOS %0,05 → %0,8; RECON %
 3. **Hangi saldırının normal göründüğü portlara bağlı:** port çıkınca BRUTEFORCE'un sessiz kaçışı neredeyse sıfırlanıyor (alarm da yalnız %5'ini yakalıyor; satırlar başka bir saldırı sanılıp ALERT alıyor), WEB'inki ise %2,3'ten %10,8'e çıkıyor. Ortalama benzer (%2,8 / %2,4), ama kaçışın hangi aileden geldiği değişiyor.
 4. **Yöntem notu:** skor bağları, eşik kuralının bütçeyi gerçekleştirememesine yol açabiliyor; tezde ayrıca yazılır. Bağ durumunda rastgele seçim gibi bir düzeltme bütçeyi doldurur ama bağlı satırlar arasında ayrım yapamaz (birebir eş sorunu ile aynı kök).
 
+## Derin öğrenme karşılaştırması: TabM'in topluluğu gerekli mi? Analiz planı (sonuçlardan ÖNCE yazıldı, 26.10.2026)
+
+Soru: İki sinyal kuralındaki kazanç TabM'in **topluluk** yapısından mı geliyor, yoksa herhangi bir sinir ağı da aynısını yapar mı? Eşik yok; aşağıdakilerin tamamı raporlanır.
+
+- **Kod:** `src/two_signal.py --classifier {TabM, MLP, MCDropout}`; karşılaştırma tablosu `src/dl_compare.py`.
+- **Modeller** (aynı veri, koşul C, aynı bölme, aynı ön işleme, mimari, optimizasyon ve erken durdurma; tek fark belirsizliğin nasıl ölçüldüğü):
+  - **TabM:** k = 32 üyeli verimli topluluk. Alarm = üye anlaşmazlığı (karşılıklı bilgi), kontrol = enerji. Sayılar mevcut 3 tohumlu koşudan (`outputs/dnn_edgeiiot/two_signal/`, `s1/`, `s2/`); AUROC ve macro-F1 kayıtlı satır dosyalarından aynı fonksiyonla hesaplanır.
+  - **MLP:** aynı mimari, k = 1 (tek ağ). Anlaşmazlık tanımsız olduğu için alarm = MSP (1 − en yüksek olasılık; Hendrycks ve Gimpel, 2017), kontrol = enerji.
+  - **MC-dropout:** aynı tek ağ (aynı tohumla aynı ağırlıklar), tahminde dropout açık, T = 32 geçiş (TabM'in k'sı kadar; Gal ve Ghahramani, 2016). Alarm = geçişler arası anlaşmazlık (aynı formül), kontrol = geçişlerin ortalama logitinden enerji.
+- **Tohumlar:** model tohumu 42, 1, 2 (bölme sabit, seed 42). Ortalama ± standart sapma.
+- **Raporlanan** (5 aile ortalaması ve aile başına):
+  1. Alarm skorunun ve enerjinin AUROC'u (görülmemiş / bilinen test satırları).
+  2. Bilinen test sınıflarında macro-F1 (sınıflandırma kalitesi).
+  3. Kontrolsüz (yalnız alarm) sessiz kaçış.
+  4. Enerji kontrolüyle q = %0,5 / 1 / 2 / 5 / 10'da sessiz kaçış, normal trafiğin analiste gitme oranı, yakalanan bilinmeyen oranı.
+  5. Eğitim süresi (aile başına; donanım notuyla).
+  6. TabM'e göre fark (MLP − TabM, MC-dropout − TabM), tohum başına hesaplanıp ortalama ± standart sapma: alarm AUROC ve q = %5'te sessiz kaçış. Üç tohumla anlamlılık testi yapılmaz; farkın tohumlar arası yönü raporlanır.
+- **Yorum çerçevesi (önceden):** MC-dropout ≈ TabM ise topluluk etkisi tek ağla ucuza elde edilebiliyor; TabM belirgin iyiyse topluluk gerekçelendirilmiş olur; MLP ≈ TabM ise anlaşmazlık sinyali MSP ve enerjinin ötesinde bir şey katmıyor. Hangisi çıkarsa çıksın raporlanır.
+
 ## Sütun hizası ve değer aralığı denetimi (19.10.2026)
 
 Kod: `src/audit_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/audit/audit.json`. Ham verideki 15 etiketin her biri için 6 kontrol (zaman damgası, IP, port 0–65535, 0/1 bayrak, ARP alanları, sayısal sütunlarda metin). İhlal yalnızca DDoS_UDP (zaman %100) ve MITM'de (zaman %100, port %30, bayrak %19); Normal'de %0,11 bayrak ihlali (önemsiz); diğer 12 saldırı türünde %0. Bu iki tür bulgu 7 gereği atıldı.
