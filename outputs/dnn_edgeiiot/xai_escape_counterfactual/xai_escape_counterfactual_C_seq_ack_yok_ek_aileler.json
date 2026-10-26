@@ -1,0 +1,265 @@
+{
+  "dataset_id": "dnn_edgeiiot",
+  "condition": "C_seq_ack_yok",
+  "dropped_features": [
+    "tcp.seq",
+    "tcp.ack"
+  ],
+  "status": "Analiz planı sonuçlardan önce yazıldı (README, Kaçışların Karşı-Olgusal Açıklaması / XAI-3); eşik yok",
+  "settings": {
+    "dataset": "dnn_edgeiiot",
+    "data_file": "/kaggle/input/datasets/mohamedamineferrag/edgeiiotset-cyber-security-dataset-of-iot-iiot/Edge-IIoTset dataset/Selected dataset for ML and DL/DNN-EdgeIIoT-dataset.csv",
+    "run_dir": null,
+    "params_from": "metrics",
+    "manifest": "outputs/dnn_edgeiiot/manifest.json",
+    "rows_dir": "outputs/dnn_edgeiiot/dss_guard",
+    "xai2_dir": "outputs/dnn_edgeiiot/xai_unknown_decision",
+    "out_dir": "outputs/dnn_edgeiiot/xai_escape_counterfactual",
+    "condition": "C_seq_ack_yok",
+    "families": "DDOS,RECON,MALWARE",
+    "cap": 40000,
+    "seed": 42,
+    "cal_size": 0.1,
+    "target": 0.95,
+    "q": 0.05,
+    "per_group": 50,
+    "k_max": 5,
+    "n_random": 20,
+    "n_real_ref": 1000,
+    "n_jobs": -1,
+    "tag": "ek_aileler",
+    "quick": false
+  },
+  "port_columns": [
+    "tcp.dstport",
+    "udp.port"
+  ],
+  "grid_percentiles": [
+    5,
+    15,
+    25,
+    35,
+    45,
+    55,
+    65,
+    75,
+    85,
+    95
+  ],
+  "families": {
+    "DDOS": {
+      "n_silent": 0
+    },
+    "RECON": {
+      "categories": [
+        "RECON"
+      ],
+      "decision_source": "dss",
+      "model": "outputs/dnn_edgeiiot/xai_unknown_decision/models/TabM_RECON_C_seq_ack_yok.joblib",
+      "twins": {
+        "alarm_unknown": {
+          "n": 7617,
+          "d_median": 0.4839102820846801,
+          "exact_twin_share": 0.0143,
+          "nearest_label_share": {
+            "BENIGN": 0.0043,
+            "BRUTEFORCE": 0.0143,
+            "DDOS": 0.1497,
+            "MALWARE": 0.0009,
+            "WEB": 0.8308
+          },
+          "exact_twin_label_share": {
+            "BENIGN": 0.0734,
+            "BRUTEFORCE": 0.367,
+            "DDOS": 0.5046,
+            "WEB": 0.055
+          }
+        },
+        "guard_unknown": {
+          "n": 66,
+          "d_median": 1.8203657630849325e-05,
+          "exact_twin_share": 0.2576,
+          "nearest_label_share": {
+            "BENIGN": 1.0
+          },
+          "exact_twin_label_share": {
+            "BENIGN": 1.0
+          }
+        },
+        "silent_unknown": {
+          "n": 1,
+          "d_median": 1.1323042196089854,
+          "exact_twin_share": 0.0,
+          "nearest_label_share": {
+            "WEB": 1.0
+          },
+          "exact_twin_label_share": {}
+        }
+      },
+      "check_vs_dss_guard": {
+        "disagree": 1.0,
+        "energy": 1.0,
+        "alarm_agreement": 1.0
+      },
+      "tau_alarm": 0.0033692121505737305,
+      "tau_guard": -6.245784759521484,
+      "score_iqr": {
+        "disagree": 0.0004942179565432525,
+        "energy": 11.2865492105484
+      },
+      "summary": {
+        "n_silent": 1,
+        "n_explained": 1,
+        "rows_from": "XAI-2 sessiz kaçan örneklemi",
+        "margin_start": {
+          "median": -6.817259635132032,
+          "q10": -6.817259635132032,
+          "q90": -6.817259635132032,
+          "median_alarm": -6.817259635132032,
+          "median_energy": -9.205420744324286
+        },
+        "caught_curve": {
+          "ks": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "greedy": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "random": [
+            0.0,
+            0.05,
+            0.1,
+            0.2,
+            0.2
+          ]
+        },
+        "k_needed_median": 1.0,
+        "change_size_iqr_median": 0.10083008701350711,
+        "change_size_iqr_q90": 0.10083008701350711,
+        "top_changed_features": [
+          {
+            "feature": "tcp.dstport",
+            "count": 1,
+            "share_of_changes": 1.0
+          }
+        ],
+        "first_change_features": {
+          "tcp.dstport": 1
+        },
+        "trigger": {
+          "alarm+energy": 1
+        },
+        "port_share_of_changes": 1.0,
+        "rows_with_port_change": 1.0,
+        "realism": {
+          "d_nn_real_known_median": 1.4901161193847656e-08,
+          "d_nn_original_median": 1.1323042196089854,
+          "d_nn_cf_median": 1.0314741325954786,
+          "cf_over_real_median_ratio": 69221057.28386794,
+          "cf_percentile_in_real": [
+            100.0
+          ]
+        },
+        "energy_only": {
+          "note": "ek analiz, sonuçlardan önce eklendi: yalnız enerji kontrolü (alarm sayılmaz)",
+          "caught_curve": {
+            "ks": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "greedy": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "random": [
+              0.0,
+              0.05,
+              0.1,
+              0.1,
+              0.15
+            ]
+          },
+          "top_changed_features": [
+            {
+              "feature": "tcp.dstport",
+              "count": 1,
+              "share_of_changes": 1.0
+            }
+          ],
+          "port_share_of_changes": 1.0,
+          "change_size_iqr_median": 1.1143190009829977
+        },
+        "consistency_with_xai2": {
+          "spearman_gain_vs_abs_shap_median": 0.4431217169079058,
+          "shap_rank_of_changed_median": 1.0,
+          "changed_in_shap_top5_share": 1.0
+        }
+      },
+      "rows": [
+        {
+          "test_row": 256326,
+          "m0": -6.817259635132032,
+          "m0_alarm": -6.817259635132032,
+          "m0_energy": -9.205420744324286,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.dstport",
+              "from": 65535.0,
+              "to": 59996.0,
+              "size_iqr": 0.10083008701350711,
+              "m_after": 1077.0980852236924
+            }
+          ],
+          "d_nn_original": 1.1323042196089854,
+          "d_nn_cf": 1.0314741325954786,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": 0.4431217169079058,
+            "shap_rank_of_changed": [
+              1
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.dstport",
+                "from": 65535.0,
+                "to": 4321.0,
+                "size_iqr": 1.1143190009829977,
+                "m_after": 0.49412936548582864
+              }
+            ]
+          }
+        }
+      ],
+      "model_calls": 254,
+      "seconds": 35.0
+    },
+    "MALWARE": {
+      "n_silent": 0
+    }
+  },
+  "runtime_seconds": 137.2
+}

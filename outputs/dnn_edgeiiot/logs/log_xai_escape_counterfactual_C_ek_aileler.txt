@@ -1,0 +1,23 @@
+Okunuyor: /kaggle/input/datasets/mohamedamineferrag/edgeiiotset-cyber-security-dataset-of-iot-iiot/Edge-IIoTset dataset/Selected dataset for ML and DL/DNN-EdgeIIoT-dataset.csv
+Hizasız satır (frame.time zaman değil): 122782 {'DDoS_UDP': 121568, 'MITM': 1214} -> atıldı
+Edge-IIoTset: 296506 satır, koşul C_seq_ack_yok, 32 özellik (port: ['tcp.dstport', 'udp.port']); aileler ['DDOS', 'RECON', 'MALWARE']
+
+=== DDOS: eğitim 136532, kalibrasyon 15171, test 59302 (bilinmeyen 21375) ===
+  dss_guard ile karşılaştırma (kayıtlı TabM): {'disagree': 1.0, 'energy': 1.0, 'alarm_agreement': 1.0}
+  sessiz kaçan: 0
+
+=== RECON: eğitim 174230, kalibrasyon 19359, test 59302 (bilinmeyen 10904) ===
+  dss_guard ile karşılaştırma (kayıtlı TabM): {'disagree': 1.0, 'energy': 1.0, 'alarm_agreement': 1.0}
+  sessiz kaçan: 1
+  n=1  başlangıç payı medyan -6.82 IQR  yakalanma k=1..5: [1.0, 1.0, 1.0, 1.0, 1.0] (rastgele [0.0, 0.05, 0.1, 0.2, 0.2])
+  en sık değişen: [('tcp.dstport', 1)]  tetik: {'alarm+energy': 1}  port payı: 1.0
+  yalnız enerji: yakalanma [1.0, 1.0, 1.0, 1.0, 1.0] (rastgele [0.0, 0.05, 0.1, 0.1, 0.15])  en sık [('tcp.dstport', 1)]  port payı 1.0
+  XAI-2 ile tutarlılık: {'spearman_gain_vs_abs_shap_median': 0.4431217169079058, 'shap_rank_of_changed_median': 1.0, 'changed_in_shap_top5_share': 1.0}
+  gerçekçilik: 1.0314741325954786 / gerçek 0.000  (31 s, 254 model satırı)
+  eş kontrolü: alarm_unknown: n=7617, birebir eş %1, en yakın etiket {'BENIGN': 0.0043, 'BRUTEFORCE': 0.0143, 'DDOS': 0.1497, 'MALWARE': 0.0009, 'WEB': 0.8308}; guard_unknown: n=66, birebir eş %26, en yakın etiket {'BENIGN': 1.0}; silent_unknown: n=1, birebir eş %0, en yakın etiket {'WEB': 1.0}
+
+=== MALWARE: eğitim 190834, kalibrasyon 21204, test 59302 (bilinmeyen 6291) ===
+  dss_guard ile karşılaştırma (kayıtlı TabM): {'disagree': 1.0, 'energy': 1.0, 'alarm_agreement': 1.0}
+  sessiz kaçan: 0
+
+Çıktı: outputs/dnn_edgeiiot/xai_escape_counterfactual/xai_escape_counterfactual_C_seq_ack_yok_ek_aileler.json  (137 s)
