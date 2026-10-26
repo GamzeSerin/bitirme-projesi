@@ -1,7 +1,7 @@
-"""XAI-2: bekçinin (TabM) kararının açıklanması ve açıklamanın sadakati (ekip ortak aracı, --dataset).
+"""Bilinmeyen Kararının Açıklanması (XAI-2): bekçinin (TabM) kararının açıklanması ve açıklamanın sadakati (ekip ortak aracı, --dataset).
 
 Soru: TabM bekçisi (alarm = üye anlaşmazlığı, kontrol = enerji) bir trafiği neden şüpheli buluyor ve bu açıklama
-doğru mu? Analiz planı sonuçlardan önce yazıldı (data/dnn_edgeiiot/README.md, "XAI-2"); başarı eşiği yok, aşağıdaki
+doğru mu? Analiz planı sonuçlardan önce yazıldı (data/dnn_edgeiiot/README.md, "Bilinmeyen Kararının Açıklanması (XAI-2)"); başarı eşiği yok, aşağıdaki
 ölçümlerin tamamı kaydedilir.
 
 Her ailede (LOFO; bölme dss_guard.py ile aynı: ekip bölmesi seed 42, kalan eğitim %90 eğitim / %10 kalibrasyon):
@@ -337,7 +337,7 @@ def main():
         print(f"  ({time.perf_counter() - t0:.0f} s, {f.calls:,} model satırı)")
 
     out = {"dataset_id": args.dataset, "condition": args.condition, "dropped_features": drop,
-           "status": "Analiz planı sonuçlardan önce yazıldı (README, XAI-2); eşik yok",
+           "status": "Analiz planı sonuçlardan önce yazıldı (README, Bilinmeyen Kararının Açıklanması / XAI-2); eşik yok",
            "settings": {k: v for k, v in vars(args).items()}, "model_seed": mseed, "tabm_params_from": params_src,
            "port_columns": ports, "families": out_fam, "runtime_seconds": round(time.perf_counter() - t_start, 1)}
     path = os.path.join(args.out_dir, f"xai_guard_{args.condition}.json")
