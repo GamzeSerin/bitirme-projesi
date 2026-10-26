@@ -25,8 +25,8 @@ Her ailede (LOFO; bölme dss_guard.py ile aynı: ekip bölmesi seed 42, kalan e�
   5. Yan bulgu: toplam |Shapley| içinde port özelliklerinin payı (kayıttaki port_columns).
 
 Çalıştırma:
-  python src/xai_guard.py --dataset dnn_edgeiiot --data-file <csv> --params-from metrics --families BRUTEFORCE,WEB
-  python src/xai_guard.py --dataset dataset_23 --data-file data/dataset_23 --run-dir work/dataset_23/<...> \\
+  python src/xai_unknown_decision.py --dataset dnn_edgeiiot --data-file <csv> --params-from metrics --families BRUTEFORCE,WEB
+  python src/xai_unknown_decision.py --dataset dataset_23 --data-file data/dataset_23 --run-dir work/dataset_23/<...> \\
       --families RECON,WEB,BRUTEFORCE
   ... --quick   (küçük örneklem, kısa eğitim, az permütasyon: tesisat denemesi)
 """
@@ -122,7 +122,7 @@ def main():
     p.add_argument("--params-from", choices=["run", "metrics"], default="run")
     p.add_argument("--manifest", default=None)
     p.add_argument("--rows-dir", default=None, help="dss_guard satır dosyaları (varsayılan outputs/<dataset>/dss_guard)")
-    p.add_argument("--out-dir", default=None, help="Varsayılan outputs/<dataset>/xai_guard")
+    p.add_argument("--out-dir", default=None, help="Varsayılan outputs/<dataset>/xai_unknown_decision")
     p.add_argument("--condition", default=None)
     p.add_argument("--families", default="BRUTEFORCE,WEB")
     p.add_argument("--cap", type=int, default=40000)
@@ -148,7 +148,7 @@ def main():
     args.manifest = args.manifest or f"outputs/{args.dataset}/manifest.json"
     args.rows_dir = args.rows_dir or f"outputs/{args.dataset}/dss_guard"
     mseed = args.seed if args.model_seed is None else args.model_seed
-    args.out_dir = args.out_dir or f"outputs/{args.dataset}/xai_guard"
+    args.out_dir = args.out_dir or f"outputs/{args.dataset}/xai_unknown_decision"
     os.makedirs(os.path.join(args.out_dir, "models"), exist_ok=True)
     rng_global = np.random.default_rng(args.seed)
     t_start = time.perf_counter()
@@ -340,10 +340,10 @@ def main():
            "status": "Analiz planı sonuçlardan önce yazıldı (README, Bilinmeyen Kararının Açıklanması / XAI-2); eşik yok",
            "settings": {k: v for k, v in vars(args).items()}, "model_seed": mseed, "tabm_params_from": params_src,
            "port_columns": ports, "families": out_fam, "runtime_seconds": round(time.perf_counter() - t_start, 1)}
-    path = os.path.join(args.out_dir, f"xai_guard_{args.condition}.json")
+    path = os.path.join(args.out_dir, f"xai_unknown_decision_{args.condition}.json")
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(out, fh, indent=2, ensure_ascii=False, default=lambda o: o.item() if hasattr(o, "item") else str(o))
-    plot(out, os.path.join(args.out_dir, f"fig_xai_guard_{args.dataset}_{args.condition}.png"))
+    plot(out, os.path.join(args.out_dir, f"fig_xai_unknown_decision_{args.dataset}_{args.condition}.png"))
     print(f"\nÇıktı: {path}  ({out['runtime_seconds']:.0f} s)")
 
 

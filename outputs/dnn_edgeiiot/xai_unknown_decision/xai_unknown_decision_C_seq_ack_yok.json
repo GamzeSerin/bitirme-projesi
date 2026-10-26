@@ -2629,5 +2629,6 @@
       "seconds": 229.8
     }
   },
-  "runtime_seconds": 578.6
+  "runtime_seconds": 578.6,
+  "renamed_from": "outputs/dnn_edgeiiot/xai_guard (betik src/xai_guard.py); 26.10.2026'da anlamlı adla yeniden adlandırıldı, koşu ve sayılar aynı"
 }

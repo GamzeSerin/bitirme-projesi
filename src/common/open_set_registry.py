@@ -20,7 +20,7 @@ veri setine özel hiçbir şey bilmez. Yeni bir veri seti eklemek için gereken 
       asıl deneyin kaydettiği RESMİ model dosyaları (eski sürümler aynı klasörde dursa da)
   protocol_drop     : asıl deneyde her zaman atılan sütunlar (çalıştırmanın config.json'u ile denetlenir)
   hardware_note     : maliyet ölçümlerinin donanımı (raporlama için)
-  port_columns      : (isteğe bağlı) port sütunları; xai_guard.py açıklamadaki paylarını raporlar
+  port_columns      : (isteğe bağlı) port sütunları; xai_unknown_decision.py açıklamadaki paylarını raporlar
   dss_voters        : asıl DSS'in oylayan modelleri (main.py kuralıyla seçilmiş hâli; dss_guard.py bunları sabit kullanır)
 
 Koşul sütunları veri yüklendikten SONRA çıkarılır; böylece her koşulda satırlar birebir aynıdır.

@@ -358,7 +358,7 @@ Gülsü'nün aracı `src/alarm_tiers.py` (dss_guard satır dosyalarından, yeni 
 
 Soru: TabM bekçisi (alarm = üye anlaşmazlığı, kontrol = enerji) bir trafiği neden şüpheli buluyor ve bu açıklama doğru mu? Başarı eşiği konmadı; aşağıdaki ölçümlerin **tamamı** raporlanır (seçici raporlama yok).
 
-- **Kod:** `src/xai_guard.py` (ortak araç, `--dataset`). Koşul C, tohum 42; LOFO bölmesi `dss_guard.py` ile aynı. TabM her ailede bir kez eğitilip kaydedilir; skorlar `dss_guard` satır dosyalarıyla karşılaştırılarak doğrulanır (sıra korelasyonu raporlanır).
+- **Kod:** `src/xai_unknown_decision.py` (ortak araç, `--dataset`). Koşul C, tohum 42; LOFO bölmesi `dss_guard.py` ile aynı. TabM her ailede bir kez eğitilip kaydedilir; skorlar `dss_guard` satır dosyalarıyla karşılaştırılarak doğrulanır (sıra korelasyonu raporlanır).
 - **Aileler:** BRUTEFORCE ve WEB (Edge-IIoTset). Aynı komut diğer veri setlerinde de çalışır.
 - **Açıklanan satırlar** (her grupta en fazla 50, rastgele, seed 42): (1) alarm alan görülmemiş saldırı, (2) alarm almamış, DSS'in BENIGN dediği ve kontrolde yakalanan görülmemiş saldırı (q = %5), (3) aynı durumda kontrolden geçen (kaçan) görülmemiş saldırı, (4) alarmla analiste giden normal trafik, (5) kontrolle analiste giden normal trafik.
 - **Açıklama:** anlaşmazlık ve enerji skorları için permütasyon Shapley değerleri (kütüphanesiz uygulama; antitetik permütasyonlar), karşılaştırma tabanı bilinen eğitim trafiğinden rastgele satırlar.
@@ -368,11 +368,49 @@ Soru: TabM bekçisi (alarm = üye anlaşmazlığı, kontrol = enerji) bir trafi�
 - **Çıktı:** en önemli özellikler (grup ve skor başına), sadakat tabloları ve eğrileri, örnek analist kartları (en çok katkı veren 3 özellik, değeri ve bilinen trafikteki yüzdelik konumu).
 - **Kaçan satırlar (grup 3)** için skor zaten düşük olduğundan sadakat testi anlamlı değil; bu grup yalnız "neden şüphelenilmedi" karşılaştırması için açıklanır.
 
+## Bilinmeyen Kararının Açıklanması (XAI-2): sonuçlar (26.10.2026)
+
+Kod: `src/xai_unknown_decision.py` (koşu `xai_guard.py` adıyla yapıldı, sonra yeniden adlandırıldı; sayılar aynı). Çıktı: `outputs/dnn_edgeiiot/xai_unknown_decision/`, kayıt: `outputs/dnn_edgeiiot/logs/log_xai_unknown_decision_C.txt`. Koşul C, tohum 42, q = %5, her grupta 50 satır; Kaggle GPU, 9,6 dk.
+
+![Silme eğrileri](../../outputs/dnn_edgeiiot/xai_unknown_decision/fig_xai_unknown_decision_dnn_edgeiiot_C_seq_ack_yok.png)
+
+**Doğrulama kontrolleri:** yeniden eğitilen TabM, `dss_guard` koşusundakiyle birebir aynı (anlaşmazlık ve enerji skorlarında sıra korelasyonu 1,0; alarm uyumu 1,0). Shapley değerlerinin toplamı = skor − taban ortalaması (verimlilik farkı ≤ 1e-6).
+
+**Sadakat: enerji kontrolü** (göreli düşüş = satırın tabanı aşan skorunun ne kadarı geri alındı):
+
+| Aile · grup | AUC SHAP / rastgele (IQR) | Göreli düşüş k=1 / k=5, SHAP | k=5, rastgele | SHAP daha iyi | Wilcoxon p |
+|---|---|---|---|---|---|
+| BRUTEFORCE · kontrolde yakalanan bilinmeyen | 0,72 / 0,11 | %19 / %84 | %10 | %100 | 2e-15 |
+| BRUTEFORCE · kontrolle analiste giden normal | 0,72 / 0,10 | %17 / %84 | %9 | %100 | 2e-15 |
+| WEB · kontrolde yakalanan bilinmeyen | 0,84 / 0,10 | %57 / %103 | %9 | %100 | 2e-15 |
+| WEB · kontrolle analiste giden normal | 0,78 / 0,08 | %53 / %103 | %7 | %100 | 2e-15 |
+
+**Sadakat: alarm (üye anlaşmazlığı)** (eksi değer = özellik değiştirilince skor **arttı**):
+
+| Aile · grup | AUC SHAP / rastgele (IQR) | Satır başına fark, medyan | SHAP daha iyi | Wilcoxon p |
+|---|---|---|---|---|
+| BRUTEFORCE · alarm alan bilinmeyen | 15,1 / −70,1 | 62,4 | %94 | 3e-11 |
+| BRUTEFORCE · alarmla analiste giden normal | −37,7 / −54,1 | 12,5 | %72 | 1e-4 |
+| WEB · alarm alan bilinmeyen | −27,6 / −60,2 | 36,4 | %84 | 2e-9 |
+| WEB · alarmla analiste giden normal | −10,8 / −35,8 | 24,9 | %100 | 2e-15 |
+
+**En önemli özellikler ve port payı** (toplam |Shapley| içinde `tcp.dstport` + `udp.port`):
+
+- Enerji: her grupta en önemli özellik `tcp.dstport`; ardından BRUTEFORCE'ta `tcp.len`, WEB'de `tcp.connection.rst`. Port payı %45–65 (tek istisna: WEB'de sessiz kaçanlar %34).
+- Anlaşmazlık: port payı %23–42. Alarm alan bilinmeyende BRUTEFORCE'ta `tcp.dstport` ve `http.content_length`, WEB'de `http.response` önde. Normal trafikteki yanlış alarmlarda BRUTEFORCE'ta `tcp.connection.rst` ve `tcp.flags.ack` önde.
+- Sessiz kaçanlar (açıklandı, sadakat testi yok): WEB'de `tcp.flags.ack`, `tcp.connection.rst` ve `tcp.dstport`; port payı enerji için %34 (yakalananlarda %65).
+
+**Yorum:**
+
+1. **Enerji kontrolünün açıklamaları sadık.** SHAP'ın gösterdiği 5 özellik geri alınınca skorun tabanı aşan kısmının %84–103'ü kayboluyor; rastgele 5 özellikte %7–10. Dört grubun hepsinde 50 satırın 50'sinde SHAP daha iyi. Analiste bu kontrolün açıklaması güvenle gösterilebilir.
+2. **Anlaşmazlık açıklamaları rastgeleden iyi, ama silme testi bu skor için temiz değil.** Özellik değiştirmek çoğu zaman anlaşmazlığı **artırıyor**; rastgele değişiklikte daha da çok. Muhtemel neden: anlaşmazlık "bu satır tanıdık değil" sinyali ve bir satıra başka satırdan değer koymak veride hiç görülmemiş karışımlar üretiyor (dağılım dışına itme). Yani silme testi bu skorda hem açıklamanın hem testin kendisinin etkisini ölçüyor. SHAP'ın rastgeleden üstünlüğü dört grupta da anlamlı; mutlak düşüş ise yalnız BRUTEFORCE alarm grubunda ilk 3 özellikte görülüyor. Tezde bu sınırlılık açıkça yazılır; anlaşmazlık açıklamaları analiste "dikkatle" etiketiyle gösterilir.
+3. **Port sorusu (yan bulgu):** enerji kontrolü kararının yaklaşık yarısından fazlasını hedef porta dayandırıyor. Yakalanan bilinmeyen saldırı da, yanlış alarm veren normal trafik de aynı şekilde açıklanıyor: "hedef port normal trafikte alışılmadık" (çoğunlukla yüksek, geçici portlar). WEB'de sessiz kaçanlarda port payının düşük olması (%34'e karşı %65) aynı tabloyla tutarlı: portu normal görünen saldırı kontrolden geçiyor. Port, paket başlığının gerçek bir alanı (seq/ack gibi oturuma özel sayaç değil), ama kısmen yön ve oturum bilgisi taşıyor. **Önerilen ek kontrol (yeni koşu, sonuçtan önce not edildi):** iki sinyal kuralını portların da çıkarıldığı koşul E'de tekrarlamak; bekçinin katkısı port olmadan ne kadar kalıyor?
+
 ## Kaçışların Karşı-Olgusal Açıklaması (XAI-3), analiz planı (sonuçlardan ÖNCE yazıldı, 26.10.2026)
 
 Soru: Bekçiden sessizce geçen (alarm yok, DSS BENIGN dedi, enerji kontrolünden de geçti) görülmemiş saldırı satırı **hangi özellikleri ne kadar farklı olsaydı yakalanırdı?** Bilinmeyen Kararının Açıklanması (XAI-2) "neden şüphelenildi?" sorusunu cevaplıyor; bu iş "neden şüphelenilmedi, ne olsaydı şüphelenilirdi?" sorusunu cevaplıyor. Amaç bekçinin kör noktalarının haritası: kaçışlar hangi özelliklerde normal trafiğe benziyor? Başarı eşiği konmadı; aşağıdaki ölçümlerin **tamamı** raporlanır.
 
-- **Kod (planlanan):** `src/xai_escape_counterfactual.py` (ortak araç, `--dataset`). Bölme, TabM modeli, eşikler ve satır grupları Bilinmeyen Kararının Açıklanması (XAI-2) koşusuyla aynı; kaydedilen TabM modelleri yeniden kullanılır (yeniden eğitim yok).
+- **Kod (planlanan):** `src/xai_escape_counterfactual.py` (ortak araç, `--dataset`). Bölme, TabM modeli, eşikler ve satır grupları Bilinmeyen Kararının Açıklanması (XAI-2) koşusuyla aynı; kaydedilen TabM modelleri (`outputs/dnn_edgeiiot/xai_unknown_decision/models/`) yeniden kullanılır (yeniden eğitim yok).
 - **Aileler:** BRUTEFORCE ve WEB (Edge-IIoTset), koşul C, tohum 42, q = %5.
 - **Açıklanan satırlar:** sessiz kaçan görülmemiş saldırı satırları (XAI-2'deki grup 3), en fazla 50, rastgele, seed 42.
 - **"Yakalandı" tanımı:** anlaşmazlık ≥ alarm eşiği **veya** enerji ≥ q = %5 kontrol eşiği (iki eşik de bilinen kalibrasyon verisinden, XAI-2 ile aynı). Değişen satırda DSS kararı yeniden hesaplanmaz; DSS'in BENIGN demeye devam ettiği varsayılır (sınırlılık olarak yazılır).
@@ -404,6 +442,8 @@ python src/xai_faithfulness_dnn_edgeiiot.py --data-file <csv> --model RF   # ve 
 python src/xai_faithfulness_dnn_edgeiiot.py --data-file <csv> --model RF --tag A_tam_nodisc --lime-no-discretize \
     --drop-one-from outputs/dnn_edgeiiot/xai_faithfulness/faithfulness_RF_A_tam.json
 python src/xai_faithfulness_summary_dnn_edgeiiot.py
+# Bilinmeyen Kararının Açıklanması (XAI-2); önce dss_guard.py satır dosyaları gerekir
+python src/xai_unknown_decision.py --dataset dnn_edgeiiot --data-file <csv> --params-from metrics --families BRUTEFORCE,WEB
 # Görülmemiş saldırı deneyi (koşullar: A_tam, C_seq_ack_yok, E_hepsi_cikarildi)
 python src/open_set_lofo_dnn_edgeiiot.py --data-file <csv> --models RF,TabM --condition C_seq_ack_yok
 python src/open_set_summary_dnn_edgeiiot.py
