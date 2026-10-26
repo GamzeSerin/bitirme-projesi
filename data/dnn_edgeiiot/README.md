@@ -620,7 +620,7 @@ Bilinmeyen Kararının Açıklanması (XAI-2) ve Kaçışların Karşı-Olgusal 
 
 (Enerji grupları: kontrolde yakalanan bilinmeyen ve kontrolle analiste giden normal trafik; anlaşmazlık grupları: alarm alan bilinmeyen ve alarmla analiste giden normal trafik. Tüm Wilcoxon p < 1e-7.)
 
-**Kaçışların Karşı-Olgusal Açıklaması (XAI-3) ve eş kontrolü:** DDOS ve MALWARE'de sessiz kaçan **yok**, RECON'da **1** satır (5.932 bilinmeyenden). Bu ailelerde karşı-olgu analizi yapılacak örnek yok; planda öngörüldüğü gibi atlandı (sessiz kaçanı olmayan ailede eş kontrolü de atlanıyor). RECON'da eş kontrolü: kontrolde yakalanan 66 bilinmeyenin en yakın eşi %100 BENIGN (birebir eş %26); alarm alan 7.617 bilinmeyenin en yakın eşi çoğunlukla başka bir saldırı (WEB %83, DDOS %15).
+**Kaçışların Karşı-Olgusal Açıklaması (XAI-3) ve eş kontrolü:** DDOS ve MALWARE'de sessiz kaçan **yok**, RECON'da **1** satır (10.904 bilinmeyenden). Bu ailelerde karşı-olgu analizi yapılacak örnek yok; planda öngörüldüğü gibi atlandı (sessiz kaçanı olmayan ailede eş kontrolü de atlanıyor). RECON'da eş kontrolü: kontrolde yakalanan 66 bilinmeyenin en yakın eşi %100 BENIGN (birebir eş %26); alarm alan 7.617 bilinmeyenin en yakın eşi çoğunlukla başka bir saldırı (WEB %83, DDOS %15).
 
 **Yorum:**
 1. **Enerji açıklamasının sadakati beş ailede de tekrarlandı:** SHAP'ın gösterdiği 5 özellik skorun tabanı aşan kısmının %83–103'ünü geri alıyor, rastgele 5 özellik %0–10'unu; 500 satırın 500'ünde SHAP daha iyi. Bu bulgu artık iki aileye değil, bekçinin genel davranışına ait.
