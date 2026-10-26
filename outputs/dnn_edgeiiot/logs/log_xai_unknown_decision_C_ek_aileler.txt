@@ -1,0 +1,116 @@
+Okunuyor: /kaggle/input/datasets/mohamedamineferrag/edgeiiotset-cyber-security-dataset-of-iot-iiot/Edge-IIoTset dataset/Selected dataset for ML and DL/DNN-EdgeIIoT-dataset.csv
+Hizasız satır (frame.time zaman değil): 122782 {'DDoS_UDP': 121568, 'MITM': 1214} -> atıldı
+Edge-IIoTset: 296506 satır, koşul C_seq_ack_yok, 32 özellik (port: ['tcp.dstport', 'udp.port']); aileler ['DDOS', 'RECON', 'MALWARE']; TabM ayarları {'TabM': 'metrics.json[TabM].params'}
+
+=== DDOS: eğitim 136532, kalibrasyon 15171, test 59302 (bilinmeyen 21375) ===
+TabM: torch 2.11.0+cu128, cihaz cuda
+    TabM: 24 özellik (0 seyrek sütun standartlaştırıldı, 0 sabit sütun atıldı)
+    TabM epoch   0  val_loss=0.3111  val_macroF1=0.8323  *  (5 s)
+    TabM epoch   1  val_loss=0.2456  val_macroF1=0.8412  *  (10 s)
+    TabM epoch   2  val_loss=0.2146  val_macroF1=0.8767  *  (14 s)
+    TabM epoch   3  val_loss=0.2139  val_macroF1=0.8839  *  (19 s)
+    TabM epoch   4  val_loss=0.2082  val_macroF1=0.8858  *  (24 s)
+    TabM epoch   5  val_loss=0.2107  val_macroF1=0.8823  (29 s)
+    TabM epoch   6  val_loss=0.2073  val_macroF1=0.8830  *  (34 s)
+    TabM epoch   7  val_loss=0.2132  val_macroF1=0.8762  (39 s)
+    TabM epoch   8  val_loss=0.2024  val_macroF1=0.8847  *  (43 s)
+    TabM epoch   9  val_loss=0.2053  val_macroF1=0.8821  (49 s)
+    TabM epoch  10  val_loss=0.2054  val_macroF1=0.8854  (54 s)
+    TabM epoch  11  val_loss=0.2006  val_macroF1=0.8840  *  (59 s)
+    TabM epoch  12  val_loss=0.1926  val_macroF1=0.8898  *  (64 s)
+    TabM epoch  13  val_loss=0.1987  val_macroF1=0.8848  (70 s)
+    TabM epoch  14  val_loss=0.1974  val_macroF1=0.8881  (76 s)
+    TabM epoch  15  val_loss=0.2014  val_macroF1=0.8840  (81 s)
+    TabM epoch  16  val_loss=0.1973  val_macroF1=0.8865  (87 s)
+    TabM epoch  17  val_loss=0.1981  val_macroF1=0.8854  (93 s)
+    TabM epoch  18  val_loss=0.2017  val_macroF1=0.8852  (98 s)
+    TabM epoch  19  val_loss=0.1941  val_macroF1=0.8879  (104 s)
+    TabM epoch  20  val_loss=0.1979  val_macroF1=0.8866  (109 s)
+    TabM epoch  21  val_loss=0.1983  val_macroF1=0.8902  (114 s)
+    TabM durdu: en iyi epoch val_loss'a göre 12 (macro-F1 0.8898), macro-F1'e göre 21 (macro-F1 0.8902)
+  dss_guard ile karşılaştırma (yeniden eğitilen TabM): {'disagree': 1.0, 'energy': 1.0, 'alarm_agreement': 1.0}
+  gruplar (dss kararı): {'alarm_unknown': 10399, 'guard_unknown': 157, 'silent_unknown': 0, 'alarm_benign': 178, 'guard_benign': 415}
+  alarm_unknown   (disagree): n=50  AUC SHAP 124.236 / rastgele -33.669  SHAP daha iyi %94  p=3.375077994860476e-14  port payı 0.2772
+  guard_unknown   (energy): n=50  AUC SHAP 0.677 / rastgele 0.082  SHAP daha iyi %100  p=1.7763568394002505e-15  port payı 0.7341
+  alarm_benign    (disagree): n=50  AUC SHAP -39.662 / rastgele -120.311  SHAP daha iyi %98  p=6.590283874174929e-13  port payı 0.3226
+  guard_benign    (energy): n=50  AUC SHAP 0.562 / rastgele 0.048  SHAP daha iyi %100  p=1.7763568394002505e-15  port payı 0.6155
+  (211 s, 4,140,270 model satırı)
+
+=== RECON: eğitim 174230, kalibrasyon 19359, test 59302 (bilinmeyen 10904) ===
+TabM: torch 2.11.0+cu128, cihaz cuda
+    TabM: 24 özellik (0 seyrek sütun standartlaştırıldı, 0 sabit sütun atıldı)
+    TabM epoch   0  val_loss=0.3930  val_macroF1=0.8076  *  (7 s)
+    TabM epoch   1  val_loss=0.3505  val_macroF1=0.8194  *  (14 s)
+    TabM epoch   2  val_loss=0.3424  val_macroF1=0.8197  *  (21 s)
+    TabM epoch   3  val_loss=0.3170  val_macroF1=0.8365  *  (28 s)
+    TabM epoch   4  val_loss=0.3159  val_macroF1=0.8405  *  (36 s)
+    TabM epoch   5  val_loss=0.3120  val_macroF1=0.8389  *  (43 s)
+    TabM epoch   6  val_loss=0.3146  val_macroF1=0.8394  (50 s)
+    TabM epoch   7  val_loss=0.3196  val_macroF1=0.8417  (56 s)
+    TabM epoch   8  val_loss=0.3075  val_macroF1=0.8384  *  (63 s)
+    TabM epoch   9  val_loss=0.3005  val_macroF1=0.8423  *  (70 s)
+    TabM epoch  10  val_loss=0.2977  val_macroF1=0.8431  *  (77 s)
+    TabM epoch  11  val_loss=0.3065  val_macroF1=0.8413  (84 s)
+    TabM epoch  12  val_loss=0.2961  val_macroF1=0.8457  *  (91 s)
+    TabM epoch  13  val_loss=0.3039  val_macroF1=0.8391  (97 s)
+    TabM epoch  14  val_loss=0.2963  val_macroF1=0.8414  (104 s)
+    TabM epoch  15  val_loss=0.3016  val_macroF1=0.8434  (111 s)
+    TabM epoch  16  val_loss=0.3004  val_macroF1=0.8424  (118 s)
+    TabM epoch  17  val_loss=0.2965  val_macroF1=0.8430  (125 s)
+    TabM epoch  18  val_loss=0.2926  val_macroF1=0.8427  *  (132 s)
+    TabM epoch  19  val_loss=0.2969  val_macroF1=0.8435  (139 s)
+    TabM epoch  20  val_loss=0.2971  val_macroF1=0.8432  (145 s)
+    TabM epoch  21  val_loss=0.3023  val_macroF1=0.8434  (152 s)
+    TabM epoch  22  val_loss=0.2984  val_macroF1=0.8453  (159 s)
+    TabM epoch  23  val_loss=0.3010  val_macroF1=0.8449  (165 s)
+    TabM epoch  24  val_loss=0.2925  val_macroF1=0.8501  *  (172 s)
+    TabM epoch  25  val_loss=0.3062  val_macroF1=0.8414  (179 s)
+    TabM epoch  26  val_loss=0.2941  val_macroF1=0.8465  (186 s)
+    TabM epoch  27  val_loss=0.3031  val_macroF1=0.8421  (192 s)
+    TabM epoch  28  val_loss=0.3062  val_macroF1=0.8408  (199 s)
+    TabM epoch  29  val_loss=0.2968  val_macroF1=0.8432  (206 s)
+    TabM epoch  30  val_loss=0.2982  val_macroF1=0.8425  (212 s)
+    TabM epoch  31  val_loss=0.3003  val_macroF1=0.8430  (219 s)
+    TabM epoch  32  val_loss=0.2973  val_macroF1=0.8432  (226 s)
+    TabM epoch  33  val_loss=0.2961  val_macroF1=0.8439  (232 s)
+    TabM durdu: en iyi epoch val_loss'a göre 24 (macro-F1 0.8500), macro-F1'e göre 24 (macro-F1 0.8500)
+  dss_guard ile karşılaştırma (yeniden eğitilen TabM): {'disagree': 1.0, 'energy': 1.0, 'alarm_agreement': 1.0}
+  gruplar (dss kararı): {'alarm_unknown': 7617, 'guard_unknown': 66, 'silent_unknown': 1, 'alarm_benign': 201, 'guard_benign': 367}
+  alarm_unknown   (disagree): n=50  AUC SHAP -9.401 / rastgele -164.056  SHAP daha iyi %92  p=2.070065541204258e-08  port payı 0.2869
+  guard_unknown   (energy): n=50  AUC SHAP 0.573 / rastgele 0.045  SHAP daha iyi %100  p=1.7763568394002505e-15  port payı 0.5867
+  alarm_benign    (disagree): n=50  AUC SHAP 13.277 / rastgele -56.666  SHAP daha iyi %100  p=1.7763568394002505e-15  port payı 0.3559
+  guard_benign    (energy): n=50  AUC SHAP 0.564 / rastgele 0.020  SHAP daha iyi %100  p=1.7763568394002505e-15  port payı 0.5104
+  (326 s, 4,156,771 model satırı)
+
+=== MALWARE: eğitim 190834, kalibrasyon 21204, test 59302 (bilinmeyen 6291) ===
+TabM: torch 2.11.0+cu128, cihaz cuda
+    TabM: 25 özellik (0 seyrek sütun standartlaştırıldı, 0 sabit sütun atıldı)
+    TabM epoch   0  val_loss=0.3804  val_macroF1=0.7993  *  (8 s)
+    TabM epoch   1  val_loss=0.3544  val_macroF1=0.8098  *  (16 s)
+    TabM epoch   2  val_loss=0.3541  val_macroF1=0.8065  *  (25 s)
+    TabM epoch   3  val_loss=0.3219  val_macroF1=0.8166  *  (33 s)
+    TabM epoch   4  val_loss=0.3371  val_macroF1=0.8111  (41 s)
+    TabM epoch   5  val_loss=0.3355  val_macroF1=0.8176  (49 s)
+    TabM epoch   6  val_loss=0.3382  val_macroF1=0.8173  (57 s)
+    TabM epoch   7  val_loss=0.3166  val_macroF1=0.8208  *  (64 s)
+    TabM epoch   8  val_loss=0.3160  val_macroF1=0.8196  *  (72 s)
+    TabM epoch   9  val_loss=0.3150  val_macroF1=0.8193  *  (80 s)
+    TabM epoch  10  val_loss=0.3191  val_macroF1=0.8189  (88 s)
+    TabM epoch  11  val_loss=0.3153  val_macroF1=0.8213  (96 s)
+    TabM epoch  12  val_loss=0.3221  val_macroF1=0.8197  (104 s)
+    TabM epoch  13  val_loss=0.3318  val_macroF1=0.8179  (112 s)
+    TabM epoch  14  val_loss=0.3239  val_macroF1=0.8201  (120 s)
+    TabM epoch  15  val_loss=0.3255  val_macroF1=0.8194  (128 s)
+    TabM epoch  16  val_loss=0.3299  val_macroF1=0.8196  (136 s)
+    TabM epoch  17  val_loss=0.3232  val_macroF1=0.8194  (144 s)
+    TabM epoch  18  val_loss=0.3219  val_macroF1=0.8205  (151 s)
+    TabM durdu: en iyi epoch val_loss'a göre 9 (macro-F1 0.8193), macro-F1'e göre 11 (macro-F1 0.8213)
+  dss_guard ile karşılaştırma (yeniden eğitilen TabM): {'disagree': 1.0, 'energy': 1.0, 'alarm_agreement': 1.0}
+  gruplar (dss kararı): {'alarm_unknown': 3216, 'guard_unknown': 897, 'silent_unknown': 0, 'alarm_benign': 314, 'guard_benign': 143}
+  alarm_unknown   (disagree): n=50  AUC SHAP 100.011 / rastgele -12.515  SHAP daha iyi %100  p=1.7763568394002505e-15  port payı 0.4958
+  guard_unknown   (energy): n=50  AUC SHAP 0.409 / rastgele 0.032  SHAP daha iyi %100  p=1.7763568394002505e-15  port payı 0.4782
+  alarm_benign    (disagree): n=50  AUC SHAP -23.196 / rastgele -49.384  SHAP daha iyi %90  p=7.65609797781508e-12  port payı 0.1518
+  guard_benign    (energy): n=50  AUC SHAP 0.388 / rastgele 0.025  SHAP daha iyi %100  p=1.7763568394002505e-15  port payı 0.4503
+  (246 s, 4,140,270 model satırı)
+
+Çıktı: outputs/dnn_edgeiiot/xai_unknown_decision/xai_unknown_decision_C_seq_ack_yok_ek_aileler.json  (821 s)
