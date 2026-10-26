@@ -1,0 +1,4744 @@
+{
+  "dataset_id": "dnn_edgeiiot",
+  "condition": "C_seq_ack_yok",
+  "dropped_features": [
+    "tcp.seq",
+    "tcp.ack"
+  ],
+  "status": "Analiz planı sonuçlardan önce yazıldı (README, Kaçışların Karşı-Olgusal Açıklaması / XAI-3); eşik yok",
+  "settings": {
+    "dataset": "dnn_edgeiiot",
+    "data_file": "/kaggle/input/datasets/mohamedamineferrag/edgeiiotset-cyber-security-dataset-of-iot-iiot/Edge-IIoTset dataset/Selected dataset for ML and DL/DNN-EdgeIIoT-dataset.csv",
+    "run_dir": null,
+    "params_from": "metrics",
+    "manifest": "outputs/dnn_edgeiiot/manifest.json",
+    "rows_dir": "outputs/dnn_edgeiiot/dss_guard",
+    "xai2_dir": "outputs/dnn_edgeiiot/xai_unknown_decision",
+    "out_dir": "outputs/dnn_edgeiiot/xai_escape_counterfactual",
+    "condition": "C_seq_ack_yok",
+    "families": "BRUTEFORCE,WEB",
+    "cap": 40000,
+    "seed": 42,
+    "cal_size": 0.1,
+    "target": 0.95,
+    "q": 0.05,
+    "per_group": 50,
+    "k_max": 5,
+    "n_random": 20,
+    "n_real_ref": 1000,
+    "n_jobs": -1,
+    "quick": false
+  },
+  "port_columns": [
+    "tcp.dstport",
+    "udp.port"
+  ],
+  "grid_percentiles": [
+    5,
+    15,
+    25,
+    35,
+    45,
+    55,
+    65,
+    75,
+    85,
+    95
+  ],
+  "families": {
+    "BRUTEFORCE": {
+      "categories": [
+        "BRUTEFORCE"
+      ],
+      "decision_source": "dss",
+      "model": "outputs/dnn_edgeiiot/xai_unknown_decision/models/TabM_BRUTEFORCE_C_seq_ack_yok.joblib",
+      "check_vs_dss_guard": {
+        "disagree": 1.0,
+        "energy": 1.0,
+        "alarm_agreement": 1.0
+      },
+      "tau_alarm": 0.004626797512173653,
+      "tau_guard": -4.124326229095459,
+      "score_iqr": {
+        "disagree": 0.0006675563540738949,
+        "energy": 8.774068832397461
+      },
+      "summary": {
+        "n_silent": 195,
+        "n_explained": 50,
+        "rows_from": "XAI-2 sessiz kaçan örneklemi",
+        "margin_start": {
+          "median": -0.02043006200464812,
+          "q10": -0.026279716765080362,
+          "q90": -0.008097494445276543,
+          "median_alarm": -4.647143105112757,
+          "median_energy": -0.02043006200464812
+        },
+        "caught_curve": {
+          "ks": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "greedy": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "random": [
+            0.137,
+            0.28,
+            0.389,
+            0.479,
+            0.562
+          ]
+        },
+        "k_needed_median": 1.0,
+        "change_size_iqr_median": 1.0,
+        "change_size_iqr_q90": 1.0,
+        "top_changed_features": [
+          {
+            "feature": "tcp.connection.syn",
+            "count": 40,
+            "share_of_changes": 0.8
+          },
+          {
+            "feature": "tcp.connection.rst",
+            "count": 7,
+            "share_of_changes": 0.14
+          },
+          {
+            "feature": "tcp.flags.ack",
+            "count": 2,
+            "share_of_changes": 0.04
+          },
+          {
+            "feature": "tcp.flags",
+            "count": 1,
+            "share_of_changes": 0.02
+          }
+        ],
+        "first_change_features": {
+          "tcp.connection.syn": 40,
+          "tcp.connection.rst": 7,
+          "tcp.flags.ack": 2,
+          "tcp.flags": 1
+        },
+        "trigger": {
+          "alarm+energy": 38,
+          "alarm": 12
+        },
+        "port_share_of_changes": 0.0,
+        "rows_with_port_change": 0.0,
+        "realism": {
+          "d_nn_real_known_median": 0.0,
+          "d_nn_original_median": 6.928497797372e-05,
+          "d_nn_cf_median": 1.000000002449188,
+          "cf_over_real_median_ratio": 1000000002449.188,
+          "cf_percentile_in_real": [
+            100.0,
+            99.9,
+            99.9,
+            99.9,
+            100.0,
+            100.0,
+            99.9,
+            99.9,
+            99.9,
+            99.9,
+            99.9,
+            99.9,
+            99.9,
+            99.9,
+            99.9,
+            100.0,
+            99.9,
+            100.0,
+            99.9,
+            99.9,
+            100.0,
+            99.9,
+            100.0,
+            99.9,
+            99.9,
+            99.9,
+            100.0,
+            99.9,
+            99.9,
+            100.0,
+            99.9,
+            99.9,
+            100.0,
+            99.9,
+            99.9,
+            99.9,
+            99.9,
+            100.0,
+            99.9,
+            99.9,
+            99.9,
+            99.9,
+            100.0,
+            99.9,
+            100.0,
+            99.9,
+            99.9,
+            99.9,
+            99.9,
+            99.9
+          ]
+        },
+        "energy_only": {
+          "note": "ek analiz, sonuçlardan önce eklendi: yalnız enerji kontrolü (alarm sayılmaz)",
+          "caught_curve": {
+            "ks": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "greedy": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "random": [
+              0.089,
+              0.169,
+              0.224,
+              0.287,
+              0.356
+            ]
+          },
+          "top_changed_features": [
+            {
+              "feature": "tcp.len",
+              "count": 35,
+              "share_of_changes": 0.7
+            },
+            {
+              "feature": "tcp.connection.rst",
+              "count": 12,
+              "share_of_changes": 0.24
+            },
+            {
+              "feature": "tcp.dstport",
+              "count": 3,
+              "share_of_changes": 0.06
+            }
+          ],
+          "port_share_of_changes": 0.06,
+          "change_size_iqr_median": 0.7105263157894737
+        },
+        "consistency_with_xai2": {
+          "spearman_gain_vs_abs_shap_median": -0.2959320151246863,
+          "shap_rank_of_changed_median": 17.0,
+          "changed_in_shap_top5_share": 0.2
+        }
+      },
+      "rows": [
+        {
+          "test_row": 172474,
+          "m0": -0.023180114774792676,
+          "m0_alarm": -4.32505965320058,
+          "m0_energy": -0.023180114774792676,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 1020.3760205562021
+            }
+          ],
+          "d_nn_original": 0.0003959141650843378,
+          "d_nn_cf": 1.00000007837401,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.31890575373516844,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.3435792918431378
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 157910,
+          "m0": -0.018597916280355876,
+          "m0_alarm": -5.968691978008215,
+          "m0_energy": -0.018597916280355876,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.rst",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 120.39820232886235
+            }
+          ],
+          "d_nn_original": 3.959141785445039e-05,
+          "d_nn_cf": 0.18181819906046473,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": 0.8007572173962101,
+            "shap_rank_of_changed": [
+              1
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.connection.rst",
+                "from": 0.0,
+                "to": 1.0,
+                "size_iqr": 1.0,
+                "m_after": 0.21686752291615535
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 166603,
+          "m0": -0.03925261823610113,
+          "m0_alarm": -5.8273493750899314,
+          "m0_energy": -0.03925261823610113,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 158.3621067058443
+            }
+          ],
+          "d_nn_original": 0.00011877424982441614,
+          "d_nn_cf": 1.0000000070536612,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": 0.27852424952911653,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.connection.rst",
+                "from": 0.0,
+                "to": 1.0,
+                "size_iqr": 1.0,
+                "m_after": 0.2276363279457425
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 166663,
+          "m0": -0.023429400720282583,
+          "m0_alarm": -0.1404301931118579,
+          "m0_energy": -0.023429400720282583,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 776.4579745555587
+            }
+          ],
+          "d_nn_original": 0.0,
+          "d_nn_cf": 1.0,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.25241260113576186,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.3106702183347068
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 158142,
+          "m0": -0.0225155696382218,
+          "m0_alarm": -4.377516241459892,
+          "m0_energy": -0.0225155696382218,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 1021.7605173350087
+            }
+          ],
+          "d_nn_original": 0.0002375484996488323,
+          "d_nn_cf": 1.0000000282146444,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.1563263498701806,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.343780793906445
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 161065,
+          "m0": -0.008223066737765967,
+          "m0_alarm": -4.7594671698450375,
+          "m0_energy": -0.008223066737765967,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 1064.7039358988513
+            }
+          ],
+          "d_nn_original": 0.00015836566861360032,
+          "d_nn_cf": 1.0000000125398425,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.3314118617247829,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.34145131266685635
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 160928,
+          "m0": -0.023561733678047554,
+          "m0_alarm": -0.48552757800078045,
+          "m0_energy": -0.023561733678047554,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 784.5158422390479
+            }
+          ],
+          "d_nn_original": 0.0,
+          "d_nn_cf": 1.0,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.39167472590032015,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.31248414450085094
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 169626,
+          "m0": -0.02064307187239342,
+          "m0_alarm": -4.602878673402878,
+          "m0_energy": -0.02064307187239342,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 899.610150558279
+            }
+          ],
+          "d_nn_original": 7.918283570890078e-05,
+          "d_nn_cf": 1.0000000031349607,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.42649025709145966,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.3288005128758066
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 172510,
+          "m0": -0.004463506428827477,
+          "m0_alarm": -5.102667188775645,
+          "m0_energy": -0.004463506428827477,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 968.9125806053295
+            }
+          ],
+          "d_nn_original": 7.918283851310196e-05,
+          "d_nn_cf": 1.000000003134961,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.2959320151246863,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.31521944228207016
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 169618,
+          "m0": -0.022770507586835964,
+          "m0_alarm": -4.395440769277862,
+          "m0_energy": -0.022770507586835964,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 892.3469443820373
+            }
+          ],
+          "d_nn_original": 5.93871230427405e-05,
+          "d_nn_cf": 1.0000000017634152,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.3568591947091806,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.3301649825146588
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 172384,
+          "m0": -0.023437606994049526,
+          "m0_alarm": -0.1707880484449067,
+          "m0_energy": -0.023437606994049526,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 777.1335261245289
+            }
+          ],
+          "d_nn_original": 3.959141785445039e-05,
+          "d_nn_cf": 1.0000000007837402,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.3742669603047504,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.3108252272376987
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 161029,
+          "m0": -0.020365362872730584,
+          "m0_alarm": -4.497094940738673,
+          "m0_energy": -0.020365362872730584,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 1026.774027855452
+            }
+          ],
+          "d_nn_original": 3.959141785445039e-05,
+          "d_nn_cf": 1.0000000007837402,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.24386910579748175,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.34405585352964335
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 160753,
+          "m0": -0.010860215310885171,
+          "m0_alarm": -5.030187809167991,
+          "m0_energy": -0.010860215310885171,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.rst",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 114.02332057235151
+            }
+          ],
+          "d_nn_original": 7.918283570890078e-05,
+          "d_nn_cf": 1.0000000031349607,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": 0.7441134253820597,
+            "shap_rank_of_changed": [
+              1
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.connection.rst",
+                "from": 0.0,
+                "to": 1.0,
+                "size_iqr": 1.0,
+                "m_after": 0.2172547394763506
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 163725,
+          "m0": -0.013718444160056903,
+          "m0_alarm": -5.029741370118975,
+          "m0_energy": -0.013718444160056903,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 118.18038242116353
+            }
+          ],
+          "d_nn_original": 0.000118774246085481,
+          "d_nn_cf": 1.0000000070536612,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": 0.2938935377559395,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.connection.rst",
+                "from": 0.0,
+                "to": 1.0,
+                "size_iqr": 1.0,
+                "m_after": 0.22768638078110248
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 160939,
+          "m0": -0.024362687736174927,
+          "m0_alarm": -1.2943858470069252,
+          "m0_energy": -0.024362687736174927,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 809.0951690972607
+            }
+          ],
+          "d_nn_original": 3.959141224604754e-05,
+          "d_nn_cf": 1.00000000078374,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.3568591947091806,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.31770243790459374
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 161034,
+          "m0": -0.010131269946408141,
+          "m0_alarm": -5.027174345587137,
+          "m0_energy": -0.010131269946408141,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 941.163625786917
+            }
+          ],
+          "d_nn_original": 0.0002375484996488323,
+          "d_nn_cf": 1.0000000282146444,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.2959320151246863,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.32030026701367065
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 169420,
+          "m0": -0.018918287034370047,
+          "m0_alarm": -5.974852836884628,
+          "m0_energy": -0.018918287034370047,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.rst",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 120.16623259899394
+            }
+          ],
+          "d_nn_original": 0.0,
+          "d_nn_cf": 0.18181818181818152,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": 0.8007572173962101,
+            "shap_rank_of_changed": [
+              1
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.connection.rst",
+                "from": 0.0,
+                "to": 1.0,
+                "size_iqr": 1.0,
+                "m_after": 0.21651891931961187
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 158161,
+          "m0": -0.012026158339997987,
+          "m0_alarm": -4.9904993777105195,
+          "m0_energy": -0.012026158339997987,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 932.984148106476
+            }
+          ],
+          "d_nn_original": 0.00017816137286715667,
+          "d_nn_cf": 1.0000000158707372,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.33074754631582587,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.32192452499804897
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 166680,
+          "m0": -0.025227933329840684,
+          "m0_alarm": -1.9144896860893488,
+          "m0_energy": -0.025227933329840684,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 830.4627241490467
+            }
+          ],
+          "d_nn_original": 1.979572014402692e-05,
+          "d_nn_cf": 1.0000000001959353,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.3133397807202561,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.3221483633429338
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 166759,
+          "m0": -0.012914011946160757,
+          "m0_alarm": -4.967039005684759,
+          "m0_energy": -0.012914011946160757,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 929.1740586865589
+            }
+          ],
+          "d_nn_original": 1.979572014402692e-05,
+          "d_nn_cf": 1.0000000001959353,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.2263009527424072,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.3226792168671425
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 163824,
+          "m0": -0.024865281244762387,
+          "m0_alarm": -1.6638588039720899,
+          "m0_energy": -0.024865281244762387,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 821.7943957099338
+            }
+          ],
+          "d_nn_original": 0.000316731331618798,
+          "d_nn_cf": 1.0000000501593669,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.3568591947091806,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.32036825408971337
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 158184,
+          "m0": -0.012748908239511893,
+          "m0_alarm": -4.6889967659579534,
+          "m0_energy": -0.012748908239511893,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 1048.577307419077
+            }
+          ],
+          "d_nn_original": 7.918284131730303e-05,
+          "d_nn_cf": 1.0000000031349612,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.26888132177671065,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.3428864731043997
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 155078,
+          "m0": -0.02609432019336807,
+          "m0_alarm": -2.6148632661847455,
+          "m0_energy": -0.02609432019336807,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 849.1993245971751
+            }
+          ],
+          "d_nn_original": 0.00021775279106151028,
+          "d_nn_cf": 1.0000000237081388,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.20889318714683738,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.3261918824626821
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 154832,
+          "m0": -0.006967343812871741,
+          "m0_alarm": -5.7081501490028135,
+          "m0_energy": -0.006967343812871741,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm",
+          "changes": [
+            {
+              "feature": "tcp.flags.ack",
+              "from": 1.0,
+              "to": 0.0,
+              "size_iqr": 1.0,
+              "m_after": 135.69507919213663
+            }
+          ],
+          "d_nn_original": 5.938711930380518e-05,
+          "d_nn_cf": 1.0000000017634152,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": 0.44389802268702944,
+            "shap_rank_of_changed": [
+              5
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.dstport",
+                "from": 49468.0,
+                "to": 59082.0,
+                "size_iqr": 0.19031593950431547,
+                "m_after": 0.2157395678695796
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 157887,
+          "m0": -0.01529105968319653,
+          "m0_alarm": -5.109653959892737,
+          "m0_energy": -0.01529105968319653,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.rst",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 115.81514833947982
+            }
+          ],
+          "d_nn_original": 0.00011877424982441614,
+          "d_nn_cf": 1.0000000070536612,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": 0.5127504275741924,
+            "shap_rank_of_changed": [
+              3
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.connection.rst",
+                "from": 0.0,
+                "to": 1.0,
+                "size_iqr": 1.0,
+                "m_after": 0.2191288676276956
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 154941,
+          "m0": -0.0007733461967127515,
+          "m0_alarm": -4.43794176674413,
+          "m0_energy": -0.0007733461967127515,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.rst",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 117.2183955583451
+            }
+          ],
+          "d_nn_original": 1.979572014402692e-05,
+          "d_nn_cf": 1.0000000001959353,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": 0.6065462374963008,
+            "shap_rank_of_changed": [
+              3
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.connection.rst",
+                "from": 0.0,
+                "to": 1.0,
+                "size_iqr": 1.0,
+                "m_after": 0.22421852361417774
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 172423,
+          "m0": -0.02657849034561782,
+          "m0_alarm": -3.294164923166614,
+          "m0_energy": -0.02657849034561782,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 865.0025526298426
+            }
+          ],
+          "d_nn_original": 0.0001979570825421689,
+          "d_nn_cf": 1.000000019593503,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.3133397807202561,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.3293584172130451
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 169563,
+          "m0": -0.02471572054670522,
+          "m0_alarm": -1.5512222319054985,
+          "m0_energy": -0.02471572054670522,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 818.0157355990673
+            }
+          ],
+          "d_nn_original": 3.95914066376439e-05,
+          "d_nn_cf": 1.0000000007837397,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.3568591947091806,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.31958993521717494
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 163852,
+          "m0": -0.026567512416472632,
+          "m0_alarm": -3.3392106232122702,
+          "m0_energy": -0.026567512416472632,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 865.8289113095701
+            }
+          ],
+          "d_nn_original": 7.91828329046995e-05,
+          "d_nn_cf": 1.0000000031349605,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.3133397807202561,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.3294995270795078
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 160970,
+          "m0": -0.02620681679401427,
+          "m0_alarm": -2.40369759600045,
+          "m0_energy": -0.02620681679401427,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 1004.4382357941613
+            }
+          ],
+          "d_nn_original": 0.0005542798315346971,
+          "d_nn_cf": 1.000000153613054,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.3564240777040118,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.33002695679413163
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 158059,
+          "m0": -0.025646453291954873,
+          "m0_alarm": -2.2688283592928906,
+          "m0_energy": -0.025646453291954873,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 840.4295652061259
+            }
+          ],
+          "d_nn_original": 1.979568649360268e-05,
+          "d_nn_cf": 1.0000000001959346,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.33074754631582587,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.32422722715552726
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 163741,
+          "m0": -0.029752035753702225,
+          "m0_alarm": -4.75634209650193,
+          "m0_energy": -0.029752035753702225,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 248.8761060009548
+            }
+          ],
+          "d_nn_original": 7.918283570890078e-05,
+          "d_nn_cf": 1.0000000031349607,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": 0.25012215979228897,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.connection.rst",
+                "from": 0.0,
+                "to": 1.0,
+                "size_iqr": 1.0,
+                "m_after": 0.23133746610700243
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 169632,
+          "m0": -0.019468107376755354,
+          "m0_alarm": -4.694532610165744,
+          "m0_energy": -0.019468107376755354,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 903.6489953469118
+            }
+          ],
+          "d_nn_original": 0.00017816137535978007,
+          "d_nn_cf": 1.0000000158707376,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.46130578828259927,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.32796529354873843
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 166760,
+          "m0": -0.012840916328832672,
+          "m0_alarm": -4.9692265570249345,
+          "m0_energy": -0.012840916328832672,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 929.4853159915324
+            }
+          ],
+          "d_nn_original": 3.959141785445039e-05,
+          "d_nn_cf": 1.0000000007837402,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.3481553119113957,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.3226166644094885
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 166712,
+          "m0": -0.02624773947048122,
+          "m0_alarm": -3.6849999886271667,
+          "m0_energy": -0.02624773947048122,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 873.3628381251348
+            }
+          ],
+          "d_nn_original": 0.0,
+          "d_nn_cf": 1.0,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.3133397807202561,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.33053093613040824
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 169629,
+          "m0": -0.024967669455205593,
+          "m0_alarm": -4.141640169912593,
+          "m0_energy": -0.024967669455205593,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 1017.0784431645545
+            }
+          ],
+          "d_nn_original": 3.959142907125371e-05,
+          "d_nn_cf": 1.0000000007837406,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.1563263498701806,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.34256910497704524
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 155136,
+          "m0": -0.020494761136565655,
+          "m0_alarm": -4.615267357013056,
+          "m0_energy": -0.020494761136565655,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 900.1285555819958
+            }
+          ],
+          "d_nn_original": 0.0,
+          "d_nn_cf": 1.0,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.4090824914958899,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.3286967795973122
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 172305,
+          "m0": -0.020089066873848812,
+          "m0_alarm": -5.003133602797656,
+          "m0_energy": -0.020089066873848812,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 145.0445173663799
+            }
+          ],
+          "d_nn_original": 0.00017816137660609175,
+          "d_nn_cf": 1.0000000158707378,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": 0.30014659175074676,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.connection.rst",
+                "from": 0.0,
+                "to": 1.0,
+                "size_iqr": 1.0,
+                "m_after": 0.2294704301326547
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 163572,
+          "m0": -0.00627529950725402,
+          "m0_alarm": -5.684846030644208,
+          "m0_energy": -0.00627529950725402,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm",
+          "changes": [
+            {
+              "feature": "tcp.flags.ack",
+              "from": 1.0,
+              "to": 0.0,
+              "size_iqr": 1.0,
+              "m_after": 136.90885767859976
+            }
+          ],
+          "d_nn_original": 1.9795697710417117e-05,
+          "d_nn_cf": 1.0000000001959348,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": 0.6179756786427273,
+            "shap_rank_of_changed": [
+              5
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.dstport",
+                "from": 49420.0,
+                "to": 59082.0,
+                "size_iqr": 0.1912661335022567,
+                "m_after": 0.2157395678695796
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 172296,
+          "m0": -0.011241562483220616,
+          "m0_alarm": -4.989740431327194,
+          "m0_energy": -0.011241562483220616,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 112.18278630497562
+            }
+          ],
+          "d_nn_original": 0.000118774246085481,
+          "d_nn_cf": 1.0000000070536608,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": 0.26888132177671065,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.connection.rst",
+                "from": 0.0,
+                "to": 1.0,
+                "size_iqr": 1.0,
+                "m_after": 0.22707811111794665
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 163823,
+          "m0": -0.024759088801447088,
+          "m0_alarm": -1.5838122824836243,
+          "m0_energy": -0.024759088801447088,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 819.1041540005668
+            }
+          ],
+          "d_nn_original": 0.00011877424795494859,
+          "d_nn_cf": 1.000000007053661,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.3568591947091806,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.31981498276465126
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 172476,
+          "m0": -0.022808332530821353,
+          "m0_alarm": -4.354948747532163,
+          "m0_energy": -0.022808332530821353,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 1021.1640747655241
+            }
+          ],
+          "d_nn_original": 3.959141785445039e-05,
+          "d_nn_cf": 1.0000000007837402,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.3314118617247829,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.34370140771833196
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 172478,
+          "m0": -0.016599009290806214,
+          "m0_alarm": -4.859157009490182,
+          "m0_energy": -0.016599009290806214,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 914.3322817898509
+            }
+          ],
+          "d_nn_original": 0.0002375484996488323,
+          "d_nn_cf": 1.0000000282146444,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.4090824914958899,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.32572643457078143
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 154874,
+          "m0": -0.010929017579686178,
+          "m0_alarm": -5.032420004413068,
+          "m0_energy": -0.010929017579686178,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.rst",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 114.04457107108465
+            }
+          ],
+          "d_nn_original": 2.9802322387695312e-08,
+          "d_nn_cf": 1.0000000000000004,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": 0.6940889934236019,
+            "shap_rank_of_changed": [
+              2
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.connection.rst",
+                "from": 0.0,
+                "to": 1.0,
+                "size_iqr": 1.0,
+                "m_after": 0.21726759234883988
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 169695,
+          "m0": -0.006600561417818027,
+          "m0_alarm": -4.766275365342523,
+          "m0_energy": -0.006600561417818027,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 1070.9947085385277
+            }
+          ],
+          "d_nn_original": 0.0002375484996488323,
+          "d_nn_cf": 1.0000000282146444,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.16883245785979503,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.34083461934519804
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 157872,
+          "m0": -0.018546504790398724,
+          "m0_alarm": -5.977710046798326,
+          "m0_energy": -0.018546504790398724,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm",
+          "changes": [
+            {
+              "feature": "tcp.flags",
+              "from": 16.0,
+              "to": 0.0,
+              "size_iqr": 0.7272727272727273,
+              "m_after": 126.35423496958693
+            }
+          ],
+          "d_nn_original": 1.9795708927225195e-05,
+          "d_nn_cf": 0.727272727542138,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": 0.7485339206095007,
+            "shap_rank_of_changed": [
+              1
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.dstport",
+                "from": 49886.0,
+                "to": 59082.0,
+                "size_iqr": 0.18204133343891044,
+                "m_after": 0.2157395678695796
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 157866,
+          "m0": -0.010076488993049993,
+          "m0_alarm": -5.004026480895687,
+          "m0_energy": -0.010076488993049993,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.rst",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 113.79313659867915
+            }
+          ],
+          "d_nn_original": 5.93871230427405e-05,
+          "d_nn_cf": 1.0000000017634152,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": 0.531509589558614,
+            "shap_rank_of_changed": [
+              1
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.connection.rst",
+                "from": 0.0,
+                "to": 1.0,
+                "size_iqr": 1.0,
+                "m_after": 0.2171052874706612
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 160980,
+          "m0": -0.02691782791780857,
+          "m0_alarm": -3.2162836310658736,
+          "m0_energy": -0.02691782791780857,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 1009.5326410702861
+            }
+          ],
+          "d_nn_original": 0.00011877424982441614,
+          "d_nn_cf": 1.0000000070536612,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.2938935377559395,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.33607825491794924
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 172463,
+          "m0": -0.019673481605664525,
+          "m0_alarm": -4.679018853212458,
+          "m0_energy": -0.019673481605664525,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 902.9304963414263
+            }
+          ],
+          "d_nn_original": 1.9795697710417117e-05,
+          "d_nn_cf": 1.0000000001959348,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.322043663518041,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.32811844109493216
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 160998,
+          "m0": -0.02346336708521199,
+          "m0_alarm": -4.313407594021277,
+          "m0_energy": -0.02346336708521199,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.connection.syn",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 889.818760047463
+            }
+          ],
+          "d_nn_original": 0.0,
+          "d_nn_cf": 1.0,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.44389802268702944,
+            "shap_rank_of_changed": [
+              17
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 108.0,
+                "size_iqr": 0.7105263157894737,
+                "m_after": 0.33049395355227307
+              }
+            ]
+          }
+        }
+      ],
+      "model_calls": 12576,
+      "seconds": 44.4
+    },
+    "WEB": {
+      "categories": [
+        "WEB"
+      ],
+      "decision_source": "dss",
+      "model": "outputs/dnn_edgeiiot/xai_unknown_decision/models/TabM_WEB_C_seq_ack_yok.joblib",
+      "check_vs_dss_guard": {
+        "disagree": 1.0,
+        "energy": 1.0,
+        "alarm_agreement": 1.0
+      },
+      "tau_alarm": 0.009186409413814545,
+      "tau_guard": -4.853311538696289,
+      "score_iqr": {
+        "disagree": 0.0015826004673726857,
+        "energy": 8.27633023262024
+      },
+      "summary": {
+        "n_silent": 66,
+        "n_explained": 50,
+        "rows_from": "XAI-2 sessiz kaçan örneklemi",
+        "margin_start": {
+          "median": -0.018350584334110312,
+          "q10": -0.6294171840334487,
+          "q90": -0.005726507409448987,
+          "median_alarm": -2.642057674410804,
+          "median_energy": -0.018350584334110312
+        },
+        "caught_curve": {
+          "ks": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "greedy": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "random": [
+            0.16,
+            0.296,
+            0.412,
+            0.498,
+            0.587
+          ]
+        },
+        "k_needed_median": 1.0,
+        "change_size_iqr_median": 2.097457627118644,
+        "change_size_iqr_q90": 2.097457627118644,
+        "top_changed_features": [
+          {
+            "feature": "tcp.len",
+            "count": 34,
+            "share_of_changes": 0.68
+          },
+          {
+            "feature": "icmp.seq_le",
+            "count": 15,
+            "share_of_changes": 0.3
+          },
+          {
+            "feature": "http.response",
+            "count": 1,
+            "share_of_changes": 0.02
+          }
+        ],
+        "first_change_features": {
+          "tcp.len": 34,
+          "icmp.seq_le": 15,
+          "http.response": 1
+        },
+        "trigger": {
+          "alarm+energy": 35,
+          "alarm": 15
+        },
+        "port_share_of_changes": 0.0,
+        "rows_with_port_change": 0.0,
+        "realism": {
+          "d_nn_real_known_median": 0.0,
+          "d_nn_original_median": 5.9398884568212125e-05,
+          "d_nn_cf_median": 1.6812070336255946,
+          "cf_over_real_median_ratio": 1681207033625.5947,
+          "cf_percentile_in_real": [
+            99.9,
+            99.9,
+            99.8,
+            99.8,
+            99.8,
+            99.9,
+            99.8,
+            99.9,
+            99.8,
+            99.9,
+            99.9,
+            99.9,
+            99.9,
+            99.9,
+            99.9,
+            99.8,
+            99.8,
+            99.8,
+            99.9,
+            99.9,
+            99.9,
+            99.9,
+            99.9,
+            99.9,
+            99.9,
+            99.9,
+            99.9,
+            99.8,
+            99.9,
+            99.9,
+            99.8,
+            99.8,
+            99.9,
+            99.9,
+            99.9,
+            99.9,
+            99.9,
+            99.9,
+            99.8,
+            99.9,
+            99.8,
+            99.9,
+            99.9,
+            99.8,
+            99.9,
+            99.9,
+            99.9,
+            99.8,
+            99.9,
+            99.9
+          ]
+        },
+        "energy_only": {
+          "note": "ek analiz, sonuçlardan önce eklendi: yalnız enerji kontrolü (alarm sayılmaz)",
+          "caught_curve": {
+            "ks": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "greedy": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "random": [
+              0.095,
+              0.178,
+              0.249,
+              0.319,
+              0.383
+            ]
+          },
+          "top_changed_features": [
+            {
+              "feature": "tcp.len",
+              "count": 34,
+              "share_of_changes": 0.68
+            },
+            {
+              "feature": "tcp.dstport",
+              "count": 16,
+              "share_of_changes": 0.32
+            }
+          ],
+          "port_share_of_changes": 0.32,
+          "change_size_iqr_median": 2.097457627118644
+        },
+        "consistency_with_xai2": {
+          "spearman_gain_vs_abs_shap_median": -0.38297084310253526,
+          "shap_rank_of_changed_median": 5.0,
+          "changed_in_shap_top5_share": 0.68
+        }
+      },
+      "rows": [
+        {
+          "test_row": 255260,
+          "m0": -0.02807972530528157,
+          "m0_alarm": -2.7104503684945485,
+          "m0_energy": -0.02807972530528157,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 568.6324602910111
+            }
+          ],
+          "d_nn_original": 0.00011879776539822933,
+          "d_nn_cf": 1.6812040246574158,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.38297084310253526,
+            "shap_rank_of_changed": [
+              5
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.38143694755735136
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 45335,
+          "m0": -0.007087570824503301,
+          "m0_alarm": -2.592420891063913,
+          "m0_energy": -0.007087570824503301,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 569.8802932920821
+            }
+          ],
+          "d_nn_original": 0.00013859739447767978,
+          "d_nn_cf": 1.6812159075320348,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.4526019054848144,
+            "shap_rank_of_changed": [
+              5
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.3920084710693508
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 255477,
+          "m0": -0.6289135520833499,
+          "m0_alarm": -5.658753367048846,
+          "m0_energy": -0.6289135520833499,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm",
+          "changes": [
+            {
+              "feature": "icmp.seq_le",
+              "from": 0.0,
+              "to": 44615.25,
+              "size_iqr": 1.0,
+              "m_after": 392.8986533422924
+            }
+          ],
+          "d_nn_original": 0.0,
+          "d_nn_cf": 1.0,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.47871355387816905,
+            "shap_rank_of_changed": [
+              18
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.dstport",
+                "from": 60992.0,
+                "to": 4321.0,
+                "size_iqr": 1.1220647051835426,
+                "m_after": 0.4733946169848599
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 46400,
+          "m0": -0.6291421666734603,
+          "m0_alarm": -5.658946387214562,
+          "m0_energy": -0.6291421666734603,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm",
+          "changes": [
+            {
+              "feature": "icmp.seq_le",
+              "from": 0.0,
+              "to": 44615.25,
+              "size_iqr": 1.0,
+              "m_after": 392.88893642468173
+            }
+          ],
+          "d_nn_original": 0.0,
+          "d_nn_cf": 1.0,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.47871355387816905,
+            "shap_rank_of_changed": [
+              18
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.dstport",
+                "from": 60972.0,
+                "to": 4321.0,
+                "size_iqr": 1.1216687126282026,
+                "m_after": 0.4733946169848599
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 255474,
+          "m0": -0.6289135520833499,
+          "m0_alarm": -5.658753367048846,
+          "m0_energy": -0.6289135520833499,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm",
+          "changes": [
+            {
+              "feature": "icmp.seq_le",
+              "from": 0.0,
+              "to": 44615.25,
+              "size_iqr": 1.0,
+              "m_after": 392.8986533422924
+            }
+          ],
+          "d_nn_original": 0.0,
+          "d_nn_cf": 1.0,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.47871355387816905,
+            "shap_rank_of_changed": [
+              18
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.dstport",
+                "from": 60992.0,
+                "to": 4321.0,
+                "size_iqr": 1.1220647051835426,
+                "m_after": 0.4733946169848599
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 254932,
+          "m0": -0.017693835918618853,
+          "m0_alarm": -2.638981121281654,
+          "m0_energy": -0.017693835918618853,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 569.5645687946784
+            }
+          ],
+          "d_nn_original": 3.959925762487301e-05,
+          "d_nn_cf": 1.6812074304993359,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.33074754631582587,
+            "shap_rank_of_changed": [
+              4
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.38667742426601565
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 255370,
+          "m0": -0.6294376141578573,
+          "m0_alarm": -5.659323011928153,
+          "m0_energy": -0.6294376141578573,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm",
+          "changes": [
+            {
+              "feature": "icmp.seq_le",
+              "from": 0.0,
+              "to": 44615.25,
+              "size_iqr": 1.0,
+              "m_after": 392.876168846891
+            }
+          ],
+          "d_nn_original": 3.959925762487301e-05,
+          "d_nn_cf": 1.0000000007840506,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.47871355387816905,
+            "shap_rank_of_changed": [
+              18
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.dstport",
+                "from": 60946.0,
+                "to": 4321.0,
+                "size_iqr": 1.1211539223062605,
+                "m_after": 0.4733946169848599
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 254464,
+          "m0": -0.003815063587033785,
+          "m0_alarm": -2.583235955861202,
+          "m0_energy": -0.003815063587033785,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 569.8041021125226
+            }
+          ],
+          "d_nn_original": 0.0,
+          "d_nn_cf": 1.681219436934817,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.38297084310253526,
+            "shap_rank_of_changed": [
+              5
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.3936919542269573
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 255451,
+          "m0": -0.6595595453000992,
+          "m0_alarm": -5.205629112413613,
+          "m0_energy": -0.6595595453000992,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm",
+          "changes": [
+            {
+              "feature": "icmp.seq_le",
+              "from": 0.0,
+              "to": 44615.25,
+              "size_iqr": 1.0,
+              "m_after": 405.22765165406474
+            }
+          ],
+          "d_nn_original": 0.0,
+          "d_nn_cf": 1.0000000000000004,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.5440156975482285,
+            "shap_rank_of_changed": [
+              18
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.dstport",
+                "from": 60982.0,
+                "to": 4321.0,
+                "size_iqr": 1.1218667089058725,
+                "m_after": 0.4646076757867161
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 255182,
+          "m0": -0.02441710985469751,
+          "m0_alarm": -2.678813892552868,
+          "m0_energy": -0.02441710985469751,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 569.018274647614
+            }
+          ],
+          "d_nn_original": 0.00045539143903789407,
+          "d_nn_cf": 1.6812044574417646,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.38297084310253526,
+            "shap_rank_of_changed": [
+              5
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.3832822844289871
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 45678,
+          "m0": -0.01490252552001105,
+          "m0_alarm": -2.625841626586233,
+          "m0_energy": -0.01490252552001105,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 569.7119420451068
+            }
+          ],
+          "d_nn_original": 3.959925201758051e-05,
+          "d_nn_cf": 1.6812092586356555,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.3655630775069655,
+            "shap_rank_of_changed": [
+              5
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.3880451796126832
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 254730,
+          "m0": -0.011743979890212567,
+          "m0_alarm": -2.6103482274308654,
+          "m0_energy": -0.011743979890212567,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 569.8454555060749
+            }
+          ],
+          "d_nn_original": 0.00025739516032777883,
+          "d_nn_cf": 1.6812115797130123,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.38297084310253526,
+            "shap_rank_of_changed": [
+              5
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.38963297938306035
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 45499,
+          "m0": -0.011008126678294245,
+          "m0_alarm": -2.6073917234291724,
+          "m0_energy": -0.011008126678294245,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 569.8698607875157
+            }
+          ],
+          "d_nn_original": 0.00021779590623197093,
+          "d_nn_cf": 1.6812121929768378,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.38297084310253526,
+            "shap_rank_of_changed": [
+              5
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.39000096360358355
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 255098,
+          "m0": -0.0221665121396047,
+          "m0_alarm": -2.662096463078328,
+          "m0_energy": -0.0221665121396047,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 569.2128389746554
+            }
+          ],
+          "d_nn_original": 0.0004157921823649837,
+          "d_nn_cf": 1.6812051789042182,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.38297084310253526,
+            "shap_rank_of_changed": [
+              5
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.38441788188985565
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 46286,
+          "m0": -0.031344454576605695,
+          "m0_alarm": -2.7367293578853906,
+          "m0_energy": -0.031344454576605695,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 568.2704862787783
+            }
+          ],
+          "d_nn_original": 0.00041579218289901153,
+          "d_nn_cf": 1.6812038418433044,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.2872281323269014,
+            "shap_rank_of_changed": [
+              4
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.37975346439974483
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 46459,
+          "m0": -0.6595018155069311,
+          "m0_alarm": -5.205197170945213,
+          "m0_energy": -0.6595018155069311,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm",
+          "changes": [
+            {
+              "feature": "icmp.seq_le",
+              "from": 0.0,
+              "to": 44615.25,
+              "size_iqr": 1.0,
+              "m_after": 405.2297607524609
+            }
+          ],
+          "d_nn_original": 9.899814294072411e-05,
+          "d_nn_cf": 1.0000000049003162,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.49399126558977063,
+            "shap_rank_of_changed": [
+              18
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.dstport",
+                "from": 60988.0,
+                "to": 4321.0,
+                "size_iqr": 1.1219855066724747,
+                "m_after": 0.4646076757867161
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 46342,
+          "m0": -0.6294149140196256,
+          "m0_alarm": -5.659304180692474,
+          "m0_energy": -0.6294149140196256,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm",
+          "changes": [
+            {
+              "feature": "icmp.seq_le",
+              "from": 0.0,
+              "to": 44615.25,
+              "size_iqr": 1.0,
+              "m_after": 392.87722339608905
+            }
+          ],
+          "d_nn_original": 0.0,
+          "d_nn_cf": 1.0,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.47871355387816905,
+            "shap_rank_of_changed": [
+              18
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.dstport",
+                "from": 60948.0,
+                "to": 4321.0,
+                "size_iqr": 1.1211935215617947,
+                "m_after": 0.4733946169848599
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 255462,
+          "m0": -0.6289824591019416,
+          "m0_alarm": -5.658865177510694,
+          "m0_energy": -0.6289824591019416,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm",
+          "changes": [
+            {
+              "feature": "icmp.seq_le",
+              "from": 0.0,
+              "to": 44615.25,
+              "size_iqr": 1.0,
+              "m_after": 392.8957156695264
+            }
+          ],
+          "d_nn_original": 1.9799623205143603e-05,
+          "d_nn_cf": 1.0000000001960125,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.47871355387816905,
+            "shap_rank_of_changed": [
+              18
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.dstport",
+                "from": 60986.0,
+                "to": 4321.0,
+                "size_iqr": 1.1219459074169407,
+                "m_after": 0.4733946169848599
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 254922,
+          "m0": -0.017429961215315853,
+          "m0_alarm": -2.6376441035484044,
+          "m0_energy": -0.017429961215315853,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 569.5810649571338
+            }
+          ],
+          "d_nn_original": 0.00011879776913642425,
+          "d_nn_cf": 1.6812075965240432,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.3655630775069655,
+            "shap_rank_of_changed": [
+              5
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.38680763318074596
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 45451,
+          "m0": -0.009997624839597452,
+          "m0_alarm": -2.603018168942592,
+          "m0_energy": -0.009997624839597452,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 569.8922699579743
+            }
+          ],
+          "d_nn_original": 5.9398884568212125e-05,
+          "d_nn_cf": 1.6812130907200573,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.38297084310253526,
+            "shap_rank_of_changed": [
+              5
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.3905125953358994
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 254833,
+          "m0": -0.01490252552001105,
+          "m0_alarm": -2.625841626586233,
+          "m0_energy": -0.01490252552001105,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 569.7119420451068
+            }
+          ],
+          "d_nn_original": 3.959925201758051e-05,
+          "d_nn_cf": 1.6812092586356555,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.33074754631582587,
+            "shap_rank_of_changed": [
+              4
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.3880451796126832
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 45668,
+          "m0": -0.014751114445714045,
+          "m0_alarm": -2.6251919489552877,
+          "m0_energy": -0.014751114445714045,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 569.718984927251
+            }
+          ],
+          "d_nn_original": 0.0,
+          "d_nn_cf": 1.681209359836001,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.38297084310253526,
+            "shap_rank_of_changed": [
+              5
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.3881196320330638
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 255246,
+          "m0": -0.027388292922238055,
+          "m0_alarm": -2.704137196732972,
+          "m0_energy": -0.027388292922238055,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 568.7059397726327
+            }
+          ],
+          "d_nn_original": 0.0,
+          "d_nn_cf": 1.6812040876163528,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.38297084310253526,
+            "shap_rank_of_changed": [
+              5
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.38179036969681346
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 254828,
+          "m0": -0.014751114445714045,
+          "m0_alarm": -2.6251919489552877,
+          "m0_energy": -0.014751114445714045,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 569.718984927251
+            }
+          ],
+          "d_nn_original": 0.0,
+          "d_nn_cf": 1.681209359836001,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.38297084310253526,
+            "shap_rank_of_changed": [
+              5
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.3881196320330638
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 45178,
+          "m0": -0.0029230172920031417,
+          "m0_alarm": -2.5812775073505265,
+          "m0_energy": -0.0029230172920031417,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 569.7644811926527
+            }
+          ],
+          "d_nn_original": 9.899813845489027e-05,
+          "d_nn_cf": 1.6812204778460629,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.33074754631582587,
+            "shap_rank_of_changed": [
+              4
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.3941378477417035
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 45597,
+          "m0": -0.013090835553774625,
+          "m0_alarm": -2.616651983574602,
+          "m0_energy": -0.013090835553774625,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 569.7923514214585
+            }
+          ],
+          "d_nn_original": 9.899813845489027e-05,
+          "d_nn_cf": 1.6812105345990114,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.3133397807202561,
+            "shap_rank_of_changed": [
+              5
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.38895620990656504
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 45976,
+          "m0": -0.021378056830717897,
+          "m0_alarm": -2.6575345962349517,
+          "m0_energy": -0.021378056830717897,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 569.2833054585684
+            }
+          ],
+          "d_nn_original": 0.00017819664872037648,
+          "d_nn_cf": 1.6812054978959219,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.40037860869810504,
+            "shap_rank_of_changed": [
+              4
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.38481748210239575
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 255454,
+          "m0": -0.6290052744693014,
+          "m0_alarm": -5.658868708367383,
+          "m0_energy": -0.6290052744693014,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm",
+          "changes": [
+            {
+              "feature": "icmp.seq_le",
+              "from": 0.0,
+              "to": 44615.25,
+              "size_iqr": 1.0,
+              "m_after": 392.89492475762785
+            }
+          ],
+          "d_nn_original": 0.0,
+          "d_nn_cf": 1.0,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.47871355387816905,
+            "shap_rank_of_changed": [
+              18
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.dstport",
+                "from": 60984.0,
+                "to": 4321.0,
+                "size_iqr": 1.1219063081614065,
+                "m_after": 0.4733946169848599
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 45125,
+          "m0": -0.001591717560731872,
+          "m0_alarm": -2.5778031443676452,
+          "m0_energy": -0.001591717560731872,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 569.6936004215548
+            }
+          ],
+          "d_nn_original": 0.00025739516032777883,
+          "d_nn_cf": 1.6812221021699842,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.20889318714683738,
+            "shap_rank_of_changed": [
+              3
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.39479108166878857
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 254947,
+          "m0": -0.018087746692960035,
+          "m0_alarm": -2.6408548292317713,
+          "m0_energy": -0.018087746692960035,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 569.5398622134668
+            }
+          ],
+          "d_nn_original": 7.919850964245372e-05,
+          "d_nn_cf": 1.681207188457669,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.33074754631582587,
+            "shap_rank_of_changed": [
+              5
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.3864802240169479
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 46399,
+          "m0": -0.6596750048864353,
+          "m0_alarm": -5.206374123175186,
+          "m0_energy": -0.6596750048864353,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm",
+          "changes": [
+            {
+              "feature": "icmp.seq_le",
+              "from": 0.0,
+              "to": 44615.25,
+              "size_iqr": 1.0,
+              "m_after": 405.2236594321007
+            }
+          ],
+          "d_nn_original": 7.919851524974602e-05,
+          "d_nn_cf": 1.0000000031362024,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.5064973735793852,
+            "shap_rank_of_changed": [
+              18
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.dstport",
+                "from": 60970.0,
+                "to": 4321.0,
+                "size_iqr": 1.1216291133726686,
+                "m_after": 0.4646076757867161
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 46453,
+          "m0": -0.6595210587713205,
+          "m0_alarm": -5.2053572364484895,
+          "m0_energy": -0.6595210587713205,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm",
+          "changes": [
+            {
+              "feature": "icmp.seq_le",
+              "from": 0.0,
+              "to": 44615.25,
+              "size_iqr": 1.0,
+              "m_after": 405.22896984056234
+            }
+          ],
+          "d_nn_original": 7.919850403516102e-05,
+          "d_nn_cf": 1.0000000031362015,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.531509589558614,
+            "shap_rank_of_changed": [
+              18
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.dstport",
+                "from": 60986.0,
+                "to": 4321.0,
+                "size_iqr": 1.1219459074169407,
+                "m_after": 0.4646076757867161
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 45769,
+          "m0": -0.017166144126576893,
+          "m0_alarm": -2.636462443509511,
+          "m0_energy": -0.017166144126576893,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 569.5971091699328
+            }
+          ],
+          "d_nn_original": 7.919850964245372e-05,
+          "d_nn_cf": 1.6812077662796254,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.38297084310253526,
+            "shap_rank_of_changed": [
+              5
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.38693728035347685
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 45284,
+          "m0": -0.00588941835072837,
+          "m0_alarm": -2.588800586004515,
+          "m0_energy": -0.00588941835072837,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 569.8621776433583
+            }
+          ],
+          "d_nn_original": 0.00027719478735327603,
+          "d_nn_cf": 1.681217138719893,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.33074754631582587,
+            "shap_rank_of_changed": [
+              4
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.39262671855242254
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 46441,
+          "m0": -0.596865220377868,
+          "m0_alarm": -5.608874425780638,
+          "m0_energy": -0.596865220377868,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "http.response",
+              "from": 0.0,
+              "to": 1.0,
+              "size_iqr": 1.0,
+              "m_after": 430.272554845882
+            }
+          ],
+          "d_nn_original": 0.00021779590623197093,
+          "d_nn_cf": 1.0000000237175282,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.5222329678670935,
+            "shap_rank_of_changed": [
+              16
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.dstport",
+                "from": 60980.0,
+                "to": 33573.75,
+                "size_iqr": 0.5426335484892884,
+                "m_after": 0.3742893567607594
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 255275,
+          "m0": -0.02877674630103696,
+          "m0_alarm": -2.7164763639120113,
+          "m0_energy": -0.02877674630103696,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 568.5553652121388
+            }
+          ],
+          "d_nn_original": 1.9799623205143603e-05,
+          "d_nn_cf": 1.681203970093002,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.38297084310253526,
+            "shap_rank_of_changed": [
+              5
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.3810800397367648
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 254626,
+          "m0": -0.008702334210851155,
+          "m0_alarm": -2.59782074789503,
+          "m0_energy": -0.008702334210851155,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 569.8990115403476
+            }
+          ],
+          "d_nn_original": 0.00029699441685994876,
+          "d_nn_cf": 1.6812143121164267,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.3655630775069655,
+            "shap_rank_of_changed": [
+              5
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.3911746298876415
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 254701,
+          "m0": -0.010863802195374155,
+          "m0_alarm": -2.606760877033907,
+          "m0_energy": -0.010863802195374155,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 569.8738153470084
+            }
+          ],
+          "d_nn_original": 0.00017819664996644147,
+          "d_nn_cf": 1.6812123184277372,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.33074754631582587,
+            "shap_rank_of_changed": [
+              5
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.39007361556883796
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 255428,
+          "m0": -0.6291421666734603,
+          "m0_alarm": -5.658946387214562,
+          "m0_energy": -0.6291421666734603,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm",
+          "changes": [
+            {
+              "feature": "icmp.seq_le",
+              "from": 0.0,
+              "to": 44615.25,
+              "size_iqr": 1.0,
+              "m_after": 392.88893642468173
+            }
+          ],
+          "d_nn_original": 0.0,
+          "d_nn_cf": 1.0,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.47871355387816905,
+            "shap_rank_of_changed": [
+              18
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.dstport",
+                "from": 60972.0,
+                "to": 4321.0,
+                "size_iqr": 1.1216687126282026,
+                "m_after": 0.4733946169848599
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 254686,
+          "m0": -0.010430943975741964,
+          "m0_alarm": -2.6048777534659497,
+          "m0_energy": -0.010430943975741964,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 569.8842478515749
+            }
+          ],
+          "d_nn_original": 5.939888083001714e-05,
+          "d_nn_cf": 1.6812127003767008,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.33074754631582587,
+            "shap_rank_of_changed": [
+              4
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.3902924500867027
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 255413,
+          "m0": -0.6292104975464118,
+          "m0_alarm": -5.659139407380278,
+          "m0_energy": -0.6292104975464118,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm",
+          "changes": [
+            {
+              "feature": "icmp.seq_le",
+              "from": 0.0,
+              "to": 44615.25,
+              "size_iqr": 1.0,
+              "m_after": 392.885923426973
+            }
+          ],
+          "d_nn_original": 1.9799634419727826e-05,
+          "d_nn_cf": 1.0000000001960128,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.47871355387816905,
+            "shap_rank_of_changed": [
+              18
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.dstport",
+                "from": 60966.0,
+                "to": 4321.0,
+                "size_iqr": 1.1215499148616006,
+                "m_after": 0.4733946169848599
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 254479,
+          "m0": -0.004260308937934567,
+          "m0_alarm": -2.5843046284860174,
+          "m0_energy": -0.004260308937934567,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 569.8200333379075
+            }
+          ],
+          "d_nn_original": 3.959925201758051e-05,
+          "d_nn_cf": 1.6812189290706292,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.3655630775069655,
+            "shap_rank_of_changed": [
+              5
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.3934671421980734
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 45734,
+          "m0": -0.01624805604860019,
+          "m0_alarm": -2.6321406749210494,
+          "m0_energy": -0.01624805604860019,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 569.6499496172496
+            }
+          ],
+          "d_nn_original": 3.959925762487301e-05,
+          "d_nn_cf": 1.6812083898047905,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.38297084310253526,
+            "shap_rank_of_changed": [
+              5
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.38738732211683397
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 255481,
+          "m0": -0.6288905062577339,
+          "m0_alarm": -5.658701581150727,
+          "m0_energy": -0.6288905062577339,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm",
+          "changes": [
+            {
+              "feature": "icmp.seq_le",
+              "from": 0.0,
+              "to": 44615.25,
+              "size_iqr": 1.0,
+              "m_after": 392.8997455539618
+            }
+          ],
+          "d_nn_original": 0.0,
+          "d_nn_cf": 1.0,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.47871355387816905,
+            "shap_rank_of_changed": [
+              18
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.dstport",
+                "from": 60994.0,
+                "to": 4321.0,
+                "size_iqr": 1.1221043044390766,
+                "m_after": 0.4733946169848599
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 254966,
+          "m0": -0.018613421975260593,
+          "m0_alarm": -2.6432605195898367,
+          "m0_energy": -0.018613421975260593,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 569.5044218279179
+            }
+          ],
+          "d_nn_original": 5.9398884568212125e-05,
+          "d_nn_cf": 1.6812068787935204,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.38297084310253526,
+            "shap_rank_of_changed": [
+              5
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.3862169542665673
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 45533,
+          "m0": -0.011743979890212567,
+          "m0_alarm": -2.6103482274308654,
+          "m0_energy": -0.011743979890212567,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 569.8454555060749
+            }
+          ],
+          "d_nn_original": 0.00025739516032777883,
+          "d_nn_cf": 1.6812115797130123,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.3133397807202561,
+            "shap_rank_of_changed": [
+              5
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.38963297938306035
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 255217,
+          "m0": -0.026001971282308627,
+          "m0_alarm": -2.6916850421398553,
+          "m0_energy": -0.026001971282308627,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 568.853727310246
+            }
+          ],
+          "d_nn_original": 0.00017819664872037648,
+          "d_nn_cf": 1.6812042387177915,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.38297084310253526,
+            "shap_rank_of_changed": [
+              5
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.3824839194150854
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 255487,
+          "m0": -0.6288674604321178,
+          "m0_alarm": -5.658700404198497,
+          "m0_energy": -0.6288674604321178,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm",
+          "changes": [
+            {
+              "feature": "icmp.seq_le",
+              "from": 0.0,
+              "to": 44615.25,
+              "size_iqr": 1.0,
+              "m_after": 392.90068711574577
+            }
+          ],
+          "d_nn_original": 3.9599246410287206e-05,
+          "d_nn_cf": 1.0000000007840502,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.47871355387816905,
+            "shap_rank_of_changed": [
+              18
+            ],
+            "changed_in_shap_top5": [
+              false
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.dstport",
+                "from": 60996.0,
+                "to": 4321.0,
+                "size_iqr": 1.1221439036946106,
+                "m_after": 0.4733946169848599
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 254418,
+          "m0": -0.002329702511519672,
+          "m0_alarm": -2.5798086709675196,
+          "m0_energy": -0.002329702511519672,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 569.7384564249436
+            }
+          ],
+          "d_nn_original": 5.9398884568212125e-05,
+          "d_nn_cf": 1.6812211904408447,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.33074754631582587,
+            "shap_rank_of_changed": [
+              4
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.3944310482581029
+              }
+            ]
+          }
+        },
+        {
+          "test_row": 254567,
+          "m0": -0.006937312041487095,
+          "m0_alarm": -2.591893616464885,
+          "m0_energy": -0.006937312041487095,
+          "caught": true,
+          "k_needed": 1,
+          "trigger": "alarm+energy",
+          "changes": [
+            {
+              "feature": "tcp.len",
+              "from": 0.0,
+              "to": 495.0,
+              "size_iqr": 2.097457627118644,
+              "m_after": 569.878598480871
+            }
+          ],
+          "d_nn_original": 0.00017819664872037648,
+          "d_nn_cf": 1.6812160581660522,
+          "consistency": {
+            "score": "disagree",
+            "spearman_gain_vs_abs_shap": -0.33074754631582587,
+            "shap_rank_of_changed": [
+              5
+            ],
+            "changed_in_shap_top5": [
+              true
+            ]
+          },
+          "energy_only": {
+            "caught": true,
+            "k_needed": 1,
+            "changes": [
+              {
+                "feature": "tcp.len",
+                "from": 0.0,
+                "to": 495.0,
+                "size_iqr": 2.097457627118644,
+                "m_after": 0.39208609229075364
+              }
+            ]
+          }
+        }
+      ],
+      "model_calls": 12686,
+      "seconds": 42.0
+    }
+  },
+  "runtime_seconds": 124.7
+}
