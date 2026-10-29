@@ -1,0 +1,1198 @@
+{
+  "dataset_id": "dnn_edgeiiot",
+  "condition": "C_seq_ack_yok",
+  "dropped_features": [
+    "tcp.seq",
+    "tcp.ack"
+  ],
+  "split": "zaman: her ince etikette kayıt sırasına göre ilk %80 eğitim / son %20 test; kalibrasyon eğitimin son %10'u",
+  "classifier": "TabM (alarm: üye anlaşmazlığı, %95 bilinen kalibrasyon eşiği)",
+  "guard_threshold": "kalibrasyonda alarm almamış ve BENIGN denmiş gerçek BENIGN satırlarının (1-q) yüzdeliği",
+  "settings": {
+    "dataset": "dnn_edgeiiot",
+    "out_dir": "outputs/dnn_edgeiiot/two_signal/s1",
+    "condition": "C_seq_ack_yok",
+    "families": "",
+    "cap": 40000,
+    "seed": 42,
+    "model_seed": 1,
+    "cal_size": 0.1,
+    "target": 0.95,
+    "cp_config": "",
+    "cp_blind_frac": 0.0625,
+    "save_rows": true,
+    "classifier": "TabM",
+    "mc_passes": 32,
+    "split": "time",
+    "skip_cp": true,
+    "quick": false
+  },
+  "primary_guard": "tabm_energy",
+  "families": {
+    "DDOS": {
+      "categories": [
+        "DDOS"
+      ],
+      "blind_frac": 0.0625,
+      "blind_frac_source": "ayar aktarımı (sabit, --cp-blind-frac)",
+      "tau_alarm": 0.008199363946914673,
+      "alarm_only": {
+        "unknown_caught": 0.5025,
+        "silent_benign": 0.0
+      },
+      "n_unknown": 21375,
+      "n_benign_test": 8000,
+      "classifier": "TabM",
+      "alarm_score": "disagree",
+      "train_seconds": 132.3,
+      "alarm_auroc": 0.6344,
+      "energy_auroc": 0.5877,
+      "known_macro_f1": 0.7522
+    },
+    "RECON": {
+      "categories": [
+        "RECON"
+      ],
+      "blind_frac": 0.0625,
+      "blind_frac_source": "ayar aktarımı (sabit, --cp-blind-frac)",
+      "tau_alarm": 0.007840098813176155,
+      "alarm_only": {
+        "unknown_caught": 0.2439,
+        "silent_benign": 0.0005
+      },
+      "n_unknown": 10904,
+      "n_benign_test": 8000,
+      "classifier": "TabM",
+      "alarm_score": "disagree",
+      "train_seconds": 150.9,
+      "alarm_auroc": 0.818,
+      "energy_auroc": 0.6217,
+      "known_macro_f1": 0.7078
+    },
+    "WEB": {
+      "categories": [
+        "WEB"
+      ],
+      "blind_frac": 0.0625,
+      "blind_frac_source": "ayar aktarımı (sabit, --cp-blind-frac)",
+      "tau_alarm": 0.005196508020162582,
+      "alarm_only": {
+        "unknown_caught": 0.1117,
+        "silent_benign": 0.015
+      },
+      "n_unknown": 8574,
+      "n_benign_test": 8000,
+      "classifier": "TabM",
+      "alarm_score": "disagree",
+      "train_seconds": 171.0,
+      "alarm_auroc": 0.8362,
+      "energy_auroc": 0.8241,
+      "known_macro_f1": 0.8392
+    },
+    "BRUTEFORCE": {
+      "categories": [
+        "BRUTEFORCE"
+      ],
+      "blind_frac": 0.0625,
+      "blind_frac_source": "ayar aktarımı (sabit, --cp-blind-frac)",
+      "tau_alarm": 0.01775437220931053,
+      "alarm_only": {
+        "unknown_caught": 0.2098,
+        "silent_benign": 0.2344
+      },
+      "n_unknown": 4156,
+      "n_benign_test": 8000,
+      "classifier": "TabM",
+      "alarm_score": "disagree",
+      "train_seconds": 292.8,
+      "alarm_auroc": 0.8182,
+      "energy_auroc": 0.8078,
+      "known_macro_f1": 0.8027
+    },
+    "MALWARE": {
+      "categories": [
+        "MALWARE"
+      ],
+      "blind_frac": 0.0625,
+      "blind_frac_source": "ayar aktarımı (sabit, --cp-blind-frac)",
+      "tau_alarm": 0.02713855542242527,
+      "alarm_only": {
+        "unknown_caught": 0.4861,
+        "silent_benign": 0.0
+      },
+      "n_unknown": 6291,
+      "n_benign_test": 8000,
+      "classifier": "TabM",
+      "alarm_score": "disagree",
+      "train_seconds": 123.8,
+      "alarm_auroc": 0.8515,
+      "energy_auroc": 0.8839,
+      "known_macro_f1": 0.6663
+    }
+  },
+  "results": [
+    {
+      "family": "DDOS",
+      "guard": "tabm_disagree",
+      "q": 0.005,
+      "silent_benign": 0.0,
+      "benign_review": 0.01713,
+      "unknown_caught": 0.5025,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "DDOS",
+      "guard": "tabm_disagree",
+      "q": 0.01,
+      "silent_benign": 0.0,
+      "benign_review": 0.01713,
+      "unknown_caught": 0.5025,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "DDOS",
+      "guard": "tabm_disagree",
+      "q": 0.02,
+      "silent_benign": 0.0,
+      "benign_review": 0.085,
+      "unknown_caught": 0.5025,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "DDOS",
+      "guard": "tabm_disagree",
+      "q": 0.05,
+      "silent_benign": 0.0,
+      "benign_review": 0.085,
+      "unknown_caught": 0.5025,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "DDOS",
+      "guard": "tabm_disagree",
+      "q": 0.1,
+      "silent_benign": 0.0,
+      "benign_review": 0.17125,
+      "unknown_caught": 0.5025,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "DDOS",
+      "guard": "tabm_msp",
+      "q": 0.005,
+      "silent_benign": 0.0,
+      "benign_review": 0.0215,
+      "unknown_caught": 0.5025,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "DDOS",
+      "guard": "tabm_msp",
+      "q": 0.01,
+      "silent_benign": 0.0,
+      "benign_review": 0.0215,
+      "unknown_caught": 0.5025,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "DDOS",
+      "guard": "tabm_msp",
+      "q": 0.02,
+      "silent_benign": 0.0,
+      "benign_review": 0.0215,
+      "unknown_caught": 0.5025,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "DDOS",
+      "guard": "tabm_msp",
+      "q": 0.05,
+      "silent_benign": 0.0,
+      "benign_review": 0.0215,
+      "unknown_caught": 0.5025,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "DDOS",
+      "guard": "tabm_msp",
+      "q": 0.1,
+      "silent_benign": 0.0,
+      "benign_review": 0.16637,
+      "unknown_caught": 0.5025,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "DDOS",
+      "guard": "tabm_energy",
+      "q": 0.005,
+      "silent_benign": 0.0,
+      "benign_review": 0.01837,
+      "unknown_caught": 0.5025,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "DDOS",
+      "guard": "tabm_energy",
+      "q": 0.01,
+      "silent_benign": 0.0,
+      "benign_review": 0.01837,
+      "unknown_caught": 0.5025,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "DDOS",
+      "guard": "tabm_energy",
+      "q": 0.02,
+      "silent_benign": 0.0,
+      "benign_review": 0.01837,
+      "unknown_caught": 0.5025,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "DDOS",
+      "guard": "tabm_energy",
+      "q": 0.05,
+      "silent_benign": 0.0,
+      "benign_review": 0.01837,
+      "unknown_caught": 0.5025,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "DDOS",
+      "guard": "tabm_energy",
+      "q": 0.1,
+      "silent_benign": 0.0,
+      "benign_review": 0.104,
+      "unknown_caught": 0.5025,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "DDOS",
+      "guard": "knn",
+      "q": 0.005,
+      "silent_benign": 0.0,
+      "benign_review": 0.0045,
+      "unknown_caught": 0.5025,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "DDOS",
+      "guard": "knn",
+      "q": 0.01,
+      "silent_benign": 0.0,
+      "benign_review": 0.00825,
+      "unknown_caught": 0.5025,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "DDOS",
+      "guard": "knn",
+      "q": 0.02,
+      "silent_benign": 0.0,
+      "benign_review": 0.02438,
+      "unknown_caught": 0.5025,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "DDOS",
+      "guard": "knn",
+      "q": 0.05,
+      "silent_benign": 0.0,
+      "benign_review": 0.05325,
+      "unknown_caught": 0.5025,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "DDOS",
+      "guard": "knn",
+      "q": 0.1,
+      "silent_benign": 0.0,
+      "benign_review": 0.085,
+      "unknown_caught": 0.5025,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "RECON",
+      "guard": "tabm_disagree",
+      "q": 0.005,
+      "silent_benign": 0.00046,
+      "benign_review": 0.00025,
+      "unknown_caught": 0.2439,
+      "silent_benign_alarm_only": 0.00046
+    },
+    {
+      "family": "RECON",
+      "guard": "tabm_disagree",
+      "q": 0.01,
+      "silent_benign": 0.00046,
+      "benign_review": 0.00025,
+      "unknown_caught": 0.2439,
+      "silent_benign_alarm_only": 0.00046
+    },
+    {
+      "family": "RECON",
+      "guard": "tabm_disagree",
+      "q": 0.02,
+      "silent_benign": 0.0,
+      "benign_review": 0.0805,
+      "unknown_caught": 0.2444,
+      "silent_benign_alarm_only": 0.00046
+    },
+    {
+      "family": "RECON",
+      "guard": "tabm_disagree",
+      "q": 0.05,
+      "silent_benign": 0.0,
+      "benign_review": 0.08275,
+      "unknown_caught": 0.2444,
+      "silent_benign_alarm_only": 0.00046
+    },
+    {
+      "family": "RECON",
+      "guard": "tabm_disagree",
+      "q": 0.1,
+      "silent_benign": 0.0,
+      "benign_review": 0.08275,
+      "unknown_caught": 0.2444,
+      "silent_benign_alarm_only": 0.00046
+    },
+    {
+      "family": "RECON",
+      "guard": "tabm_msp",
+      "q": 0.005,
+      "silent_benign": 0.0,
+      "benign_review": 0.0055,
+      "unknown_caught": 0.2444,
+      "silent_benign_alarm_only": 0.00046
+    },
+    {
+      "family": "RECON",
+      "guard": "tabm_msp",
+      "q": 0.01,
+      "silent_benign": 0.0,
+      "benign_review": 0.0055,
+      "unknown_caught": 0.2444,
+      "silent_benign_alarm_only": 0.00046
+    },
+    {
+      "family": "RECON",
+      "guard": "tabm_msp",
+      "q": 0.02,
+      "silent_benign": 0.0,
+      "benign_review": 0.0755,
+      "unknown_caught": 0.2444,
+      "silent_benign_alarm_only": 0.00046
+    },
+    {
+      "family": "RECON",
+      "guard": "tabm_msp",
+      "q": 0.05,
+      "silent_benign": 0.0,
+      "benign_review": 0.0755,
+      "unknown_caught": 0.2444,
+      "silent_benign_alarm_only": 0.00046
+    },
+    {
+      "family": "RECON",
+      "guard": "tabm_msp",
+      "q": 0.1,
+      "silent_benign": 0.0,
+      "benign_review": 0.15837,
+      "unknown_caught": 0.2444,
+      "silent_benign_alarm_only": 0.00046
+    },
+    {
+      "family": "RECON",
+      "guard": "tabm_energy",
+      "q": 0.005,
+      "silent_benign": 0.0,
+      "benign_review": 0.01562,
+      "unknown_caught": 0.2444,
+      "silent_benign_alarm_only": 0.00046
+    },
+    {
+      "family": "RECON",
+      "guard": "tabm_energy",
+      "q": 0.01,
+      "silent_benign": 0.0,
+      "benign_review": 0.01562,
+      "unknown_caught": 0.2444,
+      "silent_benign_alarm_only": 0.00046
+    },
+    {
+      "family": "RECON",
+      "guard": "tabm_energy",
+      "q": 0.02,
+      "silent_benign": 0.0,
+      "benign_review": 0.01562,
+      "unknown_caught": 0.2444,
+      "silent_benign_alarm_only": 0.00046
+    },
+    {
+      "family": "RECON",
+      "guard": "tabm_energy",
+      "q": 0.05,
+      "silent_benign": 0.0,
+      "benign_review": 0.01562,
+      "unknown_caught": 0.2444,
+      "silent_benign_alarm_only": 0.00046
+    },
+    {
+      "family": "RECON",
+      "guard": "tabm_energy",
+      "q": 0.1,
+      "silent_benign": 0.0,
+      "benign_review": 0.10725,
+      "unknown_caught": 0.2444,
+      "silent_benign_alarm_only": 0.00046
+    },
+    {
+      "family": "RECON",
+      "guard": "knn",
+      "q": 0.005,
+      "silent_benign": 0.00018,
+      "benign_review": 0.068,
+      "unknown_caught": 0.2442,
+      "silent_benign_alarm_only": 0.00046
+    },
+    {
+      "family": "RECON",
+      "guard": "knn",
+      "q": 0.01,
+      "silent_benign": 9e-05,
+      "benign_review": 0.07175,
+      "unknown_caught": 0.2443,
+      "silent_benign_alarm_only": 0.00046
+    },
+    {
+      "family": "RECON",
+      "guard": "knn",
+      "q": 0.02,
+      "silent_benign": 9e-05,
+      "benign_review": 0.07175,
+      "unknown_caught": 0.2443,
+      "silent_benign_alarm_only": 0.00046
+    },
+    {
+      "family": "RECON",
+      "guard": "knn",
+      "q": 0.05,
+      "silent_benign": 0.0,
+      "benign_review": 0.16225,
+      "unknown_caught": 0.2444,
+      "silent_benign_alarm_only": 0.00046
+    },
+    {
+      "family": "RECON",
+      "guard": "knn",
+      "q": 0.1,
+      "silent_benign": 0.0,
+      "benign_review": 0.2085,
+      "unknown_caught": 0.2444,
+      "silent_benign_alarm_only": 0.00046
+    },
+    {
+      "family": "WEB",
+      "guard": "tabm_disagree",
+      "q": 0.005,
+      "silent_benign": 0.00035,
+      "benign_review": 0.074,
+      "unknown_caught": 0.1264,
+      "silent_benign_alarm_only": 0.01505
+    },
+    {
+      "family": "WEB",
+      "guard": "tabm_disagree",
+      "q": 0.01,
+      "silent_benign": 0.00035,
+      "benign_review": 0.074,
+      "unknown_caught": 0.1264,
+      "silent_benign_alarm_only": 0.01505
+    },
+    {
+      "family": "WEB",
+      "guard": "tabm_disagree",
+      "q": 0.02,
+      "silent_benign": 0.00035,
+      "benign_review": 0.1345,
+      "unknown_caught": 0.1264,
+      "silent_benign_alarm_only": 0.01505
+    },
+    {
+      "family": "WEB",
+      "guard": "tabm_disagree",
+      "q": 0.05,
+      "silent_benign": 0.00035,
+      "benign_review": 0.1345,
+      "unknown_caught": 0.1264,
+      "silent_benign_alarm_only": 0.01505
+    },
+    {
+      "family": "WEB",
+      "guard": "tabm_disagree",
+      "q": 0.1,
+      "silent_benign": 0.00035,
+      "benign_review": 0.1345,
+      "unknown_caught": 0.1264,
+      "silent_benign_alarm_only": 0.01505
+    },
+    {
+      "family": "WEB",
+      "guard": "tabm_msp",
+      "q": 0.005,
+      "silent_benign": 0.00035,
+      "benign_review": 0.0785,
+      "unknown_caught": 0.1264,
+      "silent_benign_alarm_only": 0.01505
+    },
+    {
+      "family": "WEB",
+      "guard": "tabm_msp",
+      "q": 0.01,
+      "silent_benign": 0.00035,
+      "benign_review": 0.0785,
+      "unknown_caught": 0.1264,
+      "silent_benign_alarm_only": 0.01505
+    },
+    {
+      "family": "WEB",
+      "guard": "tabm_msp",
+      "q": 0.02,
+      "silent_benign": 0.00035,
+      "benign_review": 0.0785,
+      "unknown_caught": 0.1264,
+      "silent_benign_alarm_only": 0.01505
+    },
+    {
+      "family": "WEB",
+      "guard": "tabm_msp",
+      "q": 0.05,
+      "silent_benign": 0.00035,
+      "benign_review": 0.0785,
+      "unknown_caught": 0.1264,
+      "silent_benign_alarm_only": 0.01505
+    },
+    {
+      "family": "WEB",
+      "guard": "tabm_msp",
+      "q": 0.1,
+      "silent_benign": 0.00035,
+      "benign_review": 0.0785,
+      "unknown_caught": 0.1264,
+      "silent_benign_alarm_only": 0.01505
+    },
+    {
+      "family": "WEB",
+      "guard": "tabm_energy",
+      "q": 0.005,
+      "silent_benign": 0.00502,
+      "benign_review": 0.05588,
+      "unknown_caught": 0.1218,
+      "silent_benign_alarm_only": 0.01505
+    },
+    {
+      "family": "WEB",
+      "guard": "tabm_energy",
+      "q": 0.01,
+      "silent_benign": 0.00502,
+      "benign_review": 0.05588,
+      "unknown_caught": 0.1218,
+      "silent_benign_alarm_only": 0.01505
+    },
+    {
+      "family": "WEB",
+      "guard": "tabm_energy",
+      "q": 0.02,
+      "silent_benign": 0.00502,
+      "benign_review": 0.05588,
+      "unknown_caught": 0.1218,
+      "silent_benign_alarm_only": 0.01505
+    },
+    {
+      "family": "WEB",
+      "guard": "tabm_energy",
+      "q": 0.05,
+      "silent_benign": 0.00502,
+      "benign_review": 0.05588,
+      "unknown_caught": 0.1218,
+      "silent_benign_alarm_only": 0.01505
+    },
+    {
+      "family": "WEB",
+      "guard": "tabm_energy",
+      "q": 0.1,
+      "silent_benign": 0.00502,
+      "benign_review": 0.05588,
+      "unknown_caught": 0.1218,
+      "silent_benign_alarm_only": 0.01505
+    },
+    {
+      "family": "WEB",
+      "guard": "knn",
+      "q": 0.005,
+      "silent_benign": 0.01481,
+      "benign_review": 0.05325,
+      "unknown_caught": 0.112,
+      "silent_benign_alarm_only": 0.01505
+    },
+    {
+      "family": "WEB",
+      "guard": "knn",
+      "q": 0.01,
+      "silent_benign": 0.01481,
+      "benign_review": 0.05325,
+      "unknown_caught": 0.112,
+      "silent_benign_alarm_only": 0.01505
+    },
+    {
+      "family": "WEB",
+      "guard": "knn",
+      "q": 0.02,
+      "silent_benign": 0.01481,
+      "benign_review": 0.117,
+      "unknown_caught": 0.112,
+      "silent_benign_alarm_only": 0.01505
+    },
+    {
+      "family": "WEB",
+      "guard": "knn",
+      "q": 0.05,
+      "silent_benign": 0.00595,
+      "benign_review": 0.15338,
+      "unknown_caught": 0.1208,
+      "silent_benign_alarm_only": 0.01505
+    },
+    {
+      "family": "WEB",
+      "guard": "knn",
+      "q": 0.1,
+      "silent_benign": 0.00023,
+      "benign_review": 0.1995,
+      "unknown_caught": 0.1265,
+      "silent_benign_alarm_only": 0.01505
+    },
+    {
+      "family": "BRUTEFORCE",
+      "guard": "tabm_disagree",
+      "q": 0.005,
+      "silent_benign": 0.077,
+      "benign_review": 0.07587,
+      "unknown_caught": 0.3672,
+      "silent_benign_alarm_only": 0.23436
+    },
+    {
+      "family": "BRUTEFORCE",
+      "guard": "tabm_disagree",
+      "q": 0.01,
+      "silent_benign": 0.05654,
+      "benign_review": 0.07863,
+      "unknown_caught": 0.3876,
+      "silent_benign_alarm_only": 0.23436
+    },
+    {
+      "family": "BRUTEFORCE",
+      "guard": "tabm_disagree",
+      "q": 0.02,
+      "silent_benign": 0.05654,
+      "benign_review": 0.07863,
+      "unknown_caught": 0.3876,
+      "silent_benign_alarm_only": 0.23436
+    },
+    {
+      "family": "BRUTEFORCE",
+      "guard": "tabm_disagree",
+      "q": 0.05,
+      "silent_benign": 0.0,
+      "benign_review": 0.17775,
+      "unknown_caught": 0.4442,
+      "silent_benign_alarm_only": 0.23436
+    },
+    {
+      "family": "BRUTEFORCE",
+      "guard": "tabm_disagree",
+      "q": 0.1,
+      "silent_benign": 0.0,
+      "benign_review": 0.17988,
+      "unknown_caught": 0.4442,
+      "silent_benign_alarm_only": 0.23436
+    },
+    {
+      "family": "BRUTEFORCE",
+      "guard": "tabm_msp",
+      "q": 0.005,
+      "silent_benign": 0.00481,
+      "benign_review": 0.09475,
+      "unknown_caught": 0.4394,
+      "silent_benign_alarm_only": 0.23436
+    },
+    {
+      "family": "BRUTEFORCE",
+      "guard": "tabm_msp",
+      "q": 0.01,
+      "silent_benign": 0.00433,
+      "benign_review": 0.09588,
+      "unknown_caught": 0.4398,
+      "silent_benign_alarm_only": 0.23436
+    },
+    {
+      "family": "BRUTEFORCE",
+      "guard": "tabm_msp",
+      "q": 0.02,
+      "silent_benign": 0.00433,
+      "benign_review": 0.09588,
+      "unknown_caught": 0.4398,
+      "silent_benign_alarm_only": 0.23436
+    },
+    {
+      "family": "BRUTEFORCE",
+      "guard": "tabm_msp",
+      "q": 0.05,
+      "silent_benign": 0.00433,
+      "benign_review": 0.09588,
+      "unknown_caught": 0.4398,
+      "silent_benign_alarm_only": 0.23436
+    },
+    {
+      "family": "BRUTEFORCE",
+      "guard": "tabm_msp",
+      "q": 0.1,
+      "silent_benign": 0.0,
+      "benign_review": 0.17313,
+      "unknown_caught": 0.4442,
+      "silent_benign_alarm_only": 0.23436
+    },
+    {
+      "family": "BRUTEFORCE",
+      "guard": "tabm_energy",
+      "q": 0.005,
+      "silent_benign": 0.0,
+      "benign_review": 0.10875,
+      "unknown_caught": 0.4442,
+      "silent_benign_alarm_only": 0.23436
+    },
+    {
+      "family": "BRUTEFORCE",
+      "guard": "tabm_energy",
+      "q": 0.01,
+      "silent_benign": 0.0,
+      "benign_review": 0.10875,
+      "unknown_caught": 0.4442,
+      "silent_benign_alarm_only": 0.23436
+    },
+    {
+      "family": "BRUTEFORCE",
+      "guard": "tabm_energy",
+      "q": 0.02,
+      "silent_benign": 0.0,
+      "benign_review": 0.10875,
+      "unknown_caught": 0.4442,
+      "silent_benign_alarm_only": 0.23436
+    },
+    {
+      "family": "BRUTEFORCE",
+      "guard": "tabm_energy",
+      "q": 0.05,
+      "silent_benign": 0.0,
+      "benign_review": 0.10875,
+      "unknown_caught": 0.4442,
+      "silent_benign_alarm_only": 0.23436
+    },
+    {
+      "family": "BRUTEFORCE",
+      "guard": "tabm_energy",
+      "q": 0.1,
+      "silent_benign": 0.0,
+      "benign_review": 0.2005,
+      "unknown_caught": 0.4442,
+      "silent_benign_alarm_only": 0.23436
+    },
+    {
+      "family": "BRUTEFORCE",
+      "guard": "knn",
+      "q": 0.005,
+      "silent_benign": 0.23436,
+      "benign_review": 0.05625,
+      "unknown_caught": 0.2098,
+      "silent_benign_alarm_only": 0.23436
+    },
+    {
+      "family": "BRUTEFORCE",
+      "guard": "knn",
+      "q": 0.01,
+      "silent_benign": 0.23388,
+      "benign_review": 0.06162,
+      "unknown_caught": 0.2103,
+      "silent_benign_alarm_only": 0.23436
+    },
+    {
+      "family": "BRUTEFORCE",
+      "guard": "knn",
+      "q": 0.02,
+      "silent_benign": 0.18912,
+      "benign_review": 0.07387,
+      "unknown_caught": 0.2551,
+      "silent_benign_alarm_only": 0.23436
+    },
+    {
+      "family": "BRUTEFORCE",
+      "guard": "knn",
+      "q": 0.05,
+      "silent_benign": 0.03393,
+      "benign_review": 0.13725,
+      "unknown_caught": 0.4103,
+      "silent_benign_alarm_only": 0.23436
+    },
+    {
+      "family": "BRUTEFORCE",
+      "guard": "knn",
+      "q": 0.1,
+      "silent_benign": 0.00048,
+      "benign_review": 0.16287,
+      "unknown_caught": 0.4437,
+      "silent_benign_alarm_only": 0.23436
+    },
+    {
+      "family": "MALWARE",
+      "guard": "tabm_disagree",
+      "q": 0.005,
+      "silent_benign": 0.0,
+      "benign_review": 0.03413,
+      "unknown_caught": 0.4861,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "MALWARE",
+      "guard": "tabm_disagree",
+      "q": 0.01,
+      "silent_benign": 0.0,
+      "benign_review": 0.03413,
+      "unknown_caught": 0.4861,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "MALWARE",
+      "guard": "tabm_disagree",
+      "q": 0.02,
+      "silent_benign": 0.0,
+      "benign_review": 0.03413,
+      "unknown_caught": 0.4861,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "MALWARE",
+      "guard": "tabm_disagree",
+      "q": 0.05,
+      "silent_benign": 0.0,
+      "benign_review": 0.03413,
+      "unknown_caught": 0.4861,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "MALWARE",
+      "guard": "tabm_disagree",
+      "q": 0.1,
+      "silent_benign": 0.0,
+      "benign_review": 0.12587,
+      "unknown_caught": 0.4861,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "MALWARE",
+      "guard": "tabm_msp",
+      "q": 0.005,
+      "silent_benign": 0.0,
+      "benign_review": 0.03325,
+      "unknown_caught": 0.4861,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "MALWARE",
+      "guard": "tabm_msp",
+      "q": 0.01,
+      "silent_benign": 0.0,
+      "benign_review": 0.03325,
+      "unknown_caught": 0.4861,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "MALWARE",
+      "guard": "tabm_msp",
+      "q": 0.02,
+      "silent_benign": 0.0,
+      "benign_review": 0.03325,
+      "unknown_caught": 0.4861,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "MALWARE",
+      "guard": "tabm_msp",
+      "q": 0.05,
+      "silent_benign": 0.0,
+      "benign_review": 0.03325,
+      "unknown_caught": 0.4861,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "MALWARE",
+      "guard": "tabm_msp",
+      "q": 0.1,
+      "silent_benign": 0.0,
+      "benign_review": 0.10975,
+      "unknown_caught": 0.4861,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "MALWARE",
+      "guard": "tabm_energy",
+      "q": 0.005,
+      "silent_benign": 0.0,
+      "benign_review": 0.03313,
+      "unknown_caught": 0.4861,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "MALWARE",
+      "guard": "tabm_energy",
+      "q": 0.01,
+      "silent_benign": 0.0,
+      "benign_review": 0.03313,
+      "unknown_caught": 0.4861,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "MALWARE",
+      "guard": "tabm_energy",
+      "q": 0.02,
+      "silent_benign": 0.0,
+      "benign_review": 0.03313,
+      "unknown_caught": 0.4861,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "MALWARE",
+      "guard": "tabm_energy",
+      "q": 0.05,
+      "silent_benign": 0.0,
+      "benign_review": 0.03313,
+      "unknown_caught": 0.4861,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "MALWARE",
+      "guard": "tabm_energy",
+      "q": 0.1,
+      "silent_benign": 0.0,
+      "benign_review": 0.10912,
+      "unknown_caught": 0.4861,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "MALWARE",
+      "guard": "knn",
+      "q": 0.005,
+      "silent_benign": 0.0,
+      "benign_review": 0.063,
+      "unknown_caught": 0.4861,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "MALWARE",
+      "guard": "knn",
+      "q": 0.01,
+      "silent_benign": 0.0,
+      "benign_review": 0.063,
+      "unknown_caught": 0.4861,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "MALWARE",
+      "guard": "knn",
+      "q": 0.02,
+      "silent_benign": 0.0,
+      "benign_review": 0.12487,
+      "unknown_caught": 0.4861,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "MALWARE",
+      "guard": "knn",
+      "q": 0.05,
+      "silent_benign": 0.0,
+      "benign_review": 0.17463,
+      "unknown_caught": 0.4861,
+      "silent_benign_alarm_only": 0.0
+    },
+    {
+      "family": "MALWARE",
+      "guard": "knn",
+      "q": 0.1,
+      "silent_benign": 0.0,
+      "benign_review": 0.21038,
+      "unknown_caught": 0.4861,
+      "silent_benign_alarm_only": 0.0
+    }
+  ],
+  "mean_over_families": [
+    {
+      "guard": "knn",
+      "q": 0.005,
+      "silent_benign": 0.04987,
+      "benign_review": 0.049,
+      "unknown_caught": 0.31092,
+      "silent_benign_alarm_only": 0.04997
+    },
+    {
+      "guard": "knn",
+      "q": 0.01,
+      "silent_benign": 0.04976,
+      "benign_review": 0.05157,
+      "unknown_caught": 0.31104,
+      "silent_benign_alarm_only": 0.04997
+    },
+    {
+      "guard": "knn",
+      "q": 0.02,
+      "silent_benign": 0.0408,
+      "benign_review": 0.08237,
+      "unknown_caught": 0.32,
+      "silent_benign_alarm_only": 0.04997
+    },
+    {
+      "guard": "knn",
+      "q": 0.05,
+      "silent_benign": 0.00798,
+      "benign_review": 0.13615,
+      "unknown_caught": 0.35282,
+      "silent_benign_alarm_only": 0.04997
+    },
+    {
+      "guard": "knn",
+      "q": 0.1,
+      "silent_benign": 0.00014,
+      "benign_review": 0.17325,
+      "unknown_caught": 0.36064,
+      "silent_benign_alarm_only": 0.04997
+    },
+    {
+      "guard": "tabm_disagree",
+      "q": 0.005,
+      "silent_benign": 0.01556,
+      "benign_review": 0.04028,
+      "unknown_caught": 0.34522,
+      "silent_benign_alarm_only": 0.04997
+    },
+    {
+      "guard": "tabm_disagree",
+      "q": 0.01,
+      "silent_benign": 0.01147,
+      "benign_review": 0.04083,
+      "unknown_caught": 0.3493,
+      "silent_benign_alarm_only": 0.04997
+    },
+    {
+      "guard": "tabm_disagree",
+      "q": 0.02,
+      "silent_benign": 0.01138,
+      "benign_review": 0.08255,
+      "unknown_caught": 0.3494,
+      "silent_benign_alarm_only": 0.04997
+    },
+    {
+      "guard": "tabm_disagree",
+      "q": 0.05,
+      "silent_benign": 7e-05,
+      "benign_review": 0.10283,
+      "unknown_caught": 0.36072,
+      "silent_benign_alarm_only": 0.04997
+    },
+    {
+      "guard": "tabm_disagree",
+      "q": 0.1,
+      "silent_benign": 7e-05,
+      "benign_review": 0.13885,
+      "unknown_caught": 0.36072,
+      "silent_benign_alarm_only": 0.04997
+    },
+    {
+      "guard": "tabm_energy",
+      "q": 0.005,
+      "silent_benign": 0.001,
+      "benign_review": 0.04635,
+      "unknown_caught": 0.3598,
+      "silent_benign_alarm_only": 0.04997
+    },
+    {
+      "guard": "tabm_energy",
+      "q": 0.01,
+      "silent_benign": 0.001,
+      "benign_review": 0.04635,
+      "unknown_caught": 0.3598,
+      "silent_benign_alarm_only": 0.04997
+    },
+    {
+      "guard": "tabm_energy",
+      "q": 0.02,
+      "silent_benign": 0.001,
+      "benign_review": 0.04635,
+      "unknown_caught": 0.3598,
+      "silent_benign_alarm_only": 0.04997
+    },
+    {
+      "guard": "tabm_energy",
+      "q": 0.05,
+      "silent_benign": 0.001,
+      "benign_review": 0.04635,
+      "unknown_caught": 0.3598,
+      "silent_benign_alarm_only": 0.04997
+    },
+    {
+      "guard": "tabm_energy",
+      "q": 0.1,
+      "silent_benign": 0.001,
+      "benign_review": 0.11535,
+      "unknown_caught": 0.3598,
+      "silent_benign_alarm_only": 0.04997
+    },
+    {
+      "guard": "tabm_msp",
+      "q": 0.005,
+      "silent_benign": 0.00103,
+      "benign_review": 0.0467,
+      "unknown_caught": 0.35976,
+      "silent_benign_alarm_only": 0.04997
+    },
+    {
+      "guard": "tabm_msp",
+      "q": 0.01,
+      "silent_benign": 0.00094,
+      "benign_review": 0.04693,
+      "unknown_caught": 0.35984,
+      "silent_benign_alarm_only": 0.04997
+    },
+    {
+      "guard": "tabm_msp",
+      "q": 0.02,
+      "silent_benign": 0.00094,
+      "benign_review": 0.06093,
+      "unknown_caught": 0.35984,
+      "silent_benign_alarm_only": 0.04997
+    },
+    {
+      "guard": "tabm_msp",
+      "q": 0.05,
+      "silent_benign": 0.00094,
+      "benign_review": 0.06093,
+      "unknown_caught": 0.35984,
+      "silent_benign_alarm_only": 0.04997
+    },
+    {
+      "guard": "tabm_msp",
+      "q": 0.1,
+      "silent_benign": 7e-05,
+      "benign_review": 0.13722,
+      "unknown_caught": 0.36072,
+      "silent_benign_alarm_only": 0.04997
+    }
+  ],
+  "runtime_seconds": 977.8
+}
