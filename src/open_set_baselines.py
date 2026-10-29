@@ -136,13 +136,20 @@ class Mahalanobis:
                               for c in np.unique(y)])
         f, y = f[idx], y[idx]
         self.mu_ = np.stack([f[y == c].mean(0) for c in np.unique(y)])
-        cov = LedoitWolf().fit(f - self.mu_[np.searchsorted(np.unique(y), y)])
-        self.prec_ = cov.precision_
+        f = f.astype(np.float64)
+        self.mu_ = self.mu_.astype(np.float64)
+        cov = LedoitWolf().fit(f - self.mu_[np.searchsorted(np.unique(y), y)]).covariance_
+        # Sayısal sağlamlık: ölü ReLU birimleri kovaryansı neredeyse tekil yapıyor (Cholesky çöküyordu).
+        # Özdeğer ayrışımı + taban (en büyük özdeğerin 1e-9'u); d^T Σ^-1 d = |d W|^2, W = V / sqrt(λ).
+        lam, V = np.linalg.eigh((cov + cov.T) / 2)
+        floor = max(lam.max(), 1e-12) * 1e-9
+        self.n_floored_ = int((lam < floor).sum())
+        self.W_ = V / np.sqrt(np.maximum(lam, floor))
         return self
 
     def score(self, f):
-        L = np.linalg.cholesky(self.prec_)                          # prec = L L^T -> d^T prec d = |d L|^2
-        fL, muL = f @ L, self.mu_ @ L
+        L = self.W_
+        fL, muL = f.astype(np.float64) @ L, self.mu_ @ L
         return np.min(np.stack([((fL - m) ** 2).sum(1) for m in muL], axis=1), axis=1)
 
 

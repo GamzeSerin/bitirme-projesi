@@ -646,6 +646,12 @@ Soru: Açık küme tanıma ve dağılım dışı tespit literatüründe bilinen 
 - **Yorum çerçevesi (önceden):** Bu yöntemlerden biri AUROC'ta TabM anlaşmazlığını geçerse "alarm için daha iyi bir skor var" diye raporlanır; BENIGN kontrolünde enerjiyi aynı analist yükünde geçerse kontrol skoru olarak önerilir. Tezin katkısı (iki sinyal kuralı, analist bütçesi, açıklanabilirlik) skordan bağımsızdır; sonuç hangi yöne çıkarsa çıksın kural değişmeden kalır, yalnız hangi skorla çalıştırılacağı güncellenir.
 - **Bilinen sınırlılık:** kNN koşul C'de AUROC'ta TabM anlaşmazlığını zaten geçiyor (0,88'e karşı 0,86), ama BENIGN kontrolünde işe yaramıyor; yeni yöntemler de bu iki ölçütle ayrı ayrı değerlendirilecek.
 
+- **Sapma notu (29.10.2026, sonuçlardan önce, hızlı denemede):** Mahalanobis skorunda hassasiyet matrisinin Cholesky ayrışımı
+  gerçek TabM omurga çıktısında çöktü ("positive definite değil"; ölü ReLU birimleri kovaryansı neredeyse tekil yapıyor). Hesap
+  float64'e ve kovaryansın özdeğer ayrışımına geçirildi (en büyük özdeğerin 1e-9'u taban). Yöntem aynı: kovaryansın tersi
+  tanımlıysa uzaklık değişmez (sentetik veride eski hesapla birebir aynı sonucu verdiği doğrulandı); yalnız sayısal olarak
+  tekil yönlere sonsuz ağırlık verilmez.
+
 ## Sütun hizası ve değer aralığı denetimi (19.10.2026)
 
 Kod: `src/audit_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/audit/audit.json`. Ham verideki 15 etiketin her biri için 6 kontrol (zaman damgası, IP, port 0–65535, 0/1 bayrak, ARP alanları, sayısal sütunlarda metin). İhlal yalnızca DDoS_UDP (zaman %100) ve MITM'de (zaman %100, port %30, bayrak %19); Normal'de %0,11 bayrak ihlali (önemsiz); diğer 12 saldırı türünde %0. Bu iki tür bulgu 7 gereği atıldı.
