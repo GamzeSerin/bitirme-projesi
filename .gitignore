@@ -29,3 +29,6 @@ outputs/dss_report.json
 .env
 .env.*
 !.env.example
+
+# Demo paketi (modeller içerir; Kaggle çıktısından indirilir)
+*.zip
