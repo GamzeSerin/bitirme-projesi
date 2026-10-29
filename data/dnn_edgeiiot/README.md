@@ -652,6 +652,53 @@ Soru: Açık küme tanıma ve dağılım dışı tespit literatüründe bilinen 
   tanımlıysa uzaklık değişmez (sentetik veride eski hesapla birebir aynı sonucu verdiği doğrulandı); yalnız sayısal olarak
   tekil yönlere sonsuz ağırlık verilmez.
 
+### Literatür karşılaştırması: sonuçlar (29.10.2026; koşul C, 5 aile, tohum 42/1/2; çıktı `outputs/dnn_edgeiiot/open_set_baselines/`)
+
+**1. Tek başına bilinmeyen skoru** (5 aile ortalaması, tohumlar arası ort. ± sd; eşik: bilinenlerin %95'i kabul):
+
+| Skor | AUROC | Yakalanan bilinmeyen | BENIGN'e sessiz |
+|---|---|---|---|
+| TabM anlaşmazlığı (tez) | 0,862 ± 0,001 | %48,9 | %2,52 |
+| Mahalanobis | 0,861 ± 0,004 | %54,9 | %2,79 |
+| kNN | 0,881 | %54,1 | %2,76 |
+| Otokodlayıcı | 0,695 ± 0,020 | %45,2 | %4,21 |
+| TabM MSP | 0,752 | %9,8 | %6,00 |
+| TabM enerji | 0,744 ± 0,006 | %12,2 | %5,94 |
+| OpenMax | 0,720 ± 0,002 | %11,1 | %6,22 |
+
+Mahalanobis AUROC'ta anlaşmazlıkla eşit (tohum başına fark −0,004 / +0,004 / −0,002), kNN önceden bilindiği gibi biraz önde
+(+0,019). Otokodlayıcı ve OpenMax geride. Önceden yazılan kurala göre: "alarm için anlaşmazlıktan açıkça daha iyi bir skor"
+yok; özellik uzayı uzaklıkları (kNN, Mahalanobis) aynı düzeyde.
+
+**2. İki sinyal kuralında BENIGN kontrolü olarak** (alarm = TabM anlaşmazlığı, sabit; kontrolsüz sessiz kaçış ort. %2,52):
+
+| Kontrol | q = %1 kaçış / inceleme | q = %5 kaçış / inceleme | q = %10 kaçış / inceleme |
+|---|---|---|---|
+| **TabM enerji (tez)** | %1,95 / %0,8 | **%0,53 / %3,3** | %0,08 / %6,2 |
+| TabM MSP | %1,98 / %0,8 | %0,68 / %3,2 | %0,05 / %6,6 |
+| OpenMax | %1,99 / %0,8 | %0,73 / %3,2 | %0,09 / %6,8 |
+| TabM anlaşmazlığı | %2,06 / %0,8 | %0,89 / %3,6 | %0,10 / %7,3 |
+| kNN | %2,48 / %1,0 | %2,31 / %3,9 | %1,73 / %8,0 |
+| Mahalanobis | %2,47 / %0,9 | %2,33 / %4,2 | %2,07 / %8,1 |
+| Otokodlayıcı | %2,48 / %0,9 | %2,48 / %4,3 | %2,42 / %8,2 |
+
+Kaçışların asıl olduğu ailede (BRUTEFORCE, kontrolsüz %10,67) q = %5'te: enerji %2,33, MSP %3,02, OpenMax %3,27; kNN %10,14,
+Mahalanobis %10,45, otokodlayıcı %10,59 (yani neredeyse hiç durdurmuyorlar). WEB'de (kontrolsüz %1,75): enerji %0,23;
+Mahalanobis %1,17, otokodlayıcı %1,73.
+
+**Yorum (önceden yazılan çerçeveye göre):**
+- BENIGN kontrolünde enerji tüm tohumlarda en iyi (q = %5'te Mahalanobis'e göre +%1,6–2,0, otokodlayıcıya göre +%1,7–2,1 puan
+  daha az kaçış; inceleme yükü de daha düşük). Önceden yazılan kurala göre "kontrol olarak başka bir yöntem daha iyi" sonucu çıkmadı.
+- Ayrışma sistematik: çıkış katmanından gelen skorlar (enerji, MSP, OpenMax) kontrol olarak çalışıyor; özellik/girdi uzayı
+  yoğunluğuna bakanlar (kNN, Mahalanobis, otokodlayıcı) AUROC'ta iyi olsa bile kaçışları durduramıyor. Bu, ikiz kontrolüyle
+  tutarlı: sessiz kaçışların en yakın eğitim komşusu %76–96 BENIGN, yani girdi uzayında normal trafiğin içindeler; uzaklık
+  temelli yöntemler onları "normal" görüyor.
+- Dolayısıyla "tek başına iyi ayırmak" ile "BENIGN'e kaçışı durdurmak" farklı ölçülerdir; tezin iki sinyalli tasarımı (alarm için
+  anlaşmazlık, kontrol için enerji) bu iki rol ayrı tutulduğu için savunulabilir. Ek bir ağ (otokodlayıcı) eğitmek iki rolde de
+  kazanç getirmedi.
+- Sınırlılık: Mahalanobis/kNN AUROC'ta anlaşmazlığa eşit ya da biraz önde olduğundan, alarm sinyali olarak anlaşmazlığın
+  üstünlüğü iddia edilmez; iddia, ek model ve ek veri yapısı gerektirmeden aynı düzeyde olmasıdır.
+
 ## Sütun hizası ve değer aralığı denetimi (19.10.2026)
 
 Kod: `src/audit_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/audit/audit.json`. Ham verideki 15 etiketin her biri için 6 kontrol (zaman damgası, IP, port 0–65535, 0/1 bayrak, ARP alanları, sayısal sütunlarda metin). İhlal yalnızca DDoS_UDP (zaman %100) ve MITM'de (zaman %100, port %30, bayrak %19); Normal'de %0,11 bayrak ihlali (önemsiz); diğer 12 saldırı türünde %0. Bu iki tür bulgu 7 gereği atıldı.
@@ -711,3 +758,14 @@ kendi çıkarıcımızın ürettiği 32 özelliğin (koşul C) veri setinin CSV'
 - Not: bu kontrol, demonun sınıflandırma başarısını değil, yalnız girdilerin eğitimdeki temsille aynı olup olmadığını ölçer.
 
 Çalıştırma: `python src/demo/feature_check_dnn_edgeiiot.py --pcap "<pcap>" --csv "<csv>" [--max-packets N]`
+
+**İlk koşu (29.10.2026) ve düzeltme.** XSS (16.215 paket / CSV 15.915 satır) ve Distance (ilk 100.000 / 100.000) çiftleri
+koşuldu. Sıra hizalı eşleşme 34 özelliğin yalnız 16'sında ≥ %99 çıktı; ancak değer dağılımları çoğu özellikte neredeyse aynı
+(ör. Distance `tcp.len` 0: %74,78 / %74,78), yani CSV satırları PCAP sırasında değil. Ayrıca CSV tarafı çevrilmeden okunmuştu
+(`tcp.flags`, `mqtt.hdrflags`, `mqtt.conflags`, `udp.port` CSV'de "hep 0" görünüyordu: onaltılık/çok değerli metin sayıya
+çevrilemiyordu). Bu bir araç hatasıydı; karar kuralı değişmedi. Araca eklenenler: CSV'ye de aynı normalleştirme, çok değerli
+alanlarda ilk değer, sıradan bağımsız çoklu küme eşleşmesi, özellik başına dağılım farkı (TVD) ve asıl hedefle, yani modelin
+eğitildiği `DNN-EdgeIIoT-dataset.csv`'deki aynı etiketli satırlarla karşılaştırma (`--dnn-csv`, `--dnn-label`). XSS'te 300 fazla
+paketin hepsi TCP dışı görünüyor (bizde `tcp.dstport` = 0 olan 1.038, CSV'de 737 satır); yazarlar bunları atmış olabilir.
+Karar kuralı DNN dosyasına göre uygulanır: TVD ≤ 0,01 ve DNN satırlarının bizde birebir karşılığının yüksek olması.
+

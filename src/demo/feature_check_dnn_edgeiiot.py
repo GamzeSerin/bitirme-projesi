@@ -61,7 +61,8 @@ def run_tshark(tshark, pcap, fields, max_packets):
 
 def normalize(series, rules):
     """tshark metnini sayıya çevirir; kullanılan kuralları 'rules' kümesine ekler."""
-    s = series.astype(str).str.strip()
+    s = series.astype(str).str.strip().str.split(",").str[0].str.strip()   # çok değerli alan -> ilk değer
+    s = s.str.replace(r"^(-?\d+)\.0$", r"\1", regex=True)
     out = pd.Series(np.zeros(len(s)), index=s.index)
     empty = s.eq("") | s.eq("nan")
     if (~empty).any():
@@ -84,8 +85,25 @@ def normalize(series, rules):
     return out, t[rest][bad].head(5).tolist()
 
 
-def csv_numeric(series):
-    return pd.to_numeric(series, errors="coerce")
+def csv_numeric(series, rules=None, bad_store=None, name=None):
+    """CSV tarafına da aynı normalleştirme (onaltılık, True/False, çok değerli metinler)."""
+    v, bad = normalize(series.fillna(""), rules if rules is not None else set())
+    if bad and bad_store is not None:
+        bad_store[name] = bad
+    return v
+
+
+def multiset_share(A, B):
+    """A'daki vektörlerin B'de (sayıları da dikkate alarak) karşılığı olanların oranı; sıradan bağımsız."""
+    from collections import Counter
+    ca, cb = Counter(map(tuple, A)), Counter(map(tuple, B))
+    return round(sum(min(n, cb[k]) for k, n in ca.items()) / max(len(A), 1), 4)
+
+
+def tvd(a, b):
+    pa, pb = a.value_counts(normalize=True), b.value_counts(normalize=True)
+    keys = pa.index.union(pb.index)
+    return round(float(0.5 * (pa.reindex(keys, fill_value=0) - pb.reindex(keys, fill_value=0)).abs().sum()), 4)
 
 
 def main():
@@ -95,6 +113,8 @@ def main():
     p.add_argument("--max-packets", type=int, default=0)
     p.add_argument("--tshark", default=shutil.which("tshark") or "tshark")
     p.add_argument("--out-dir", default="outputs/dnn_edgeiiot/demo")
+    p.add_argument("--dnn-csv", default=None, help="Modelin eğitildiği DNN-EdgeIIoT-dataset.csv (asıl hedef temsil)")
+    p.add_argument("--dnn-label", default=None, help="DNN dosyasında karşılaştırılacak Attack_type (ör. XSS, Normal)")
     args = p.parse_args()
     os.makedirs(args.out_dir, exist_ok=True)
     name = os.path.splitext(os.path.basename(args.pcap))[0].replace(" ", "_")
@@ -110,11 +130,11 @@ def main():
     ours = run_tshark(args.tshark, args.pcap, use, args.max_packets)
     print(f"tshark: {len(ours)} paket")
 
-    rules, report, nonnum = set(), {}, {}
+    rules, report, nonnum, csv_rules, csv_nonnum = set(), {}, {}, set(), {}
     aligned = len(ours) == len(ref)
     for f in FEATURES:
         r = {}
-        refv = csv_numeric(ref[f]) if f in ref.columns else None
+        refv = csv_numeric(ref[f], csv_rules, csv_nonnum, f) if f in ref.columns else None
         if f not in use:
             r["status"] = "tshark'ta alan yok" if f in cols else "CSV'de sütun yok"
             report[f] = r
@@ -134,6 +154,7 @@ def main():
             r["mismatch_examples"] = [{"row": int(i), "ours_raw": str(ours[f].iloc[i]), "ours": None if np.isnan(a[i]) else float(a[i]),
                                        "csv": float(b[i])} for i in mism]
         if refv is not None:
+            r["tvd_vs_csv"] = tvd(ov.dropna().round(6), refv.dropna().round(6))
             top_o = ov.value_counts(normalize=True).head(5)
             top_c = refv.value_counts(normalize=True).head(5)
             r["top_values_ours"] = {str(k): round(float(v), 4) for k, v in top_o.items()}
@@ -143,15 +164,33 @@ def main():
     # vektör düzeyi: 34 özellikli vektörlerin kaçının CSV'de birebir karşılığı var
     feats = [f for f in FEATURES if f in use and f in ref.columns]
     O = pd.DataFrame({f: normalize(ours[f], set())[0] for f in feats}).round(6)
-    R = ref[feats].apply(pd.to_numeric, errors="coerce").round(6)
-    keys_csv = set(map(tuple, R.fillna(-1e18).to_numpy()))
-    vec_match = round(float(np.mean([tuple(v) in keys_csv for v in O.fillna(-2e18).to_numpy()])), 4) if len(O) else None
+    R = pd.DataFrame({f: csv_numeric(ref[f]) for f in feats}).round(6)
+    vec_match = multiset_share(R.fillna(-1e18).to_numpy(), O.fillna(-2e18).to_numpy())   # CSV satırlarının bizde karşılığı
+
+    # 4) asıl hedef: modelin eğitildiği DNN-EdgeIIoT dosyasındaki aynı etiketli satırlar
+    dnn = None
+    if args.dnn_csv:
+        D = pd.read_csv(args.dnn_csv, usecols=lambda c: c in FEATURES or c == "Attack_type", low_memory=False)
+        D = D[D["Attack_type"] == args.dnn_label]
+        dnn_nonnum = {}
+        Dn = pd.DataFrame({f: csv_numeric(D[f], set(), dnn_nonnum, f) for f in FEATURES if f in D.columns}).round(6)
+        Of = pd.DataFrame({f: (O[f] if f in O.columns else pd.Series(0.0, index=O.index)) for f in Dn.columns})
+        per = {f: {"tvd": tvd(Of[f].dropna(), Dn[f].dropna()),
+                   "ours_top": {str(k): round(float(v), 4) for k, v in Of[f].value_counts(normalize=True).head(5).items()},
+                   "dnn_top": {str(k): round(float(v), 4) for k, v in Dn[f].value_counts(normalize=True).head(5).items()}}
+               for f in Dn.columns}
+        dnn = {"file": os.path.basename(args.dnn_csv), "label": args.dnn_label, "rows": int(len(Dn)),
+               "non_numeric_in_dnn": dnn_nonnum,
+               "dnn_rows_found_in_ours": multiset_share(Dn.fillna(-1e18).to_numpy(), Of.fillna(-2e18).to_numpy()),
+               "features": per}
 
     exact = {f: r.get("aligned_exact_match") for f, r in report.items() if r.get("aligned_exact_match") is not None}
     out = {"pcap": os.path.basename(args.pcap), "csv": os.path.basename(args.csv), "tshark": ver,
            "rows": {"ours": int(len(ours)), "csv": int(len(ref)), "aligned": aligned},
            "fields_missing_in_tshark": missing_fields, "normalization_rules_used": sorted(rules),
-           "non_numeric_examples": nonnum, "vector_match_rate": vec_match, "features": report,
+           "non_numeric_examples": nonnum, "csv_non_numeric_examples": csv_nonnum,
+           "csv_normalization_rules_used": sorted(csv_rules),
+           "csv_rows_found_in_ours_orderfree": vec_match, "features": report, "dnn_reference": dnn,
            "summary": {"features_compared": len(exact),
                        "features_exact_ge_0.99": sorted([f for f, v in exact.items() if v >= 0.99]),
                        "features_below_0.99": {f: v for f, v in sorted(exact.items(), key=lambda t: t[1]) if v < 0.99}}}
@@ -165,7 +204,16 @@ def main():
         for f, v in out["summary"]["features_below_0.99"].items():
             ex = report[f]["mismatch_examples"][:2]
             print(f"  {f:28s} eşleşme {v:.3f}  örnek: {[(e['ours_raw'], e['csv']) for e in ex]}")
-    print(f"34 özellikli vektörlerin CSV'de birebir karşılığı: {vec_match}")
+    print(f"CSV normalleştirme kuralları: {sorted(csv_rules)}")
+    print(f"Ham CSV satırlarının bizde birebir karşılığı (sıradan bağımsız): {vec_match}")
+    big = {f: r["tvd_vs_csv"] for f, r in report.items() if r.get("tvd_vs_csv", 0) > 0.01}
+    print(f"Dağılımı ham CSV'den ayrışan özellikler (TVD > 0,01): {big}")
+    if dnn:
+        print(f"\nDNN dosyası, etiket {dnn['label']}: {dnn['rows']} satır; bizde birebir karşılığı olan: "
+              f"{dnn['dnn_rows_found_in_ours']}; DNN'de sayı olmayan alanlar: {list(dnn['non_numeric_in_dnn'])}")
+        for f, r in sorted(dnn["features"].items(), key=lambda t: -t[1]["tvd"]):
+            if r["tvd"] > 0.01:
+                print(f"  {f:26s} TVD {r['tvd']:.3f}  bizim {r['ours_top']}  DNN {r['dnn_top']}")
     for f, r in report.items():
         if "status" in r:
             print(f"  {f}: {r['status']}")
