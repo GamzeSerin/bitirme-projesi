@@ -769,3 +769,18 @@ eğitildiği `DNN-EdgeIIoT-dataset.csv`'deki aynı etiketli satırlarla karşıl
 paketin hepsi TCP dışı görünüyor (bizde `tcp.dstport` = 0 olan 1.038, CSV'de 737 satır); yazarlar bunları atmış olabilir.
 Karar kuralı DNN dosyasına göre uygulanır: TVD ≤ 0,01 ve DNN satırlarının bizde birebir karşılığının yüksek olması.
 
+**Sonuç (ikinci koşu, 29.10.2026).**
+- **XSS:** Modelin eğitildiği DNN dosyasındaki 15.915 XSS satırının **%100'ünün** bizim tshark çıkarımımızda 34 özelliğiyle birebir
+  karşılığı var (sıradan bağımsız çoklu küme eşleşmesi); ham CSV satırları için de %100. Yani çıkarıcı, eğitimdeki temsili
+  birebir üretiyor. Yedi özellikte TVD 0,014–0,018 (kuraldaki 0,01'in biraz üstü); fark özellik çıkarımından değil paket
+  seçiminden: bizde 300 fazla paket var ve bunlar TCP dışı (`udp.port` 137/123 vb., `udp.time_delta` ≠ 0). DNN dosyasında XSS
+  için `udp.port` ve `udp.time_delta` hep 0, yani yazarlar bu paketleri kayda almamış.
+- **Distance (normal):** İlk 100.000 paketin ham CSV ile sıradan bağımsız eşleşmesi %99,95, dağılım farkı yok (TVD ≤ 0,01).
+  DNN dosyasındaki Normal satırlarla karşılaştırma bu cihaz için anlamlı değil: DNN'in 1.615.643 Normal satırı tüm cihazlardan
+  geliyor (ör. `tcp.dstport` 5900, 60944 başka cihazların), bu yüzden TVD yüksek ve DNN satırlarının bu tek cihazda karşılığı
+  %3,2. Ham CSV → DNN dönüşümünün birebir olduğu XSS'te gösterildiği için normal trafikte de çıkarım geçerli sayılır.
+- **Karar:** Çıkarıcı (tshark alanları + normalleştirme: onaltılık → tam sayı, True/False → 1/0, boş → 0, çok değerli alanda ilk
+  değer) demoda kullanılır. Açık kalan iki nokta: (1) yazarların attığı TCP dışı paketler demoda da atılacak mı (öneri: aynı
+  seçim, aksi hâlde model eğitimde görmediği satırlar görür; tez metninde belirtilir); (2) `dns.qry.name` bizde metin, DNN'de
+  sayısal: DNN dosyasındaki değer kümesine bakılıp aynı dönüşüm çıkarıcıya eklenecek.
+
