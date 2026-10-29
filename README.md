@@ -128,8 +128,12 @@ Edge-IIoTset'te yapılan analizler (planlar ve sonuçlar: `data/dnn_edgeiiot/REA
 | Kaçışların Karşı-Olgusal Açıklaması (XAI-3) + eş kontrolü | `src/xai_escape_counterfactual.py` | XAI-2 (kayıtlı TabM, Shapley) |
 | Derin öğrenme karşılaştırması: TabM / MLP / MC-dropout | `src/two_signal.py --classifier MLP\|MCDropout`, `src/dl_compare.py` | TabM'in two_signal koşuları (3 tohum) |
 | Tahmin süresi | `src/inference_time.py` | XAI-2 (kayıtlı TabM) |
+| Literatür karşılaştırması: OpenMax, Mahalanobis, otokodlayıcı (tek başına ve BENIGN kontrolü olarak, 3 tohum) | `src/open_set_baselines.py` | yok (GPU önerilir) |
+| Etiket karışıklığı payı: ana koşulda başka etiketle birebir aynı vektöre düşen satırlar | `src/label_noise_check.py` | yok (CPU) |
+| Zaman bölmesinde iki sinyal kuralı (3 tohum) | `src/two_signal.py --split time --skip-cp` | yükleyicinin satır sırası kayıt sırası olmalı (önce kontrol) |
 
-Hepsini sırayla (her adımda önce `--quick`) tek komutla:
+Hepsini sırayla (her adımda önce `--quick`) tek komutla. Varsayılan adımlar `xai2,dl,xai3,timing,baselines,noise`; zaman
+bölmesi (`time`) yalnız satır sırası kayıt sırasıysa `--steps time` ile ayrıca eklenir:
 
 ```bash
 python src/xai_dl_suite.py --dataset dataset_23 --data-file data/dataset_23 \

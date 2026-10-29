@@ -112,6 +112,16 @@ def extra_metrics(is_unk, alarm_score, energy, pred_names, cat_names, known):
             "known_macro_f1": round(float(f1_score(cat_names[kn], pred_names[kn], labels=known, average="macro")), 4)}
 
 
+def temporal_split(idx, fine, test_frac):
+    """Her ince etikette idx'leri kayıt sırasına (artan indeks = CSV satır sırası) göre dizer; son test_frac'ı ayırır."""
+    a, b = [], []
+    for lab in np.unique(fine[idx]):
+        ix = np.sort(idx[fine[idx] == lab])
+        cut = int(round((1 - test_frac) * len(ix)))
+        a.append(ix[:cut]); b.append(ix[cut:])
+    return np.concatenate(a), np.concatenate(b)
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--dataset", default="dnn_edgeiiot", choices=list(registry.DATASETS))
@@ -129,6 +139,10 @@ def main():
     p.add_argument("--save-rows", action="store_true", default=True)
     p.add_argument("--classifier", choices=list(CLASSIFIERS), default="TabM")
     p.add_argument("--mc-passes", type=int, default=32, help="MCDropout geçiş sayısı (TabM'in k'sı ile aynı)")
+    p.add_argument("--split", choices=["random", "time"], default="random",
+                   help="random: katmanlı rastgele 80/20 (ana deney). time: her ince etiketin kayıt sırasına göre ilk %%80 "
+                        "eğitim, son %%20 test; kalibrasyon eğitimin en son %%10'u (README, zaman bölmesinde iki sinyal)")
+    p.add_argument("--skip-cp", action="store_true", help="CP-TabM eğitme (kontrol listesinden cp_benign_z çıkar)")
     p.add_argument("--quick", action="store_true")
     args = p.parse_args()
     if args.quick:
@@ -146,8 +160,12 @@ def main():
     # Dosya adı da tohumu taşır: --out-dir elle verilse bile tohumlar birbirini silmez
     clf = args.classifier
     prefix, alarm_key, guards = CLASSIFIERS[clf]
+    if args.skip_cp:
+        guards = [g for g in guards if g != "cp_benign_z"]
     primary = f"{prefix}_energy"
     base_tag = args.condition if clf == "TabM" else f"{args.condition}_{clf.lower()}"
+    if args.split == "time":
+        base_tag += "_time"
     tag = base_tag if mseed == args.seed else f"{base_tag}_seed{mseed}"
     epochs = 3 if args.quick else 60
     t_start = time.perf_counter()
@@ -164,8 +182,12 @@ def main():
     if args.cp_config:
         with open(args.cp_config, encoding="utf-8") as f:
             cp_cfg = {fam: v["chosen"] for fam, v in json.load(f)["families"].items()}
-    idx_tr, idx_te = train_test_split(np.arange(len(category)), test_size=0.2, stratify=fine,
-                                      random_state=args.seed)
+    if args.split == "time":
+        # yükleyici satırların CSV (kayıt) sırasını korur (örneklem np.sort ile); her ince etikette sıraya göre kesilir
+        idx_tr, idx_te = temporal_split(np.arange(len(category)), fine, 0.2)
+    else:
+        idx_tr, idx_te = train_test_split(np.arange(len(category)), test_size=0.2, stratify=fine,
+                                          random_state=args.seed)
     print(f"{spec['name']}: {len(category)} satır, koşul {args.condition}; aileler {families}; "
           f"analist bütçeleri q = {QS}")
 
@@ -179,7 +201,10 @@ def main():
         known = [c for c in present if c not in fam_cats]
         b = known.index(benign)
         tr = idx_tr[~np.isin(category[idx_tr], fam_cats)]
-        tr_fit, tr_cal = train_test_split(tr, test_size=args.cal_size, stratify=fine[tr], random_state=args.seed)
+        if args.split == "time":
+            tr_fit, tr_cal = temporal_split(tr, fine, args.cal_size)
+        else:
+            tr_fit, tr_cal = train_test_split(tr, test_size=args.cal_size, stratify=fine[tr], random_state=args.seed)
         yfit = np.array([known.index(c) for c in category[tr_fit]])
         Xfit, Xcal, Xte = X.iloc[tr_fit], X.iloc[tr_cal], X.iloc[idx_te]
         is_unk = np.isin(category[idx_te], fam_cats)
@@ -192,16 +217,16 @@ def main():
         t_fit = time.perf_counter() - t_fit
         bf = cp_cfg.get(fam, {}).get("blind_frac", args.cp_blind_frac)
         cp = (CPTabMClassifier(blind_frac=bf, max_epochs=epochs, random_state=mseed, verbose=False).fit(Xfit, yfit)
-              if clf == "TabM" else None)
+              if clf == "TabM" and not args.skip_cp else None)
         knn = KNNScore(seed=args.seed).fit(Xfit)
 
         P_cal, S_cal = classifier_scores(clf, tabm, Xcal, args.mc_passes, mseed)
         P_te, S_te = classifier_scores(clf, tabm, Xte, args.mc_passes, mseed)
         pred_cal, pred_te = P_cal.argmax(1), P_te.argmax(1)
         if clf == "TabM":
-            G_cal = {"cp_benign_z": cp.class_energy_z(Xcal, b), "tabm_disagree": S_cal["disagree"],
+            G_cal = {"cp_benign_z": cp.class_energy_z(Xcal, b) if cp else None, "tabm_disagree": S_cal["disagree"],
                      "tabm_msp": S_cal["msp"], "tabm_energy": S_cal["energy"], "knn": knn.score(Xcal)}
-            G_te = {"cp_benign_z": cp.class_energy_z(Xte, b), "tabm_disagree": S_te["disagree"],
+            G_te = {"cp_benign_z": cp.class_energy_z(Xte, b) if cp else None, "tabm_disagree": S_te["disagree"],
                     "tabm_msp": S_te["msp"], "tabm_energy": S_te["energy"], "knn": knn.score(Xte)}
         else:
             G_cal = {g: (knn.score(Xcal) if g == "knn" else S_cal[g.split("_", 1)[1]]) for g in guards}
@@ -243,13 +268,15 @@ def main():
             np.savez_compressed(os.path.join(args.out_dir, f"rows_{fam}_{tag}.npz"),
                                 test_index=idx_te, category=category[idx_te], is_unknown=is_unk,
                                 tabm_pred=np.array(known)[pred_te], alarm=alarm, tau_alarm=tau1,
-                                **{f"score_{k}": v for k, v in G_te.items()})
+                                **{f"score_{k}": v for k, v in G_te.items() if v is not None})
         print(f"  ({time.perf_counter() - t0:.0f} s)")
 
     df = pd.DataFrame(rows)
     mean = df.groupby(["guard", "q"])[["silent_benign", "benign_review", "unknown_caught",
                                        "silent_benign_alarm_only"]].mean().round(5).reset_index()
     out = {"dataset_id": args.dataset, "condition": args.condition, "dropped_features": drop,
+           "split": ("zaman: her ince etikette kayıt sırasına göre ilk %80 eğitim / son %20 test; kalibrasyon eğitimin son %10'u"
+                     if args.split == "time" else "rastgele: ince etikete göre katmanlı 80/20, kalibrasyon %10"),
            "classifier": ("TabM (alarm: üye anlaşmazlığı, %95 bilinen kalibrasyon eşiği)" if clf == "TabM" else
                           f"{clf} (k = 1; alarm: {alarm_key}, %95 bilinen kalibrasyon eşiği)"),
            "guard_threshold": "kalibrasyonda alarm almamış ve BENIGN denmiş gerçek BENIGN satırlarının (1-q) yüzdeliği",

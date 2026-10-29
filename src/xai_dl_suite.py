@@ -12,7 +12,13 @@ Adımlar (--steps ile seçilir; sıra önemli):
           (outputs/<dataset>/two_signal/, s1/, s2/; AUROC için satır dosyaları gerekir).
   xai3    Kaçışların Karşı-Olgusal Açıklaması (XAI-3) + eş kontrolü: src/xai_escape_counterfactual.py
           Önkoşul: xai2 (kayıtlı TabM ve Shapley değerleri).
-  timing  Tahmin süresi: src/inference_time.py (--timing-family ailesi; önkoşul xai2). İsteğe bağlı.
+  timing  Tahmin süresi: src/inference_time.py (--timing-family ailesi; önkoşul xai2).
+  baselines Literatür karşılaştırması: src/open_set_baselines.py (OpenMax, Mahalanobis, otokodlayıcı; tek başına ve
+          BENIGN kontrolü olarak; model tohumları --seeds). GPU önerilir.
+  noise   Etiket karışıklığı payı: src/label_noise_check.py (ana koşulda başka etiketle birebir aynı vektöre düşen satırlar). CPU.
+  time    Zaman bölmesinde iki sinyal kuralı: src/two_signal.py --split time --skip-cp, tohumlar --seeds. VARSAYILANDA YOK:
+          yalnız yükleyicinin döndürdüğü satır sırası kayıt (zaman) sırasıysa anlamlıdır; önce bunu kontrol edin
+          (Edge-IIoTset'te CSV satır sırası etiket içinde kayıt sırasıyla aynıydı).
 
 Örnek (CICIoT2023):
   python src/xai_dl_suite.py --dataset dataset_23 --data-file data/dataset_23 \\
@@ -27,7 +33,7 @@ import sys
 import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-STEPS = ["xai2", "dl", "xai3", "timing"]
+STEPS = ["xai2", "dl", "xai3", "timing", "baselines", "noise", "time"]
 
 
 def run(cmd, log=None):
@@ -57,7 +63,7 @@ def main():
     p.add_argument("--params-from", choices=["run", "metrics"], default="run")
     p.add_argument("--condition", default=None, help="Varsayılan: kayıttaki ana koşul")
     p.add_argument("--families", required=True, help="XAI adımlarının aileleri, ör. RECON,SPOOFING,WEB,BRUTEFORCE")
-    p.add_argument("--steps", default="xai2,dl,xai3", help=f"Virgülle: {','.join(STEPS)}")
+    p.add_argument("--steps", default="xai2,dl,xai3,timing,baselines,noise", help=f"Virgülle: {','.join(STEPS)}")
     p.add_argument("--seeds", default="42,1,2", help="dl adımının model tohumları")
     p.add_argument("--cp-config", default="", help="two_signal için (MLP/MCDropout'ta kullanılmaz, iletilir)")
     p.add_argument("--timing-family", default=None, help="timing adımının ailesi (varsayılan: --families'in ilki)")
@@ -118,8 +124,27 @@ def main():
         cmd = [py, os.path.join(HERE, "inference_time.py")] + base + cond + ["--family", fam]
         step("Tahmin süresi", cmd, f"log_inference_time_{fam}_{c}.txt", ["--out-dir", os.path.join(quick_dir, "timing")])
 
+    if "baselines" in steps:
+        cmd = [py, os.path.join(HERE, "open_set_baselines.py")] + base + cond + ["--seeds", args.seeds]
+        step("Literatür karşılaştırması", cmd, f"log_open_set_baselines_{c}.txt",
+             ["--out-dir", os.path.join(quick_dir, "baselines")])
+
+    if "noise" in steps:
+        cmd = [py, os.path.join(HERE, "label_noise_check.py")] + base + cond
+        step("Etiket karışıklığı", cmd, f"log_label_noise_{c}.txt", ["--out-dir", os.path.join(quick_dir, "noise")])
+
+    if "time" in steps:
+        for i, seed in enumerate(int(s) for s in args.seeds.split(",") if s):
+            cmd = [py, os.path.join(HERE, "two_signal.py")] + base + cond + ["--split", "time", "--skip-cp",
+                                                                            "--model-seed", str(seed)]
+            log = f"log_two_signal_{c}_time" + ("" if seed == 42 else f"_s{seed}") + ".txt"
+            if i == 0:
+                step(f"Zaman bölmesi tohum {seed}", cmd, log, ["--out-dir", os.path.join(quick_dir, "two_signal_time")])
+            elif not run(cmd, os.path.join(logs, log)):
+                raise SystemExit(f"Zaman bölmesi tohum {seed}: tam koşu başarısız")
+
     print(f"\nHepsi bitti ({(time.perf_counter() - t_start) / 60:.0f} dk). Çıktılar: outputs/{args.dataset}/ "
-          f"(xai_unknown_decision, two_signal, dl_compare, xai_escape_counterfactual, inference_time); kayıtlar: {logs}")
+          f"(xai_unknown_decision, two_signal, dl_compare, xai_escape_counterfactual, inference_time, open_set_baselines, label_noise); kayıtlar: {logs}")
 
 
 if __name__ == "__main__":
