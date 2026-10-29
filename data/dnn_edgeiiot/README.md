@@ -647,6 +647,33 @@ Bilinmeyen Kararının Açıklanması (XAI-2) ve Kaçışların Karşı-Olgusal 
     kodlama ise (ör. kategori numarası) eşleme tablosu çıkarılır ya da alan demoda sabit tutulup sınırlama olarak yazılır.
   - Etiket başına asıl ölçü düşükse (eşleşmeyenler bir türde toplanmıyorsa) o etiketin PCAP'i demoda kullanılmaz.
 
+**Sonuç, ilk koşu (29.10.2026; 34 özellik, tüm paketler).** Çıktı `outputs/dnn_edgeiiot/demo/validate_extractor.{json,log}`.
+
+| PCAP (etiket) | Okunan paket | Bizim satırların DNN'de karşılığı | DNN satırlarının bizde | UDP'nin DNN'de karşılığı |
+|---|---|---|---|---|
+| XSS | 16.215 (tamamı) | %98,2 | **%100** | %0 (298 paket) |
+| SQL_injection | 51.228 (tamamı) | %99,95 | **%100** | %0 (25) |
+| Uploading | 37.644 (tamamı) | %99,97 | **%100** | %0 (9) |
+| Password | ilk 300.000 | %56,8 | – | %0 (197) |
+| Port_Scanning | 23.329 (tamamı) | %55,3 | %57,2 | %0 (565) |
+| DDoS_TCP | ilk 300.000 | %11,9 | – | (UDP yok) |
+| Normal · Distance | ilk 300.000 | %51,3 | – | %0 (99) |
+| Normal · Temperature_and_Humidity | ilk 300.000 | %98,0 | – | %0 (6.082) |
+
+- **Açık nokta 1, paket seçimi → karar: UDP atılır.** UDP paketlerinin 8 PCAP'in hiçbirinde DNN'de karşılığı yok; eşleşmeyenlerin
+  büyük kısmı SSDP (239.255.255.250), yayın ve mDNS gibi arka plan trafiği. Önceden yazılan kurala göre süzgeç uygulanır.
+- **Açık nokta 2, `dns.qry.name` → karar: "zero".** DNN dosyasında modelin kullandığı bütün etiketlerde değer 0 (Normal'de %99,89; kalan
+  %0,11 0,00004 gibi anlamsız küçük sayılar, büyük olasılıkla başka alandan kayma). 0 dışı değerler yalnız hizasız DDoS_UDP ve MITM
+  satırlarında. Yazarlar alan adını kaydetmemiş; bizdeki metin → 0 kuralı doğru.
+- **WEB ailesi birebir:** demoda "görülmemiş saldırı" olarak oynatılacak üç PCAP'te DNN satırlarının tamamı çıkarımımızda var.
+- **Diğerlerinde düşük oran:** dağılım farkı neredeyse yalnız `tcp.ack` ve `tcp.seq`'te (Port_Scanning `tcp.ack` TVD 0,44, diğer alanlar
+  ≤ 0,03; DDoS_TCP `tcp.ack` 0,58, `tcp.dstport` 0,30). Bu iki alan bağlantıya özgü sayaç ve ana koşul C'de modele girmiyor. Ayrıca DNN
+  dosyası bir örneklem olduğundan, ilk 300 bin paketi okunan büyük PCAP'lerde neredeyse benzersiz vektörlerin DNN'de bulunmaması beklenir.
+
+**Sonradan eklenen analiz (ilk sonuçlardan sonra tanımlandı, 29.10.2026):** aynı karşılaştırma modelin gerçekten gördüğü 32 özellikte
+(koşul C) ve UDP süzgeciyle tekrarlanır (`model_input_C_no_udp`). Karar kuralı aynı; değerlendirme bu sonuca göre yapılır, ilk koşunun
+sayıları da raporda kalır.
+
 ## Literatür karşılaştırması: OpenMax, Mahalanobis, otokodlayıcı. Analiz planı (sonuçlardan ÖNCE yazıldı, 29.10.2026)
 
 Soru: Açık küme tanıma ve dağılım dışı tespit literatüründe bilinen yöntemler, TabM'in üye anlaşmazlığından (tezin alarmı) ve enerjisinden (tezin BENIGN kontrolü) daha iyi mi? Eşik yok; aşağıdakilerin tamamı raporlanır. Bir yöntem TabM skorlarını geçerse bu açıkça yazılır.

@@ -26,7 +26,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import numpy as np
 import pandas as pd
 
-from extractor_dnn_edgeiiot import FEATURES, extract, protocol_of, to_number
+from extractor_dnn_edgeiiot import CONDITIONS, FEATURES, extract, protocol_of, to_number
 
 # (PCAP, DNN Attack_type). Demoda kullanılacak aileler ağırlıkta: WEB (bilinmeyen), BRUTEFORCE, RECON, DDOS, normal.
 PCAPS = [("Attack traffic/XSS attacks.pcap", "XSS"),
@@ -105,7 +105,28 @@ def main():
         miss = ~hit
         pair = (meta["ip.src"].str.split(",").str[0] + " > " + meta["ip.dst"].str.split(",").str[0]).where(
             meta["ip.src"].ne(""), "(IP yok)")
-        r = {"pcap": os.path.basename(path), "label": lab, "packets": int(len(X)), "pcap_fully_read": full,
+        # Sonradan eklenen analiz (29.10.2026, ilk sonuçlardan sonra): modelin gördüğü özellikler (koşul C, 32) ve
+        # UDP süzgeciyle (ilk koşuda UDP'nin 8 PCAP'te de DNN'de karşılığı yoktu). tcp.seq/tcp.ack bağlantıya özgü
+        # sayaç: 34 özellikte birebir eşleşmeyi neredeyse benzersiz değerleriyle düşürüyor, ama C'de modele girmiyor.
+        colsC = [f for f in FEATURES if f not in CONDITIONS["C_seq_ack_yok"]]
+        keep = (proto != "udp").to_numpy()
+        XC = Xr[colsC].to_numpy()[keep]
+        DC = DN[lab][colsC].to_numpy()
+        dsetC = set(map(tuple, DC))
+        hitC = np.array([tuple(v) in dsetC for v in XC])
+        cdC, coC = Counter(map(tuple, DC)), Counter(map(tuple, XC))
+        dnn_in_oursC = sum(min(n, coC[k]) for k, n in cdC.items()) / max(len(DC), 1)
+        protoK = proto[keep]
+        modelC = {"features": len(colsC), "udp_dropped": int((~keep).sum()),
+                  "ours_in_dnn": round(float(hitC.mean()), 4),
+                  "dnn_in_ours": round(float(dnn_in_oursC), 4) if full else None,
+                  "by_protocol": {pr: {"packets": int((protoK == pr).sum()),
+                                       "in_dnn": round(float(hitC[(protoK == pr).to_numpy()].mean()), 4)}
+                                  for pr in sorted(protoK.unique())},
+                  "tvd_over_0.01": {f: v for f, v in
+                                    ((f, tvd(Xr.loc[keep, f], DN[lab][f].replace(-1e18, np.nan).dropna())) for f in colsC)
+                                    if v > 0.01}}
+        r = {"pcap": os.path.basename(path), "model_input_C_no_udp": modelC, "label": lab, "packets": int(len(X)), "pcap_fully_read": full,
              "dnn_rows": int(len(DN[lab])),
              "ours_in_dnn": round(float(hit.mean()), 4),
              "dnn_in_ours": round(float(dnn_in_ours), 4) if full else None,
@@ -127,6 +148,10 @@ def main():
               + "  ".join(f"{k} {v['packets']} ({v['in_dnn']:.3f})" for k, v in r["by_protocol"].items()))
         print(f"  eşleşmeyen en sık IP çiftleri: {r['unmatched_top_pairs']}")
         print(f"  eşleşen en sık IP çiftleri:    {r['matched_top_pairs']}")
+        print(f"  MODEL GİRDİSİ (koşul C, {modelC['features']} özellik, UDP atıldı: {modelC['udp_dropped']}): "
+              f"bizim satırların DNN'de karşılığı {modelC['ours_in_dnn']:.4f}, DNN satırlarının bizde {modelC['dnn_in_ours']}; "
+              + "  ".join(f"{k} {v['packets']} ({v['in_dnn']:.3f})" for k, v in modelC["by_protocol"].items()))
+        print(f"  MODEL GİRDİSİ TVD > 0,01: {modelC['tvd_over_0.01']}")
         big = {f: v for f, v in r["tvd"].items() if v > 0.01}
         print(f"  TVD > 0,01: {big}")
         if r["dns_text_values_ours"]:
