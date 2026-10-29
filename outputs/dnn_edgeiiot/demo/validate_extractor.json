@@ -1,0 +1,804 @@
+{
+  "dnn_file": "DNN-EdgeIIoT-dataset.csv",
+  "max_packets": 300000,
+  "labels_in_dnn": [
+    "Backdoor",
+    "DDoS_HTTP",
+    "DDoS_ICMP",
+    "DDoS_TCP",
+    "DDoS_UDP",
+    "Fingerprinting",
+    "MITM",
+    "Normal",
+    "Password",
+    "Port_Scanning",
+    "Ransomware",
+    "SQL_injection",
+    "Uploading",
+    "Vulnerability_scanner",
+    "XSS"
+  ],
+  "dns_qry_name_profile_dnn": {
+    "Backdoor": {
+      "n_unique": 1,
+      "top": {
+        "0.0": 1.0
+      }
+    },
+    "DDoS_HTTP": {
+      "n_unique": 1,
+      "top": {
+        "0.0": 1.0
+      }
+    },
+    "DDoS_ICMP": {
+      "n_unique": 1,
+      "top": {
+        "0.0": 1.0
+      }
+    },
+    "DDoS_TCP": {
+      "n_unique": 1,
+      "top": {
+        "0.0": 1.0
+      }
+    },
+    "DDoS_UDP": {
+      "n_unique": 11534,
+      "top": {
+        "0.0": 0.9051,
+        "2081753.0": 0.0,
+        "2082274.0": 0.0,
+        "2082448.0": 0.0,
+        "2082752.0": 0.0,
+        "2082975.0": 0.0,
+        "2083006.0": 0.0,
+        "2083020.0": 0.0
+      }
+    },
+    "Fingerprinting": {
+      "n_unique": 1,
+      "top": {
+        "0.0": 1.0
+      }
+    },
+    "MITM": {
+      "n_unique": 2,
+      "top": {
+        "0.0": 0.813,
+        "1.0": 0.187
+      }
+    },
+    "Normal": {
+      "n_unique": 916,
+      "top": {
+        "0.0": 0.9989,
+        "4e-05": 0.0,
+        "3.9e-05": 0.0,
+        "3.4e-05": 0.0,
+        "4.1e-05": 0.0,
+        "5.6999999999999996e-05": 0.0,
+        "3.3e-05": 0.0,
+        "5.7999999999999994e-05": 0.0
+      }
+    },
+    "Password": {
+      "n_unique": 1,
+      "top": {
+        "0.0": 1.0
+      }
+    },
+    "Port_Scanning": {
+      "n_unique": 1,
+      "top": {
+        "0.0": 1.0
+      }
+    },
+    "Ransomware": {
+      "n_unique": 1,
+      "top": {
+        "0.0": 1.0
+      }
+    },
+    "SQL_injection": {
+      "n_unique": 1,
+      "top": {
+        "0.0": 1.0
+      }
+    },
+    "Uploading": {
+      "n_unique": 1,
+      "top": {
+        "0.0": 1.0
+      }
+    },
+    "Vulnerability_scanner": {
+      "n_unique": 1,
+      "top": {
+        "0.0": 1.0
+      }
+    },
+    "XSS": {
+      "n_unique": 1,
+      "top": {
+        "0.0": 1.0
+      }
+    }
+  },
+  "pcaps": [
+    {
+      "pcap": "XSS attacks.pcap",
+      "label": "XSS",
+      "packets": 16215,
+      "pcap_fully_read": true,
+      "dnn_rows": 15915,
+      "ours_in_dnn": 0.9815,
+      "dnn_in_ours": 1.0,
+      "by_protocol": {
+        "arp": {
+          "packets": 59,
+          "in_dnn": 1.0
+        },
+        "other": {
+          "packets": 680,
+          "in_dnn": 0.9971
+        },
+        "tcp": {
+          "packets": 15178,
+          "in_dnn": 1.0
+        },
+        "udp": {
+          "packets": 298,
+          "in_dnn": 0.0
+        }
+      },
+      "unmatched_top_pairs": {
+        "192.168.0.128 > 239.255.255.250": 260,
+        "192.168.0.101 > 192.168.0.255": 18,
+        "192.168.0.128 > 160.119.238.171": 8,
+        "160.119.238.171 > 192.168.0.128": 6,
+        "(IP yok)": 2,
+        "192.168.0.128 > 224.0.0.251": 2,
+        "192.168.0.128 > 192.168.0.1": 2,
+        "192.168.0.1 > 192.168.0.128": 2
+      },
+      "matched_top_pairs": {
+        "192.168.0.170 > 192.168.0.128": 8029,
+        "192.168.0.128 > 192.168.0.170": 7062,
+        "(IP yok)": 552,
+        "192.168.0.128 > 224.0.0.251": 62,
+        "192.168.0.128 > 224.0.0.252": 62
+      },
+      "tvd": {
+        "arp.opcode": 0.0001,
+        "arp.hw.size": 0.0001,
+        "icmp.seq_le": 0.0,
+        "icmp.transmit_timestamp": 0.0,
+        "http.content_length": 0.0013,
+        "http.response": 0.0013,
+        "tcp.ack": 0.0155,
+        "tcp.connection.fin": 0.0027,
+        "tcp.connection.rst": 0.0008,
+        "tcp.connection.syn": 0.0014,
+        "tcp.connection.synack": 0.0014,
+        "tcp.dstport": 0.0176,
+        "tcp.flags": 0.0176,
+        "tcp.flags.ack": 0.0155,
+        "tcp.len": 0.003,
+        "tcp.seq": 0.0148,
+        "udp.port": 0.0185,
+        "udp.time_delta": 0.0138,
+        "dns.qry.name": 0.0,
+        "dns.qry.qu": 0.0,
+        "dns.retransmission": 0.0,
+        "dns.retransmit_request": 0.0,
+        "dns.retransmit_request_in": 0.0,
+        "mqtt.conflag.cleansess": 0.0,
+        "mqtt.conflags": 0.0,
+        "mqtt.hdrflags": 0.0,
+        "mqtt.len": 0.0,
+        "mqtt.msgtype": 0.0,
+        "mqtt.proto_len": 0.0,
+        "mqtt.topic_len": 0.0,
+        "mqtt.ver": 0.0,
+        "mbtcp.len": 0.0,
+        "mbtcp.trans_id": 0.0,
+        "mbtcp.unit_id": 0.0
+      },
+      "dns_text_values_ours": {
+        "_ipps._tcp.local,_ipp._tcp.local": 4,
+        "safebrowsing.googleapis.com": 2,
+        "cdn.jsdelivr.net": 2
+      },
+      "non_numeric": {}
+    },
+    {
+      "pcap": "SQL injection attack.pcap",
+      "label": "SQL_injection",
+      "packets": 51228,
+      "pcap_fully_read": true,
+      "dnn_rows": 51203,
+      "ours_in_dnn": 0.9995,
+      "dnn_in_ours": 1.0,
+      "by_protocol": {
+        "arp": {
+          "packets": 15,
+          "in_dnn": 1.0
+        },
+        "other": {
+          "packets": 42,
+          "in_dnn": 1.0
+        },
+        "tcp": {
+          "packets": 51146,
+          "in_dnn": 1.0
+        },
+        "udp": {
+          "packets": 25,
+          "in_dnn": 0.0
+        }
+      },
+      "unmatched_top_pairs": {
+        "192.168.0.128 > 239.255.255.250": 16,
+        "192.168.0.128 > 196.10.52.57": 5,
+        "196.10.52.57 > 192.168.0.128": 4
+      },
+      "matched_top_pairs": {
+        "192.168.0.170 > 192.168.0.128": 26375,
+        "192.168.0.128 > 192.168.0.170": 24771,
+        "(IP yok)": 45,
+        "0.0.0.0 > 224.0.0.1": 4,
+        "192.168.0.128 > 224.0.0.251": 4
+      },
+      "tvd": {
+        "arp.opcode": 0.0,
+        "arp.hw.size": 0.0,
+        "icmp.seq_le": 0.0,
+        "icmp.transmit_timestamp": 0.0,
+        "http.content_length": 0.0,
+        "http.response": 0.0,
+        "tcp.ack": 0.0004,
+        "tcp.connection.fin": 0.0001,
+        "tcp.connection.rst": 0.0,
+        "tcp.connection.syn": 0.0,
+        "tcp.connection.synack": 0.0,
+        "tcp.dstport": 0.0005,
+        "tcp.flags": 0.0005,
+        "tcp.flags.ack": 0.0004,
+        "tcp.len": 0.0001,
+        "tcp.seq": 0.0004,
+        "udp.port": 0.0005,
+        "udp.time_delta": 0.0003,
+        "dns.qry.name": 0.0,
+        "dns.qry.qu": 0.0,
+        "dns.retransmission": 0.0,
+        "dns.retransmit_request": 0.0,
+        "dns.retransmit_request_in": 0.0,
+        "mqtt.conflag.cleansess": 0.0,
+        "mqtt.conflags": 0.0,
+        "mqtt.hdrflags": 0.0,
+        "mqtt.len": 0.0,
+        "mqtt.msgtype": 0.0,
+        "mqtt.proto_len": 0.0,
+        "mqtt.topic_len": 0.0,
+        "mqtt.ver": 0.0,
+        "mbtcp.len": 0.0,
+        "mbtcp.trans_id": 0.0,
+        "mbtcp.unit_id": 0.0
+      },
+      "dns_text_values_ours": {},
+      "non_numeric": {}
+    },
+    {
+      "pcap": "Uploading attack.pcap",
+      "label": "Uploading",
+      "packets": 37644,
+      "pcap_fully_read": true,
+      "dnn_rows": 37634,
+      "ours_in_dnn": 0.9997,
+      "dnn_in_ours": 1.0,
+      "by_protocol": {
+        "arp": {
+          "packets": 8,
+          "in_dnn": 1.0
+        },
+        "other": {
+          "packets": 56,
+          "in_dnn": 0.9821
+        },
+        "tcp": {
+          "packets": 37571,
+          "in_dnn": 1.0
+        },
+        "udp": {
+          "packets": 9,
+          "in_dnn": 0.0
+        }
+      },
+      "unmatched_top_pairs": {
+        "192.168.0.128 > 194.0.5.123": 5,
+        "194.0.5.123 > 192.168.0.128": 2,
+        "(IP yok)": 1,
+        "192.168.0.128 > 224.0.0.251": 1,
+        "192.168.0.101 > 192.168.0.255": 1
+      },
+      "matched_top_pairs": {
+        "192.168.0.170 > 192.168.0.128": 20470,
+        "192.168.0.128 > 192.168.0.170": 17101,
+        "(IP yok)": 51,
+        "0.0.0.0 > 224.0.0.1": 4,
+        "192.168.0.128 > 224.0.0.252": 4
+      },
+      "tvd": {
+        "arp.opcode": 0.0,
+        "arp.hw.size": 0.0,
+        "icmp.seq_le": 0.0,
+        "icmp.transmit_timestamp": 0.0,
+        "http.content_length": 0.0,
+        "http.response": 0.0,
+        "tcp.ack": 0.0002,
+        "tcp.connection.fin": 0.0,
+        "tcp.connection.rst": 0.0,
+        "tcp.connection.syn": 0.0001,
+        "tcp.connection.synack": 0.0,
+        "tcp.dstport": 0.0003,
+        "tcp.flags": 0.0003,
+        "tcp.flags.ack": 0.0002,
+        "tcp.len": 0.0,
+        "tcp.seq": 0.0002,
+        "udp.port": 0.0003,
+        "udp.time_delta": 0.0001,
+        "dns.qry.name": 0.0,
+        "dns.qry.qu": 0.0,
+        "dns.retransmission": 0.0,
+        "dns.retransmit_request": 0.0,
+        "dns.retransmit_request_in": 0.0,
+        "mqtt.conflag.cleansess": 0.0,
+        "mqtt.conflags": 0.0,
+        "mqtt.hdrflags": 0.0,
+        "mqtt.len": 0.0,
+        "mqtt.msgtype": 0.0,
+        "mqtt.proto_len": 0.0,
+        "mqtt.topic_len": 0.0,
+        "mqtt.ver": 0.0,
+        "mbtcp.len": 0.0,
+        "mbtcp.trans_id": 0.0,
+        "mbtcp.unit_id": 0.0
+      },
+      "dns_text_values_ours": {
+        "_ipps._tcp.local,_ipp._tcp.local": 2
+      },
+      "non_numeric": {}
+    },
+    {
+      "pcap": "Password attacks.pcap",
+      "label": "Password",
+      "packets": 300000,
+      "pcap_fully_read": false,
+      "dnn_rows": 50153,
+      "ours_in_dnn": 0.5676,
+      "dnn_in_ours": null,
+      "by_protocol": {
+        "arp": {
+          "packets": 160,
+          "in_dnn": 1.0
+        },
+        "other": {
+          "packets": 409,
+          "in_dnn": 0.9756
+        },
+        "tcp": {
+          "packets": 299234,
+          "in_dnn": 0.5672
+        },
+        "udp": {
+          "packets": 197,
+          "in_dnn": 0.0
+        }
+      },
+      "unmatched_top_pairs": {
+        "192.168.0.128 > 192.168.0.170": 129493,
+        "192.168.0.128 > 196.10.52.57": 50,
+        "196.10.52.57 > 192.168.0.128": 40,
+        "192.168.0.128 > 84.2.46.19": 21,
+        "192.168.0.128 > 239.255.255.250": 20,
+        "192.168.0.101 > 192.168.0.255": 15,
+        "192.168.0.170 > 192.168.0.128": 14,
+        "84.2.46.19 > 192.168.0.128": 12
+      },
+      "matched_top_pairs": {
+        "192.168.0.170 > 192.168.0.128": 148656,
+        "192.168.0.128 > 192.168.0.170": 21071,
+        "(IP yok)": 460,
+        "0.0.0.0 > 224.0.0.1": 33,
+        "192.168.0.128 > 224.0.0.252": 33
+      },
+      "tvd": {
+        "arp.opcode": 0.0002,
+        "arp.hw.size": 0.0002,
+        "icmp.seq_le": 0.0,
+        "icmp.transmit_timestamp": 0.0,
+        "http.content_length": 0.0014,
+        "http.response": 0.001,
+        "tcp.ack": 0.0087,
+        "tcp.connection.fin": 0.0016,
+        "tcp.connection.rst": 0.0014,
+        "tcp.connection.syn": 0.0003,
+        "tcp.connection.synack": 0.0015,
+        "tcp.dstport": 0.163,
+        "tcp.flags": 0.0032,
+        "tcp.flags.ack": 0.0007,
+        "tcp.len": 0.0025,
+        "tcp.seq": 0.008,
+        "udp.port": 0.0007,
+        "udp.time_delta": 0.0004,
+        "dns.qry.name": 0.0,
+        "dns.qry.qu": 0.0,
+        "dns.retransmission": 0.0,
+        "dns.retransmit_request": 0.0,
+        "dns.retransmit_request_in": 0.0,
+        "mqtt.conflag.cleansess": 0.0,
+        "mqtt.conflags": 0.0,
+        "mqtt.hdrflags": 0.0,
+        "mqtt.len": 0.0,
+        "mqtt.msgtype": 0.0,
+        "mqtt.proto_len": 0.0,
+        "mqtt.topic_len": 0.0,
+        "mqtt.ver": 0.0,
+        "mbtcp.len": 0.0,
+        "mbtcp.trans_id": 0.0,
+        "mbtcp.unit_id": 0.0
+      },
+      "dns_text_values_ours": {
+        "_ipps._tcp.local,_ipp._tcp.local": 8,
+        "1.debian.pool.ntp.org": 4,
+        "2.debian.pool.ntp.org": 4,
+        "0.debian.pool.ntp.org": 2
+      },
+      "non_numeric": {}
+    },
+    {
+      "pcap": "Port Scanning attack.pcap",
+      "label": "Port_Scanning",
+      "packets": 23329,
+      "pcap_fully_read": true,
+      "dnn_rows": 22564,
+      "ours_in_dnn": 0.5534,
+      "dnn_in_ours": 0.5722,
+      "by_protocol": {
+        "arp": {
+          "packets": 1746,
+          "in_dnn": 1.0
+        },
+        "icmp": {
+          "packets": 35,
+          "in_dnn": 0.0
+        },
+        "other": {
+          "packets": 1009,
+          "in_dnn": 0.8365
+        },
+        "tcp": {
+          "packets": 19974,
+          "in_dnn": 0.5167
+        },
+        "udp": {
+          "packets": 565,
+          "in_dnn": 0.0
+        }
+      },
+      "unmatched_top_pairs": {
+        "192.168.0.170 > 192.168.0.128": 9654,
+        "192.168.0.129 > 224.0.0.251": 263,
+        "(IP yok)": 165,
+        "192.168.0.101 > 224.0.0.251": 82,
+        "192.168.0.128 > 196.200.131.160": 63,
+        "196.200.131.160 > 192.168.0.128": 61,
+        "192.168.0.101 > 192.168.0.255": 38,
+        "192.168.0.101 > 192.168.0.128": 35
+      },
+      "matched_top_pairs": {
+        "192.168.0.128 > 192.168.0.170": 9987,
+        "(IP yok)": 2430,
+        "192.168.0.170 > 192.168.0.128": 333,
+        "0.0.0.0 > 224.0.0.1": 80,
+        "192.168.0.128 > 224.0.0.251": 80
+      },
+      "tvd": {
+        "arp.opcode": 0.0025,
+        "arp.hw.size": 0.0025,
+        "icmp.seq_le": 0.0,
+        "icmp.transmit_timestamp": 0.0,
+        "http.content_length": 0.0,
+        "http.response": 0.0,
+        "tcp.ack": 0.4428,
+        "tcp.connection.fin": 0.0,
+        "tcp.connection.rst": 0.0145,
+        "tcp.connection.syn": 0.0145,
+        "tcp.connection.synack": 0.0,
+        "tcp.dstport": 0.029,
+        "tcp.flags": 0.029,
+        "tcp.flags.ack": 0.0145,
+        "tcp.len": 0.0,
+        "tcp.seq": 0.0145,
+        "udp.port": 0.0328,
+        "udp.time_delta": 0.0265,
+        "dns.qry.name": 0.0,
+        "dns.qry.qu": 0.001,
+        "dns.retransmission": 0.007,
+        "dns.retransmit_request": 0.0057,
+        "dns.retransmit_request_in": 0.0057,
+        "mqtt.conflag.cleansess": 0.0,
+        "mqtt.conflags": 0.0,
+        "mqtt.hdrflags": 0.0,
+        "mqtt.len": 0.0,
+        "mqtt.msgtype": 0.0,
+        "mqtt.proto_len": 0.0,
+        "mqtt.topic_len": 0.0,
+        "mqtt.ver": 0.0,
+        "mbtcp.len": 0.0,
+        "mbtcp.trans_id": 0.0,
+        "mbtcp.unit_id": 0.0
+      },
+      "dns_text_values_ours": {
+        "_233637DE._sub._googlecast._tcp.local,_googlecast._tcp.local": 263,
+        "raspberrypi.local": 116,
+        "_googlecast._tcp.local": 24,
+        "DESKTOP-UHF0SF2.local": 12,
+        "_ipps._tcp.local,_ipp._tcp.local": 6
+      },
+      "non_numeric": {}
+    },
+    {
+      "pcap": "DDoS TCP SYN Flood Attacks.pcap",
+      "label": "DDoS_TCP",
+      "packets": 300000,
+      "pcap_fully_read": false,
+      "dnn_rows": 50062,
+      "ours_in_dnn": 0.1188,
+      "dnn_in_ours": null,
+      "by_protocol": {
+        "arp": {
+          "packets": 36,
+          "in_dnn": 0.3056
+        },
+        "other": {
+          "packets": 2,
+          "in_dnn": 0.0
+        },
+        "tcp": {
+          "packets": 299962,
+          "in_dnn": 0.1188
+        }
+      },
+      "unmatched_top_pairs": {
+        "(IP yok)": 27,
+        "2.23.123.9 > 192.168.0.128": 2,
+        "192.168.0.128 > 71.144.174.254": 2,
+        "71.144.174.254 > 192.168.0.128": 2,
+        "241.199.71.78 > 192.168.0.128": 2,
+        "239.149.21.21 > 192.168.0.128": 2,
+        "120.123.218.32 > 192.168.0.128": 2,
+        "241.236.192.118 > 192.168.0.128": 2
+      },
+      "matched_top_pairs": {
+        "(IP yok)": 11,
+        "25.206.123.133 > 192.168.0.128": 2,
+        "192.168.0.128 > 201.103.34.151": 2,
+        "192.168.0.128 > 73.68.251.122": 2,
+        "192.168.0.128 > 58.130.135.184": 2
+      },
+      "tvd": {
+        "arp.opcode": 0.0001,
+        "arp.hw.size": 0.0001,
+        "icmp.seq_le": 0.0,
+        "icmp.transmit_timestamp": 0.0,
+        "http.content_length": 0.0,
+        "http.response": 0.0,
+        "tcp.ack": 0.5818,
+        "tcp.connection.fin": 0.0,
+        "tcp.connection.rst": 0.0039,
+        "tcp.connection.syn": 0.004,
+        "tcp.connection.synack": 0.0,
+        "tcp.dstport": 0.3034,
+        "tcp.flags": 0.004,
+        "tcp.flags.ack": 0.0039,
+        "tcp.len": 0.004,
+        "tcp.seq": 0.0039,
+        "udp.port": 0.0,
+        "udp.time_delta": 0.0,
+        "dns.qry.name": 0.0,
+        "dns.qry.qu": 0.0,
+        "dns.retransmission": 0.0,
+        "dns.retransmit_request": 0.0,
+        "dns.retransmit_request_in": 0.0,
+        "mqtt.conflag.cleansess": 0.0,
+        "mqtt.conflags": 0.0,
+        "mqtt.hdrflags": 0.0,
+        "mqtt.len": 0.0,
+        "mqtt.msgtype": 0.0,
+        "mqtt.proto_len": 0.0,
+        "mqtt.topic_len": 0.0,
+        "mqtt.ver": 0.0,
+        "mbtcp.len": 0.0,
+        "mbtcp.trans_id": 0.0,
+        "mbtcp.unit_id": 0.0
+      },
+      "dns_text_values_ours": {},
+      "non_numeric": {}
+    },
+    {
+      "pcap": "Distance.pcap",
+      "label": "Normal",
+      "packets": 300000,
+      "pcap_fully_read": false,
+      "dnn_rows": 1615643,
+      "ours_in_dnn": 0.513,
+      "dnn_in_ours": null,
+      "by_protocol": {
+        "arp": {
+          "packets": 20,
+          "in_dnn": 1.0
+        },
+        "other": {
+          "packets": 49,
+          "in_dnn": 0.8776
+        },
+        "tcp": {
+          "packets": 299832,
+          "in_dnn": 0.513
+        },
+        "udp": {
+          "packets": 99,
+          "in_dnn": 0.0
+        }
+      },
+      "unmatched_top_pairs": {
+        "192.168.1.101 > 192.168.1.128": 98411,
+        "192.168.1.128 > 192.168.1.101": 47594,
+        "192.168.1.101 > 224.0.0.251": 80,
+        "192.168.1.101 > 192.168.1.255": 16,
+        "(IP yok)": 6,
+        "192.168.1.128 > 224.0.0.251": 3
+      },
+      "matched_top_pairs": {
+        "192.168.1.128 > 192.168.1.101": 96963,
+        "192.168.1.101 > 192.168.1.128": 56864,
+        "(IP yok)": 54,
+        "0.0.0.0 > 224.0.0.1": 3,
+        "192.168.1.128 > 224.0.0.252": 3
+      },
+      "tvd": {
+        "arp.opcode": 0.0018,
+        "arp.hw.size": 0.0018,
+        "icmp.seq_le": 0.0,
+        "icmp.transmit_timestamp": 0.0,
+        "http.content_length": 0.0,
+        "http.response": 0.0,
+        "tcp.ack": 0.3209,
+        "tcp.connection.fin": 0.0232,
+        "tcp.connection.rst": 0.0291,
+        "tcp.connection.syn": 0.0108,
+        "tcp.connection.synack": 0.0094,
+        "tcp.dstport": 0.2251,
+        "tcp.flags": 0.0725,
+        "tcp.flags.ack": 0.0335,
+        "tcp.len": 0.1705,
+        "tcp.seq": 0.3791,
+        "udp.port": 0.0013,
+        "udp.time_delta": 0.0014,
+        "dns.qry.name": 0.0011,
+        "dns.qry.qu": 0.0011,
+        "dns.retransmission": 0.0011,
+        "dns.retransmit_request": 0.0,
+        "dns.retransmit_request_in": 0.0,
+        "mqtt.conflag.cleansess": 0.0116,
+        "mqtt.conflags": 0.0116,
+        "mqtt.hdrflags": 0.0465,
+        "mqtt.len": 0.0863,
+        "mqtt.msgtype": 0.0465,
+        "mqtt.proto_len": 0.0116,
+        "mqtt.topic_len": 0.063,
+        "mqtt.ver": 0.0116,
+        "mbtcp.len": 0.0001,
+        "mbtcp.trans_id": 0.0001,
+        "mbtcp.unit_id": 0.0001
+      },
+      "dns_text_values_ours": {
+        "_ipps._tcp.local,_ipp._tcp.local": 6
+      },
+      "non_numeric": {}
+    },
+    {
+      "pcap": "Temperature_and_Humidity.pcap",
+      "label": "Normal",
+      "packets": 300000,
+      "pcap_fully_read": false,
+      "dnn_rows": 1615643,
+      "ours_in_dnn": 0.9796,
+      "dnn_in_ours": null,
+      "by_protocol": {
+        "arp": {
+          "packets": 454,
+          "in_dnn": 1.0
+        },
+        "icmp": {
+          "packets": 7,
+          "in_dnn": 0.0
+        },
+        "other": {
+          "packets": 1283,
+          "in_dnn": 0.9743
+        },
+        "tcp": {
+          "packets": 292174,
+          "in_dnn": 1.0
+        },
+        "udp": {
+          "packets": 6082,
+          "in_dnn": 0.0
+        }
+      },
+      "unmatched_top_pairs": {
+        "192.168.0.152 > 255.255.255.255": 5905,
+        "192.168.0.147 > 224.0.0.251": 86,
+        "(IP yok)": 33,
+        "192.168.0.101 > 192.168.0.255": 27,
+        "192.168.0.128 > 196.200.160.123": 19,
+        "196.200.160.123 > 192.168.0.128": 17,
+        "192.168.0.101 > 192.168.0.128": 15,
+        "192.168.0.128 > 224.0.0.251": 11
+      },
+      "matched_top_pairs": {
+        "192.168.0.101 > 192.168.0.128": 146208,
+        "192.168.0.128 > 192.168.0.101": 145958,
+        "(IP yok)": 1410,
+        "0.0.0.0 > 224.0.0.1": 147,
+        "192.168.0.128 > 224.0.0.251": 147
+      },
+      "tvd": {
+        "arp.opcode": 0.0004,
+        "arp.hw.size": 0.0004,
+        "icmp.seq_le": 0.0,
+        "icmp.transmit_timestamp": 0.0,
+        "http.content_length": 0.0,
+        "http.response": 0.0,
+        "tcp.ack": 0.169,
+        "tcp.connection.fin": 0.0184,
+        "tcp.connection.rst": 0.0184,
+        "tcp.connection.syn": 0.0096,
+        "tcp.connection.synack": 0.0102,
+        "tcp.dstport": 0.2136,
+        "tcp.flags": 0.0757,
+        "tcp.flags.ack": 0.0471,
+        "tcp.len": 0.1192,
+        "tcp.seq": 0.1688,
+        "udp.port": 0.0203,
+        "udp.time_delta": 0.0203,
+        "dns.qry.name": 0.0011,
+        "dns.qry.qu": 0.0011,
+        "dns.retransmission": 0.0011,
+        "dns.retransmit_request": 0.0,
+        "dns.retransmit_request_in": 0.0001,
+        "mqtt.conflag.cleansess": 0.0093,
+        "mqtt.conflags": 0.0093,
+        "mqtt.hdrflags": 0.0372,
+        "mqtt.len": 0.0279,
+        "mqtt.msgtype": 0.0372,
+        "mqtt.proto_len": 0.0093,
+        "mqtt.topic_len": 0.0093,
+        "mqtt.ver": 0.0093,
+        "mbtcp.len": 0.0001,
+        "mbtcp.trans_id": 0.0001,
+        "mbtcp.unit_id": 0.0001
+      },
+      "dns_text_values_ours": {
+        "_233637DE._sub._googlecast._tcp.local,_googlecast._tcp.local": 86,
+        "raspberrypi.local": 20,
+        "_ipp._tcp.local,_ipps._tcp.local": 14
+      },
+      "non_numeric": {}
+    }
+  ],
+  "status": "Plan sonuçlardan önce yazıldı (README, Canlı demo, 2. adım)"
+}
