@@ -128,6 +128,27 @@
   "pcaps": [
     {
       "pcap": "XSS attacks.pcap",
+      "model_input_C_no_udp": {
+        "features": 32,
+        "udp_dropped": 298,
+        "ours_in_dnn": 0.9999,
+        "dnn_in_ours": 1.0,
+        "by_protocol": {
+          "arp": {
+            "packets": 59,
+            "in_dnn": 1.0
+          },
+          "other": {
+            "packets": 680,
+            "in_dnn": 0.9971
+          },
+          "tcp": {
+            "packets": 15178,
+            "in_dnn": 1.0
+          }
+        },
+        "tvd_over_0.01": {}
+      },
       "label": "XSS",
       "packets": 16215,
       "pcap_fully_read": true,
@@ -214,6 +235,27 @@
     },
     {
       "pcap": "SQL injection attack.pcap",
+      "model_input_C_no_udp": {
+        "features": 32,
+        "udp_dropped": 25,
+        "ours_in_dnn": 1.0,
+        "dnn_in_ours": 1.0,
+        "by_protocol": {
+          "arp": {
+            "packets": 15,
+            "in_dnn": 1.0
+          },
+          "other": {
+            "packets": 42,
+            "in_dnn": 1.0
+          },
+          "tcp": {
+            "packets": 51146,
+            "in_dnn": 1.0
+          }
+        },
+        "tvd_over_0.01": {}
+      },
       "label": "SQL_injection",
       "packets": 51228,
       "pcap_fully_read": true,
@@ -291,6 +333,27 @@
     },
     {
       "pcap": "Uploading attack.pcap",
+      "model_input_C_no_udp": {
+        "features": 32,
+        "udp_dropped": 9,
+        "ours_in_dnn": 1.0,
+        "dnn_in_ours": 1.0,
+        "by_protocol": {
+          "arp": {
+            "packets": 8,
+            "in_dnn": 1.0
+          },
+          "other": {
+            "packets": 56,
+            "in_dnn": 0.9821
+          },
+          "tcp": {
+            "packets": 37571,
+            "in_dnn": 1.0
+          }
+        },
+        "tvd_over_0.01": {}
+      },
       "label": "Uploading",
       "packets": 37644,
       "pcap_fully_read": true,
@@ -372,6 +435,29 @@
     },
     {
       "pcap": "Password attacks.pcap",
+      "model_input_C_no_udp": {
+        "features": 32,
+        "udp_dropped": 197,
+        "ours_in_dnn": 0.6835,
+        "dnn_in_ours": null,
+        "by_protocol": {
+          "arp": {
+            "packets": 160,
+            "in_dnn": 1.0
+          },
+          "other": {
+            "packets": 409,
+            "in_dnn": 0.9756
+          },
+          "tcp": {
+            "packets": 299234,
+            "in_dnn": 0.6829
+          }
+        },
+        "tvd_over_0.01": {
+          "tcp.dstport": 0.1628
+        }
+      },
       "label": "Password",
       "packets": 300000,
       "pcap_fully_read": false,
@@ -459,6 +545,31 @@
     },
     {
       "pcap": "Port Scanning attack.pcap",
+      "model_input_C_no_udp": {
+        "features": 32,
+        "udp_dropped": 565,
+        "ours_in_dnn": 0.9912,
+        "dnn_in_ours": 1.0,
+        "by_protocol": {
+          "arp": {
+            "packets": 1746,
+            "in_dnn": 1.0
+          },
+          "icmp": {
+            "packets": 35,
+            "in_dnn": 0.0
+          },
+          "other": {
+            "packets": 1009,
+            "in_dnn": 0.8365
+          },
+          "tcp": {
+            "packets": 19974,
+            "in_dnn": 1.0
+          }
+        },
+        "tvd_over_0.01": {}
+      },
       "label": "Port_Scanning",
       "packets": 23329,
       "pcap_fully_read": true,
@@ -551,6 +662,29 @@
     },
     {
       "pcap": "DDoS TCP SYN Flood Attacks.pcap",
+      "model_input_C_no_udp": {
+        "features": 32,
+        "udp_dropped": 0,
+        "ours_in_dnn": 0.6966,
+        "dnn_in_ours": null,
+        "by_protocol": {
+          "arp": {
+            "packets": 36,
+            "in_dnn": 0.3056
+          },
+          "other": {
+            "packets": 2,
+            "in_dnn": 0.0
+          },
+          "tcp": {
+            "packets": 299962,
+            "in_dnn": 0.6967
+          }
+        },
+        "tvd_over_0.01": {
+          "tcp.dstport": 0.3034
+        }
+      },
       "label": "DDoS_TCP",
       "packets": 300000,
       "pcap_fully_read": false,
@@ -629,6 +763,43 @@
     },
     {
       "pcap": "Distance.pcap",
+      "model_input_C_no_udp": {
+        "features": 32,
+        "udp_dropped": 99,
+        "ours_in_dnn": 0.9367,
+        "dnn_in_ours": null,
+        "by_protocol": {
+          "arp": {
+            "packets": 20,
+            "in_dnn": 1.0
+          },
+          "other": {
+            "packets": 49,
+            "in_dnn": 0.8776
+          },
+          "tcp": {
+            "packets": 299832,
+            "in_dnn": 0.9367
+          }
+        },
+        "tvd_over_0.01": {
+          "tcp.connection.fin": 0.0232,
+          "tcp.connection.rst": 0.0292,
+          "tcp.connection.syn": 0.0108,
+          "tcp.dstport": 0.2254,
+          "tcp.flags": 0.0726,
+          "tcp.flags.ack": 0.0332,
+          "tcp.len": 0.1705,
+          "mqtt.conflag.cleansess": 0.0116,
+          "mqtt.conflags": 0.0116,
+          "mqtt.hdrflags": 0.0466,
+          "mqtt.len": 0.0863,
+          "mqtt.msgtype": 0.0466,
+          "mqtt.proto_len": 0.0116,
+          "mqtt.topic_len": 0.063,
+          "mqtt.ver": 0.0116
+        }
+      },
       "label": "Normal",
       "packets": 300000,
       "pcap_fully_read": false,
@@ -711,6 +882,48 @@
     },
     {
       "pcap": "Temperature_and_Humidity.pcap",
+      "model_input_C_no_udp": {
+        "features": 32,
+        "udp_dropped": 6082,
+        "ours_in_dnn": 0.9998,
+        "dnn_in_ours": null,
+        "by_protocol": {
+          "arp": {
+            "packets": 454,
+            "in_dnn": 1.0
+          },
+          "icmp": {
+            "packets": 7,
+            "in_dnn": 0.0
+          },
+          "other": {
+            "packets": 1283,
+            "in_dnn": 0.9743
+          },
+          "tcp": {
+            "packets": 292174,
+            "in_dnn": 1.0
+          }
+        },
+        "tvd_over_0.01": {
+          "tcp.connection.fin": 0.0209,
+          "tcp.connection.rst": 0.0209,
+          "tcp.connection.syn": 0.0108,
+          "tcp.connection.synack": 0.0115,
+          "tcp.dstport": 0.2116,
+          "tcp.flags": 0.0642,
+          "tcp.flags.ack": 0.0307,
+          "tcp.len": 0.1192,
+          "mqtt.conflag.cleansess": 0.0105,
+          "mqtt.conflags": 0.0105,
+          "mqtt.hdrflags": 0.0422,
+          "mqtt.len": 0.0316,
+          "mqtt.msgtype": 0.0422,
+          "mqtt.proto_len": 0.0105,
+          "mqtt.topic_len": 0.0106,
+          "mqtt.ver": 0.0105
+        }
+      },
       "label": "Normal",
       "packets": 300000,
       "pcap_fully_read": false,

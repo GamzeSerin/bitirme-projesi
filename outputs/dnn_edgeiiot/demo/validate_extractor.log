@@ -22,6 +22,8 @@ dns.qry.name (DNN, etiket başına en sık değerler):
   paket türüne göre (sayı, DNN'de karşılığı): arp 59 (1.000)  other 680 (0.997)  tcp 15178 (1.000)  udp 298 (0.000)
   eşleşmeyen en sık IP çiftleri: {'192.168.0.128 > 239.255.255.250': 260, '192.168.0.101 > 192.168.0.255': 18, '192.168.0.128 > 160.119.238.171': 8, '160.119.238.171 > 192.168.0.128': 6, '(IP yok)': 2, '192.168.0.128 > 224.0.0.251': 2, '192.168.0.128 > 192.168.0.1': 2, '192.168.0.1 > 192.168.0.128': 2}
   eşleşen en sık IP çiftleri:    {'192.168.0.170 > 192.168.0.128': 8029, '192.168.0.128 > 192.168.0.170': 7062, '(IP yok)': 552, '192.168.0.128 > 224.0.0.251': 62, '192.168.0.128 > 224.0.0.252': 62}
+  MODEL GİRDİSİ (koşul C, 32 özellik, UDP atıldı: 298): bizim satırların DNN'de karşılığı 0.9999, DNN satırlarının bizde 1.0; arp 59 (1.000)  other 680 (0.997)  tcp 15178 (1.000)
+  MODEL GİRDİSİ TVD > 0,01: {}
   TVD > 0,01: {'tcp.ack': 0.0155, 'tcp.dstport': 0.0176, 'tcp.flags': 0.0176, 'tcp.flags.ack': 0.0155, 'tcp.seq': 0.0148, 'udp.port': 0.0185, 'udp.time_delta': 0.0138}
   bizdeki dns.qry.name metinleri: {'_ipps._tcp.local,_ipp._tcp.local': 4, 'safebrowsing.googleapis.com': 2, 'cdn.jsdelivr.net': 2}
 
@@ -30,6 +32,8 @@ dns.qry.name (DNN, etiket başına en sık değerler):
   paket türüne göre (sayı, DNN'de karşılığı): arp 15 (1.000)  other 42 (1.000)  tcp 51146 (1.000)  udp 25 (0.000)
   eşleşmeyen en sık IP çiftleri: {'192.168.0.128 > 239.255.255.250': 16, '192.168.0.128 > 196.10.52.57': 5, '196.10.52.57 > 192.168.0.128': 4}
   eşleşen en sık IP çiftleri:    {'192.168.0.170 > 192.168.0.128': 26375, '192.168.0.128 > 192.168.0.170': 24771, '(IP yok)': 45, '0.0.0.0 > 224.0.0.1': 4, '192.168.0.128 > 224.0.0.251': 4}
+  MODEL GİRDİSİ (koşul C, 32 özellik, UDP atıldı: 25): bizim satırların DNN'de karşılığı 1.0000, DNN satırlarının bizde 1.0; arp 15 (1.000)  other 42 (1.000)  tcp 51146 (1.000)
+  MODEL GİRDİSİ TVD > 0,01: {}
   TVD > 0,01: {}
 
 [Uploading] Uploading attack.pcap: 37644 paket (tamamı); DNN 37634 satır
@@ -37,6 +41,8 @@ dns.qry.name (DNN, etiket başına en sık değerler):
   paket türüne göre (sayı, DNN'de karşılığı): arp 8 (1.000)  other 56 (0.982)  tcp 37571 (1.000)  udp 9 (0.000)
   eşleşmeyen en sık IP çiftleri: {'192.168.0.128 > 194.0.5.123': 5, '194.0.5.123 > 192.168.0.128': 2, '(IP yok)': 1, '192.168.0.128 > 224.0.0.251': 1, '192.168.0.101 > 192.168.0.255': 1}
   eşleşen en sık IP çiftleri:    {'192.168.0.170 > 192.168.0.128': 20470, '192.168.0.128 > 192.168.0.170': 17101, '(IP yok)': 51, '0.0.0.0 > 224.0.0.1': 4, '192.168.0.128 > 224.0.0.252': 4}
+  MODEL GİRDİSİ (koşul C, 32 özellik, UDP atıldı: 9): bizim satırların DNN'de karşılığı 1.0000, DNN satırlarının bizde 1.0; arp 8 (1.000)  other 56 (0.982)  tcp 37571 (1.000)
+  MODEL GİRDİSİ TVD > 0,01: {}
   TVD > 0,01: {}
   bizdeki dns.qry.name metinleri: {'_ipps._tcp.local,_ipp._tcp.local': 2}
 
@@ -45,6 +51,8 @@ dns.qry.name (DNN, etiket başına en sık değerler):
   paket türüne göre (sayı, DNN'de karşılığı): arp 160 (1.000)  other 409 (0.976)  tcp 299234 (0.567)  udp 197 (0.000)
   eşleşmeyen en sık IP çiftleri: {'192.168.0.128 > 192.168.0.170': 129493, '192.168.0.128 > 196.10.52.57': 50, '196.10.52.57 > 192.168.0.128': 40, '192.168.0.128 > 84.2.46.19': 21, '192.168.0.128 > 239.255.255.250': 20, '192.168.0.101 > 192.168.0.255': 15, '192.168.0.170 > 192.168.0.128': 14, '84.2.46.19 > 192.168.0.128': 12}
   eşleşen en sık IP çiftleri:    {'192.168.0.170 > 192.168.0.128': 148656, '192.168.0.128 > 192.168.0.170': 21071, '(IP yok)': 460, '0.0.0.0 > 224.0.0.1': 33, '192.168.0.128 > 224.0.0.252': 33}
+  MODEL GİRDİSİ (koşul C, 32 özellik, UDP atıldı: 197): bizim satırların DNN'de karşılığı 0.6835, DNN satırlarının bizde None; arp 160 (1.000)  other 409 (0.976)  tcp 299234 (0.683)
+  MODEL GİRDİSİ TVD > 0,01: {'tcp.dstport': 0.1628}
   TVD > 0,01: {'tcp.dstport': 0.163}
   bizdeki dns.qry.name metinleri: {'_ipps._tcp.local,_ipp._tcp.local': 8, '1.debian.pool.ntp.org': 4, '2.debian.pool.ntp.org': 4, '0.debian.pool.ntp.org': 2}
 
@@ -53,6 +61,8 @@ dns.qry.name (DNN, etiket başına en sık değerler):
   paket türüne göre (sayı, DNN'de karşılığı): arp 1746 (1.000)  icmp 35 (0.000)  other 1009 (0.837)  tcp 19974 (0.517)  udp 565 (0.000)
   eşleşmeyen en sık IP çiftleri: {'192.168.0.170 > 192.168.0.128': 9654, '192.168.0.129 > 224.0.0.251': 263, '(IP yok)': 165, '192.168.0.101 > 224.0.0.251': 82, '192.168.0.128 > 196.200.131.160': 63, '196.200.131.160 > 192.168.0.128': 61, '192.168.0.101 > 192.168.0.255': 38, '192.168.0.101 > 192.168.0.128': 35}
   eşleşen en sık IP çiftleri:    {'192.168.0.128 > 192.168.0.170': 9987, '(IP yok)': 2430, '192.168.0.170 > 192.168.0.128': 333, '0.0.0.0 > 224.0.0.1': 80, '192.168.0.128 > 224.0.0.251': 80}
+  MODEL GİRDİSİ (koşul C, 32 özellik, UDP atıldı: 565): bizim satırların DNN'de karşılığı 0.9912, DNN satırlarının bizde 1.0; arp 1746 (1.000)  icmp 35 (0.000)  other 1009 (0.837)  tcp 19974 (1.000)
+  MODEL GİRDİSİ TVD > 0,01: {}
   TVD > 0,01: {'tcp.ack': 0.4428, 'tcp.connection.rst': 0.0145, 'tcp.connection.syn': 0.0145, 'tcp.dstport': 0.029, 'tcp.flags': 0.029, 'tcp.flags.ack': 0.0145, 'tcp.seq': 0.0145, 'udp.port': 0.0328, 'udp.time_delta': 0.0265}
   bizdeki dns.qry.name metinleri: {'_233637DE._sub._googlecast._tcp.local,_googlecast._tcp.local': 263, 'raspberrypi.local': 116, '_googlecast._tcp.local': 24, 'DESKTOP-UHF0SF2.local': 12, '_ipps._tcp.local,_ipp._tcp.local': 6}
 
@@ -61,6 +71,8 @@ dns.qry.name (DNN, etiket başına en sık değerler):
   paket türüne göre (sayı, DNN'de karşılığı): arp 36 (0.306)  other 2 (0.000)  tcp 299962 (0.119)
   eşleşmeyen en sık IP çiftleri: {'(IP yok)': 27, '2.23.123.9 > 192.168.0.128': 2, '192.168.0.128 > 71.144.174.254': 2, '71.144.174.254 > 192.168.0.128': 2, '241.199.71.78 > 192.168.0.128': 2, '239.149.21.21 > 192.168.0.128': 2, '120.123.218.32 > 192.168.0.128': 2, '241.236.192.118 > 192.168.0.128': 2}
   eşleşen en sık IP çiftleri:    {'(IP yok)': 11, '25.206.123.133 > 192.168.0.128': 2, '192.168.0.128 > 201.103.34.151': 2, '192.168.0.128 > 73.68.251.122': 2, '192.168.0.128 > 58.130.135.184': 2}
+  MODEL GİRDİSİ (koşul C, 32 özellik, UDP atıldı: 0): bizim satırların DNN'de karşılığı 0.6966, DNN satırlarının bizde None; arp 36 (0.306)  other 2 (0.000)  tcp 299962 (0.697)
+  MODEL GİRDİSİ TVD > 0,01: {'tcp.dstport': 0.3034}
   TVD > 0,01: {'tcp.ack': 0.5818, 'tcp.dstport': 0.3034}
 
 [Normal] Distance.pcap: 300000 paket (ilk 300000); DNN 1615643 satır
@@ -68,6 +80,8 @@ dns.qry.name (DNN, etiket başına en sık değerler):
   paket türüne göre (sayı, DNN'de karşılığı): arp 20 (1.000)  other 49 (0.878)  tcp 299832 (0.513)  udp 99 (0.000)
   eşleşmeyen en sık IP çiftleri: {'192.168.1.101 > 192.168.1.128': 98411, '192.168.1.128 > 192.168.1.101': 47594, '192.168.1.101 > 224.0.0.251': 80, '192.168.1.101 > 192.168.1.255': 16, '(IP yok)': 6, '192.168.1.128 > 224.0.0.251': 3}
   eşleşen en sık IP çiftleri:    {'192.168.1.128 > 192.168.1.101': 96963, '192.168.1.101 > 192.168.1.128': 56864, '(IP yok)': 54, '0.0.0.0 > 224.0.0.1': 3, '192.168.1.128 > 224.0.0.252': 3}
+  MODEL GİRDİSİ (koşul C, 32 özellik, UDP atıldı: 99): bizim satırların DNN'de karşılığı 0.9367, DNN satırlarının bizde None; arp 20 (1.000)  other 49 (0.878)  tcp 299832 (0.937)
+  MODEL GİRDİSİ TVD > 0,01: {'tcp.connection.fin': 0.0232, 'tcp.connection.rst': 0.0292, 'tcp.connection.syn': 0.0108, 'tcp.dstport': 0.2254, 'tcp.flags': 0.0726, 'tcp.flags.ack': 0.0332, 'tcp.len': 0.1705, 'mqtt.conflag.cleansess': 0.0116, 'mqtt.conflags': 0.0116, 'mqtt.hdrflags': 0.0466, 'mqtt.len': 0.0863, 'mqtt.msgtype': 0.0466, 'mqtt.proto_len': 0.0116, 'mqtt.topic_len': 0.063, 'mqtt.ver': 0.0116}
   TVD > 0,01: {'tcp.ack': 0.3209, 'tcp.connection.fin': 0.0232, 'tcp.connection.rst': 0.0291, 'tcp.connection.syn': 0.0108, 'tcp.dstport': 0.2251, 'tcp.flags': 0.0725, 'tcp.flags.ack': 0.0335, 'tcp.len': 0.1705, 'tcp.seq': 0.3791, 'mqtt.conflag.cleansess': 0.0116, 'mqtt.conflags': 0.0116, 'mqtt.hdrflags': 0.0465, 'mqtt.len': 0.0863, 'mqtt.msgtype': 0.0465, 'mqtt.proto_len': 0.0116, 'mqtt.topic_len': 0.063, 'mqtt.ver': 0.0116}
   bizdeki dns.qry.name metinleri: {'_ipps._tcp.local,_ipp._tcp.local': 6}
 
@@ -76,6 +90,8 @@ dns.qry.name (DNN, etiket başına en sık değerler):
   paket türüne göre (sayı, DNN'de karşılığı): arp 454 (1.000)  icmp 7 (0.000)  other 1283 (0.974)  tcp 292174 (1.000)  udp 6082 (0.000)
   eşleşmeyen en sık IP çiftleri: {'192.168.0.152 > 255.255.255.255': 5905, '192.168.0.147 > 224.0.0.251': 86, '(IP yok)': 33, '192.168.0.101 > 192.168.0.255': 27, '192.168.0.128 > 196.200.160.123': 19, '196.200.160.123 > 192.168.0.128': 17, '192.168.0.101 > 192.168.0.128': 15, '192.168.0.128 > 224.0.0.251': 11}
   eşleşen en sık IP çiftleri:    {'192.168.0.101 > 192.168.0.128': 146208, '192.168.0.128 > 192.168.0.101': 145958, '(IP yok)': 1410, '0.0.0.0 > 224.0.0.1': 147, '192.168.0.128 > 224.0.0.251': 147}
+  MODEL GİRDİSİ (koşul C, 32 özellik, UDP atıldı: 6082): bizim satırların DNN'de karşılığı 0.9998, DNN satırlarının bizde None; arp 454 (1.000)  icmp 7 (0.000)  other 1283 (0.974)  tcp 292174 (1.000)
+  MODEL GİRDİSİ TVD > 0,01: {'tcp.connection.fin': 0.0209, 'tcp.connection.rst': 0.0209, 'tcp.connection.syn': 0.0108, 'tcp.connection.synack': 0.0115, 'tcp.dstport': 0.2116, 'tcp.flags': 0.0642, 'tcp.flags.ack': 0.0307, 'tcp.len': 0.1192, 'mqtt.conflag.cleansess': 0.0105, 'mqtt.conflags': 0.0105, 'mqtt.hdrflags': 0.0422, 'mqtt.len': 0.0316, 'mqtt.msgtype': 0.0422, 'mqtt.proto_len': 0.0105, 'mqtt.topic_len': 0.0106, 'mqtt.ver': 0.0105}
   TVD > 0,01: {'tcp.ack': 0.169, 'tcp.connection.fin': 0.0184, 'tcp.connection.rst': 0.0184, 'tcp.connection.synack': 0.0102, 'tcp.dstport': 0.2136, 'tcp.flags': 0.0757, 'tcp.flags.ack': 0.0471, 'tcp.len': 0.1192, 'tcp.seq': 0.1688, 'udp.port': 0.0203, 'udp.time_delta': 0.0203, 'mqtt.hdrflags': 0.0372, 'mqtt.len': 0.0279, 'mqtt.msgtype': 0.0372}
   bizdeki dns.qry.name metinleri: {'_233637DE._sub._googlecast._tcp.local,_googlecast._tcp.local': 86, 'raspberrypi.local': 20, '_ipp._tcp.local,_ipps._tcp.local': 14}
 
