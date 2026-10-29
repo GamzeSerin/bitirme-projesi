@@ -56,8 +56,13 @@ def main():
     p.add_argument("--q", type=float, default=0.05)
     p.add_argument("--n-background", type=int, default=50)
     p.add_argument("--out-dir", default="outputs/dnn_edgeiiot/demo/bundle")
+    p.add_argument("--usage-data", action="store_true",
+                   help="Kullanım modeli verisi (usage_data_dnn_edgeiiot.py): koşul C'de çoğunluk etiketi, tekrarlar korunur. "
+                        "YALNIZ demo; çıktı varsayılan olarak bundle_usage/")
     p.add_argument("--quick", action="store_true")
     args = p.parse_args()
+    if args.usage_data and args.out_dir == "outputs/dnn_edgeiiot/demo/bundle":
+        args.out_dir = "outputs/dnn_edgeiiot/demo/bundle_usage"
     if args.quick:
         args.cap, args.families = 3000, "WEB"
     import dss_guard
@@ -69,7 +74,12 @@ def main():
         params, params_src = dss_guard.official_params(spec, args.run_dir, manifest, ["TabM"])
     gpu = bool(manifest.get("runtime", {}).get("gpu_used_for_xgb", False))
 
-    X, fine, category, _ = spec["loader"](args.data_file, args.cap, args.seed)
+    if args.usage_data:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        from usage_data_dnn_edgeiiot import load_usage_data
+        X, fine, category, data_stats = load_usage_data(args.data_file, args.cap, args.seed)
+    else:
+        X, fine, category, data_stats = spec["loader"](args.data_file, args.cap, args.seed)
     X, _ = registry.apply_condition(X, spec, args.condition)
     X = X.astype(np.float32)
     cols = list(X.columns)
@@ -144,6 +154,10 @@ def main():
                 "target": args.target, "q": args.q, "tau_alarm": tau_alarm, "tau_guard": tau_guard,
                 "tau_guard_dss": tau_guard_dss, "score_iqr": iqr, "grid_percentiles": PCTS,
                 "tabm_params_source": params_src, "test_check": check,
+                "data": ("KULLANIM MODELİ: koşul C'de çoğunluk etiketi, tekrarlar korunur (usage_data_dnn_edgeiiot.py); "
+                         "test_check sayıları sızıntılı, başarı ölçüsü değildir" if args.usage_data else
+                         "asıl deney verisi (model_dnn_edgeiiot.load_data, çakışmalar atılır, tekrarlar silinir)"),
+                "data_stats": {k: v for k, v in data_stats.items() if k != "dropped_columns"},
                 "rule": "alarm = disagree > tau_alarm; değilse tahmin BENIGN ve energy > tau_guard ise analiste (kontrol); "
                         "değilse tahmin edilen sınıf"}
         with open(os.path.join(d, "meta.json"), "w", encoding="utf-8") as fh:
@@ -154,7 +168,8 @@ def main():
 
     with open(os.path.join(args.out_dir, "summary.json"), "w", encoding="utf-8") as fh:
         json.dump(summary, fh, indent=2, ensure_ascii=False)
-    z = shutil.make_archive(os.path.join(os.path.dirname(args.out_dir), "demo_bundle"), "zip", args.out_dir)
+    z = shutil.make_archive(os.path.join(os.path.dirname(args.out_dir),
+                                         "demo_bundle_usage" if args.usage_data else "demo_bundle"), "zip", args.out_dir)
     print(f"Paket: {args.out_dir} ; zip: {z} ({os.path.getsize(z) / 1e6:.1f} MB)")
 
 
