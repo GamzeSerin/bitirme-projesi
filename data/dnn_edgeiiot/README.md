@@ -674,6 +674,29 @@ Bilinmeyen Kararının Açıklanması (XAI-2) ve Kaçışların Karşı-Olgusal 
 (koşul C) ve UDP süzgeciyle tekrarlanır (`model_input_C_no_udp`). Karar kuralı aynı; değerlendirme bu sonuca göre yapılır, ilk koşunun
 sayıları da raporda kalır.
 
+**Sonuç, model girdisi (koşul C, 32 özellik, UDP atıldı; 29.10.2026):**
+
+| PCAP (etiket) | Okunan paket | Bizim satırların DNN'de karşılığı | DNN satırlarının bizde | TVD > 0,01 |
+|---|---|---|---|---|
+| XSS | tamamı | %99,99 | **%100** | yok |
+| SQL_injection | tamamı | %100 | **%100** | yok |
+| Uploading | tamamı | %100 | **%100** | yok |
+| Port_Scanning | tamamı | %99,1 | **%100** | yok |
+| Password | ilk 300.000 | %68,4 | – | yalnız `tcp.dstport` (0,16) |
+| DDoS_TCP | ilk 300.000 | %69,7 | – | yalnız `tcp.dstport` (0,30) |
+| Normal · Temperature_and_Humidity | ilk 300.000 | %99,98 | – | (DNN Normal tüm cihazlardan; karşılaştırılamaz) |
+| Normal · Distance | ilk 300.000 | %93,7 | – | (aynı) |
+
+**Değerlendirme (önceden yazılan kurala göre):** tamamı okunan dört saldırı PCAP'inde DNN satırlarının tamamı model girdisinde birebir
+var; ilk koşudaki düşük oranlar `tcp.seq`/`tcp.ack`'tan geliyordu. Yalnız ilk 300 bin paketi okunan büyük PCAP'lerde (Password,
+DDoS_TCP) tek farklı alan `tcp.dstport`: DNN satırları kaydın tamamından örneklenmiş, biz ise kaydın başından bir zaman dilimi
+okuduk; dönüş yönündeki paketlerin hedef portu saldırganın geçici portu ve kayıt boyunca değişiyor. Bu bir çıkarım farkı değil
+örnekleme farkı olarak yorumlanır (tam kayıt okunmadığı için kesin kanıt değil; tezde böyle yazılır). Demoda kullanılacaklar:
+WEB (XSS, SQL_injection, Uploading), RECON (Port_Scanning), BRUTEFORCE (Password), DDOS (DDoS_TCP) ve normal trafik olarak
+Temperature_and_Humidity. MALWARE PCAP'leri (Backdoor, Ransomware) sınanmadı; demoda kullanılacaksa önce aynı doğrulama.
+ICMP paketleri bu PCAP'lerde az ve DNN'de karşılıksız (Port_Scanning 35, Temperature 7); eğitimde ICMP satırları DDOS'ta var
+olduğu için süzgece alınmaz.
+
 ## Zaman bölmesinde iki sinyal kuralı. Analiz planı (sonuçlardan ÖNCE yazıldı, 29.10.2026)
 
 Soru: Tezin ana sonucu (iki sinyal kuralı; koşul C, q = %5'te sessiz kaçış %2,52 → %0,53) rastgele bölmeyle ölçüldü. Kapalı kümede
