@@ -1,0 +1,9 @@
+# Canlı demo (yerel bilgisayar). Ayrıca tshark gerekir: macOS'ta `brew install wireshark`
+numpy
+pandas
+scipy
+scikit-learn
+joblib
+torch
+tabm
+rtdl_num_embeddings
