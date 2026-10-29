@@ -24,3 +24,8 @@ outputs_ablation/
 
 # main.py her çalıştırmada yeniden üretir
 outputs/dss_report.json
+
+# Gizli bilgiler (veritabanı şifresi vb.) asla GitHub'a girmez; şablon .env.example
+.env
+.env.*
+!.env.example
