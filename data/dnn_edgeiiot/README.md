@@ -629,6 +629,23 @@ Bilinmeyen Kararının Açıklanması (XAI-2) ve Kaçışların Karşı-Olgusal 
 4. **Sessiz kaçış neredeyse yalnız BRUTEFORCE ve WEB'de:** diğer üç ailede DSS + bekçi altında sessiz kaçan 0–1 satır. XAI-3'ün bulguları (kıl payı kaçış, yük taşımayan paketler, normal ikiz) bu iki aileye ait; genelleme bu çerçevede yapılmalı.
 5. **Eş kontrolündeki üç grup ayrımı RECON'da da tekrarlandı:** kontrolde yakalananlar normal trafiğe, alarm alanlar başka saldırılara benziyor.
 
+## Literatür karşılaştırması: OpenMax, Mahalanobis, otokodlayıcı. Analiz planı (sonuçlardan ÖNCE yazıldı, 29.10.2026)
+
+Soru: Açık küme tanıma ve dağılım dışı tespit literatüründe bilinen yöntemler, TabM'in üye anlaşmazlığından (tezin alarmı) ve enerjisinden (tezin BENIGN kontrolü) daha iyi mi? Eşik yok; aşağıdakilerin tamamı raporlanır. Bir yöntem TabM skorlarını geçerse bu açıkça yazılır.
+
+- **Kod:** `src/open_set_baselines.py` (ortak araç, `--dataset`). Koşul C, 5 aile, LOFO bölmesi önceki deneylerle aynı; model tohumları 42, 1, 2.
+- **Yöntemler** (ayarlar sabit, sonuçlara bakılarak seçilmedi):
+  - **OpenMax** (Bendale ve Boult, CVPR 2016): aktivasyon vektörü = TabM üyelerinin ortalama logiti; sınıf merkezi = eğitimde doğru sınıflanan satırların ortalaması; uzaklık eucos; her sınıfta en büyük 20 uzaklığa Weibull; alfa = bilinen sınıf sayısı. Skor = "bilinmeyen" olasılığı.
+  - **Mahalanobis** (Lee vd., NeurIPS 2018): TabM omurgasının son gizli çıktısı (üye ortalaması, 512 boyut); sınıf koşullu Gauss, ortak kovaryans (Ledoit-Wolf); en yakın sınıf merkezine uzaklık. Girdi pertürbasyonu ve katman topluluğu kullanılmaz (sadeleştirilmiş, yaygın varyant).
+  - **Otokodlayıcı:** bilinen eğitim trafiğiyle eğitilen MLP (64-16-64, ReLU, Adam, %10 doğrulamayla erken durdurma, en fazla 50 epoch, en fazla 100 bin satır); girdi TabM'in ön işlenmiş özellikleri; skor = yeniden üretim hatası. IDS literatüründe yaygın anomali tespiti tabanı.
+  - **Referanslar** (aynı TabM'den): üye anlaşmazlığı, enerji, MSP; ve kNN.
+- **Ölçümler:**
+  1. Tek başına bilinmeyen skoru olarak: AUROC; kalibrasyon eşiğinde (%95 bilinen kabul) yakalanan bilinmeyen, yanlış reddedilen bilinen, BENIGN'e sessiz kaçış.
+  2. İki sinyal kuralında BENIGN kontrolü olarak (alarm = TabM anlaşmazlığı, değişmez): q = %1 / 5 / 10'da sessiz kaçış ve normal trafiğin analiste gitme oranı.
+  3. 5 aile ortalaması, tohumlar arası ortalama ± standart sapma, aile başına; tohum başına TabM referansına göre fark (AUROC'ta anlaşmazlığa, q = %5 sessiz kaçışta enerjiye). Üç tohumla anlamlılık testi yapılmaz; farkın tohumlar arası yönü raporlanır.
+- **Yorum çerçevesi (önceden):** Bu yöntemlerden biri AUROC'ta TabM anlaşmazlığını geçerse "alarm için daha iyi bir skor var" diye raporlanır; BENIGN kontrolünde enerjiyi aynı analist yükünde geçerse kontrol skoru olarak önerilir. Tezin katkısı (iki sinyal kuralı, analist bütçesi, açıklanabilirlik) skordan bağımsızdır; sonuç hangi yöne çıkarsa çıksın kural değişmeden kalır, yalnız hangi skorla çalıştırılacağı güncellenir.
+- **Bilinen sınırlılık:** kNN koşul C'de AUROC'ta TabM anlaşmazlığını zaten geçiyor (0,88'e karşı 0,86), ama BENIGN kontrolünde işe yaramıyor; yeni yöntemler de bu iki ölçütle ayrı ayrı değerlendirilecek.
+
 ## Sütun hizası ve değer aralığı denetimi (19.10.2026)
 
 Kod: `src/audit_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/audit/audit.json`. Ham verideki 15 etiketin her biri için 6 kontrol (zaman damgası, IP, port 0–65535, 0/1 bayrak, ARP alanları, sayısal sütunlarda metin). İhlal yalnızca DDoS_UDP (zaman %100) ve MITM'de (zaman %100, port %30, bayrak %19); Normal'de %0,11 bayrak ihlali (önemsiz); diğer 12 saldırı türünde %0. Bu iki tür bulgu 7 gereği atıldı.
@@ -660,6 +677,8 @@ python src/xai_escape_counterfactual.py --dataset dnn_edgeiiot --data-file <csv>
 python src/two_signal.py --dataset dnn_edgeiiot --data-file <csv> --classifier MCDropout --model-seed 1   # MLP / MCDropout, tohum 42, 1, 2
 python src/dl_compare.py --dataset dnn_edgeiiot
 python src/inference_time.py --dataset dnn_edgeiiot --data-file <csv>
+# Literatür karşılaştırması (OpenMax, Mahalanobis, otokodlayıcı; 3 tohum)
+python src/open_set_baselines.py --dataset dnn_edgeiiot --data-file <csv> --seeds 42,1,2
 # Portsuz bekçi (koşul E)
 python src/two_signal.py --dataset dnn_edgeiiot --data-file <csv> --condition E_hepsi_cikarildi --cp-config outputs/dnn_edgeiiot/cp_tune/cp_tune_C_seq_ack_yok.json
 # Görülmemiş saldırı deneyi (koşullar: A_tam, C_seq_ack_yok, E_hepsi_cikarildi)
