@@ -23,11 +23,16 @@
       "_ipps._tcp.local"
     ]
   },
-  "vector_match_rate": 0.0455,
+  "csv_non_numeric_examples": {},
+  "csv_normalization_rules_used": [
+    "onaltılık -> tam sayı"
+  ],
+  "csv_rows_found_in_ours_orderfree": 1.0,
   "features": {
     "arp.opcode": {
       "ours_unique": 3,
       "csv_unique": 3,
+      "tvd_vs_csv": 0.0001,
       "top_values_ours": {
         "0.0": 0.9964,
         "1.0": 0.0019,
@@ -42,6 +47,7 @@
     "arp.hw.size": {
       "ours_unique": 2,
       "csv_unique": 2,
+      "tvd_vs_csv": 0.0001,
       "top_values_ours": {
         "0.0": 0.9964,
         "6.0": 0.0036
@@ -54,6 +60,7 @@
     "icmp.seq_le": {
       "ours_unique": 1,
       "csv_unique": 1,
+      "tvd_vs_csv": 0.0,
       "top_values_ours": {
         "0.0": 1.0
       },
@@ -64,6 +71,7 @@
     "icmp.transmit_timestamp": {
       "ours_unique": 1,
       "csv_unique": 1,
+      "tvd_vs_csv": 0.0,
       "top_values_ours": {
         "0.0": 1.0
       },
@@ -74,6 +82,7 @@
     "http.content_length": {
       "ours_unique": 3,
       "csv_unique": 3,
+      "tvd_vs_csv": 0.0013,
       "top_values_ours": {
         "0.0": 0.9293,
         "277.0": 0.0472,
@@ -88,6 +97,7 @@
     "http.response": {
       "ours_unique": 2,
       "csv_unique": 2,
+      "tvd_vs_csv": 0.0013,
       "top_values_ours": {
         "0.0": 0.9293,
         "1.0": 0.0707
@@ -100,6 +110,7 @@
     "tcp.ack": {
       "ours_unique": 55,
       "csv_unique": 55,
+      "tvd_vs_csv": 0.0155,
       "top_values_ours": {
         "1.0": 0.2193,
         "0.0": 0.1776,
@@ -118,6 +129,7 @@
     "tcp.connection.fin": {
       "ours_unique": 2,
       "csv_unique": 2,
+      "tvd_vs_csv": 0.0027,
       "top_values_ours": {
         "0.0": 0.8548,
         "1.0": 0.1452
@@ -130,6 +142,7 @@
     "tcp.connection.rst": {
       "ours_unique": 2,
       "csv_unique": 2,
+      "tvd_vs_csv": 0.0008,
       "top_values_ours": {
         "0.0": 0.9599,
         "1.0": 0.0401
@@ -142,6 +155,7 @@
     "tcp.connection.syn": {
       "ours_unique": 2,
       "csv_unique": 2,
+      "tvd_vs_csv": 0.0014,
       "top_values_ours": {
         "0.0": 0.9265,
         "1.0": 0.0735
@@ -154,6 +168,7 @@
     "tcp.connection.synack": {
       "ours_unique": 2,
       "csv_unique": 2,
+      "tvd_vs_csv": 0.0014,
       "top_values_ours": {
         "0.0": 0.9247,
         "1.0": 0.0753
@@ -166,6 +181,7 @@
     "tcp.dstport": {
       "ours_unique": 1153,
       "csv_unique": 1153,
+      "tvd_vs_csv": 0.0176,
       "top_values_ours": {
         "80.0": 0.4952,
         "0.0": 0.064,
@@ -183,7 +199,8 @@
     },
     "tcp.flags": {
       "ours_unique": 7,
-      "csv_unique": 1,
+      "csv_unique": 7,
+      "tvd_vs_csv": 0.0176,
       "top_values_ours": {
         "16.0": 0.4442,
         "24.0": 0.1578,
@@ -192,12 +209,17 @@
         "2.0": 0.0735
       },
       "top_values_csv": {
-        "0.0": 1.0
+        "16.0": 0.4525,
+        "24.0": 0.1608,
+        "17.0": 0.1479,
+        "18.0": 0.0767,
+        "2.0": 0.0749
       }
     },
     "tcp.flags.ack": {
       "ours_unique": 2,
       "csv_unique": 2,
+      "tvd_vs_csv": 0.0155,
       "top_values_ours": {
         "1.0": 0.8224,
         "0.0": 0.1776
@@ -210,6 +232,7 @@
     "tcp.len": {
       "ours_unique": 37,
       "csv_unique": 37,
+      "tvd_vs_csv": 0.003,
       "top_values_ours": {
         "0.0": 0.842,
         "102.0": 0.0612,
@@ -228,6 +251,7 @@
     "tcp.seq": {
       "ours_unique": 59,
       "csv_unique": 59,
+      "tvd_vs_csv": 0.0148,
       "top_values_ours": {
         "1.0": 0.2863,
         "0.0": 0.2128,
@@ -246,6 +270,7 @@
     "udp.port": {
       "ours_unique": 78,
       "csv_unique": 1,
+      "tvd_vs_csv": 0.0185,
       "top_values_ours": {
         "0.0": 0.9815,
         "137.0": 0.0011,
@@ -260,6 +285,7 @@
     "udp.time_delta": {
       "ours_unique": 162,
       "csv_unique": 1,
+      "tvd_vs_csv": 0.0138,
       "top_values_ours": {
         "0.0": 0.9862,
         "1.001265": 0.0003,
@@ -274,6 +300,7 @@
     "dns.qry.name": {
       "ours_unique": 1,
       "csv_unique": 1,
+      "tvd_vs_csv": 0.0,
       "top_values_ours": {
         "0.0": 1.0
       },
@@ -284,6 +311,7 @@
     "dns.qry.qu": {
       "ours_unique": 1,
       "csv_unique": 1,
+      "tvd_vs_csv": 0.0,
       "top_values_ours": {
         "0.0": 1.0
       },
@@ -294,6 +322,7 @@
     "dns.retransmission": {
       "ours_unique": 1,
       "csv_unique": 1,
+      "tvd_vs_csv": 0.0,
       "top_values_ours": {
         "0.0": 1.0
       },
@@ -304,6 +333,7 @@
     "dns.retransmit_request": {
       "ours_unique": 1,
       "csv_unique": 1,
+      "tvd_vs_csv": 0.0,
       "top_values_ours": {
         "0.0": 1.0
       },
@@ -314,6 +344,7 @@
     "dns.retransmit_request_in": {
       "ours_unique": 1,
       "csv_unique": 1,
+      "tvd_vs_csv": 0.0,
       "top_values_ours": {
         "0.0": 1.0
       },
@@ -324,6 +355,7 @@
     "mqtt.conflag.cleansess": {
       "ours_unique": 1,
       "csv_unique": 1,
+      "tvd_vs_csv": 0.0,
       "top_values_ours": {
         "0.0": 1.0
       },
@@ -334,6 +366,7 @@
     "mqtt.conflags": {
       "ours_unique": 1,
       "csv_unique": 1,
+      "tvd_vs_csv": 0.0,
       "top_values_ours": {
         "0.0": 1.0
       },
@@ -344,6 +377,7 @@
     "mqtt.hdrflags": {
       "ours_unique": 1,
       "csv_unique": 1,
+      "tvd_vs_csv": 0.0,
       "top_values_ours": {
         "0.0": 1.0
       },
@@ -354,6 +388,7 @@
     "mqtt.len": {
       "ours_unique": 1,
       "csv_unique": 1,
+      "tvd_vs_csv": 0.0,
       "top_values_ours": {
         "0.0": 1.0
       },
@@ -364,6 +399,7 @@
     "mqtt.msgtype": {
       "ours_unique": 1,
       "csv_unique": 1,
+      "tvd_vs_csv": 0.0,
       "top_values_ours": {
         "0.0": 1.0
       },
@@ -374,6 +410,7 @@
     "mqtt.proto_len": {
       "ours_unique": 1,
       "csv_unique": 1,
+      "tvd_vs_csv": 0.0,
       "top_values_ours": {
         "0.0": 1.0
       },
@@ -384,6 +421,7 @@
     "mqtt.topic_len": {
       "ours_unique": 1,
       "csv_unique": 1,
+      "tvd_vs_csv": 0.0,
       "top_values_ours": {
         "0.0": 1.0
       },
@@ -394,6 +432,7 @@
     "mqtt.ver": {
       "ours_unique": 1,
       "csv_unique": 1,
+      "tvd_vs_csv": 0.0,
       "top_values_ours": {
         "0.0": 1.0
       },
@@ -404,6 +443,7 @@
     "mbtcp.len": {
       "ours_unique": 1,
       "csv_unique": 1,
+      "tvd_vs_csv": 0.0,
       "top_values_ours": {
         "0.0": 1.0
       },
@@ -414,6 +454,7 @@
     "mbtcp.trans_id": {
       "ours_unique": 1,
       "csv_unique": 1,
+      "tvd_vs_csv": 0.0,
       "top_values_ours": {
         "0.0": 1.0
       },
@@ -424,11 +465,397 @@
     "mbtcp.unit_id": {
       "ours_unique": 1,
       "csv_unique": 1,
+      "tvd_vs_csv": 0.0,
       "top_values_ours": {
         "0.0": 1.0
       },
       "top_values_csv": {
         "0.0": 1.0
+      }
+    }
+  },
+  "dnn_reference": {
+    "file": "DNN-EdgeIIoT-dataset.csv",
+    "label": "XSS",
+    "rows": 15915,
+    "non_numeric_in_dnn": {},
+    "dnn_rows_found_in_ours": 1.0,
+    "features": {
+      "arp.opcode": {
+        "tvd": 0.0001,
+        "ours_top": {
+          "0.0": 0.9964,
+          "1.0": 0.0019,
+          "2.0": 0.0017
+        },
+        "dnn_top": {
+          "0.0": 0.9963,
+          "1.0": 0.0019,
+          "2.0": 0.0018
+        }
+      },
+      "arp.hw.size": {
+        "tvd": 0.0001,
+        "ours_top": {
+          "0.0": 0.9964,
+          "6.0": 0.0036
+        },
+        "dnn_top": {
+          "0.0": 0.9963,
+          "6.0": 0.0037
+        }
+      },
+      "icmp.seq_le": {
+        "tvd": 0.0,
+        "ours_top": {
+          "0.0": 1.0
+        },
+        "dnn_top": {
+          "0.0": 1.0
+        }
+      },
+      "icmp.transmit_timestamp": {
+        "tvd": 0.0,
+        "ours_top": {
+          "0.0": 1.0
+        },
+        "dnn_top": {
+          "0.0": 1.0
+        }
+      },
+      "http.content_length": {
+        "tvd": 0.0013,
+        "ours_top": {
+          "0.0": 0.9293,
+          "277.0": 0.0472,
+          "303.0": 0.0236
+        },
+        "dnn_top": {
+          "0.0": 0.9279,
+          "277.0": 0.0481,
+          "303.0": 0.024
+        }
+      },
+      "http.response": {
+        "tvd": 0.0013,
+        "ours_top": {
+          "0.0": 0.9293,
+          "1.0": 0.0707
+        },
+        "dnn_top": {
+          "0.0": 0.9279,
+          "1.0": 0.0721
+        }
+      },
+      "tcp.ack": {
+        "tvd": 0.0155,
+        "ours_top": {
+          "1.0": 0.2193,
+          "0.0": 0.1776,
+          "103.0": 0.1436,
+          "441.0": 0.119,
+          "442.0": 0.0606
+        },
+        "dnn_top": {
+          "1.0": 0.2234,
+          "0.0": 0.162,
+          "103.0": 0.1463,
+          "441.0": 0.1213,
+          "442.0": 0.0617
+        }
+      },
+      "tcp.connection.fin": {
+        "tvd": 0.0027,
+        "ours_top": {
+          "0.0": 0.8548,
+          "1.0": 0.1452
+        },
+        "dnn_top": {
+          "0.0": 0.8521,
+          "1.0": 0.1479
+        }
+      },
+      "tcp.connection.rst": {
+        "tvd": 0.0008,
+        "ours_top": {
+          "0.0": 0.9599,
+          "1.0": 0.0401
+        },
+        "dnn_top": {
+          "0.0": 0.9592,
+          "1.0": 0.0408
+        }
+      },
+      "tcp.connection.syn": {
+        "tvd": 0.0014,
+        "ours_top": {
+          "0.0": 0.9265,
+          "1.0": 0.0735
+        },
+        "dnn_top": {
+          "0.0": 0.9251,
+          "1.0": 0.0749
+        }
+      },
+      "tcp.connection.synack": {
+        "tvd": 0.0014,
+        "ours_top": {
+          "0.0": 0.9247,
+          "1.0": 0.0753
+        },
+        "dnn_top": {
+          "0.0": 0.9233,
+          "1.0": 0.0767
+        }
+      },
+      "tcp.dstport": {
+        "tvd": 0.0176,
+        "ours_top": {
+          "80.0": 0.4952,
+          "0.0": 0.064,
+          "443.0": 0.0031,
+          "53024.0": 0.0014,
+          "35314.0": 0.0009
+        },
+        "dnn_top": {
+          "80.0": 0.5045,
+          "0.0": 0.0463,
+          "443.0": 0.0031,
+          "53024.0": 0.0014,
+          "35314.0": 0.0009
+        }
+      },
+      "tcp.flags": {
+        "tvd": 0.0176,
+        "ours_top": {
+          "16.0": 0.4442,
+          "24.0": 0.1578,
+          "17.0": 0.1452,
+          "18.0": 0.0753,
+          "2.0": 0.0735
+        },
+        "dnn_top": {
+          "16.0": 0.4525,
+          "24.0": 0.1608,
+          "17.0": 0.1479,
+          "18.0": 0.0767,
+          "2.0": 0.0749
+        }
+      },
+      "tcp.flags.ack": {
+        "tvd": 0.0155,
+        "ours_top": {
+          "1.0": 0.8224,
+          "0.0": 0.1776
+        },
+        "dnn_top": {
+          "1.0": 0.838,
+          "0.0": 0.162
+        }
+      },
+      "tcp.len": {
+        "tvd": 0.003,
+        "ours_top": {
+          "0.0": 0.842,
+          "102.0": 0.0612,
+          "440.0": 0.0472,
+          "484.0": 0.0236,
+          "120.0": 0.0189
+        },
+        "dnn_top": {
+          "0.0": 0.839,
+          "102.0": 0.0624,
+          "440.0": 0.0481,
+          "484.0": 0.0241,
+          "120.0": 0.0192
+        }
+      },
+      "tcp.seq": {
+        "tvd": 0.0148,
+        "ours_top": {
+          "1.0": 0.2863,
+          "0.0": 0.2128,
+          "103.0": 0.1225,
+          "441.0": 0.0757,
+          "442.0": 0.0723
+        },
+        "dnn_top": {
+          "1.0": 0.2917,
+          "0.0": 0.1979,
+          "103.0": 0.1248,
+          "441.0": 0.0771,
+          "442.0": 0.0737
+        }
+      },
+      "udp.port": {
+        "tvd": 0.0185,
+        "ours_top": {
+          "0.0": 0.9815,
+          "137.0": 0.0011,
+          "123.0": 0.0004,
+          "50955.0": 0.0002,
+          "52276.0": 0.0002
+        },
+        "dnn_top": {
+          "0.0": 1.0
+        }
+      },
+      "udp.time_delta": {
+        "tvd": 0.0138,
+        "ours_top": {
+          "0.0": 0.9862,
+          "1.001265": 0.0003,
+          "1.001353": 0.0003,
+          "1.001262": 0.0003,
+          "1.001209": 0.0002
+        },
+        "dnn_top": {
+          "0.0": 1.0
+        }
+      },
+      "dns.qry.name": {
+        "tvd": 0.0,
+        "ours_top": {
+          "0.0": 1.0
+        },
+        "dnn_top": {
+          "0.0": 1.0
+        }
+      },
+      "dns.qry.qu": {
+        "tvd": 0.0,
+        "ours_top": {
+          "0.0": 1.0
+        },
+        "dnn_top": {
+          "0.0": 1.0
+        }
+      },
+      "dns.retransmission": {
+        "tvd": 0.0,
+        "ours_top": {
+          "0.0": 1.0
+        },
+        "dnn_top": {
+          "0.0": 1.0
+        }
+      },
+      "dns.retransmit_request": {
+        "tvd": 0.0,
+        "ours_top": {
+          "0.0": 1.0
+        },
+        "dnn_top": {
+          "0.0": 1.0
+        }
+      },
+      "dns.retransmit_request_in": {
+        "tvd": 0.0,
+        "ours_top": {
+          "0.0": 1.0
+        },
+        "dnn_top": {
+          "0.0": 1.0
+        }
+      },
+      "mqtt.conflag.cleansess": {
+        "tvd": 0.0,
+        "ours_top": {
+          "0.0": 1.0
+        },
+        "dnn_top": {
+          "0.0": 1.0
+        }
+      },
+      "mqtt.conflags": {
+        "tvd": 0.0,
+        "ours_top": {
+          "0.0": 1.0
+        },
+        "dnn_top": {
+          "0.0": 1.0
+        }
+      },
+      "mqtt.hdrflags": {
+        "tvd": 0.0,
+        "ours_top": {
+          "0.0": 1.0
+        },
+        "dnn_top": {
+          "0.0": 1.0
+        }
+      },
+      "mqtt.len": {
+        "tvd": 0.0,
+        "ours_top": {
+          "0.0": 1.0
+        },
+        "dnn_top": {
+          "0.0": 1.0
+        }
+      },
+      "mqtt.msgtype": {
+        "tvd": 0.0,
+        "ours_top": {
+          "0.0": 1.0
+        },
+        "dnn_top": {
+          "0.0": 1.0
+        }
+      },
+      "mqtt.proto_len": {
+        "tvd": 0.0,
+        "ours_top": {
+          "0.0": 1.0
+        },
+        "dnn_top": {
+          "0.0": 1.0
+        }
+      },
+      "mqtt.topic_len": {
+        "tvd": 0.0,
+        "ours_top": {
+          "0.0": 1.0
+        },
+        "dnn_top": {
+          "0.0": 1.0
+        }
+      },
+      "mqtt.ver": {
+        "tvd": 0.0,
+        "ours_top": {
+          "0.0": 1.0
+        },
+        "dnn_top": {
+          "0.0": 1.0
+        }
+      },
+      "mbtcp.len": {
+        "tvd": 0.0,
+        "ours_top": {
+          "0.0": 1.0
+        },
+        "dnn_top": {
+          "0.0": 1.0
+        }
+      },
+      "mbtcp.trans_id": {
+        "tvd": 0.0,
+        "ours_top": {
+          "0.0": 1.0
+        },
+        "dnn_top": {
+          "0.0": 1.0
+        }
+      },
+      "mbtcp.unit_id": {
+        "tvd": 0.0,
+        "ours_top": {
+          "0.0": 1.0
+        },
+        "dnn_top": {
+          "0.0": 1.0
+        }
       }
     }
   },
