@@ -687,3 +687,21 @@ python src/open_set_summary_dnn_edgeiiot.py
 ```
 
 Çalıştırma kayıtları: `outputs/dnn_edgeiiot/logs/`.
+
+## Canlı demo, 1. adım: özellik ön kontrolü (plan, 29.10.2026; sonuçlardan önce yazıldı)
+
+Demo, veri setindeki PCAP'leri yeniden oynatıp paketleri tshark ile özelliğe çevirecek ve WEB'i hiç görmemiş LOFO modeline
+(`outputs/dnn_edgeiiot/xai_unknown_decision/models/TabM_WEB_C_seq_ack_yok.joblib`) verecek. Bunun anlamlı olması için
+kendi çıkarıcımızın ürettiği 32 özelliğin (koşul C) veri setinin CSV'sindekiyle aynı olması gerekir.
+
+- Araç: `src/demo/feature_check_dnn_edgeiiot.py`. Bir PCAP ve aynı kaydın arşivdeki ham CSV'si (ör. `Attack traffic/XSS attacks.pcap`
+  ve `XSS_attack.csv`; ayrıca bir normal cihaz çifti) karşılaştırılır.
+- Normalleştirme: onaltılık → tam sayı, True/False → 1/0, boş → 0, çok değerli alanda ilk değer. Hangi kuralların gerektiği raporlanır.
+- Ölçüler: satır sayıları; satır sayıları eşitse özellik başına sıra hizalı birebir eşleşme oranı ve uyuşmazlık örnekleri;
+  değer dağılımları; 34 özellikli vektörlerin CSV'de birebir karşılığı olma oranı.
+- Karar kuralı: modelin kullandığı her özellik için birebir eşleşme ≥ %99 ise çıkarıcı doğrudan kullanılır. Altında kalan
+  özellikler için (ör. CSV'de sayısal görünen `dns.qry.name`, `http.response`) yazarların dönüşümü örneklerden çıkarılıp
+  çıkarıcıya eklenir ve kontrol tekrarlanır; çıkarılamazsa o özellik demoda sabit tutulur ve bu tezde sınırlama olarak yazılır.
+- Not: bu kontrol, demonun sınıflandırma başarısını değil, yalnız girdilerin eğitimdeki temsille aynı olup olmadığını ölçer.
+
+Çalıştırma: `python src/demo/feature_check_dnn_edgeiiot.py --pcap "<pcap>" --csv "<csv>" [--max-packets N]`
