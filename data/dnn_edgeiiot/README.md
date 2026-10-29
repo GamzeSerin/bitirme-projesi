@@ -629,6 +629,24 @@ Bilinmeyen Kararının Açıklanması (XAI-2) ve Kaçışların Karşı-Olgusal 
 4. **Sessiz kaçış neredeyse yalnız BRUTEFORCE ve WEB'de:** diğer üç ailede DSS + bekçi altında sessiz kaçan 0–1 satır. XAI-3'ün bulguları (kıl payı kaçış, yük taşımayan paketler, normal ikiz) bu iki aileye ait; genelleme bu çerçevede yapılmalı.
 5. **Eş kontrolündeki üç grup ayrımı RECON'da da tekrarlandı:** kontrolde yakalananlar normal trafiğe, alarm alanlar başka saldırılara benziyor.
 
+## Canlı demo, 2. adım: çıkarıcı ve doğrulaması (plan, 29.10.2026; sonuçlardan önce yazıldı)
+
+- **Çıkarıcı:** `src/demo/extractor_dnn_edgeiiot.py`. tshark ile 34 özellik (manifest sırası; çalışırken manifest ile denetlenir)
+  ve gösterim alanları (çerçeve no, zaman, IP'ler, protokol). Normalleştirme 1. adımla aynı. Model girdisi `model_matrix`:
+  koşul C'nin 32 sütunu, eğitim sırasıyla. `dns.qry.name` metin kuralı şimdilik "zero" (geçici; aşağıdaki sonuca göre kesinleşir).
+- **Doğrulama:** `src/demo/validate_extractor_dnn_edgeiiot.py`, 8 PCAP (XSS, SQL_injection, Uploading, Password, Port_Scanning,
+  DDoS_TCP, iki normal cihaz), her biri en fazla 300.000 paket, DNN dosyasındaki aynı etiketli satırlarla:
+  1. Asıl ölçü: bizim satırlarımızın DNN'de aynı etiketle birebir karşılığı (DNN bir örneklem olduğundan bu yön).
+  2. Paket türüne (tcp/udp/icmp/arp) ve IP çiftine göre eşleşmeyenler: yazarların paket seçimi kuralını bulmak için.
+  3. `dns.qry.name`: DNN'deki değer kümesi (etiket başına) ve bizdeki metin değerleri yan yana.
+- **Karar kuralları (önceden):**
+  - Paket seçimi: eşleşmeyenler tek bir paket türünde (ör. UDP) ya da belirli IP çiftlerinde toplanıyorsa ve o türün bütün
+    etiketlerde DNN'de karşılığı yoksa, demoda aynı süzgeç uygulanır. Bir etikette (ör. DDoS_UDP) o tür eğitimde varsa süzgeç
+    tür bazında değil IP bazında kurulur ya da hiç uygulanmaz; seçim tezde yazılır.
+  - `dns.qry.name`: DNN'de yalnız 0 varsa "zero"; 0/1 ise "present"; uzunluğa benzer tam sayılar ise "length"; başka bir
+    kodlama ise (ör. kategori numarası) eşleme tablosu çıkarılır ya da alan demoda sabit tutulup sınırlama olarak yazılır.
+  - Etiket başına asıl ölçü düşükse (eşleşmeyenler bir türde toplanmıyorsa) o etiketin PCAP'i demoda kullanılmaz.
+
 ## Literatür karşılaştırması: OpenMax, Mahalanobis, otokodlayıcı. Analiz planı (sonuçlardan ÖNCE yazıldı, 29.10.2026)
 
 Soru: Açık küme tanıma ve dağılım dışı tespit literatüründe bilinen yöntemler, TabM'in üye anlaşmazlığından (tezin alarmı) ve enerjisinden (tezin BENIGN kontrolü) daha iyi mi? Eşik yok; aşağıdakilerin tamamı raporlanır. Bir yöntem TabM skorlarını geçerse bu açıkça yazılır.
