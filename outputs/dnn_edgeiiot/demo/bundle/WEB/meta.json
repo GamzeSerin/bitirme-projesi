@@ -1,0 +1,91 @@
+{
+  "dataset": "Edge-IIoTset",
+  "unseen_family": "WEB",
+  "unseen_categories": [
+    "WEB"
+  ],
+  "unseen_fine_labels": [
+    "SQL_INJECTION",
+    "UPLOADING",
+    "XSS"
+  ],
+  "condition": "C_seq_ack_yok",
+  "features": [
+    "arp.opcode",
+    "arp.hw.size",
+    "icmp.seq_le",
+    "icmp.transmit_timestamp",
+    "http.content_length",
+    "http.response",
+    "tcp.connection.fin",
+    "tcp.connection.rst",
+    "tcp.connection.syn",
+    "tcp.connection.synack",
+    "tcp.dstport",
+    "tcp.flags",
+    "tcp.flags.ack",
+    "tcp.len",
+    "udp.port",
+    "udp.time_delta",
+    "dns.qry.name",
+    "dns.qry.qu",
+    "dns.retransmission",
+    "dns.retransmit_request",
+    "dns.retransmit_request_in",
+    "mqtt.conflag.cleansess",
+    "mqtt.conflags",
+    "mqtt.hdrflags",
+    "mqtt.len",
+    "mqtt.msgtype",
+    "mqtt.proto_len",
+    "mqtt.topic_len",
+    "mqtt.ver",
+    "mbtcp.len",
+    "mbtcp.trans_id",
+    "mbtcp.unit_id"
+  ],
+  "known_classes": [
+    "BENIGN",
+    "RECON",
+    "BRUTEFORCE",
+    "MALWARE",
+    "DDOS"
+  ],
+  "benign_index": 0,
+  "seed": 42,
+  "target": 0.95,
+  "q": 0.05,
+  "tau_alarm": 0.00918639451265335,
+  "tau_guard": -7.711950302124023,
+  "tau_guard_dss": -4.853311061859131,
+  "score_iqr": {
+    "disagree": 0.001582604178111069,
+    "energy": 8.276330471038818
+  },
+  "grid_percentiles": [
+    5,
+    15,
+    25,
+    35,
+    45,
+    55,
+    65,
+    75,
+    85,
+    95
+  ],
+  "tabm_params_source": {
+    "TabM": "metrics.json[TabM].params"
+  },
+  "test_check": {
+    "silent_alarm_only": 0.02309,
+    "silent_q": 0.00327,
+    "guard_review_q": 0.04038,
+    "alarm_caught": 0.30834,
+    "alarm_review_benign": 0.00925,
+    "rank_corr_disagree_vs_dss_guard": 1.0,
+    "rank_corr_energy_vs_dss_guard": 1.0,
+    "alarm_agreement_vs_dss_guard": 1.0
+  },
+  "rule": "alarm = disagree > tau_alarm; değilse tahmin BENIGN ve energy > tau_guard ise analiste (kontrol); değilse tahmin edilen sınıf"
+}

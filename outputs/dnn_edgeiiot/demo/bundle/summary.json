@@ -1,0 +1,57 @@
+{
+  "WEB": {
+    "seconds": 113.9,
+    "silent_alarm_only": 0.02309,
+    "silent_q": 0.00327,
+    "guard_review_q": 0.04038,
+    "alarm_caught": 0.30834,
+    "alarm_review_benign": 0.00925,
+    "rank_corr_disagree_vs_dss_guard": 1.0,
+    "rank_corr_energy_vs_dss_guard": 1.0,
+    "alarm_agreement_vs_dss_guard": 1.0
+  },
+  "BRUTEFORCE": {
+    "seconds": 188.4,
+    "silent_alarm_only": 0.11643,
+    "silent_q": 0.03392,
+    "guard_review_q": 0.04537,
+    "alarm_caught": 0.35699,
+    "alarm_review_benign": 0.05175,
+    "rank_corr_disagree_vs_dss_guard": 1.0,
+    "rank_corr_energy_vs_dss_guard": 1.0,
+    "alarm_agreement_vs_dss_guard": 1.0
+  },
+  "RECON": {
+    "seconds": 214.4,
+    "silent_alarm_only": 0.00046,
+    "silent_q": 9e-05,
+    "guard_review_q": 0.02675,
+    "alarm_caught": 0.69855,
+    "alarm_review_benign": 0.02513,
+    "rank_corr_disagree_vs_dss_guard": 1.0,
+    "rank_corr_energy_vs_dss_guard": 1.0,
+    "alarm_agreement_vs_dss_guard": 1.0
+  },
+  "DDOS": {
+    "seconds": 110.5,
+    "silent_alarm_only": 0.00047,
+    "silent_q": 9e-05,
+    "guard_review_q": 0.04788,
+    "alarm_caught": 0.4865,
+    "alarm_review_benign": 0.02225,
+    "rank_corr_disagree_vs_dss_guard": 1.0,
+    "rank_corr_energy_vs_dss_guard": 1.0,
+    "alarm_agreement_vs_dss_guard": 1.0
+  },
+  "MALWARE": {
+    "seconds": 138.6,
+    "silent_alarm_only": 0.0,
+    "silent_q": 0.0,
+    "guard_review_q": 0.0,
+    "alarm_caught": 0.51121,
+    "alarm_review_benign": 0.03925,
+    "rank_corr_disagree_vs_dss_guard": 1.0,
+    "rank_corr_energy_vs_dss_guard": 1.0,
+    "alarm_agreement_vs_dss_guard": 1.0
+  }
+}
