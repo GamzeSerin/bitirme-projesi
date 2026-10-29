@@ -118,6 +118,24 @@ Karşılaştırılan kontrol skorları: TabM'in kendi skorları (anlaşmazlık, 
 
 Edge-IIoTset sonucu ve önceden yazılan ölçütler: `data/dnn_edgeiiot/README.md` ("İki sinyalli karar kuralı").
 
+### Bekçinin açıklanması ve derin öğrenme karşılaştırması (ortak araçlar)
+
+Edge-IIoTset'te yapılan analizler (planlar ve sonuçlar: `data/dnn_edgeiiot/README.md`); hepsi `--dataset` ile çalışır.
+
+| Analiz | Betik | Önkoşul |
+| --- | --- | --- |
+| Bilinmeyen Kararının Açıklanması (XAI-2): bekçinin kararına permütasyon Shapley + silme eğrisi sadakati | `src/xai_unknown_decision.py` | `dss_guard.py` satır dosyaları |
+| Kaçışların Karşı-Olgusal Açıklaması (XAI-3) + eş kontrolü | `src/xai_escape_counterfactual.py` | XAI-2 (kayıtlı TabM, Shapley) |
+| Derin öğrenme karşılaştırması: TabM / MLP / MC-dropout | `src/two_signal.py --classifier MLP\|MCDropout`, `src/dl_compare.py` | TabM'in two_signal koşuları (3 tohum) |
+| Tahmin süresi | `src/inference_time.py` | XAI-2 (kayıtlı TabM) |
+
+Hepsini sırayla (her adımda önce `--quick`) tek komutla:
+
+```bash
+python src/xai_dl_suite.py --dataset dataset_23 --data-file data/dataset_23 \
+    --run-dir work/dataset_23/<asıl deney> --params-from run --families RECON,SPOOFING,WEB,BRUTEFORCE
+```
+
 ## Nasıl çalıştırılır?
 
 **1. Kurulum (bir kez):**
