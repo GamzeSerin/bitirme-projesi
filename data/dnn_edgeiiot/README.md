@@ -718,6 +718,38 @@ denenince" geçerli mi? (Dış incelemede önerildi; deney sonuç görülmeden t
 - **Bilinen sınırlılık:** kayıt sırası gerçek zaman ekseni değil (`frame.time`'da tarih yok); her etiket ayrı kayıtlarda toplandığı için
   "zaman" etiket içi sıradır. Kapalı küme zaman bölmesi kontrolüyle aynı tanım.
 
+### Zaman bölmesinde iki sinyal kuralı: sonuçlar (29.10.2026; koşul C, 5 aile, tohum 42/1/2)
+
+Çıktılar `outputs/dnn_edgeiiot/two_signal/two_signal_C_seq_ack_yok_time.json`, `s1/…_time_seed1.json`, `s2/…_time_seed2.json`,
+kayıt `logs/log_two_signal_C_time.txt`. Rastgele bölme sütunu aynı tohumların ana koşusu (tablolar yukarıda).
+
+| 5 aile ortalaması, 3 tohum | Rastgele bölme | Zaman bölmesi |
+|---|---|---|
+| Bilinen sınıflarda macro-F1 | 0,875 | 0,757 ± 0,003 |
+| Alarm AUROC | 0,862 ± 0,001 | 0,795 ± 0,010 |
+| Kontrolsüz sessiz kaçış | %2,52 ± 0,25 | **%4,82 ± 0,16** |
+| Enerji kontrolü, q = %1: sessiz kaçış / kontrolün analist yükü | %1,95 / %0,8 | **%0,05** / %4,0 |
+| q = %5 | %0,53 / %3,3 | **%0,05** / %4,4 ± 1,0 |
+| q = %10 | %0,08 / %6,2 | %0,05 / %11,0 |
+
+Aile başına (zaman, 3 tohum ort.): kontrolsüz kaçış BRUTEFORCE **%22,7** (rastgele %10,7), WEB %1,4, DDOS/RECON/MALWARE ≈ %0; q = %5'te
+kaçış BRUTEFORCE %0, WEB %0,25; kontrolün analist yükü BRUTEFORCE %12,8, WEB %3,1, diğerleri %1,9–2,4. q = %0,5 ile %5 arasında
+sonuçlar çoğu tohum ve ailede birebir aynı (tohum 1 ve 2'de yük q = %0,5'te de %4,6 ve %3,3).
+
+**Önceden yazılan çerçeveye göre değerlendirme:**
+1. **Ölçüte göre "dayanıklı":** q = %5'te enerji kontrolü sessiz kaçışı %4,82'den %0,05'e indiriyor (yaklaşık %99 azalma; ölçüt en az
+   yarı); kontrolün analist yükü %4,4 (ölçütteki sınır %3,3'ün iki katı, %6,6). Üç tohumda da aynı yön.
+2. **Ama analist bütçesi zamanda tutmuyor (önemli yan bulgu):** eşik kalibrasyondan seçildiği hâlde gerçekleşen yük bütçeye uymuyor:
+   q = %0,5 ve %1'de bile normal trafiğin %3,3–4,6'sı analiste gidiyor (rastgele bölmede %0,4–0,8). Yani "gelecekteki" normal trafiğin
+   bir kısmı kalibrasyondaki normal trafikten belirgin daha yüksek enerjili; eşik, aralarındaki boşluğa düştüğü için q'ya tepki
+   vermiyor (plato). Kural kaçışı yine durduruyor, ama bunu bütçeden fazla analist yüküyle yapıyor. Sahada eşiğin düzenli aralıklarla
+   güncel normal trafikle yeniden kalibre edilmesi gerekir; tezde öneri ve sınırlılık olarak yazılır.
+3. **Model bütün olarak zaman kaymasında zayıflıyor:** bilinen macro-F1 0,875 → 0,757, alarm AUROC 0,862 → 0,795, kontrolsüz kaçış iki
+   katına çıkıyor (artışın tamamı BRUTEFORCE'tan). İki sinyal kuralının ikinci kontrolü bu kaybı telafi ediyor; kontrolün değeri zaman
+   bölmesinde rastgele bölmeden daha büyük.
+4. Diğer kontroller (q = %5, tohum ort.): MSP kaçış %0,05 / yük %5,8; anlaşmazlık %0,01 / %7,8; kNN %0,74 / %12,7. Enerji en düşük yükle
+   aynı düzeyde kaçış veriyor; kNN yine en kötüsü.
+
 ## Literatür karşılaştırması: OpenMax, Mahalanobis, otokodlayıcı. Analiz planı (sonuçlardan ÖNCE yazıldı, 29.10.2026)
 
 Soru: Açık küme tanıma ve dağılım dışı tespit literatüründe bilinen yöntemler, TabM'in üye anlaşmazlığından (tezin alarmı) ve enerjisinden (tezin BENIGN kontrolü) daha iyi mi? Eşik yok; aşağıdakilerin tamamı raporlanır. Bir yöntem TabM skorlarını geçerse bu açıkça yazılır.
