@@ -37,7 +37,7 @@ FEATURES = ['arp.opcode', 'arp.hw.size', 'icmp.seq_le', 'icmp.transmit_timestamp
             'mbtcp.unit_id']
 # Gösterim ve süzme için (modele girmez)
 META = ['frame.number', 'frame.time_epoch', 'frame.len', 'ip.src', 'ip.dst', 'tcp.srcport', 'udp.srcport',
-        'udp.dstport', 'eth.type', 'ip.proto', '_ws.col.Protocol']
+        'udp.dstport', 'eth.type', 'ip.proto']
 TEXT_FIELDS = ['dns.qry.name']
 CONDITIONS = {"A_tam": [], "C_seq_ack_yok": ["tcp.seq", "tcp.ack"]}   # open_set_registry ile aynı (demoda C)
 
@@ -107,7 +107,11 @@ def tshark_fields(tshark, pcap, fields, max_packets=0, display_filter=None):
     r = subprocess.run(cmd, capture_output=True, text=True)
     if r.returncode != 0:
         raise RuntimeError("tshark hata verdi:\n" + r.stderr[-2000:])
-    return pd.read_csv(StringIO(r.stdout), sep="\t", dtype=str, keep_default_na=False, quoting=3)
+    df = pd.read_csv(StringIO(r.stdout), sep="\t", dtype=str, keep_default_na=False, quoting=3)
+    if len(df.columns) != len(fields):
+        raise RuntimeError(f"tshark {len(df.columns)} sütun verdi, {len(fields)} bekleniyordu")
+    df.columns = list(fields)   # başlıktaki yazım tshark sürümüne göre değişebilir; sıra -e sırasıyla aynı
+    return df
 
 
 def extract(pcap, max_packets=0, tshark=None, dns_policy=None, display_filter=None, rules=None):
