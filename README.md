@@ -118,6 +118,26 @@ Karşılaştırılan kontrol skorları: TabM'in kendi skorları (anlaşmazlık, 
 
 Edge-IIoTset sonucu ve önceden yazılan ölçütler: `data/dnn_edgeiiot/README.md` ("İki sinyalli karar kuralı").
 
+### Ortak bulgu: gerçek DSS'te bilinmeyen katmanı (25.10.2026)
+
+Aynı bekçi (TabM: alarm = üye anlaşmazlığı, kontrol = enerji) iki veri setinde **gerçek DSS'in** kararına uygulandı (`src/dss_guard.py --dataset <dataset_id>`; oylayanlar asıl DSS'le aynı ve sabit, ayarlar asıl deneyden, ağırlıklar 5-fold OOF). Alarm kademesi KEŞİF'tir (sonuçlardan sonra tanımlandı; `src/alarm_tiers.py`, yeni eğitim yok). Koşul C, tohum 42, ailelerin ortalaması:
+
+| | Edge-IIoTset (5 aile) | CICIoT2023 (6 aile) |
+| --- | --- | --- |
+| Oylayanlar | DT, RF, XGB, LGBM, TabM | RF, XGB, LGBM |
+| Görülmemiş saldırı ALLOW: yalnız DSS → alarm → alarm + kontrol (q = %5) | %2,5 → %2,1 → **%0,8** | %6,0 → %4,4 → **%4,1** |
+| Katkının çoğu | enerji kontrolünden | TabM alarmından |
+| Normal trafikte analiste giden: yalnız DSS | %1,6 | %6,4 |
+| … alarm + kontrol, q = %5, tek kademe | %8,1 | %23,3 |
+| … **skor kademesi** (alarm %95–99 → LOG_MONITOR, %99+ → analist) | **%5,6** | **%11,1** |
+| Görülmemiş flood'un analiste gitmesi: tek → skor → ciddiyet kademesi | %49 → %46,5 → %3,2 (DDOS) | %57 → %55 → %38 (FLOOD) |
+
+- **Kural gerçek DSS'e taşınabiliyor:** kontrol TabM'in ya da DSS'in kararına uygulansa sonuç aynı.
+- **Gücü veriye bağlı:** saldırıların normalden ayırt edilebildiği veride (Edge-IIoTset) düşük bedelle ~3 kat azalma; ayırt edilemediği veride (CICIoT2023) küçük kazanç, yüksek yük (normal trafik TabM için de belirsiz, alarm sık çalıyor).
+- **Skor kademesi** iki veri setinde de ALLOW'u değiştirmeden analist yükünü belirgin azaltıyor (LOG_MONITOR'a giden normal trafik artıyor; bu bir kayıt, insan incelemesi değil).
+- **Ciddiyet kademesi önerilmez:** görülmemiş ağır saldırılar sık sık RECON sanıldığı için insan incelemesinden kaçıyor (iki veri setinde de).
+- Ayrıntılar: `data/dnn_edgeiiot/README.md` ve `data/dataset_23/README.md` ("Gerçek DSS'te BENIGN kontrolü"). Sınırlılık: tek tohum; test kümesinde saldırı oranı ~%95, gerçek ağda normal trafik çoğunlukta olduğu için analist yükü mutlak sayıda çok daha büyük.
+
 ## Nasıl çalıştırılır?
 
 **1. Kurulum (bir kez):**
