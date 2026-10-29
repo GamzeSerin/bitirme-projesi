@@ -1,0 +1,35 @@
+tshark: TShark (Wireshark) 4.2.2 (Git v4.2.2 packaged as 4.2.2-1.1build3).
+CSV: 15915 satır, 61 alan; bu tshark sürümünde olmayan alan: []
+tshark: 16215 paket
+
+Satır: bizim 16215 / CSV 15915 (sıra hizası YOK)
+Normalleştirme kuralları: ['True/False -> 1/0', 'boş -> 0', 'onaltılık -> tam sayı', 'sayı olmayan metin -> ayrıca raporlandı']
+34 özellikli vektörlerin CSV'de birebir karşılığı: 0.0455
+Çıktı: outputs/dnn_edgeiiot/demo/feature_check_XSS_attacks.json
+tshark: TShark (Wireshark) 4.2.2 (Git v4.2.2 packaged as 4.2.2-1.1build3).
+CSV: 100000 satır, 61 alan; bu tshark sürümünde olmayan alan: []
+tshark: 100000 paket
+
+Satır: bizim 100000 / CSV 100000 (sıra hizası var)
+Normalleştirme kuralları: ['True/False -> 1/0', 'boş -> 0', 'onaltılık -> tam sayı', 'sayı olmayan metin -> ayrıca raporlandı']
+Birebir eşleşen özellik (>= %99): 16 / 34
+  tcp.flags                    eşleşme 0.000  örnek: [('0x0011', 0.0), ('0x0010', 0.0)]
+  tcp.ack                      eşleşme 0.168  örnek: [('', 6.0), ('6', 0.0)]
+  tcp.seq                      eşleşme 0.181  örnek: [('', 48.0), ('48', 6.0)]
+  tcp.dstport                  eşleşme 0.320  örnek: [('', 1883.0), ('1883', 61941.0)]
+  tcp.len                      eşleşme 0.577  örnek: [('0', 14.0), ('14', 0.0)]
+  mqtt.msgtype                 eşleşme 0.578  örnek: [('', 1.0), ('1', 0.0)]
+  mqtt.len                     eşleşme 0.672  örnek: [('', 12.0), ('12', 0.0)]
+  tcp.flags.ack                eşleşme 0.689  örnek: [('', 1.0), ('True', 0.0)]
+  mqtt.hdrflags                eşleşme 0.749  örnek: [('0x10', 0.0), ('0x20', 0.0)]
+  tcp.connection.rst           eşleşme 0.777  örnek: [('', 1.0), ('1', 0.0)]
+  tcp.connection.fin           eşleşme 0.783  örnek: [('', 1.0), ('1', 0.0)]
+  tcp.connection.syn           eşleşme 0.883  örnek: [('', 1.0), ('1', 0.0)]
+  tcp.connection.synack        eşleşme 0.883  örnek: [('', 1.0), ('1', 0.0)]
+  mqtt.topic_len               eşleşme 0.883  örnek: [('', 8.0), ('8', 0.0)]
+  mqtt.conflag.cleansess       eşleşme 0.883  örnek: [('', 1.0), ('True', 0.0)]
+  mqtt.proto_len               eşleşme 0.883  örnek: [('', 4.0), ('4', 0.0)]
+  mqtt.ver                     eşleşme 0.883  örnek: [('', 4.0), ('4', 0.0)]
+  mqtt.conflags                eşleşme 0.938  örnek: [('0x02', 0.0), ('0x02', 0.0)]
+34 özellikli vektörlerin CSV'de birebir karşılığı: 0.0002
+Çıktı: outputs/dnn_edgeiiot/demo/feature_check_Distance.json

@@ -1,0 +1,1304 @@
+{
+  "pcap": "Distance.pcap",
+  "csv": "Distance.csv",
+  "tshark": "TShark (Wireshark) 4.2.2 (Git v4.2.2 packaged as 4.2.2-1.1build3).",
+  "rows": {
+    "ours": 100000,
+    "csv": 100000,
+    "aligned": true
+  },
+  "fields_missing_in_tshark": [],
+  "normalization_rules_used": [
+    "True/False -> 1/0",
+    "boş -> 0",
+    "onaltılık -> tam sayı",
+    "sayı olmayan metin -> ayrıca raporlandı"
+  ],
+  "non_numeric_examples": {
+    "dns.qry.name": [
+      "_ipps._tcp.local",
+      "_ipps._tcp.local",
+      "_ipps._tcp.local",
+      "_ipps._tcp.local"
+    ]
+  },
+  "vector_match_rate": 0.0002,
+  "features": {
+    "arp.opcode": {
+      "ours_unique": 2,
+      "csv_unique": 2,
+      "aligned_exact_match": 0.9999,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [
+        {
+          "row": 37193,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 1.0
+        },
+        {
+          "row": 37209,
+          "ours_raw": "1",
+          "ours": 1.0,
+          "csv": 0.0
+        },
+        {
+          "row": 51217,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 1.0
+        },
+        {
+          "row": 51236,
+          "ours_raw": "1",
+          "ours": 1.0,
+          "csv": 0.0
+        },
+        {
+          "row": 77105,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 1.0
+        }
+      ],
+      "top_values_ours": {
+        "0.0": 1.0,
+        "1.0": 0.0
+      },
+      "top_values_csv": {
+        "0.0": 1.0,
+        "1.0": 0.0
+      }
+    },
+    "arp.hw.size": {
+      "ours_unique": 2,
+      "csv_unique": 2,
+      "aligned_exact_match": 0.9999,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [
+        {
+          "row": 37193,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 6.0
+        },
+        {
+          "row": 37209,
+          "ours_raw": "6",
+          "ours": 6.0,
+          "csv": 0.0
+        },
+        {
+          "row": 51217,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 6.0
+        },
+        {
+          "row": 51236,
+          "ours_raw": "6",
+          "ours": 6.0,
+          "csv": 0.0
+        },
+        {
+          "row": 77105,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 6.0
+        }
+      ],
+      "top_values_ours": {
+        "0.0": 1.0,
+        "6.0": 0.0
+      },
+      "top_values_csv": {
+        "0.0": 1.0,
+        "6.0": 0.0
+      }
+    },
+    "icmp.seq_le": {
+      "ours_unique": 1,
+      "csv_unique": 1,
+      "aligned_exact_match": 1.0,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [],
+      "top_values_ours": {
+        "0.0": 1.0
+      },
+      "top_values_csv": {
+        "0.0": 1.0
+      }
+    },
+    "icmp.transmit_timestamp": {
+      "ours_unique": 1,
+      "csv_unique": 1,
+      "aligned_exact_match": 1.0,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [],
+      "top_values_ours": {
+        "0.0": 1.0
+      },
+      "top_values_csv": {
+        "0.0": 1.0
+      }
+    },
+    "http.content_length": {
+      "ours_unique": 1,
+      "csv_unique": 1,
+      "aligned_exact_match": 1.0,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [],
+      "top_values_ours": {
+        "0.0": 1.0
+      },
+      "top_values_csv": {
+        "0.0": 1.0
+      }
+    },
+    "http.response": {
+      "ours_unique": 1,
+      "csv_unique": 1,
+      "aligned_exact_match": 1.0,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [],
+      "top_values_ours": {
+        "0.0": 1.0
+      },
+      "top_values_csv": {
+        "0.0": 1.0
+      }
+    },
+    "tcp.ack": {
+      "ours_unique": 14,
+      "csv_unique": 14,
+      "aligned_exact_match": 0.1678,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [
+        {
+          "row": 1490,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 6.0
+        },
+        {
+          "row": 1491,
+          "ours_raw": "6",
+          "ours": 6.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1493,
+          "ours_raw": "0",
+          "ours": 0.0,
+          "csv": 1.0
+        },
+        {
+          "row": 1495,
+          "ours_raw": "1",
+          "ours": 1.0,
+          "csv": 15.0
+        },
+        {
+          "row": 1497,
+          "ours_raw": "15",
+          "ours": 15.0,
+          "csv": 6.0
+        }
+      ],
+      "top_values_ours": {
+        "0.0": 0.1935,
+        "6.0": 0.1929,
+        "1.0": 0.1888,
+        "15.0": 0.1464,
+        "5.0": 0.1357
+      },
+      "top_values_csv": {
+        "0.0": 0.1932,
+        "6.0": 0.193,
+        "1.0": 0.1889,
+        "15.0": 0.1464,
+        "5.0": 0.1357
+      }
+    },
+    "tcp.connection.fin": {
+      "ours_unique": 2,
+      "csv_unique": 2,
+      "aligned_exact_match": 0.7829,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [
+        {
+          "row": 1506,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 1.0
+        },
+        {
+          "row": 1508,
+          "ours_raw": "1",
+          "ours": 1.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1524,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 1.0
+        },
+        {
+          "row": 1526,
+          "ours_raw": "1",
+          "ours": 1.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1533,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 1.0
+        }
+      ],
+      "top_values_ours": {
+        "0.0": 0.8739,
+        "1.0": 0.1261
+      },
+      "top_values_csv": {
+        "0.0": 0.8739,
+        "1.0": 0.1261
+      }
+    },
+    "tcp.connection.rst": {
+      "ours_unique": 2,
+      "csv_unique": 2,
+      "aligned_exact_match": 0.7771,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [
+        {
+          "row": 1491,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 1.0
+        },
+        {
+          "row": 1492,
+          "ours_raw": "1",
+          "ours": 1.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1501,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 1.0
+        },
+        {
+          "row": 1502,
+          "ours_raw": "1",
+          "ours": 1.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1503,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 1.0
+        }
+      ],
+      "top_values_ours": {
+        "0.0": 0.8701,
+        "1.0": 0.1299
+      },
+      "top_values_csv": {
+        "0.0": 0.87,
+        "1.0": 0.13
+      }
+    },
+    "tcp.connection.syn": {
+      "ours_unique": 2,
+      "csv_unique": 2,
+      "aligned_exact_match": 0.8826,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [
+        {
+          "row": 1492,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 1.0
+        },
+        {
+          "row": 1493,
+          "ours_raw": "1",
+          "ours": 1.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1508,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 1.0
+        },
+        {
+          "row": 1509,
+          "ours_raw": "1",
+          "ours": 1.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1526,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 1.0
+        }
+      ],
+      "top_values_ours": {
+        "0.0": 0.937,
+        "1.0": 0.063
+      },
+      "top_values_csv": {
+        "0.0": 0.937,
+        "1.0": 0.063
+      }
+    },
+    "tcp.connection.synack": {
+      "ours_unique": 2,
+      "csv_unique": 2,
+      "aligned_exact_match": 0.8827,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [
+        {
+          "row": 1493,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 1.0
+        },
+        {
+          "row": 1494,
+          "ours_raw": "1",
+          "ours": 1.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1509,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 1.0
+        },
+        {
+          "row": 1510,
+          "ours_raw": "1",
+          "ours": 1.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1527,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 1.0
+        }
+      ],
+      "top_values_ours": {
+        "0.0": 0.937,
+        "1.0": 0.063
+      },
+      "top_values_csv": {
+        "0.0": 0.9369,
+        "1.0": 0.063
+      }
+    },
+    "tcp.dstport": {
+      "ours_unique": 6305,
+      "csv_unique": 6307,
+      "aligned_exact_match": 0.3196,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [
+        {
+          "row": 1490,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 1883.0
+        },
+        {
+          "row": 1491,
+          "ours_raw": "1883",
+          "ours": 1883.0,
+          "csv": 61941.0
+        },
+        {
+          "row": 1492,
+          "ours_raw": "61941",
+          "ours": 61941.0,
+          "csv": 1883.0
+        },
+        {
+          "row": 1493,
+          "ours_raw": "1883",
+          "ours": 1883.0,
+          "csv": 61943.0
+        },
+        {
+          "row": 1494,
+          "ours_raw": "61943",
+          "ours": 61943.0,
+          "csv": 1883.0
+        }
+      ],
+      "top_values_ours": {
+        "1883.0": 0.5174,
+        "0.0": 0.0005,
+        "64926.0": 0.0001,
+        "51567.0": 0.0001,
+        "62582.0": 0.0001
+      },
+      "top_values_csv": {
+        "1883.0": 0.5176,
+        "0.0": 0.0002,
+        "64926.0": 0.0001,
+        "51567.0": 0.0001,
+        "62582.0": 0.0001
+      }
+    },
+    "tcp.flags": {
+      "ours_unique": 8,
+      "csv_unique": 1,
+      "aligned_exact_match": 0.0,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [
+        {
+          "row": 27114,
+          "ours_raw": "0x0011",
+          "ours": 17.0,
+          "csv": 0.0
+        },
+        {
+          "row": 27121,
+          "ours_raw": "0x0010",
+          "ours": 16.0,
+          "csv": 0.0
+        },
+        {
+          "row": 27491,
+          "ours_raw": "0x0019",
+          "ours": 25.0,
+          "csv": 0.0
+        },
+        {
+          "row": 27547,
+          "ours_raw": "0x0002",
+          "ours": 2.0,
+          "csv": 0.0
+        },
+        {
+          "row": 27548,
+          "ours_raw": "0x0012",
+          "ours": 18.0,
+          "csv": 0.0
+        }
+      ],
+      "top_values_ours": {
+        "16.0": 0.4283,
+        "24.0": 0.1891,
+        "4.0": 0.1299,
+        "17.0": 0.0631,
+        "25.0": 0.063
+      },
+      "top_values_csv": {
+        "0.0": 1.0
+      }
+    },
+    "tcp.flags.ack": {
+      "ours_unique": 2,
+      "csv_unique": 2,
+      "aligned_exact_match": 0.6888,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [
+        {
+          "row": 1490,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 1.0
+        },
+        {
+          "row": 1491,
+          "ours_raw": "True",
+          "ours": 1.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1493,
+          "ours_raw": "False",
+          "ours": 0.0,
+          "csv": 1.0
+        },
+        {
+          "row": 1501,
+          "ours_raw": "True",
+          "ours": 1.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1502,
+          "ours_raw": "False",
+          "ours": 0.0,
+          "csv": 1.0
+        }
+      ],
+      "top_values_ours": {
+        "1.0": 0.8065,
+        "0.0": 0.1935
+      },
+      "top_values_csv": {
+        "1.0": 0.8068,
+        "0.0": 0.1932
+      }
+    },
+    "tcp.len": {
+      "ours_unique": 11,
+      "csv_unique": 11,
+      "aligned_exact_match": 0.5772,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [
+        {
+          "row": 1494,
+          "ours_raw": "0",
+          "ours": 0.0,
+          "csv": 14.0
+        },
+        {
+          "row": 1495,
+          "ours_raw": "14",
+          "ours": 14.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1496,
+          "ours_raw": "0",
+          "ours": 0.0,
+          "csv": 4.0
+        },
+        {
+          "row": 1497,
+          "ours_raw": "4",
+          "ours": 4.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1504,
+          "ours_raw": "0",
+          "ours": 0.0,
+          "csv": 30.0
+        }
+      ],
+      "top_values_ours": {
+        "0.0": 0.7478,
+        "4.0": 0.0631,
+        "14.0": 0.0631,
+        "2.0": 0.063,
+        "30.0": 0.0622
+      },
+      "top_values_csv": {
+        "0.0": 0.7478,
+        "4.0": 0.0631,
+        "14.0": 0.0631,
+        "2.0": 0.063,
+        "30.0": 0.0622
+      }
+    },
+    "tcp.seq": {
+      "ours_unique": 14,
+      "csv_unique": 14,
+      "aligned_exact_match": 0.1812,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [
+        {
+          "row": 1490,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 48.0
+        },
+        {
+          "row": 1491,
+          "ours_raw": "48",
+          "ours": 48.0,
+          "csv": 6.0
+        },
+        {
+          "row": 1492,
+          "ours_raw": "6",
+          "ours": 6.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1494,
+          "ours_raw": "0",
+          "ours": 0.0,
+          "csv": 1.0
+        },
+        {
+          "row": 1497,
+          "ours_raw": "1",
+          "ours": 1.0,
+          "csv": 48.0
+        }
+      ],
+      "top_values_ours": {
+        "1.0": 0.2527,
+        "48.0": 0.199,
+        "5.0": 0.1468,
+        "6.0": 0.1453,
+        "0.0": 0.1266
+      },
+      "top_values_csv": {
+        "1.0": 0.2529,
+        "48.0": 0.1991,
+        "5.0": 0.1468,
+        "6.0": 0.1453,
+        "0.0": 0.1263
+      }
+    },
+    "udp.port": {
+      "ours_unique": 4,
+      "csv_unique": 1,
+      "aligned_exact_match": 0.9997,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [
+        {
+          "row": 1490,
+          "ours_raw": "5353",
+          "ours": 5353.0,
+          "csv": 0.0
+        },
+        {
+          "row": 5201,
+          "ours_raw": "5353",
+          "ours": 5353.0,
+          "csv": 0.0
+        },
+        {
+          "row": 8846,
+          "ours_raw": "5353",
+          "ours": 5353.0,
+          "csv": 0.0
+        },
+        {
+          "row": 12412,
+          "ours_raw": "5353",
+          "ours": 5353.0,
+          "csv": 0.0
+        },
+        {
+          "row": 16358,
+          "ours_raw": "5353",
+          "ours": 5353.0,
+          "csv": 0.0
+        }
+      ],
+      "top_values_ours": {
+        "0.0": 0.9997,
+        "5353.0": 0.0003,
+        "137.0": 0.0,
+        "138.0": 0.0
+      },
+      "top_values_csv": {
+        "0.0": 1.0
+      }
+    },
+    "udp.time_delta": {
+      "ours_unique": 31,
+      "csv_unique": 1,
+      "aligned_exact_match": 0.9997,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [
+        {
+          "row": 5201,
+          "ours_raw": "5.002997000",
+          "ours": 5.002997,
+          "csv": 0.0
+        },
+        {
+          "row": 8846,
+          "ours_raw": "5.002930000",
+          "ours": 5.00293,
+          "csv": 0.0
+        },
+        {
+          "row": 12412,
+          "ours_raw": "4.997580000",
+          "ours": 4.99758,
+          "csv": 0.0
+        },
+        {
+          "row": 16358,
+          "ours_raw": "4.999073000",
+          "ours": 4.999073,
+          "csv": 0.0
+        },
+        {
+          "row": 19624,
+          "ours_raw": "4.999948000",
+          "ours": 4.999948,
+          "csv": 0.0
+        }
+      ],
+      "top_values_ours": {
+        "0.0": 0.9997,
+        "5.002997": 0.0,
+        "5.00293": 0.0,
+        "4.99758": 0.0,
+        "4.999073": 0.0
+      },
+      "top_values_csv": {
+        "0.0": 1.0
+      }
+    },
+    "dns.qry.name": {
+      "ours_unique": 1,
+      "csv_unique": 1,
+      "aligned_exact_match": 1.0,
+      "ours_non_numeric_rows": 4,
+      "mismatch_examples": [
+        {
+          "row": 16880,
+          "ours_raw": "_ipps._tcp.local",
+          "ours": null,
+          "csv": 0.0
+        },
+        {
+          "row": 21023,
+          "ours_raw": "_ipps._tcp.local",
+          "ours": null,
+          "csv": 0.0
+        },
+        {
+          "row": 64864,
+          "ours_raw": "_ipps._tcp.local",
+          "ours": null,
+          "csv": 0.0
+        },
+        {
+          "row": 69206,
+          "ours_raw": "_ipps._tcp.local",
+          "ours": null,
+          "csv": 0.0
+        }
+      ],
+      "top_values_ours": {
+        "0.0": 1.0
+      },
+      "top_values_csv": {
+        "0.0": 1.0
+      }
+    },
+    "dns.qry.qu": {
+      "ours_unique": 1,
+      "csv_unique": 1,
+      "aligned_exact_match": 1.0,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [],
+      "top_values_ours": {
+        "0.0": 1.0
+      },
+      "top_values_csv": {
+        "0.0": 1.0
+      }
+    },
+    "dns.retransmission": {
+      "ours_unique": 1,
+      "csv_unique": 1,
+      "aligned_exact_match": 1.0,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [],
+      "top_values_ours": {
+        "0.0": 1.0
+      },
+      "top_values_csv": {
+        "0.0": 1.0
+      }
+    },
+    "dns.retransmit_request": {
+      "ours_unique": 1,
+      "csv_unique": 1,
+      "aligned_exact_match": 1.0,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [],
+      "top_values_ours": {
+        "0.0": 1.0
+      },
+      "top_values_csv": {
+        "0.0": 1.0
+      }
+    },
+    "dns.retransmit_request_in": {
+      "ours_unique": 1,
+      "csv_unique": 1,
+      "aligned_exact_match": 1.0,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [],
+      "top_values_ours": {
+        "0.0": 1.0
+      },
+      "top_values_csv": {
+        "0.0": 1.0
+      }
+    },
+    "mqtt.conflag.cleansess": {
+      "ours_unique": 2,
+      "csv_unique": 2,
+      "aligned_exact_match": 0.8831,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [
+        {
+          "row": 1494,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 1.0
+        },
+        {
+          "row": 1495,
+          "ours_raw": "True",
+          "ours": 1.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1510,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 1.0
+        },
+        {
+          "row": 1511,
+          "ours_raw": "True",
+          "ours": 1.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1528,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 1.0
+        }
+      ],
+      "top_values_ours": {
+        "0.0": 0.937,
+        "1.0": 0.063
+      },
+      "top_values_csv": {
+        "0.0": 0.9369,
+        "1.0": 0.0631
+      }
+    },
+    "mqtt.conflags": {
+      "ours_unique": 2,
+      "csv_unique": 1,
+      "aligned_exact_match": 0.9377,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [
+        {
+          "row": 1495,
+          "ours_raw": "0x02",
+          "ours": 2.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1511,
+          "ours_raw": "0x02",
+          "ours": 2.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1529,
+          "ours_raw": "0x02",
+          "ours": 2.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1548,
+          "ours_raw": "0x02",
+          "ours": 2.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1568,
+          "ours_raw": "0x02",
+          "ours": 2.0,
+          "csv": 0.0
+        }
+      ],
+      "top_values_ours": {
+        "0.0": 0.937,
+        "2.0": 0.063
+      },
+      "top_values_csv": {
+        "0.0": 1.0
+      }
+    },
+    "mqtt.hdrflags": {
+      "ours_unique": 5,
+      "csv_unique": 1,
+      "aligned_exact_match": 0.7485,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [
+        {
+          "row": 1495,
+          "ours_raw": "0x10",
+          "ours": 16.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1497,
+          "ours_raw": "0x20",
+          "ours": 32.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1505,
+          "ours_raw": "0x30",
+          "ours": 48.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1507,
+          "ours_raw": "0xe0",
+          "ours": 224.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1511,
+          "ours_raw": "0x10",
+          "ours": 16.0,
+          "csv": 0.0
+        }
+      ],
+      "top_values_ours": {
+        "0.0": 0.748,
+        "16.0": 0.063,
+        "32.0": 0.063,
+        "48.0": 0.063,
+        "224.0": 0.063
+      },
+      "top_values_csv": {
+        "0.0": 1.0
+      }
+    },
+    "mqtt.len": {
+      "ours_unique": 9,
+      "csv_unique": 9,
+      "aligned_exact_match": 0.6725,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [
+        {
+          "row": 1494,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 12.0
+        },
+        {
+          "row": 1495,
+          "ours_raw": "12",
+          "ours": 12.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1496,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 2.0
+        },
+        {
+          "row": 1497,
+          "ours_raw": "2",
+          "ours": 2.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1504,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 28.0
+        }
+      ],
+      "top_values_ours": {
+        "0.0": 0.811,
+        "12.0": 0.063,
+        "2.0": 0.063,
+        "28.0": 0.0622,
+        "29.0": 0.0005
+      },
+      "top_values_csv": {
+        "0.0": 0.8109,
+        "12.0": 0.0631,
+        "2.0": 0.063,
+        "28.0": 0.0622,
+        "29.0": 0.0005
+      }
+    },
+    "mqtt.msgtype": {
+      "ours_unique": 5,
+      "csv_unique": 5,
+      "aligned_exact_match": 0.5775,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [
+        {
+          "row": 1494,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 1.0
+        },
+        {
+          "row": 1495,
+          "ours_raw": "1",
+          "ours": 1.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1496,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 2.0
+        },
+        {
+          "row": 1497,
+          "ours_raw": "2",
+          "ours": 2.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1504,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 3.0
+        }
+      ],
+      "top_values_ours": {
+        "0.0": 0.748,
+        "1.0": 0.063,
+        "2.0": 0.063,
+        "3.0": 0.063,
+        "14.0": 0.063
+      },
+      "top_values_csv": {
+        "0.0": 0.7479,
+        "1.0": 0.0631,
+        "2.0": 0.063,
+        "3.0": 0.063,
+        "14.0": 0.063
+      }
+    },
+    "mqtt.proto_len": {
+      "ours_unique": 2,
+      "csv_unique": 2,
+      "aligned_exact_match": 0.8831,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [
+        {
+          "row": 1494,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 4.0
+        },
+        {
+          "row": 1495,
+          "ours_raw": "4",
+          "ours": 4.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1510,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 4.0
+        },
+        {
+          "row": 1511,
+          "ours_raw": "4",
+          "ours": 4.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1528,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 4.0
+        }
+      ],
+      "top_values_ours": {
+        "0.0": 0.937,
+        "4.0": 0.063
+      },
+      "top_values_csv": {
+        "0.0": 0.9369,
+        "4.0": 0.0631
+      }
+    },
+    "mqtt.topic_len": {
+      "ours_unique": 2,
+      "csv_unique": 2,
+      "aligned_exact_match": 0.8827,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [
+        {
+          "row": 1504,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 8.0
+        },
+        {
+          "row": 1505,
+          "ours_raw": "8",
+          "ours": 8.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1522,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 8.0
+        },
+        {
+          "row": 1523,
+          "ours_raw": "8",
+          "ours": 8.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1531,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 8.0
+        }
+      ],
+      "top_values_ours": {
+        "0.0": 0.937,
+        "8.0": 0.063
+      },
+      "top_values_csv": {
+        "0.0": 0.937,
+        "8.0": 0.063
+      }
+    },
+    "mqtt.ver": {
+      "ours_unique": 2,
+      "csv_unique": 2,
+      "aligned_exact_match": 0.8831,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [
+        {
+          "row": 1494,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 4.0
+        },
+        {
+          "row": 1495,
+          "ours_raw": "4",
+          "ours": 4.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1510,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 4.0
+        },
+        {
+          "row": 1511,
+          "ours_raw": "4",
+          "ours": 4.0,
+          "csv": 0.0
+        },
+        {
+          "row": 1528,
+          "ours_raw": "",
+          "ours": 0.0,
+          "csv": 4.0
+        }
+      ],
+      "top_values_ours": {
+        "0.0": 0.937,
+        "4.0": 0.063
+      },
+      "top_values_csv": {
+        "0.0": 0.9369,
+        "4.0": 0.0631
+      }
+    },
+    "mbtcp.len": {
+      "ours_unique": 1,
+      "csv_unique": 1,
+      "aligned_exact_match": 1.0,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [],
+      "top_values_ours": {
+        "0.0": 1.0
+      },
+      "top_values_csv": {
+        "0.0": 1.0
+      }
+    },
+    "mbtcp.trans_id": {
+      "ours_unique": 1,
+      "csv_unique": 1,
+      "aligned_exact_match": 1.0,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [],
+      "top_values_ours": {
+        "0.0": 1.0
+      },
+      "top_values_csv": {
+        "0.0": 1.0
+      }
+    },
+    "mbtcp.unit_id": {
+      "ours_unique": 1,
+      "csv_unique": 1,
+      "aligned_exact_match": 1.0,
+      "ours_non_numeric_rows": 0,
+      "mismatch_examples": [],
+      "top_values_ours": {
+        "0.0": 1.0
+      },
+      "top_values_csv": {
+        "0.0": 1.0
+      }
+    }
+  },
+  "summary": {
+    "features_compared": 34,
+    "features_exact_ge_0.99": [
+      "arp.hw.size",
+      "arp.opcode",
+      "dns.qry.name",
+      "dns.qry.qu",
+      "dns.retransmission",
+      "dns.retransmit_request",
+      "dns.retransmit_request_in",
+      "http.content_length",
+      "http.response",
+      "icmp.seq_le",
+      "icmp.transmit_timestamp",
+      "mbtcp.len",
+      "mbtcp.trans_id",
+      "mbtcp.unit_id",
+      "udp.port",
+      "udp.time_delta"
+    ],
+    "features_below_0.99": {
+      "tcp.flags": 0.0,
+      "tcp.ack": 0.1678,
+      "tcp.seq": 0.1812,
+      "tcp.dstport": 0.3196,
+      "tcp.len": 0.5772,
+      "mqtt.msgtype": 0.5775,
+      "mqtt.len": 0.6725,
+      "tcp.flags.ack": 0.6888,
+      "mqtt.hdrflags": 0.7485,
+      "tcp.connection.rst": 0.7771,
+      "tcp.connection.fin": 0.7829,
+      "tcp.connection.syn": 0.8826,
+      "tcp.connection.synack": 0.8827,
+      "mqtt.topic_len": 0.8827,
+      "mqtt.conflag.cleansess": 0.8831,
+      "mqtt.proto_len": 0.8831,
+      "mqtt.ver": 0.8831,
+      "mqtt.conflags": 0.9377
+    }
+  }
+}
