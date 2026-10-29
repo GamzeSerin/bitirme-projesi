@@ -1,0 +1,131 @@
+{
+  "ref": "Normal_Temperature_and_Humidity.csv.gz",
+  "top_types": [
+    {
+      "packets_in_ref": 4868,
+      "share_in_ref": 0.2486,
+      "values": {
+        "tcp.dstport": "1883.0",
+        "tcp.flags": "16.0",
+        "tcp.flags.ack": "1.0"
+      },
+      "asıl deney verisi (40.000/etiket, tohum 42)": {
+        "NORMAL": 1
+      },
+      "temizlenmiş veri, örneklemsiz": {
+        "NORMAL": 6
+      }
+    },
+    {
+      "packets_in_ref": 1248,
+      "share_in_ref": 0.0637,
+      "values": {
+        "tcp.connection.syn": "1.0",
+        "tcp.dstport": "1883.0",
+        "tcp.flags": "2.0"
+      },
+      "asıl deney verisi (40.000/etiket, tohum 42)": {},
+      "temizlenmiş veri, örneklemsiz": {
+        "NORMAL": 1
+      }
+    },
+    {
+      "packets_in_ref": 1212,
+      "share_in_ref": 0.0619,
+      "values": {
+        "tcp.dstport": "1883.0",
+        "tcp.flags": "24.0",
+        "tcp.flags.ack": "1.0",
+        "tcp.len": "14.0",
+        "mqtt.conflag.cleansess": "1.0",
+        "mqtt.conflags": "2.0",
+        "mqtt.hdrflags": "16.0",
+        "mqtt.len": "12.0",
+        "mqtt.msgtype": "1.0",
+        "mqtt.proto_len": "4.0",
+        "mqtt.ver": "4.0"
+      },
+      "asıl deney verisi (40.000/etiket, tohum 42)": {},
+      "temizlenmiş veri, örneklemsiz": {
+        "NORMAL": 1
+      }
+    },
+    {
+      "packets_in_ref": 1212,
+      "share_in_ref": 0.0619,
+      "values": {
+        "tcp.dstport": "1883.0",
+        "tcp.flags": "24.0",
+        "tcp.flags.ack": "1.0",
+        "tcp.len": "41.0",
+        "mqtt.hdrflags": "48.0",
+        "mqtt.len": "39.0",
+        "mqtt.msgtype": "3.0",
+        "mqtt.topic_len": "24.0"
+      },
+      "asıl deney verisi (40.000/etiket, tohum 42)": {},
+      "temizlenmiş veri, örneklemsiz": {
+        "NORMAL": 1
+      }
+    },
+    {
+      "packets_in_ref": 1212,
+      "share_in_ref": 0.0619,
+      "values": {
+        "tcp.connection.fin": "1.0",
+        "tcp.dstport": "1883.0",
+        "tcp.flags": "25.0",
+        "tcp.flags.ack": "1.0",
+        "tcp.len": "2.0",
+        "mqtt.hdrflags": "224.0",
+        "mqtt.msgtype": "14.0"
+      },
+      "asıl deney verisi (40.000/etiket, tohum 42)": {},
+      "temizlenmiş veri, örneklemsiz": {
+        "NORMAL": 1
+      }
+    },
+    {
+      "packets_in_ref": 88,
+      "share_in_ref": 0.0045,
+      "values": {},
+      "asıl deney verisi (40.000/etiket, tohum 42)": {},
+      "temizlenmiş veri, örneklemsiz": {}
+    },
+    {
+      "packets_in_ref": 8,
+      "share_in_ref": 0.0004,
+      "values": {
+        "arp.opcode": "2.0",
+        "arp.hw.size": "6.0"
+      },
+      "asıl deney verisi (40.000/etiket, tohum 42)": {},
+      "temizlenmiş veri, örneklemsiz": {}
+    },
+    {
+      "packets_in_ref": 8,
+      "share_in_ref": 0.0004,
+      "values": {
+        "arp.opcode": "1.0",
+        "arp.hw.size": "6.0"
+      },
+      "asıl deney verisi (40.000/etiket, tohum 42)": {},
+      "temizlenmiş veri, örneklemsiz": {}
+    }
+  ],
+  "multi_label_share_by_label_condition_C": {
+    "BACKDOOR": 0.8894,
+    "DDOS_HTTP": 0.543,
+    "DDOS_ICMP": 0.0,
+    "DDOS_TCP": 0.09,
+    "FINGERPRINTING": 0.1271,
+    "NORMAL": 0.1077,
+    "PASSWORD": 0.5968,
+    "PORT_SCANNING": 0.1251,
+    "RANSOMWARE": 0.8502,
+    "SQL_INJECTION": 0.3999,
+    "UPLOADING": 0.3869,
+    "VULNERABILITY_SCANNER": 0.1132,
+    "XSS": 0.7868
+  }
+}
