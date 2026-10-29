@@ -674,6 +674,27 @@ Bilinmeyen Kararının Açıklanması (XAI-2) ve Kaçışların Karşı-Olgusal 
 (koşul C) ve UDP süzgeciyle tekrarlanır (`model_input_C_no_udp`). Karar kuralı aynı; değerlendirme bu sonuca göre yapılır, ilk koşunun
 sayıları da raporda kalır.
 
+## Zaman bölmesinde iki sinyal kuralı. Analiz planı (sonuçlardan ÖNCE yazıldı, 29.10.2026)
+
+Soru: Tezin ana sonucu (iki sinyal kuralı; koşul C, q = %5'te sessiz kaçış %2,52 → %0,53) rastgele bölmeyle ölçüldü. Kapalı kümede
+zaman bölmesi 34 özellikli modelin yanlış alarmını %0,01'den %3,9'a çıkarmıştı. Ana sonuç da "geçmişle eğitilip gelecekte
+denenince" geçerli mi? (Dış incelemede önerildi; deney sonuç görülmeden tanımlanıyor.)
+
+- **Kod:** `src/two_signal.py --split time --skip-cp` (ortak araç). Her ince etikette satırlar kayıt sırasına (CSV satır sırası;
+  yükleyici örneklemden sonra sırayı korur) göre dizilir: ilk %80 eğitim havuzu, son %20 test. Kalibrasyon eğitim havuzunun
+  her ince etikette **en son %10'u** (eşikler de "geçmişten" seçilir). LOFO, eşik tanımları, q değerleri ve TabM ayarları ana
+  deneyle aynı. CP-TabM eğitilmez (ana yöntem değil; süre yarıya iner).
+- **Koşul C, 5 aile, model tohumu 42 / 1 / 2.** Çıktı `outputs/dnn_edgeiiot/two_signal/two_signal_C_seq_ack_yok_time*.json`.
+- **Raporlanan** (rastgele bölmenin aynı tohumlu sonuçlarıyla yan yana; 5 aile ortalaması ± tohum sapması ve aile başına):
+  bilinen macro-F1; alarm AUROC; kontrolsüz sessiz kaçış; q = %1 / 5 / 10'da enerji kontrolüyle sessiz kaçış ve kontrolün
+  analiste gönderdiği normal trafik; alarmın analiste gönderdiği normal trafik (toplam yük için).
+- **Yorum çerçevesi (önceden):** q = %5'te enerji kontrolünün göreli azaltması (kontrolsüz → kontrollü sessiz kaçış) zaman bölmesinde
+  de en az yarıya indirirse "kural zaman kaymasına dayanıklı" yazılır. Azaltma yarının altında kalırsa ya da analist yükü belirgin
+  artarsa (kontrolün yükü %3,3'ün iki katından fazla) "zaman kaymasında zayıflıyor" yazılır ve aile bazında nedeni raporlanır.
+  Mutlak sayılar (kaçış, yük) rastgele bölmeyle doğrudan aynı olmak zorunda değil: test kümesi farklı. Hangisi çıkarsa çıksın raporlanır.
+- **Bilinen sınırlılık:** kayıt sırası gerçek zaman ekseni değil (`frame.time`'da tarih yok); her etiket ayrı kayıtlarda toplandığı için
+  "zaman" etiket içi sıradır. Kapalı küme zaman bölmesi kontrolüyle aynı tanım.
+
 ## Literatür karşılaştırması: OpenMax, Mahalanobis, otokodlayıcı. Analiz planı (sonuçlardan ÖNCE yazıldı, 29.10.2026)
 
 Soru: Açık küme tanıma ve dağılım dışı tespit literatüründe bilinen yöntemler, TabM'in üye anlaşmazlığından (tezin alarmı) ve enerjisinden (tezin BENIGN kontrolü) daha iyi mi? Eşik yok; aşağıdakilerin tamamı raporlanır. Bir yöntem TabM skorlarını geçerse bu açıkça yazılır.
