@@ -1,0 +1,47 @@
+{
+  "WEB": {
+    "seconds": 355.1,
+    "silent_alarm_only": 0.01627,
+    "silent_q": 0.00083,
+    "guard_review_q": 0.0545,
+    "alarm_caught": 0.57197,
+    "alarm_review_benign": 0.01588,
+    "dss_guard_rows": "bölme farklı, karşılaştırılmadı"
+  },
+  "BRUTEFORCE": {
+    "seconds": 504.1,
+    "silent_alarm_only": 0.0005,
+    "silent_q": 0.0005,
+    "guard_review_q": 0.04963,
+    "alarm_caught": 0.84088,
+    "alarm_review_benign": 0.02725,
+    "dss_guard_rows": "bölme farklı, karşılaştırılmadı"
+  },
+  "RECON": {
+    "seconds": 226.3,
+    "silent_alarm_only": 0.02998,
+    "silent_q": 0.02998,
+    "guard_review_q": 0.03338,
+    "alarm_caught": 0.47531,
+    "alarm_review_benign": 0.023,
+    "dss_guard_rows": "bölme farklı, karşılaştırılmadı"
+  },
+  "DDOS": {
+    "seconds": 187.0,
+    "silent_alarm_only": 0.00017,
+    "silent_q": 0.0,
+    "guard_review_q": 0.04925,
+    "alarm_caught": 0.56708,
+    "alarm_review_benign": 0.01162,
+    "dss_guard_rows": "bölme farklı, karşılaştırılmadı"
+  },
+  "MALWARE": {
+    "seconds": 366.2,
+    "silent_alarm_only": 0.14022,
+    "silent_q": 0.14022,
+    "guard_review_q": 0.02687,
+    "alarm_caught": 0.78944,
+    "alarm_review_benign": 0.0555,
+    "dss_guard_rows": "bölme farklı, karşılaştırılmadı"
+  }
+}
