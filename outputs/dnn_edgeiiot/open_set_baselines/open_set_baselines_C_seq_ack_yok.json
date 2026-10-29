@@ -1,0 +1,3779 @@
+{
+  "dataset_id": "dnn_edgeiiot",
+  "condition": "C_seq_ack_yok",
+  "dropped_features": [
+    "tcp.seq",
+    "tcp.ack"
+  ],
+  "families": [
+    "DDOS",
+    "RECON",
+    "WEB",
+    "BRUTEFORCE",
+    "MALWARE"
+  ],
+  "seeds": [
+    42,
+    1,
+    2
+  ],
+  "status": "Analiz planı sonuçlardan önce yazıldı (README, Literatür karşılaştırması); eşik yok",
+  "settings": {
+    "dataset": "dnn_edgeiiot",
+    "condition": "C_seq_ack_yok",
+    "families": "",
+    "seeds": "42,1,2",
+    "seed": 42,
+    "cap": 40000,
+    "cal_size": 0.1,
+    "target": 0.95,
+    "openmax_tail": 20,
+    "out_dir": "outputs/dnn_edgeiiot/open_set_baselines",
+    "quick": false
+  },
+  "summary": {
+    "tabm_disagree": {
+      "auroc": {
+        "mean": 0.86194,
+        "sd": 0.00074,
+        "per_seed": [
+          0.86116,
+          0.86202,
+          0.86264
+        ]
+      },
+      "detect@cal": {
+        "mean": 0.48856,
+        "sd": 0.03442,
+        "per_seed": [
+          0.47232,
+          0.46526,
+          0.5281
+        ]
+      },
+      "known_reject@cal": {
+        "mean": 0.04915,
+        "sd": 0.00026,
+        "per_seed": [
+          0.04886,
+          0.04924,
+          0.04936
+        ]
+      },
+      "silent_benign@cal": {
+        "mean": 0.0252,
+        "sd": 0.00253,
+        "per_seed": [
+          0.0281,
+          0.02348,
+          0.02402
+        ]
+      },
+      "guard_silent_q0.01": {
+        "mean": 0.02062,
+        "sd": 0.00152,
+        "per_seed": [
+          0.02223,
+          0.01921,
+          0.02043
+        ]
+      },
+      "guard_review_q0.01": {
+        "mean": 0.00781,
+        "sd": 0.00161,
+        "per_seed": [
+          0.00862,
+          0.00885,
+          0.00595
+        ]
+      },
+      "guard_silent_q0.05": {
+        "mean": 0.0089,
+        "sd": 0.0036,
+        "per_seed": [
+          0.0104,
+          0.0048,
+          0.01151
+        ]
+      },
+      "guard_review_q0.05": {
+        "mean": 0.03554,
+        "sd": 0.00128,
+        "per_seed": [
+          0.03522,
+          0.03695,
+          0.03445
+        ]
+      },
+      "guard_silent_q0.1": {
+        "mean": 0.00098,
+        "sd": 0.00078,
+        "per_seed": [
+          0.00061,
+          0.00045,
+          0.00187
+        ]
+      },
+      "guard_review_q0.1": {
+        "mean": 0.07342,
+        "sd": 0.00537,
+        "per_seed": [
+          0.0692,
+          0.07947,
+          0.0716
+        ]
+      },
+      "diff_guard_silent_q0.05_vs_tabm_energy": [
+        0.00293,
+        0.00225,
+        0.0056
+      ]
+    },
+    "tabm_energy": {
+      "auroc": {
+        "mean": 0.74375,
+        "sd": 0.0056,
+        "per_seed": [
+          0.74928,
+          0.73808,
+          0.74388
+        ]
+      },
+      "detect@cal": {
+        "mean": 0.12197,
+        "sd": 0.04773,
+        "per_seed": [
+          0.17662,
+          0.10082,
+          0.08846
+        ]
+      },
+      "known_reject@cal": {
+        "mean": 0.04895,
+        "sd": 0.00068,
+        "per_seed": [
+          0.04818,
+          0.04948,
+          0.04918
+        ]
+      },
+      "silent_benign@cal": {
+        "mean": 0.05936,
+        "sd": 0.00521,
+        "per_seed": [
+          0.05362,
+          0.06068,
+          0.06378
+        ]
+      },
+      "guard_silent_q0.01": {
+        "mean": 0.01952,
+        "sd": 0.0026,
+        "per_seed": [
+          0.02231,
+          0.01717,
+          0.01908
+        ]
+      },
+      "guard_review_q0.01": {
+        "mean": 0.0082,
+        "sd": 0.00048,
+        "per_seed": [
+          0.0078,
+          0.00873,
+          0.00807
+        ]
+      },
+      "guard_silent_q0.05": {
+        "mean": 0.00531,
+        "sd": 0.00252,
+        "per_seed": [
+          0.00747,
+          0.00255,
+          0.00591
+        ]
+      },
+      "guard_review_q0.05": {
+        "mean": 0.03338,
+        "sd": 0.00251,
+        "per_seed": [
+          0.03208,
+          0.03628,
+          0.0318
+        ]
+      },
+      "guard_silent_q0.1": {
+        "mean": 0.00082,
+        "sd": 9e-05,
+        "per_seed": [
+          0.00088,
+          0.00086,
+          0.00071
+        ]
+      },
+      "guard_review_q0.1": {
+        "mean": 0.06246,
+        "sd": 0.00487,
+        "per_seed": [
+          0.06035,
+          0.06802,
+          0.059
+        ]
+      },
+      "diff_auroc_vs_tabm_disagree": [
+        -0.1119,
+        -0.1239,
+        -0.1188
+      ]
+    },
+    "tabm_msp": {
+      "auroc": {
+        "mean": 0.75239,
+        "sd": 0.00159,
+        "per_seed": [
+          0.75056,
+          0.75332,
+          0.7533
+        ]
+      },
+      "detect@cal": {
+        "mean": 0.0979,
+        "sd": 0.00879,
+        "per_seed": [
+          0.0916,
+          0.10794,
+          0.09416
+        ]
+      },
+      "known_reject@cal": {
+        "mean": 0.04801,
+        "sd": 6e-05,
+        "per_seed": [
+          0.04806,
+          0.04794,
+          0.04804
+        ]
+      },
+      "silent_benign@cal": {
+        "mean": 0.05995,
+        "sd": 0.00195,
+        "per_seed": [
+          0.05914,
+          0.05854,
+          0.06218
+        ]
+      },
+      "guard_silent_q0.01": {
+        "mean": 0.01978,
+        "sd": 0.00221,
+        "per_seed": [
+          0.02233,
+          0.01845,
+          0.01856
+        ]
+      },
+      "guard_review_q0.01": {
+        "mean": 0.00783,
+        "sd": 0.00059,
+        "per_seed": [
+          0.00715,
+          0.00813,
+          0.00822
+        ]
+      },
+      "guard_silent_q0.05": {
+        "mean": 0.00676,
+        "sd": 0.00338,
+        "per_seed": [
+          0.00897,
+          0.00287,
+          0.00845
+        ]
+      },
+      "guard_review_q0.05": {
+        "mean": 0.03166,
+        "sd": 0.00197,
+        "per_seed": [
+          0.02962,
+          0.03355,
+          0.0318
+        ]
+      },
+      "guard_silent_q0.1": {
+        "mean": 0.00049,
+        "sd": 0.00021,
+        "per_seed": [
+          0.00027,
+          0.00051,
+          0.00069
+        ]
+      },
+      "guard_review_q0.1": {
+        "mean": 0.066,
+        "sd": 0.0008,
+        "per_seed": [
+          0.06692,
+          0.0656,
+          0.06548
+        ]
+      },
+      "diff_auroc_vs_tabm_disagree": [
+        -0.1106,
+        -0.1087,
+        -0.1093
+      ],
+      "diff_guard_silent_q0.05_vs_tabm_energy": [
+        0.0015,
+        0.00032,
+        0.00254
+      ]
+    },
+    "knn": {
+      "auroc": {
+        "mean": 0.88116,
+        "sd": 0.0,
+        "per_seed": [
+          0.88116,
+          0.88116,
+          0.88116
+        ]
+      },
+      "detect@cal": {
+        "mean": 0.54136,
+        "sd": 0.0,
+        "per_seed": [
+          0.54136,
+          0.54136,
+          0.54136
+        ]
+      },
+      "known_reject@cal": {
+        "mean": 0.04842,
+        "sd": 0.0,
+        "per_seed": [
+          0.04842,
+          0.04842,
+          0.04842
+        ]
+      },
+      "silent_benign@cal": {
+        "mean": 0.02762,
+        "sd": 0.00037,
+        "per_seed": [
+          0.0272,
+          0.02788,
+          0.02778
+        ]
+      },
+      "guard_silent_q0.01": {
+        "mean": 0.02478,
+        "sd": 0.00262,
+        "per_seed": [
+          0.02781,
+          0.02325,
+          0.02328
+        ]
+      },
+      "guard_review_q0.01": {
+        "mean": 0.00994,
+        "sd": 0.00015,
+        "per_seed": [
+          0.01005,
+          0.01,
+          0.00977
+        ]
+      },
+      "guard_silent_q0.05": {
+        "mean": 0.02314,
+        "sd": 0.00242,
+        "per_seed": [
+          0.02592,
+          0.02156,
+          0.02193
+        ]
+      },
+      "guard_review_q0.05": {
+        "mean": 0.03925,
+        "sd": 0.00058,
+        "per_seed": [
+          0.0386,
+          0.03972,
+          0.03943
+        ]
+      },
+      "guard_silent_q0.1": {
+        "mean": 0.01727,
+        "sd": 0.00157,
+        "per_seed": [
+          0.01907,
+          0.01632,
+          0.0164
+        ]
+      },
+      "guard_review_q0.1": {
+        "mean": 0.0797,
+        "sd": 0.00137,
+        "per_seed": [
+          0.07898,
+          0.08128,
+          0.07885
+        ]
+      },
+      "diff_auroc_vs_tabm_disagree": [
+        0.02,
+        0.0191,
+        0.0185
+      ],
+      "diff_guard_silent_q0.05_vs_tabm_energy": [
+        0.01845,
+        0.01901,
+        0.01602
+      ]
+    },
+    "openmax": {
+      "auroc": {
+        "mean": 0.72037,
+        "sd": 0.00201,
+        "per_seed": [
+          0.71894,
+          0.72266,
+          0.7195
+        ]
+      },
+      "detect@cal": {
+        "mean": 0.11065,
+        "sd": 0.04687,
+        "per_seed": [
+          0.11676,
+          0.15416,
+          0.06102
+        ]
+      },
+      "known_reject@cal": {
+        "mean": 0.04819,
+        "sd": 0.00086,
+        "per_seed": [
+          0.04868,
+          0.0487,
+          0.0472
+        ]
+      },
+      "silent_benign@cal": {
+        "mean": 0.06224,
+        "sd": 0.00412,
+        "per_seed": [
+          0.0605,
+          0.05928,
+          0.06694
+        ]
+      },
+      "guard_silent_q0.01": {
+        "mean": 0.01989,
+        "sd": 0.00183,
+        "per_seed": [
+          0.02132,
+          0.01783,
+          0.02052
+        ]
+      },
+      "guard_review_q0.01": {
+        "mean": 0.00807,
+        "sd": 0.00029,
+        "per_seed": [
+          0.0078,
+          0.00837,
+          0.00803
+        ]
+      },
+      "guard_silent_q0.05": {
+        "mean": 0.00733,
+        "sd": 0.00369,
+        "per_seed": [
+          0.01086,
+          0.00349,
+          0.00764
+        ]
+      },
+      "guard_review_q0.05": {
+        "mean": 0.03223,
+        "sd": 0.00409,
+        "per_seed": [
+          0.0303,
+          0.03693,
+          0.02945
+        ]
+      },
+      "guard_silent_q0.1": {
+        "mean": 0.00093,
+        "sd": 0.00014,
+        "per_seed": [
+          0.00086,
+          0.00084,
+          0.00109
+        ]
+      },
+      "guard_review_q0.1": {
+        "mean": 0.06799,
+        "sd": 0.01848,
+        "per_seed": [
+          0.08898,
+          0.06088,
+          0.05412
+        ]
+      },
+      "diff_auroc_vs_tabm_disagree": [
+        -0.1422,
+        -0.1394,
+        -0.1431
+      ],
+      "diff_guard_silent_q0.05_vs_tabm_energy": [
+        0.00339,
+        0.00094,
+        0.00173
+      ]
+    },
+    "mahalanobis": {
+      "auroc": {
+        "mean": 0.86107,
+        "sd": 0.0042,
+        "per_seed": [
+          0.85734,
+          0.86562,
+          0.86024
+        ]
+      },
+      "detect@cal": {
+        "mean": 0.54935,
+        "sd": 0.00328,
+        "per_seed": [
+          0.54674,
+          0.54828,
+          0.55304
+        ]
+      },
+      "known_reject@cal": {
+        "mean": 0.05018,
+        "sd": 0.00027,
+        "per_seed": [
+          0.05044,
+          0.0502,
+          0.0499
+        ]
+      },
+      "silent_benign@cal": {
+        "mean": 0.02793,
+        "sd": 0.00115,
+        "per_seed": [
+          0.02726,
+          0.02926,
+          0.02728
+        ]
+      },
+      "guard_silent_q0.01": {
+        "mean": 0.02473,
+        "sd": 0.00249,
+        "per_seed": [
+          0.0276,
+          0.02325,
+          0.02333
+        ]
+      },
+      "guard_review_q0.01": {
+        "mean": 0.00906,
+        "sd": 0.00044,
+        "per_seed": [
+          0.00855,
+          0.00928,
+          0.00935
+        ]
+      },
+      "guard_silent_q0.05": {
+        "mean": 0.02334,
+        "sd": 0.0018,
+        "per_seed": [
+          0.02541,
+          0.02222,
+          0.02237
+        ]
+      },
+      "guard_review_q0.05": {
+        "mean": 0.04147,
+        "sd": 0.0006,
+        "per_seed": [
+          0.04177,
+          0.04185,
+          0.04077
+        ]
+      },
+      "guard_silent_q0.1": {
+        "mean": 0.02073,
+        "sd": 0.00136,
+        "per_seed": [
+          0.0221,
+          0.02069,
+          0.01939
+        ]
+      },
+      "guard_review_q0.1": {
+        "mean": 0.08068,
+        "sd": 0.00049,
+        "per_seed": [
+          0.08015,
+          0.0811,
+          0.0808
+        ]
+      },
+      "diff_auroc_vs_tabm_disagree": [
+        -0.0038,
+        0.0036,
+        -0.0024
+      ],
+      "diff_guard_silent_q0.05_vs_tabm_energy": [
+        0.01794,
+        0.01967,
+        0.01646
+      ]
+    },
+    "autoencoder": {
+      "auroc": {
+        "mean": 0.6949,
+        "sd": 0.02018,
+        "per_seed": [
+          0.67288,
+          0.71252,
+          0.6993
+        ]
+      },
+      "detect@cal": {
+        "mean": 0.45152,
+        "sd": 0.04851,
+        "per_seed": [
+          0.48056,
+          0.39552,
+          0.47848
+        ]
+      },
+      "known_reject@cal": {
+        "mean": 0.04712,
+        "sd": 0.0006,
+        "per_seed": [
+          0.04646,
+          0.04728,
+          0.04762
+        ]
+      },
+      "silent_benign@cal": {
+        "mean": 0.0421,
+        "sd": 0.01675,
+        "per_seed": [
+          0.03134,
+          0.0614,
+          0.03356
+        ]
+      },
+      "guard_silent_q0.01": {
+        "mean": 0.02483,
+        "sd": 0.00267,
+        "per_seed": [
+          0.02791,
+          0.02325,
+          0.02333
+        ]
+      },
+      "guard_review_q0.01": {
+        "mean": 0.00878,
+        "sd": 0.00014,
+        "per_seed": [
+          0.0088,
+          0.0089,
+          0.00862
+        ]
+      },
+      "guard_silent_q0.05": {
+        "mean": 0.02477,
+        "sd": 0.00264,
+        "per_seed": [
+          0.02781,
+          0.0232,
+          0.02329
+        ]
+      },
+      "guard_review_q0.05": {
+        "mean": 0.04248,
+        "sd": 0.00228,
+        "per_seed": [
+          0.04443,
+          0.03998,
+          0.04303
+        ]
+      },
+      "guard_silent_q0.1": {
+        "mean": 0.02424,
+        "sd": 0.00179,
+        "per_seed": [
+          0.0263,
+          0.02313,
+          0.02329
+        ]
+      },
+      "guard_review_q0.1": {
+        "mean": 0.08182,
+        "sd": 0.00247,
+        "per_seed": [
+          0.07898,
+          0.08332,
+          0.08317
+        ]
+      },
+      "diff_auroc_vs_tabm_disagree": [
+        -0.1883,
+        -0.1495,
+        -0.1633
+      ],
+      "diff_guard_silent_q0.05_vs_tabm_energy": [
+        0.02034,
+        0.02065,
+        0.01738
+      ]
+    }
+  },
+  "per_seed": {
+    "42": {
+      "DDOS": {
+        "standalone": {
+          "tabm_disagree": {
+            "auroc": 0.7795,
+            "aupr": 0.7777,
+            "fpr95": 0.5121,
+            "detect@cal": 0.4865,
+            "known_reject@cal": 0.0476,
+            "silent_benign@cal": 0.0005,
+            "open_f1@cal": 0.7553
+          },
+          "tabm_energy": {
+            "auroc": 0.6219,
+            "aupr": 0.484,
+            "fpr95": 0.9327,
+            "detect@cal": 0.0662,
+            "known_reject@cal": 0.0479,
+            "silent_benign@cal": 0.0021,
+            "open_f1@cal": 0.6377
+          },
+          "tabm_msp": {
+            "auroc": 0.6465,
+            "aupr": 0.477,
+            "fpr95": 0.9422,
+            "detect@cal": 0.0528,
+            "known_reject@cal": 0.0474,
+            "silent_benign@cal": 0.0019,
+            "open_f1@cal": 0.6399
+          },
+          "knn": {
+            "auroc": 0.9145,
+            "aupr": 0.9009,
+            "fpr95": 0.2435,
+            "detect@cal": 0.7564,
+            "known_reject@cal": 0.0486,
+            "silent_benign@cal": 0.0005,
+            "open_f1@cal": 0.7973
+          },
+          "openmax": {
+            "auroc": 0.6117,
+            "aupr": 0.4966,
+            "fpr95": 0.8982,
+            "detect@cal": 0.0996,
+            "known_reject@cal": 0.0478,
+            "silent_benign@cal": 0.0008,
+            "open_f1@cal": 0.6591
+          },
+          "mahalanobis": {
+            "auroc": 0.9141,
+            "aupr": 0.8957,
+            "fpr95": 0.2952,
+            "detect@cal": 0.7049,
+            "known_reject@cal": 0.0509,
+            "silent_benign@cal": 0.0006,
+            "open_f1@cal": 0.7874
+          },
+          "autoencoder": {
+            "auroc": 0.8298,
+            "aupr": 0.8486,
+            "fpr95": 0.3095,
+            "detect@cal": 0.6863,
+            "known_reject@cal": 0.0473,
+            "silent_benign@cal": 0.0007,
+            "open_f1@cal": 0.7888
+          }
+        },
+        "guard": {
+          "tabm_disagree": {
+            "silent_alarm_only": 0.00047,
+            "q0.01": {
+              "silent": 0.00019,
+              "review": 0.01287,
+              "caught": 0.4868
+            },
+            "q0.05": {
+              "silent": 5e-05,
+              "review": 0.04525,
+              "caught": 0.4869
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.0595,
+              "caught": 0.487
+            }
+          },
+          "tabm_energy": {
+            "silent_alarm_only": 0.00047,
+            "q0.01": {
+              "silent": 0.00019,
+              "review": 0.01263,
+              "caught": 0.4868
+            },
+            "q0.05": {
+              "silent": 9e-05,
+              "review": 0.04788,
+              "caught": 0.4869
+            },
+            "q0.1": {
+              "silent": 9e-05,
+              "review": 0.04788,
+              "caught": 0.4869
+            }
+          },
+          "tabm_msp": {
+            "silent_alarm_only": 0.00047,
+            "q0.01": {
+              "silent": 0.00023,
+              "review": 0.01112,
+              "caught": 0.4867
+            },
+            "q0.05": {
+              "silent": 9e-05,
+              "review": 0.04487,
+              "caught": 0.4869
+            },
+            "q0.1": {
+              "silent": 9e-05,
+              "review": 0.04487,
+              "caught": 0.4869
+            }
+          },
+          "knn": {
+            "silent_alarm_only": 0.00047,
+            "q0.01": {
+              "silent": 0.00037,
+              "review": 0.00825,
+              "caught": 0.4866
+            },
+            "q0.05": {
+              "silent": 0.00028,
+              "review": 0.03338,
+              "caught": 0.4867
+            },
+            "q0.1": {
+              "silent": 0.00028,
+              "review": 0.06713,
+              "caught": 0.4867
+            }
+          },
+          "openmax": {
+            "silent_alarm_only": 0.00047,
+            "q0.01": {
+              "silent": 0.00019,
+              "review": 0.01175,
+              "caught": 0.4868
+            },
+            "q0.05": {
+              "silent": 9e-05,
+              "review": 0.04788,
+              "caught": 0.4869
+            },
+            "q0.1": {
+              "silent": 9e-05,
+              "review": 0.11713,
+              "caught": 0.4869
+            }
+          },
+          "mahalanobis": {
+            "silent_alarm_only": 0.00047,
+            "q0.01": {
+              "silent": 0.00037,
+              "review": 0.00863,
+              "caught": 0.4866
+            },
+            "q0.05": {
+              "silent": 0.00037,
+              "review": 0.04,
+              "caught": 0.4866
+            },
+            "q0.1": {
+              "silent": 0.00033,
+              "review": 0.07888,
+              "caught": 0.4866
+            }
+          },
+          "autoencoder": {
+            "silent_alarm_only": 0.00047,
+            "q0.01": {
+              "silent": 0.00037,
+              "review": 0.011,
+              "caught": 0.4866
+            },
+            "q0.05": {
+              "silent": 0.00037,
+              "review": 0.04263,
+              "caught": 0.4866
+            },
+            "q0.1": {
+              "silent": 0.00037,
+              "review": 0.07863,
+              "caught": 0.4866
+            }
+          }
+        },
+        "seconds": {
+          "knn": 10.3,
+          "openmax": 0.1,
+          "mahalanobis": 3.6,
+          "autoencoder": 15.8
+        },
+        "n_unknown": 21375
+      },
+      "RECON": {
+        "standalone": {
+          "tabm_disagree": {
+            "auroc": 0.896,
+            "aupr": 0.7873,
+            "fpr95": 0.3014,
+            "detect@cal": 0.6986,
+            "known_reject@cal": 0.0481,
+            "silent_benign@cal": 0.0005,
+            "open_f1@cal": 0.7988
+          },
+          "tabm_energy": {
+            "auroc": 0.5813,
+            "aupr": 0.1971,
+            "fpr95": 0.9961,
+            "detect@cal": 0.0039,
+            "known_reject@cal": 0.0507,
+            "silent_benign@cal": 0.0006,
+            "open_f1@cal": 0.6551
+          },
+          "tabm_msp": {
+            "auroc": 0.6745,
+            "aupr": 0.2385,
+            "fpr95": 0.9983,
+            "detect@cal": 0.0017,
+            "known_reject@cal": 0.0506,
+            "silent_benign@cal": 0.0006,
+            "open_f1@cal": 0.657
+          },
+          "knn": {
+            "auroc": 0.8885,
+            "aupr": 0.8133,
+            "fpr95": 0.2649,
+            "detect@cal": 0.7351,
+            "known_reject@cal": 0.0494,
+            "silent_benign@cal": 0.0003,
+            "open_f1@cal": 0.7763
+          },
+          "openmax": {
+            "auroc": 0.5537,
+            "aupr": 0.187,
+            "fpr95": 0.9987,
+            "detect@cal": 0.0013,
+            "known_reject@cal": 0.0516,
+            "silent_benign@cal": 0.0005,
+            "open_f1@cal": 0.6498
+          },
+          "mahalanobis": {
+            "auroc": 0.9485,
+            "aupr": 0.8683,
+            "fpr95": 0.2633,
+            "detect@cal": 0.7413,
+            "known_reject@cal": 0.0524,
+            "silent_benign@cal": 0.0002,
+            "open_f1@cal": 0.784
+          },
+          "autoencoder": {
+            "auroc": 0.9141,
+            "aupr": 0.7722,
+            "fpr95": 0.2858,
+            "detect@cal": 0.7135,
+            "known_reject@cal": 0.0469,
+            "silent_benign@cal": 0.0005,
+            "open_f1@cal": 0.7892
+          }
+        },
+        "guard": {
+          "tabm_disagree": {
+            "silent_alarm_only": 0.00046,
+            "q0.01": {
+              "silent": 0.00028,
+              "review": 0.0095,
+              "caught": 0.6987
+            },
+            "q0.05": {
+              "silent": 9e-05,
+              "review": 0.03275,
+              "caught": 0.6989
+            },
+            "q0.1": {
+              "silent": 9e-05,
+              "review": 0.03275,
+              "caught": 0.6989
+            }
+          },
+          "tabm_energy": {
+            "silent_alarm_only": 0.00046,
+            "q0.01": {
+              "silent": 0.00046,
+              "review": 0.01,
+              "caught": 0.6986
+            },
+            "q0.05": {
+              "silent": 9e-05,
+              "review": 0.02675,
+              "caught": 0.6989
+            },
+            "q0.1": {
+              "silent": 9e-05,
+              "review": 0.02675,
+              "caught": 0.6989
+            }
+          },
+          "tabm_msp": {
+            "silent_alarm_only": 0.00046,
+            "q0.01": {
+              "silent": 0.00028,
+              "review": 0.00863,
+              "caught": 0.6987
+            },
+            "q0.05": {
+              "silent": 9e-05,
+              "review": 0.02662,
+              "caught": 0.6989
+            },
+            "q0.1": {
+              "silent": 9e-05,
+              "review": 0.02662,
+              "caught": 0.6989
+            }
+          },
+          "knn": {
+            "silent_alarm_only": 0.00046,
+            "q0.01": {
+              "silent": 0.00037,
+              "review": 0.0095,
+              "caught": 0.6986
+            },
+            "q0.05": {
+              "silent": 0.00037,
+              "review": 0.039,
+              "caught": 0.6986
+            },
+            "q0.1": {
+              "silent": 0.00018,
+              "review": 0.08238,
+              "caught": 0.6988
+            }
+          },
+          "openmax": {
+            "silent_alarm_only": 0.00046,
+            "q0.01": {
+              "silent": 0.00028,
+              "review": 0.00937,
+              "caught": 0.6987
+            },
+            "q0.05": {
+              "silent": 0.00018,
+              "review": 0.02088,
+              "caught": 0.6988
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.08538,
+              "caught": 0.699
+            }
+          },
+          "mahalanobis": {
+            "silent_alarm_only": 0.00046,
+            "q0.01": {
+              "silent": 0.00037,
+              "review": 0.0085,
+              "caught": 0.6986
+            },
+            "q0.05": {
+              "silent": 0.00018,
+              "review": 0.04825,
+              "caught": 0.6988
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.08712,
+              "caught": 0.699
+            }
+          },
+          "autoencoder": {
+            "silent_alarm_only": 0.00046,
+            "q0.01": {
+              "silent": 0.00037,
+              "review": 0.00863,
+              "caught": 0.6986
+            },
+            "q0.05": {
+              "silent": 0.00037,
+              "review": 0.04888,
+              "caught": 0.6986
+            },
+            "q0.1": {
+              "silent": 0.00037,
+              "review": 0.07725,
+              "caught": 0.6986
+            }
+          }
+        },
+        "seconds": {
+          "knn": 11.1,
+          "openmax": 0.2,
+          "mahalanobis": 3.7,
+          "autoencoder": 6.1
+        },
+        "n_unknown": 10904
+      },
+      "WEB": {
+        "standalone": {
+          "tabm_disagree": {
+            "auroc": 0.8797,
+            "aupr": 0.533,
+            "fpr95": 0.6878,
+            "detect@cal": 0.3083,
+            "known_reject@cal": 0.0486,
+            "silent_benign@cal": 0.0231,
+            "open_f1@cal": 0.7479
+          },
+          "tabm_energy": {
+            "auroc": 0.8762,
+            "aupr": 0.4353,
+            "fpr95": 0.8428,
+            "detect@cal": 0.149,
+            "known_reject@cal": 0.0479,
+            "silent_benign@cal": 0.0231,
+            "open_f1@cal": 0.7266
+          },
+          "tabm_msp": {
+            "auroc": 0.8371,
+            "aupr": 0.3393,
+            "fpr95": 0.9227,
+            "detect@cal": 0.0753,
+            "known_reject@cal": 0.0475,
+            "silent_benign@cal": 0.0245,
+            "open_f1@cal": 0.7069
+          },
+          "knn": {
+            "auroc": 0.8674,
+            "aupr": 0.5637,
+            "fpr95": 0.6623,
+            "detect@cal": 0.3308,
+            "known_reject@cal": 0.0467,
+            "silent_benign@cal": 0.0166,
+            "open_f1@cal": 0.7466
+          },
+          "openmax": {
+            "auroc": 0.7982,
+            "aupr": 0.3235,
+            "fpr95": 0.8552,
+            "detect@cal": 0.1376,
+            "known_reject@cal": 0.0478,
+            "silent_benign@cal": 0.0231,
+            "open_f1@cal": 0.7178
+          },
+          "mahalanobis": {
+            "auroc": 0.7776,
+            "aupr": 0.515,
+            "fpr95": 0.599,
+            "detect@cal": 0.3997,
+            "known_reject@cal": 0.0492,
+            "silent_benign@cal": 0.009,
+            "open_f1@cal": 0.7618
+          },
+          "autoencoder": {
+            "auroc": 0.5239,
+            "aupr": 0.3031,
+            "fpr95": 0.7037,
+            "detect@cal": 0.2956,
+            "known_reject@cal": 0.0489,
+            "silent_benign@cal": 0.0092,
+            "open_f1@cal": 0.7353
+          }
+        },
+        "guard": {
+          "tabm_disagree": {
+            "silent_alarm_only": 0.02309,
+            "q0.01": {
+              "silent": 0.01155,
+              "review": 0.00637,
+              "caught": 0.3199
+            },
+            "q0.05": {
+              "silent": 0.00327,
+              "review": 0.04125,
+              "caught": 0.3282
+            },
+            "q0.1": {
+              "silent": 0.00222,
+              "review": 0.07712,
+              "caught": 0.3292
+            }
+          },
+          "tabm_energy": {
+            "silent_alarm_only": 0.02309,
+            "q0.01": {
+              "silent": 0.01155,
+              "review": 0.0055,
+              "caught": 0.3199
+            },
+            "q0.05": {
+              "silent": 0.00327,
+              "review": 0.04038,
+              "caught": 0.3282
+            },
+            "q0.1": {
+              "silent": 0.00327,
+              "review": 0.0475,
+              "caught": 0.3282
+            }
+          },
+          "tabm_msp": {
+            "silent_alarm_only": 0.02309,
+            "q0.01": {
+              "silent": 0.01493,
+              "review": 0.00525,
+              "caught": 0.3165
+            },
+            "q0.05": {
+              "silent": 0.00327,
+              "review": 0.03787,
+              "caught": 0.3282
+            },
+            "q0.1": {
+              "silent": 0.00023,
+              "review": 0.08425,
+              "caught": 0.3312
+            }
+          },
+          "knn": {
+            "silent_alarm_only": 0.02309,
+            "q0.01": {
+              "silent": 0.02309,
+              "review": 0.01162,
+              "caught": 0.3083
+            },
+            "q0.05": {
+              "silent": 0.01854,
+              "review": 0.044,
+              "caught": 0.3129
+            },
+            "q0.1": {
+              "silent": 0.00735,
+              "review": 0.08525,
+              "caught": 0.3241
+            }
+          },
+          "openmax": {
+            "silent_alarm_only": 0.02309,
+            "q0.01": {
+              "silent": 0.01085,
+              "review": 0.00675,
+              "caught": 0.3206
+            },
+            "q0.05": {
+              "silent": 0.00327,
+              "review": 0.04075,
+              "caught": 0.3282
+            },
+            "q0.1": {
+              "silent": 0.00327,
+              "review": 0.06338,
+              "caught": 0.3282
+            }
+          },
+          "mahalanobis": {
+            "silent_alarm_only": 0.02309,
+            "q0.01": {
+              "silent": 0.02181,
+              "review": 0.00975,
+              "caught": 0.3096
+            },
+            "q0.05": {
+              "silent": 0.01201,
+              "review": 0.04088,
+              "caught": 0.3194
+            },
+            "q0.1": {
+              "silent": 0.00816,
+              "review": 0.07925,
+              "caught": 0.3233
+            }
+          },
+          "autoencoder": {
+            "silent_alarm_only": 0.02309,
+            "q0.01": {
+              "silent": 0.02309,
+              "review": 0.00825,
+              "caught": 0.3083
+            },
+            "q0.05": {
+              "silent": 0.02286,
+              "review": 0.04763,
+              "caught": 0.3086
+            },
+            "q0.1": {
+              "silent": 0.01528,
+              "review": 0.0885,
+              "caught": 0.3162
+            }
+          }
+        },
+        "seconds": {
+          "knn": 11.2,
+          "openmax": 0.2,
+          "mahalanobis": 3.6,
+          "autoencoder": 25.8
+        },
+        "n_unknown": 8575
+      },
+      "BRUTEFORCE": {
+        "standalone": {
+          "tabm_disagree": {
+            "auroc": 0.8612,
+            "aupr": 0.3824,
+            "fpr95": 0.6437,
+            "detect@cal": 0.357,
+            "known_reject@cal": 0.0504,
+            "silent_benign@cal": 0.1164,
+            "open_f1@cal": 0.8061
+          },
+          "tabm_energy": {
+            "auroc": 0.8091,
+            "aupr": 0.1998,
+            "fpr95": 0.8525,
+            "detect@cal": 0.139,
+            "known_reject@cal": 0.0473,
+            "silent_benign@cal": 0.1285,
+            "open_f1@cal": 0.7741
+          },
+          "tabm_msp": {
+            "auroc": 0.8211,
+            "aupr": 0.1797,
+            "fpr95": 0.816,
+            "detect@cal": 0.1773,
+            "known_reject@cal": 0.0484,
+            "silent_benign@cal": 0.1123,
+            "open_f1@cal": 0.7837
+          },
+          "knn": {
+            "auroc": 0.8589,
+            "aupr": 0.3988,
+            "fpr95": 0.6223,
+            "detect@cal": 0.3762,
+            "known_reject@cal": 0.0491,
+            "silent_benign@cal": 0.1186,
+            "open_f1@cal": 0.8006
+          },
+          "openmax": {
+            "auroc": 0.7898,
+            "aupr": 0.171,
+            "fpr95": 0.8475,
+            "detect@cal": 0.1525,
+            "known_reject@cal": 0.0493,
+            "silent_benign@cal": 0.122,
+            "open_f1@cal": 0.7742
+          },
+          "mahalanobis": {
+            "auroc": 0.8328,
+            "aupr": 0.4248,
+            "fpr95": 0.6319,
+            "detect@cal": 0.3685,
+            "known_reject@cal": 0.0501,
+            "silent_benign@cal": 0.1265,
+            "open_f1@cal": 0.7995
+          },
+          "autoencoder": {
+            "auroc": 0.5235,
+            "aupr": 0.1967,
+            "fpr95": 0.7873,
+            "detect@cal": 0.2115,
+            "known_reject@cal": 0.0436,
+            "silent_benign@cal": 0.1463,
+            "open_f1@cal": 0.7711
+          }
+        },
+        "guard": {
+          "tabm_disagree": {
+            "silent_alarm_only": 0.11643,
+            "q0.01": {
+              "silent": 0.09911,
+              "review": 0.01038,
+              "caught": 0.3743
+            },
+            "q0.05": {
+              "silent": 0.04859,
+              "review": 0.04637,
+              "caught": 0.4248
+            },
+            "q0.1": {
+              "silent": 0.00072,
+              "review": 0.09087,
+              "caught": 0.4727
+            }
+          },
+          "tabm_energy": {
+            "silent_alarm_only": 0.11643,
+            "q0.01": {
+              "silent": 0.09935,
+              "review": 0.01087,
+              "caught": 0.3741
+            },
+            "q0.05": {
+              "silent": 0.03392,
+              "review": 0.04537,
+              "caught": 0.4395
+            },
+            "q0.1": {
+              "silent": 0.00096,
+              "review": 0.091,
+              "caught": 0.4725
+            }
+          },
+          "tabm_msp": {
+            "silent_alarm_only": 0.11643,
+            "q0.01": {
+              "silent": 0.09622,
+              "review": 0.01075,
+              "caught": 0.3772
+            },
+            "q0.05": {
+              "silent": 0.04138,
+              "review": 0.03875,
+              "caught": 0.432
+            },
+            "q0.1": {
+              "silent": 0.00096,
+              "review": 0.09025,
+              "caught": 0.4725
+            }
+          },
+          "knn": {
+            "silent_alarm_only": 0.11643,
+            "q0.01": {
+              "silent": 0.11523,
+              "review": 0.012,
+              "caught": 0.3582
+            },
+            "q0.05": {
+              "silent": 0.11042,
+              "review": 0.04125,
+              "caught": 0.363
+            },
+            "q0.1": {
+              "silent": 0.08756,
+              "review": 0.08737,
+              "caught": 0.3859
+            }
+          },
+          "openmax": {
+            "silent_alarm_only": 0.11643,
+            "q0.01": {
+              "silent": 0.09526,
+              "review": 0.01112,
+              "caught": 0.3782
+            },
+            "q0.05": {
+              "silent": 0.05076,
+              "review": 0.042,
+              "caught": 0.4227
+            },
+            "q0.1": {
+              "silent": 0.00096,
+              "review": 0.091,
+              "caught": 0.4725
+            }
+          },
+          "mahalanobis": {
+            "silent_alarm_only": 0.11643,
+            "q0.01": {
+              "silent": 0.11547,
+              "review": 0.00725,
+              "caught": 0.358
+            },
+            "q0.05": {
+              "silent": 0.11451,
+              "review": 0.04412,
+              "caught": 0.3589
+            },
+            "q0.1": {
+              "silent": 0.102,
+              "review": 0.0825,
+              "caught": 0.3714
+            }
+          },
+          "autoencoder": {
+            "silent_alarm_only": 0.11643,
+            "q0.01": {
+              "silent": 0.11571,
+              "review": 0.00863,
+              "caught": 0.3577
+            },
+            "q0.05": {
+              "silent": 0.11547,
+              "review": 0.04713,
+              "caught": 0.358
+            },
+            "q0.1": {
+              "silent": 0.11547,
+              "review": 0.08413,
+              "caught": 0.358
+            }
+          }
+        },
+        "seconds": {
+          "knn": 11.2,
+          "openmax": 0.2,
+          "mahalanobis": 3.8,
+          "autoencoder": 13.0
+        },
+        "n_unknown": 4157
+      },
+      "MALWARE": {
+        "standalone": {
+          "tabm_disagree": {
+            "auroc": 0.8894,
+            "aupr": 0.6438,
+            "fpr95": 0.4888,
+            "detect@cal": 0.5112,
+            "known_reject@cal": 0.0496,
+            "silent_benign@cal": 0.0,
+            "open_f1@cal": 0.7322
+          },
+          "tabm_energy": {
+            "auroc": 0.8579,
+            "aupr": 0.4959,
+            "fpr95": 0.475,
+            "detect@cal": 0.525,
+            "known_reject@cal": 0.0471,
+            "silent_benign@cal": 0.1138,
+            "open_f1@cal": 0.7481
+          },
+          "tabm_msp": {
+            "auroc": 0.7736,
+            "aupr": 0.2361,
+            "fpr95": 0.8491,
+            "detect@cal": 0.1509,
+            "known_reject@cal": 0.0464,
+            "silent_benign@cal": 0.1564,
+            "open_f1@cal": 0.6812
+          },
+          "knn": {
+            "auroc": 0.8765,
+            "aupr": 0.63,
+            "fpr95": 0.4909,
+            "detect@cal": 0.5083,
+            "known_reject@cal": 0.0483,
+            "silent_benign@cal": 0.0,
+            "open_f1@cal": 0.7162
+          },
+          "openmax": {
+            "auroc": 0.8413,
+            "aupr": 0.378,
+            "fpr95": 0.8072,
+            "detect@cal": 0.1928,
+            "known_reject@cal": 0.0469,
+            "silent_benign@cal": 0.1561,
+            "open_f1@cal": 0.6906
+          },
+          "mahalanobis": {
+            "auroc": 0.8137,
+            "aupr": 0.5988,
+            "fpr95": 0.4807,
+            "detect@cal": 0.5193,
+            "known_reject@cal": 0.0496,
+            "silent_benign@cal": 0.0,
+            "open_f1@cal": 0.7224
+          },
+          "autoencoder": {
+            "auroc": 0.5731,
+            "aupr": 0.5002,
+            "fpr95": 0.5041,
+            "detect@cal": 0.4959,
+            "known_reject@cal": 0.0456,
+            "silent_benign@cal": 0.0,
+            "open_f1@cal": 0.7204
+          }
+        },
+        "guard": {
+          "tabm_disagree": {
+            "silent_alarm_only": 0.0,
+            "q0.01": {
+              "silent": 0.0,
+              "review": 0.004,
+              "caught": 0.5112
+            },
+            "q0.05": {
+              "silent": 0.0,
+              "review": 0.0105,
+              "caught": 0.5112
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.08575,
+              "caught": 0.5112
+            }
+          },
+          "tabm_energy": {
+            "silent_alarm_only": 0.0,
+            "q0.01": {
+              "silent": 0.0,
+              "review": 0.0,
+              "caught": 0.5112
+            },
+            "q0.05": {
+              "silent": 0.0,
+              "review": 0.0,
+              "caught": 0.5112
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.08862,
+              "caught": 0.5112
+            }
+          },
+          "tabm_msp": {
+            "silent_alarm_only": 0.0,
+            "q0.01": {
+              "silent": 0.0,
+              "review": 0.0,
+              "caught": 0.5112
+            },
+            "q0.05": {
+              "silent": 0.0,
+              "review": 0.0,
+              "caught": 0.5112
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.08862,
+              "caught": 0.5112
+            }
+          },
+          "knn": {
+            "silent_alarm_only": 0.0,
+            "q0.01": {
+              "silent": 0.0,
+              "review": 0.00887,
+              "caught": 0.5112
+            },
+            "q0.05": {
+              "silent": 0.0,
+              "review": 0.03537,
+              "caught": 0.5112
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.07275,
+              "caught": 0.5112
+            }
+          },
+          "openmax": {
+            "silent_alarm_only": 0.0,
+            "q0.01": {
+              "silent": 0.0,
+              "review": 0.0,
+              "caught": 0.5112
+            },
+            "q0.05": {
+              "silent": 0.0,
+              "review": 0.0,
+              "caught": 0.5112
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.088,
+              "caught": 0.5112
+            }
+          },
+          "mahalanobis": {
+            "silent_alarm_only": 0.0,
+            "q0.01": {
+              "silent": 0.0,
+              "review": 0.00863,
+              "caught": 0.5112
+            },
+            "q0.05": {
+              "silent": 0.0,
+              "review": 0.03562,
+              "caught": 0.5112
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.073,
+              "caught": 0.5112
+            }
+          },
+          "autoencoder": {
+            "silent_alarm_only": 0.0,
+            "q0.01": {
+              "silent": 0.0,
+              "review": 0.0075,
+              "caught": 0.5112
+            },
+            "q0.05": {
+              "silent": 0.0,
+              "review": 0.03587,
+              "caught": 0.5112
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.06638,
+              "caught": 0.5112
+            }
+          }
+        },
+        "seconds": {
+          "knn": 11.0,
+          "openmax": 0.2,
+          "mahalanobis": 3.7,
+          "autoencoder": 21.5
+        },
+        "n_unknown": 6291
+      }
+    },
+    "1": {
+      "DDOS": {
+        "standalone": {
+          "tabm_disagree": {
+            "auroc": 0.7821,
+            "aupr": 0.7963,
+            "fpr95": 0.416,
+            "detect@cal": 0.5833,
+            "known_reject@cal": 0.0464,
+            "silent_benign@cal": 0.0005,
+            "open_f1@cal": 0.7782
+          },
+          "tabm_energy": {
+            "auroc": 0.638,
+            "aupr": 0.4789,
+            "fpr95": 0.9256,
+            "detect@cal": 0.0731,
+            "known_reject@cal": 0.0468,
+            "silent_benign@cal": 0.0027,
+            "open_f1@cal": 0.6468
+          },
+          "tabm_msp": {
+            "auroc": 0.6548,
+            "aupr": 0.4886,
+            "fpr95": 0.8924,
+            "detect@cal": 0.106,
+            "known_reject@cal": 0.0477,
+            "silent_benign@cal": 0.0019,
+            "open_f1@cal": 0.6606
+          },
+          "knn": {
+            "auroc": 0.9145,
+            "aupr": 0.9009,
+            "fpr95": 0.2435,
+            "detect@cal": 0.7564,
+            "known_reject@cal": 0.0486,
+            "silent_benign@cal": 0.0005,
+            "open_f1@cal": 0.8004
+          },
+          "openmax": {
+            "auroc": 0.5629,
+            "aupr": 0.4252,
+            "fpr95": 0.9534,
+            "detect@cal": 0.0458,
+            "known_reject@cal": 0.048,
+            "silent_benign@cal": 0.0027,
+            "open_f1@cal": 0.635
+          },
+          "mahalanobis": {
+            "auroc": 0.9197,
+            "aupr": 0.9088,
+            "fpr95": 0.2417,
+            "detect@cal": 0.7585,
+            "known_reject@cal": 0.0503,
+            "silent_benign@cal": 0.0006,
+            "open_f1@cal": 0.8031
+          },
+          "autoencoder": {
+            "auroc": 0.8194,
+            "aupr": 0.8375,
+            "fpr95": 0.3194,
+            "detect@cal": 0.6761,
+            "known_reject@cal": 0.0455,
+            "silent_benign@cal": 0.0006,
+            "open_f1@cal": 0.79
+          }
+        },
+        "guard": {
+          "tabm_disagree": {
+            "silent_alarm_only": 0.00047,
+            "q0.01": {
+              "silent": 0.00033,
+              "review": 0.01087,
+              "caught": 0.5834
+            },
+            "q0.05": {
+              "silent": 0.00019,
+              "review": 0.02363,
+              "caught": 0.5835
+            },
+            "q0.1": {
+              "silent": 0.00019,
+              "review": 0.08837,
+              "caught": 0.5835
+            }
+          },
+          "tabm_energy": {
+            "silent_alarm_only": 0.00047,
+            "q0.01": {
+              "silent": 0.00033,
+              "review": 0.00962,
+              "caught": 0.5834
+            },
+            "q0.05": {
+              "silent": 0.00023,
+              "review": 0.02438,
+              "caught": 0.5835
+            },
+            "q0.1": {
+              "silent": 0.00023,
+              "review": 0.08737,
+              "caught": 0.5835
+            }
+          },
+          "tabm_msp": {
+            "silent_alarm_only": 0.00047,
+            "q0.01": {
+              "silent": 0.00047,
+              "review": 0.00912,
+              "caught": 0.5833
+            },
+            "q0.05": {
+              "silent": 0.00047,
+              "review": 0.00912,
+              "caught": 0.5833
+            },
+            "q0.1": {
+              "silent": 0.00023,
+              "review": 0.089,
+              "caught": 0.5835
+            }
+          },
+          "knn": {
+            "silent_alarm_only": 0.00047,
+            "q0.01": {
+              "silent": 0.00023,
+              "review": 0.008,
+              "caught": 0.5835
+            },
+            "q0.05": {
+              "silent": 9e-05,
+              "review": 0.03587,
+              "caught": 0.5836
+            },
+            "q0.1": {
+              "silent": 9e-05,
+              "review": 0.06838,
+              "caught": 0.5836
+            }
+          },
+          "openmax": {
+            "silent_alarm_only": 0.00047,
+            "q0.01": {
+              "silent": 0.00033,
+              "review": 0.00925,
+              "caught": 0.5834
+            },
+            "q0.05": {
+              "silent": 0.00023,
+              "review": 0.02925,
+              "caught": 0.5835
+            },
+            "q0.1": {
+              "silent": 0.00023,
+              "review": 0.02925,
+              "caught": 0.5835
+            }
+          },
+          "mahalanobis": {
+            "silent_alarm_only": 0.00047,
+            "q0.01": {
+              "silent": 0.00023,
+              "review": 0.00875,
+              "caught": 0.5835
+            },
+            "q0.05": {
+              "silent": 0.00023,
+              "review": 0.04038,
+              "caught": 0.5835
+            },
+            "q0.1": {
+              "silent": 0.00019,
+              "review": 0.07975,
+              "caught": 0.5835
+            }
+          },
+          "autoencoder": {
+            "silent_alarm_only": 0.00047,
+            "q0.01": {
+              "silent": 0.00023,
+              "review": 0.00988,
+              "caught": 0.5835
+            },
+            "q0.05": {
+              "silent": 0.00023,
+              "review": 0.04213,
+              "caught": 0.5835
+            },
+            "q0.1": {
+              "silent": 0.00023,
+              "review": 0.07587,
+              "caught": 0.5835
+            }
+          }
+        },
+        "seconds": {
+          "knn": 10.2,
+          "openmax": 0.1,
+          "mahalanobis": 3.5,
+          "autoencoder": 17.5
+        },
+        "n_unknown": 21375
+      },
+      "RECON": {
+        "standalone": {
+          "tabm_disagree": {
+            "auroc": 0.8504,
+            "aupr": 0.6658,
+            "fpr95": 0.4934,
+            "detect@cal": 0.5067,
+            "known_reject@cal": 0.0503,
+            "silent_benign@cal": 0.0005,
+            "open_f1@cal": 0.7651
+          },
+          "tabm_energy": {
+            "auroc": 0.6077,
+            "aupr": 0.2063,
+            "fpr95": 0.9961,
+            "detect@cal": 0.0039,
+            "known_reject@cal": 0.0506,
+            "silent_benign@cal": 0.0006,
+            "open_f1@cal": 0.6523
+          },
+          "tabm_msp": {
+            "auroc": 0.6555,
+            "aupr": 0.2277,
+            "fpr95": 0.9982,
+            "detect@cal": 0.0018,
+            "known_reject@cal": 0.0484,
+            "silent_benign@cal": 0.0006,
+            "open_f1@cal": 0.6553
+          },
+          "knn": {
+            "auroc": 0.8885,
+            "aupr": 0.8133,
+            "fpr95": 0.2649,
+            "detect@cal": 0.7351,
+            "known_reject@cal": 0.0494,
+            "silent_benign@cal": 0.0003,
+            "open_f1@cal": 0.7754
+          },
+          "openmax": {
+            "auroc": 0.6128,
+            "aupr": 0.207,
+            "fpr95": 0.9987,
+            "detect@cal": 0.0013,
+            "known_reject@cal": 0.0509,
+            "silent_benign@cal": 0.0005,
+            "open_f1@cal": 0.6503
+          },
+          "mahalanobis": {
+            "auroc": 0.9484,
+            "aupr": 0.8684,
+            "fpr95": 0.2642,
+            "detect@cal": 0.7368,
+            "known_reject@cal": 0.0528,
+            "silent_benign@cal": 0.0002,
+            "open_f1@cal": 0.7805
+          },
+          "autoencoder": {
+            "auroc": 0.9128,
+            "aupr": 0.8263,
+            "fpr95": 0.2857,
+            "detect@cal": 0.7138,
+            "known_reject@cal": 0.0468,
+            "silent_benign@cal": 0.0,
+            "open_f1@cal": 0.7838
+          }
+        },
+        "guard": {
+          "tabm_disagree": {
+            "silent_alarm_only": 0.00046,
+            "q0.01": {
+              "silent": 0.00046,
+              "review": 0.01,
+              "caught": 0.5067
+            },
+            "q0.05": {
+              "silent": 9e-05,
+              "review": 0.02725,
+              "caught": 0.5071
+            },
+            "q0.1": {
+              "silent": 9e-05,
+              "review": 0.09287,
+              "caught": 0.5071
+            }
+          },
+          "tabm_energy": {
+            "silent_alarm_only": 0.00046,
+            "q0.01": {
+              "silent": 0.00046,
+              "review": 0.01025,
+              "caught": 0.5067
+            },
+            "q0.05": {
+              "silent": 9e-05,
+              "review": 0.03325,
+              "caught": 0.5071
+            },
+            "q0.1": {
+              "silent": 9e-05,
+              "review": 0.09438,
+              "caught": 0.5071
+            }
+          },
+          "tabm_msp": {
+            "silent_alarm_only": 0.00046,
+            "q0.01": {
+              "silent": 0.00028,
+              "review": 0.01125,
+              "caught": 0.5069
+            },
+            "q0.05": {
+              "silent": 9e-05,
+              "review": 0.0325,
+              "caught": 0.5071
+            },
+            "q0.1": {
+              "silent": 9e-05,
+              "review": 0.0325,
+              "caught": 0.5071
+            }
+          },
+          "knn": {
+            "silent_alarm_only": 0.00046,
+            "q0.01": {
+              "silent": 0.00037,
+              "review": 0.00925,
+              "caught": 0.5068
+            },
+            "q0.05": {
+              "silent": 0.00037,
+              "review": 0.03963,
+              "caught": 0.5068
+            },
+            "q0.1": {
+              "silent": 0.00018,
+              "review": 0.08538,
+              "caught": 0.507
+            }
+          },
+          "openmax": {
+            "silent_alarm_only": 0.00046,
+            "q0.01": {
+              "silent": 0.00037,
+              "review": 0.00887,
+              "caught": 0.5068
+            },
+            "q0.05": {
+              "silent": 0.0,
+              "review": 0.02913,
+              "caught": 0.5072
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.09475,
+              "caught": 0.5072
+            }
+          },
+          "mahalanobis": {
+            "silent_alarm_only": 0.00046,
+            "q0.01": {
+              "silent": 0.00037,
+              "review": 0.00875,
+              "caught": 0.5068
+            },
+            "q0.05": {
+              "silent": 0.00018,
+              "review": 0.04863,
+              "caught": 0.507
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.08625,
+              "caught": 0.5072
+            }
+          },
+          "autoencoder": {
+            "silent_alarm_only": 0.00046,
+            "q0.01": {
+              "silent": 0.00037,
+              "review": 0.00925,
+              "caught": 0.5068
+            },
+            "q0.05": {
+              "silent": 0.00037,
+              "review": 0.03525,
+              "caught": 0.5068
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.08887,
+              "caught": 0.5072
+            }
+          }
+        },
+        "seconds": {
+          "knn": 11.0,
+          "openmax": 0.2,
+          "mahalanobis": 3.4,
+          "autoencoder": 8.3
+        },
+        "n_unknown": 10904
+      },
+      "WEB": {
+        "standalone": {
+          "tabm_disagree": {
+            "auroc": 0.8659,
+            "aupr": 0.5001,
+            "fpr95": 0.7073,
+            "detect@cal": 0.2957,
+            "known_reject@cal": 0.0506,
+            "silent_benign@cal": 0.0139,
+            "open_f1@cal": 0.7519
+          },
+          "tabm_energy": {
+            "auroc": 0.8253,
+            "aupr": 0.3355,
+            "fpr95": 0.8514,
+            "detect@cal": 0.1424,
+            "known_reject@cal": 0.0487,
+            "silent_benign@cal": 0.0266,
+            "open_f1@cal": 0.7217
+          },
+          "tabm_msp": {
+            "auroc": 0.8484,
+            "aupr": 0.3435,
+            "fpr95": 0.8836,
+            "detect@cal": 0.1139,
+            "known_reject@cal": 0.049,
+            "silent_benign@cal": 0.0259,
+            "open_f1@cal": 0.7158
+          },
+          "knn": {
+            "auroc": 0.8674,
+            "aupr": 0.5637,
+            "fpr95": 0.6623,
+            "detect@cal": 0.3308,
+            "known_reject@cal": 0.0467,
+            "silent_benign@cal": 0.0166,
+            "open_f1@cal": 0.7453
+          },
+          "openmax": {
+            "auroc": 0.7756,
+            "aupr": 0.3138,
+            "fpr95": 0.7899,
+            "detect@cal": 0.2068,
+            "known_reject@cal": 0.0484,
+            "silent_benign@cal": 0.0205,
+            "open_f1@cal": 0.737
+          },
+          "mahalanobis": {
+            "auroc": 0.7691,
+            "aupr": 0.5138,
+            "fpr95": 0.6309,
+            "detect@cal": 0.3692,
+            "known_reject@cal": 0.0501,
+            "silent_benign@cal": 0.0079,
+            "open_f1@cal": 0.7547
+          },
+          "autoencoder": {
+            "auroc": 0.5881,
+            "aupr": 0.3093,
+            "fpr95": 0.7065,
+            "detect@cal": 0.2935,
+            "known_reject@cal": 0.0479,
+            "silent_benign@cal": 0.0183,
+            "open_f1@cal": 0.7343
+          }
+        },
+        "guard": {
+          "tabm_disagree": {
+            "silent_alarm_only": 0.01388,
+            "q0.01": {
+              "silent": 0.00793,
+              "review": 0.008,
+              "caught": 0.3017
+            },
+            "q0.05": {
+              "silent": 0.00327,
+              "review": 0.04312,
+              "caught": 0.3064
+            },
+            "q0.1": {
+              "silent": 0.00198,
+              "review": 0.082,
+              "caught": 0.3076
+            }
+          },
+          "tabm_energy": {
+            "silent_alarm_only": 0.01388,
+            "q0.01": {
+              "silent": 0.00327,
+              "review": 0.00813,
+              "caught": 0.3064
+            },
+            "q0.05": {
+              "silent": 0.00327,
+              "review": 0.03925,
+              "caught": 0.3064
+            },
+            "q0.1": {
+              "silent": 0.00327,
+              "review": 0.03925,
+              "caught": 0.3064
+            }
+          },
+          "tabm_msp": {
+            "silent_alarm_only": 0.01388,
+            "q0.01": {
+              "silent": 0.00536,
+              "review": 0.006,
+              "caught": 0.3043
+            },
+            "q0.05": {
+              "silent": 0.00222,
+              "review": 0.04175,
+              "caught": 0.3074
+            },
+            "q0.1": {
+              "silent": 0.00222,
+              "review": 0.08637,
+              "caught": 0.3074
+            }
+          },
+          "knn": {
+            "silent_alarm_only": 0.01388,
+            "q0.01": {
+              "silent": 0.01388,
+              "review": 0.01013,
+              "caught": 0.2957
+            },
+            "q0.05": {
+              "silent": 0.01015,
+              "review": 0.04512,
+              "caught": 0.2995
+            },
+            "q0.1": {
+              "silent": 0.00362,
+              "review": 0.0855,
+              "caught": 0.306
+            }
+          },
+          "openmax": {
+            "silent_alarm_only": 0.01388,
+            "q0.01": {
+              "silent": 0.00327,
+              "review": 0.00838,
+              "caught": 0.3064
+            },
+            "q0.05": {
+              "silent": 0.00327,
+              "review": 0.0395,
+              "caught": 0.3064
+            },
+            "q0.1": {
+              "silent": 0.00327,
+              "review": 0.0395,
+              "caught": 0.3064
+            }
+          },
+          "mahalanobis": {
+            "silent_alarm_only": 0.01388,
+            "q0.01": {
+              "silent": 0.01388,
+              "review": 0.00988,
+              "caught": 0.2957
+            },
+            "q0.05": {
+              "silent": 0.00991,
+              "review": 0.04013,
+              "caught": 0.2997
+            },
+            "q0.1": {
+              "silent": 0.00513,
+              "review": 0.08063,
+              "caught": 0.3045
+            }
+          },
+          "autoencoder": {
+            "silent_alarm_only": 0.01388,
+            "q0.01": {
+              "silent": 0.01388,
+              "review": 0.0075,
+              "caught": 0.2957
+            },
+            "q0.05": {
+              "silent": 0.01364,
+              "review": 0.041,
+              "caught": 0.296
+            },
+            "q0.1": {
+              "silent": 0.01364,
+              "review": 0.09062,
+              "caught": 0.296
+            }
+          }
+        },
+        "seconds": {
+          "knn": 11.4,
+          "openmax": 0.2,
+          "mahalanobis": 3.6,
+          "autoencoder": 23.0
+        },
+        "n_unknown": 8575
+      },
+      "BRUTEFORCE": {
+        "standalone": {
+          "tabm_disagree": {
+            "auroc": 0.8902,
+            "aupr": 0.4288,
+            "fpr95": 0.6004,
+            "detect@cal": 0.3933,
+            "known_reject@cal": 0.0488,
+            "silent_benign@cal": 0.1025,
+            "open_f1@cal": 0.8155
+          },
+          "tabm_energy": {
+            "auroc": 0.826,
+            "aupr": 0.2932,
+            "fpr95": 0.7861,
+            "detect@cal": 0.2122,
+            "known_reject@cal": 0.0483,
+            "silent_benign@cal": 0.135,
+            "open_f1@cal": 0.7876
+          },
+          "tabm_msp": {
+            "auroc": 0.821,
+            "aupr": 0.1764,
+            "fpr95": 0.8364,
+            "detect@cal": 0.1597,
+            "known_reject@cal": 0.0471,
+            "silent_benign@cal": 0.1258,
+            "open_f1@cal": 0.7829
+          },
+          "knn": {
+            "auroc": 0.8589,
+            "aupr": 0.3988,
+            "fpr95": 0.6223,
+            "detect@cal": 0.3762,
+            "known_reject@cal": 0.0491,
+            "silent_benign@cal": 0.122,
+            "open_f1@cal": 0.8033
+          },
+          "openmax": {
+            "auroc": 0.8153,
+            "aupr": 0.1733,
+            "fpr95": 0.842,
+            "detect@cal": 0.158,
+            "known_reject@cal": 0.05,
+            "silent_benign@cal": 0.1342,
+            "open_f1@cal": 0.7734
+          },
+          "mahalanobis": {
+            "auroc": 0.8395,
+            "aupr": 0.4211,
+            "fpr95": 0.643,
+            "detect@cal": 0.357,
+            "known_reject@cal": 0.0503,
+            "silent_benign@cal": 0.1376,
+            "open_f1@cal": 0.7985
+          },
+          "autoencoder": {
+            "auroc": 0.4885,
+            "aupr": 0.164,
+            "fpr95": 0.7676,
+            "detect@cal": 0.2319,
+            "known_reject@cal": 0.0484,
+            "silent_benign@cal": 0.1496,
+            "open_f1@cal": 0.7758
+          }
+        },
+        "guard": {
+          "tabm_disagree": {
+            "silent_alarm_only": 0.10248,
+            "q0.01": {
+              "silent": 0.08732,
+              "review": 0.01013,
+              "caught": 0.4085
+            },
+            "q0.05": {
+              "silent": 0.02045,
+              "review": 0.052,
+              "caught": 0.4753
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.09,
+              "caught": 0.4958
+            }
+          },
+          "tabm_energy": {
+            "silent_alarm_only": 0.10248,
+            "q0.01": {
+              "silent": 0.08179,
+              "review": 0.00988,
+              "caught": 0.414
+            },
+            "q0.05": {
+              "silent": 0.00914,
+              "review": 0.04813,
+              "caught": 0.4866
+            },
+            "q0.1": {
+              "silent": 0.00072,
+              "review": 0.08275,
+              "caught": 0.4951
+            }
+          },
+          "tabm_msp": {
+            "silent_alarm_only": 0.10248,
+            "q0.01": {
+              "silent": 0.08612,
+              "review": 0.00813,
+              "caught": 0.4097
+            },
+            "q0.05": {
+              "silent": 0.01155,
+              "review": 0.04688,
+              "caught": 0.4842
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.08263,
+              "caught": 0.4958
+            }
+          },
+          "knn": {
+            "silent_alarm_only": 0.10248,
+            "q0.01": {
+              "silent": 0.10176,
+              "review": 0.013,
+              "caught": 0.394
+            },
+            "q0.05": {
+              "silent": 0.09719,
+              "review": 0.04337,
+              "caught": 0.3986
+            },
+            "q0.1": {
+              "silent": 0.0777,
+              "review": 0.09438,
+              "caught": 0.4181
+            }
+          },
+          "openmax": {
+            "silent_alarm_only": 0.10248,
+            "q0.01": {
+              "silent": 0.08516,
+              "review": 0.009,
+              "caught": 0.4106
+            },
+            "q0.05": {
+              "silent": 0.01395,
+              "review": 0.0485,
+              "caught": 0.4818
+            },
+            "q0.1": {
+              "silent": 0.00072,
+              "review": 0.10038,
+              "caught": 0.4951
+            }
+          },
+          "mahalanobis": {
+            "silent_alarm_only": 0.10248,
+            "q0.01": {
+              "silent": 0.10176,
+              "review": 0.01238,
+              "caught": 0.394
+            },
+            "q0.05": {
+              "silent": 0.10079,
+              "review": 0.04612,
+              "caught": 0.395
+            },
+            "q0.1": {
+              "silent": 0.09815,
+              "review": 0.088,
+              "caught": 0.3976
+            }
+          },
+          "autoencoder": {
+            "silent_alarm_only": 0.10248,
+            "q0.01": {
+              "silent": 0.10176,
+              "review": 0.01,
+              "caught": 0.394
+            },
+            "q0.05": {
+              "silent": 0.10176,
+              "review": 0.04675,
+              "caught": 0.394
+            },
+            "q0.1": {
+              "silent": 0.10176,
+              "review": 0.08875,
+              "caught": 0.394
+            }
+          }
+        },
+        "seconds": {
+          "knn": 11.5,
+          "openmax": 0.2,
+          "mahalanobis": 3.8,
+          "autoencoder": 23.4
+        },
+        "n_unknown": 4157
+      },
+      "MALWARE": {
+        "standalone": {
+          "tabm_disagree": {
+            "auroc": 0.9215,
+            "aupr": 0.6983,
+            "fpr95": 0.4527,
+            "detect@cal": 0.5473,
+            "known_reject@cal": 0.0501,
+            "silent_benign@cal": 0.0,
+            "open_f1@cal": 0.7415
+          },
+          "tabm_energy": {
+            "auroc": 0.7934,
+            "aupr": 0.2779,
+            "fpr95": 0.9275,
+            "detect@cal": 0.0725,
+            "known_reject@cal": 0.053,
+            "silent_benign@cal": 0.1385,
+            "open_f1@cal": 0.6532
+          },
+          "tabm_msp": {
+            "auroc": 0.7869,
+            "aupr": 0.2635,
+            "fpr95": 0.8417,
+            "detect@cal": 0.1583,
+            "known_reject@cal": 0.0475,
+            "silent_benign@cal": 0.1385,
+            "open_f1@cal": 0.6852
+          },
+          "knn": {
+            "auroc": 0.8765,
+            "aupr": 0.63,
+            "fpr95": 0.4909,
+            "detect@cal": 0.5083,
+            "known_reject@cal": 0.0483,
+            "silent_benign@cal": 0.0,
+            "open_f1@cal": 0.7164
+          },
+          "openmax": {
+            "auroc": 0.8467,
+            "aupr": 0.3845,
+            "fpr95": 0.5455,
+            "detect@cal": 0.3589,
+            "known_reject@cal": 0.0462,
+            "silent_benign@cal": 0.1385,
+            "open_f1@cal": 0.7212
+          },
+          "mahalanobis": {
+            "auroc": 0.8514,
+            "aupr": 0.6266,
+            "fpr95": 0.4801,
+            "detect@cal": 0.5199,
+            "known_reject@cal": 0.0475,
+            "silent_benign@cal": 0.0,
+            "open_f1@cal": 0.7242
+          },
+          "autoencoder": {
+            "auroc": 0.7538,
+            "aupr": 0.2292,
+            "fpr95": 0.9377,
+            "detect@cal": 0.0623,
+            "known_reject@cal": 0.0478,
+            "silent_benign@cal": 0.1385,
+            "open_f1@cal": 0.6312
+          }
+        },
+        "guard": {
+          "tabm_disagree": {
+            "silent_alarm_only": 0.0,
+            "q0.01": {
+              "silent": 0.0,
+              "review": 0.00525,
+              "caught": 0.5473
+            },
+            "q0.05": {
+              "silent": 0.0,
+              "review": 0.03875,
+              "caught": 0.5473
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.04412,
+              "caught": 0.5473
+            }
+          },
+          "tabm_energy": {
+            "silent_alarm_only": 0.0,
+            "q0.01": {
+              "silent": 0.0,
+              "review": 0.00575,
+              "caught": 0.5473
+            },
+            "q0.05": {
+              "silent": 0.0,
+              "review": 0.03637,
+              "caught": 0.5473
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.03637,
+              "caught": 0.5473
+            }
+          },
+          "tabm_msp": {
+            "silent_alarm_only": 0.0,
+            "q0.01": {
+              "silent": 0.0,
+              "review": 0.00613,
+              "caught": 0.5473
+            },
+            "q0.05": {
+              "silent": 0.0,
+              "review": 0.0375,
+              "caught": 0.5473
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.0375,
+              "caught": 0.5473
+            }
+          },
+          "knn": {
+            "silent_alarm_only": 0.0,
+            "q0.01": {
+              "silent": 0.0,
+              "review": 0.00962,
+              "caught": 0.5473
+            },
+            "q0.05": {
+              "silent": 0.0,
+              "review": 0.03463,
+              "caught": 0.5473
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.07275,
+              "caught": 0.5473
+            }
+          },
+          "openmax": {
+            "silent_alarm_only": 0.0,
+            "q0.01": {
+              "silent": 0.0,
+              "review": 0.00637,
+              "caught": 0.5473
+            },
+            "q0.05": {
+              "silent": 0.0,
+              "review": 0.03825,
+              "caught": 0.5473
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.0405,
+              "caught": 0.5473
+            }
+          },
+          "mahalanobis": {
+            "silent_alarm_only": 0.0,
+            "q0.01": {
+              "silent": 0.0,
+              "review": 0.00662,
+              "caught": 0.5473
+            },
+            "q0.05": {
+              "silent": 0.0,
+              "review": 0.034,
+              "caught": 0.5473
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.07087,
+              "caught": 0.5473
+            }
+          },
+          "autoencoder": {
+            "silent_alarm_only": 0.0,
+            "q0.01": {
+              "silent": 0.0,
+              "review": 0.00788,
+              "caught": 0.5473
+            },
+            "q0.05": {
+              "silent": 0.0,
+              "review": 0.03475,
+              "caught": 0.5473
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.0725,
+              "caught": 0.5473
+            }
+          }
+        },
+        "seconds": {
+          "knn": 11.1,
+          "openmax": 0.2,
+          "mahalanobis": 3.6,
+          "autoencoder": 5.1
+        },
+        "n_unknown": 6291
+      }
+    },
+    "2": {
+      "DDOS": {
+        "standalone": {
+          "tabm_disagree": {
+            "auroc": 0.7826,
+            "aupr": 0.7924,
+            "fpr95": 0.4178,
+            "detect@cal": 0.5807,
+            "known_reject@cal": 0.0464,
+            "silent_benign@cal": 0.0028,
+            "open_f1@cal": 0.7724
+          },
+          "tabm_energy": {
+            "auroc": 0.6095,
+            "aupr": 0.465,
+            "fpr95": 0.9367,
+            "detect@cal": 0.0651,
+            "known_reject@cal": 0.0518,
+            "silent_benign@cal": 0.0056,
+            "open_f1@cal": 0.6438
+          },
+          "tabm_msp": {
+            "auroc": 0.6626,
+            "aupr": 0.497,
+            "fpr95": 0.9231,
+            "detect@cal": 0.0766,
+            "known_reject@cal": 0.0499,
+            "silent_benign@cal": 0.0053,
+            "open_f1@cal": 0.6512
+          },
+          "knn": {
+            "auroc": 0.9145,
+            "aupr": 0.9009,
+            "fpr95": 0.2435,
+            "detect@cal": 0.7564,
+            "known_reject@cal": 0.0486,
+            "silent_benign@cal": 0.0005,
+            "open_f1@cal": 0.8019
+          },
+          "openmax": {
+            "auroc": 0.5934,
+            "aupr": 0.4505,
+            "fpr95": 0.9582,
+            "detect@cal": 0.0389,
+            "known_reject@cal": 0.0469,
+            "silent_benign@cal": 0.0048,
+            "open_f1@cal": 0.6384
+          },
+          "mahalanobis": {
+            "auroc": 0.917,
+            "aupr": 0.9022,
+            "fpr95": 0.2427,
+            "detect@cal": 0.7573,
+            "known_reject@cal": 0.0504,
+            "silent_benign@cal": 0.0005,
+            "open_f1@cal": 0.8038
+          },
+          "autoencoder": {
+            "auroc": 0.8636,
+            "aupr": 0.8733,
+            "fpr95": 0.3184,
+            "detect@cal": 0.6782,
+            "known_reject@cal": 0.0469,
+            "silent_benign@cal": 0.0007,
+            "open_f1@cal": 0.7903
+          }
+        },
+        "guard": {
+          "tabm_disagree": {
+            "silent_alarm_only": 0.00276,
+            "q0.01": {
+              "silent": 0.00248,
+              "review": 0.00775,
+              "caught": 0.581
+            },
+            "q0.05": {
+              "silent": 0.00201,
+              "review": 0.04038,
+              "caught": 0.5814
+            },
+            "q0.1": {
+              "silent": 0.00201,
+              "review": 0.04038,
+              "caught": 0.5814
+            }
+          },
+          "tabm_energy": {
+            "silent_alarm_only": 0.00276,
+            "q0.01": {
+              "silent": 0.00262,
+              "review": 0.00637,
+              "caught": 0.5808
+            },
+            "q0.05": {
+              "silent": 0.00253,
+              "review": 0.02525,
+              "caught": 0.5809
+            },
+            "q0.1": {
+              "silent": 0.00253,
+              "review": 0.02525,
+              "caught": 0.5809
+            }
+          },
+          "tabm_msp": {
+            "silent_alarm_only": 0.00276,
+            "q0.01": {
+              "silent": 0.00262,
+              "review": 0.00637,
+              "caught": 0.5808
+            },
+            "q0.05": {
+              "silent": 0.00239,
+              "review": 0.03288,
+              "caught": 0.5811
+            },
+            "q0.1": {
+              "silent": 0.00239,
+              "review": 0.03288,
+              "caught": 0.5811
+            }
+          },
+          "knn": {
+            "silent_alarm_only": 0.00276,
+            "q0.01": {
+              "silent": 0.00023,
+              "review": 0.00725,
+              "caught": 0.5832
+            },
+            "q0.05": {
+              "silent": 9e-05,
+              "review": 0.03413,
+              "caught": 0.5833
+            },
+            "q0.1": {
+              "silent": 9e-05,
+              "review": 0.0665,
+              "caught": 0.5833
+            }
+          },
+          "openmax": {
+            "silent_alarm_only": 0.00276,
+            "q0.01": {
+              "silent": 0.00276,
+              "review": 0.00737,
+              "caught": 0.5807
+            },
+            "q0.05": {
+              "silent": 0.00253,
+              "review": 0.02675,
+              "caught": 0.5809
+            },
+            "q0.1": {
+              "silent": 0.00253,
+              "review": 0.02675,
+              "caught": 0.5809
+            }
+          },
+          "mahalanobis": {
+            "silent_alarm_only": 0.00276,
+            "q0.01": {
+              "silent": 0.00023,
+              "review": 0.00912,
+              "caught": 0.5832
+            },
+            "q0.05": {
+              "silent": 0.00023,
+              "review": 0.03887,
+              "caught": 0.5832
+            },
+            "q0.1": {
+              "silent": 0.00019,
+              "review": 0.07838,
+              "caught": 0.5833
+            }
+          },
+          "autoencoder": {
+            "silent_alarm_only": 0.00276,
+            "q0.01": {
+              "silent": 0.00023,
+              "review": 0.00975,
+              "caught": 0.5832
+            },
+            "q0.05": {
+              "silent": 0.00023,
+              "review": 0.03575,
+              "caught": 0.5832
+            },
+            "q0.1": {
+              "silent": 0.00023,
+              "review": 0.07725,
+              "caught": 0.5832
+            }
+          }
+        },
+        "seconds": {
+          "knn": 10.2,
+          "openmax": 0.1,
+          "mahalanobis": 3.5,
+          "autoencoder": 19.1
+        },
+        "n_unknown": 21375
+      },
+      "RECON": {
+        "standalone": {
+          "tabm_disagree": {
+            "auroc": 0.8909,
+            "aupr": 0.7914,
+            "fpr95": 0.2498,
+            "detect@cal": 0.7537,
+            "known_reject@cal": 0.0524,
+            "silent_benign@cal": 0.0005,
+            "open_f1@cal": 0.7983
+          },
+          "tabm_energy": {
+            "auroc": 0.6083,
+            "aupr": 0.2054,
+            "fpr95": 0.9983,
+            "detect@cal": 0.0017,
+            "known_reject@cal": 0.0496,
+            "silent_benign@cal": 0.0006,
+            "open_f1@cal": 0.6517
+          },
+          "tabm_msp": {
+            "auroc": 0.6741,
+            "aupr": 0.2383,
+            "fpr95": 0.9933,
+            "detect@cal": 0.0067,
+            "known_reject@cal": 0.0497,
+            "silent_benign@cal": 0.0006,
+            "open_f1@cal": 0.6571
+          },
+          "knn": {
+            "auroc": 0.8885,
+            "aupr": 0.8133,
+            "fpr95": 0.2649,
+            "detect@cal": 0.7351,
+            "known_reject@cal": 0.0494,
+            "silent_benign@cal": 0.0003,
+            "open_f1@cal": 0.7741
+          },
+          "openmax": {
+            "auroc": 0.6142,
+            "aupr": 0.2086,
+            "fpr95": 0.9996,
+            "detect@cal": 0.0004,
+            "known_reject@cal": 0.0488,
+            "silent_benign@cal": 0.0005,
+            "open_f1@cal": 0.6523
+          },
+          "mahalanobis": {
+            "auroc": 0.9485,
+            "aupr": 0.8693,
+            "fpr95": 0.2634,
+            "detect@cal": 0.7371,
+            "known_reject@cal": 0.0525,
+            "silent_benign@cal": 0.0002,
+            "open_f1@cal": 0.7804
+          },
+          "autoencoder": {
+            "auroc": 0.8353,
+            "aupr": 0.7565,
+            "fpr95": 0.3027,
+            "detect@cal": 0.6973,
+            "known_reject@cal": 0.0484,
+            "silent_benign@cal": 0.0005,
+            "open_f1@cal": 0.7756
+          }
+        },
+        "guard": {
+          "tabm_disagree": {
+            "silent_alarm_only": 0.00046,
+            "q0.01": {
+              "silent": 0.00028,
+              "review": 0.00925,
+              "caught": 0.7539
+            },
+            "q0.05": {
+              "silent": 9e-05,
+              "review": 0.04725,
+              "caught": 0.754
+            },
+            "q0.1": {
+              "silent": 9e-05,
+              "review": 0.04788,
+              "caught": 0.754
+            }
+          },
+          "tabm_energy": {
+            "silent_alarm_only": 0.00046,
+            "q0.01": {
+              "silent": 0.00028,
+              "review": 0.01025,
+              "caught": 0.7539
+            },
+            "q0.05": {
+              "silent": 9e-05,
+              "review": 0.03025,
+              "caught": 0.754
+            },
+            "q0.1": {
+              "silent": 9e-05,
+              "review": 0.03025,
+              "caught": 0.754
+            }
+          },
+          "tabm_msp": {
+            "silent_alarm_only": 0.00046,
+            "q0.01": {
+              "silent": 9e-05,
+              "review": 0.01025,
+              "caught": 0.754
+            },
+            "q0.05": {
+              "silent": 9e-05,
+              "review": 0.02925,
+              "caught": 0.754
+            },
+            "q0.1": {
+              "silent": 9e-05,
+              "review": 0.02925,
+              "caught": 0.754
+            }
+          },
+          "knn": {
+            "silent_alarm_only": 0.00046,
+            "q0.01": {
+              "silent": 0.00037,
+              "review": 0.0095,
+              "caught": 0.7538
+            },
+            "q0.05": {
+              "silent": 0.00037,
+              "review": 0.0385,
+              "caught": 0.7538
+            },
+            "q0.1": {
+              "silent": 0.00018,
+              "review": 0.08238,
+              "caught": 0.7539
+            }
+          },
+          "openmax": {
+            "silent_alarm_only": 0.00046,
+            "q0.01": {
+              "silent": 0.00018,
+              "review": 0.01038,
+              "caught": 0.7539
+            },
+            "q0.05": {
+              "silent": 0.0,
+              "review": 0.02987,
+              "caught": 0.7541
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.02987,
+              "caught": 0.7541
+            }
+          },
+          "mahalanobis": {
+            "silent_alarm_only": 0.00046,
+            "q0.01": {
+              "silent": 0.00037,
+              "review": 0.00912,
+              "caught": 0.7538
+            },
+            "q0.05": {
+              "silent": 0.00018,
+              "review": 0.0455,
+              "caught": 0.7539
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.08875,
+              "caught": 0.7541
+            }
+          },
+          "autoencoder": {
+            "silent_alarm_only": 0.00046,
+            "q0.01": {
+              "silent": 0.00037,
+              "review": 0.0085,
+              "caught": 0.7538
+            },
+            "q0.05": {
+              "silent": 0.00037,
+              "review": 0.04688,
+              "caught": 0.7538
+            },
+            "q0.1": {
+              "silent": 0.00037,
+              "review": 0.08862,
+              "caught": 0.7538
+            }
+          }
+        },
+        "seconds": {
+          "knn": 10.5,
+          "openmax": 0.2,
+          "mahalanobis": 3.6,
+          "autoencoder": 17.8
+        },
+        "n_unknown": 10904
+      },
+      "WEB": {
+        "standalone": {
+          "tabm_disagree": {
+            "auroc": 0.8906,
+            "aupr": 0.5385,
+            "fpr95": 0.6669,
+            "detect@cal": 0.3271,
+            "known_reject@cal": 0.0463,
+            "silent_benign@cal": 0.0155,
+            "open_f1@cal": 0.761
+          },
+          "tabm_energy": {
+            "auroc": 0.839,
+            "aupr": 0.36,
+            "fpr95": 0.8961,
+            "detect@cal": 0.0917,
+            "known_reject@cal": 0.0473,
+            "silent_benign@cal": 0.0243,
+            "open_f1@cal": 0.7102
+          },
+          "tabm_msp": {
+            "auroc": 0.8356,
+            "aupr": 0.3177,
+            "fpr95": 0.9235,
+            "detect@cal": 0.0687,
+            "known_reject@cal": 0.0477,
+            "silent_benign@cal": 0.0253,
+            "open_f1@cal": 0.7046
+          },
+          "knn": {
+            "auroc": 0.8674,
+            "aupr": 0.5637,
+            "fpr95": 0.6623,
+            "detect@cal": 0.3308,
+            "known_reject@cal": 0.0467,
+            "silent_benign@cal": 0.0166,
+            "open_f1@cal": 0.7458
+          },
+          "openmax": {
+            "auroc": 0.7999,
+            "aupr": 0.2919,
+            "fpr95": 0.8978,
+            "detect@cal": 0.0964,
+            "known_reject@cal": 0.0475,
+            "silent_benign@cal": 0.0229,
+            "open_f1@cal": 0.709
+          },
+          "mahalanobis": {
+            "auroc": 0.7862,
+            "aupr": 0.5283,
+            "fpr95": 0.6115,
+            "detect@cal": 0.3893,
+            "known_reject@cal": 0.0503,
+            "silent_benign@cal": 0.0092,
+            "open_f1@cal": 0.7588
+          },
+          "autoencoder": {
+            "auroc": 0.6118,
+            "aupr": 0.3518,
+            "fpr95": 0.6974,
+            "detect@cal": 0.3026,
+            "known_reject@cal": 0.048,
+            "silent_benign@cal": 0.0176,
+            "open_f1@cal": 0.7363
+          }
+        },
+        "guard": {
+          "tabm_disagree": {
+            "silent_alarm_only": 0.01551,
+            "q0.01": {
+              "silent": 0.00606,
+              "review": 0.00688,
+              "caught": 0.3366
+            },
+            "q0.05": {
+              "silent": 0.00303,
+              "review": 0.0445,
+              "caught": 0.3396
+            },
+            "q0.1": {
+              "silent": 0.00198,
+              "review": 0.08737,
+              "caught": 0.3406
+            }
+          },
+          "tabm_energy": {
+            "silent_alarm_only": 0.01551,
+            "q0.01": {
+              "silent": 0.00327,
+              "review": 0.008,
+              "caught": 0.3394
+            },
+            "q0.05": {
+              "silent": 0.00023,
+              "review": 0.04325,
+              "caught": 0.3424
+            },
+            "q0.1": {
+              "silent": 0.00023,
+              "review": 0.05713,
+              "caught": 0.3424
+            }
+          },
+          "tabm_msp": {
+            "silent_alarm_only": 0.01551,
+            "q0.01": {
+              "silent": 0.00327,
+              "review": 0.00737,
+              "caught": 0.3394
+            },
+            "q0.05": {
+              "silent": 0.00222,
+              "review": 0.03988,
+              "caught": 0.3404
+            },
+            "q0.1": {
+              "silent": 0.00023,
+              "review": 0.08588,
+              "caught": 0.3424
+            }
+          },
+          "knn": {
+            "silent_alarm_only": 0.01551,
+            "q0.01": {
+              "silent": 0.01551,
+              "review": 0.0105,
+              "caught": 0.3271
+            },
+            "q0.05": {
+              "silent": 0.01271,
+              "review": 0.045,
+              "caught": 0.3299
+            },
+            "q0.1": {
+              "silent": 0.00525,
+              "review": 0.08488,
+              "caught": 0.3374
+            }
+          },
+          "openmax": {
+            "silent_alarm_only": 0.01551,
+            "q0.01": {
+              "silent": 0.00945,
+              "review": 0.00613,
+              "caught": 0.3332
+            },
+            "q0.05": {
+              "silent": 0.00222,
+              "review": 0.03062,
+              "caught": 0.3404
+            },
+            "q0.1": {
+              "silent": 0.00222,
+              "review": 0.03062,
+              "caught": 0.3404
+            }
+          },
+          "mahalanobis": {
+            "silent_alarm_only": 0.01551,
+            "q0.01": {
+              "silent": 0.01551,
+              "review": 0.0125,
+              "caught": 0.3271
+            },
+            "q0.05": {
+              "silent": 0.01329,
+              "review": 0.04075,
+              "caught": 0.3293
+            },
+            "q0.1": {
+              "silent": 0.00606,
+              "review": 0.0815,
+              "caught": 0.3366
+            }
+          },
+          "autoencoder": {
+            "silent_alarm_only": 0.01551,
+            "q0.01": {
+              "silent": 0.01551,
+              "review": 0.00912,
+              "caught": 0.3271
+            },
+            "q0.05": {
+              "silent": 0.01528,
+              "review": 0.0495,
+              "caught": 0.3273
+            },
+            "q0.1": {
+              "silent": 0.01528,
+              "review": 0.08837,
+              "caught": 0.3273
+            }
+          }
+        },
+        "seconds": {
+          "knn": 11.3,
+          "openmax": 0.2,
+          "mahalanobis": 3.8,
+          "autoencoder": 28.1
+        },
+        "n_unknown": 8575
+      },
+      "BRUTEFORCE": {
+        "standalone": {
+          "tabm_disagree": {
+            "auroc": 0.8668,
+            "aupr": 0.406,
+            "fpr95": 0.6146,
+            "detect@cal": 0.3859,
+            "known_reject@cal": 0.0501,
+            "silent_benign@cal": 0.1013,
+            "open_f1@cal": 0.8126
+          },
+          "tabm_energy": {
+            "auroc": 0.8304,
+            "aupr": 0.2153,
+            "fpr95": 0.8205,
+            "detect@cal": 0.1732,
+            "known_reject@cal": 0.0473,
+            "silent_benign@cal": 0.1487,
+            "open_f1@cal": 0.7816
+          },
+          "tabm_msp": {
+            "auroc": 0.8248,
+            "aupr": 0.1846,
+            "fpr95": 0.8193,
+            "detect@cal": 0.1713,
+            "known_reject@cal": 0.0466,
+            "silent_benign@cal": 0.1234,
+            "open_f1@cal": 0.7845
+          },
+          "knn": {
+            "auroc": 0.8589,
+            "aupr": 0.3988,
+            "fpr95": 0.6223,
+            "detect@cal": 0.3762,
+            "known_reject@cal": 0.0491,
+            "silent_benign@cal": 0.1215,
+            "open_f1@cal": 0.8028
+          },
+          "openmax": {
+            "auroc": 0.7834,
+            "aupr": 0.1553,
+            "fpr95": 0.8951,
+            "detect@cal": 0.0929,
+            "known_reject@cal": 0.046,
+            "silent_benign@cal": 0.1501,
+            "open_f1@cal": 0.7653
+          },
+          "mahalanobis": {
+            "auroc": 0.8248,
+            "aupr": 0.4127,
+            "fpr95": 0.6363,
+            "detect@cal": 0.3616,
+            "known_reject@cal": 0.0484,
+            "silent_benign@cal": 0.1265,
+            "open_f1@cal": 0.8018
+          },
+          "autoencoder": {
+            "auroc": 0.5094,
+            "aupr": 0.1927,
+            "fpr95": 0.7794,
+            "detect@cal": 0.2184,
+            "known_reject@cal": 0.0483,
+            "silent_benign@cal": 0.1487,
+            "open_f1@cal": 0.7713
+          }
+        },
+        "guard": {
+          "tabm_disagree": {
+            "silent_alarm_only": 0.10127,
+            "q0.01": {
+              "silent": 0.09334,
+              "review": 0.0055,
+              "caught": 0.3938
+            },
+            "q0.05": {
+              "silent": 0.05244,
+              "review": 0.03975,
+              "caught": 0.4347
+            },
+            "q0.1": {
+              "silent": 0.00529,
+              "review": 0.09438,
+              "caught": 0.4818
+            }
+          },
+          "tabm_energy": {
+            "silent_alarm_only": 0.10127,
+            "q0.01": {
+              "silent": 0.08925,
+              "review": 0.00813,
+              "caught": 0.3979
+            },
+            "q0.05": {
+              "silent": 0.0267,
+              "review": 0.0425,
+              "caught": 0.4604
+            },
+            "q0.1": {
+              "silent": 0.00072,
+              "review": 0.09325,
+              "caught": 0.4864
+            }
+          },
+          "tabm_msp": {
+            "silent_alarm_only": 0.10127,
+            "q0.01": {
+              "silent": 0.08684,
+              "review": 0.00988,
+              "caught": 0.4003
+            },
+            "q0.05": {
+              "silent": 0.03753,
+              "review": 0.0435,
+              "caught": 0.4496
+            },
+            "q0.1": {
+              "silent": 0.00072,
+              "review": 0.09425,
+              "caught": 0.4864
+            }
+          },
+          "knn": {
+            "silent_alarm_only": 0.10127,
+            "q0.01": {
+              "silent": 0.10031,
+              "review": 0.012,
+              "caught": 0.3868
+            },
+            "q0.05": {
+              "silent": 0.09646,
+              "review": 0.04288,
+              "caught": 0.3907
+            },
+            "q0.1": {
+              "silent": 0.0765,
+              "review": 0.08687,
+              "caught": 0.4106
+            }
+          },
+          "openmax": {
+            "silent_alarm_only": 0.10127,
+            "q0.01": {
+              "silent": 0.09021,
+              "review": 0.0085,
+              "caught": 0.3969
+            },
+            "q0.05": {
+              "silent": 0.03344,
+              "review": 0.0445,
+              "caught": 0.4537
+            },
+            "q0.1": {
+              "silent": 0.00072,
+              "review": 0.09538,
+              "caught": 0.4864
+            }
+          },
+          "mahalanobis": {
+            "silent_alarm_only": 0.10127,
+            "q0.01": {
+              "silent": 0.10055,
+              "review": 0.00925,
+              "caught": 0.3866
+            },
+            "q0.05": {
+              "silent": 0.09815,
+              "review": 0.04462,
+              "caught": 0.389
+            },
+            "q0.1": {
+              "silent": 0.09069,
+              "review": 0.08475,
+              "caught": 0.3964
+            }
+          },
+          "autoencoder": {
+            "silent_alarm_only": 0.10127,
+            "q0.01": {
+              "silent": 0.10055,
+              "review": 0.00762,
+              "caught": 0.3866
+            },
+            "q0.05": {
+              "silent": 0.10055,
+              "review": 0.04675,
+              "caught": 0.3866
+            },
+            "q0.1": {
+              "silent": 0.10055,
+              "review": 0.08862,
+              "caught": 0.3866
+            }
+          }
+        },
+        "seconds": {
+          "knn": 11.5,
+          "openmax": 0.2,
+          "mahalanobis": 3.9,
+          "autoencoder": 28.2
+        },
+        "n_unknown": 4157
+      },
+      "MALWARE": {
+        "standalone": {
+          "tabm_disagree": {
+            "auroc": 0.8823,
+            "aupr": 0.5991,
+            "fpr95": 0.4072,
+            "detect@cal": 0.5931,
+            "known_reject@cal": 0.0516,
+            "silent_benign@cal": 0.0,
+            "open_f1@cal": 0.7579
+          },
+          "tabm_energy": {
+            "auroc": 0.8322,
+            "aupr": 0.3795,
+            "fpr95": 0.8894,
+            "detect@cal": 0.1106,
+            "known_reject@cal": 0.0499,
+            "silent_benign@cal": 0.1397,
+            "open_f1@cal": 0.668
+          },
+          "tabm_msp": {
+            "auroc": 0.7694,
+            "aupr": 0.2795,
+            "fpr95": 0.8523,
+            "detect@cal": 0.1475,
+            "known_reject@cal": 0.0463,
+            "silent_benign@cal": 0.1563,
+            "open_f1@cal": 0.6814
+          },
+          "knn": {
+            "auroc": 0.8765,
+            "aupr": 0.63,
+            "fpr95": 0.4909,
+            "detect@cal": 0.5083,
+            "known_reject@cal": 0.0483,
+            "silent_benign@cal": 0.0,
+            "open_f1@cal": 0.7188
+          },
+          "openmax": {
+            "auroc": 0.8066,
+            "aupr": 0.2803,
+            "fpr95": 0.9235,
+            "detect@cal": 0.0765,
+            "known_reject@cal": 0.0468,
+            "silent_benign@cal": 0.1564,
+            "open_f1@cal": 0.6648
+          },
+          "mahalanobis": {
+            "auroc": 0.8247,
+            "aupr": 0.6181,
+            "fpr95": 0.4801,
+            "detect@cal": 0.5199,
+            "known_reject@cal": 0.0479,
+            "silent_benign@cal": 0.0,
+            "open_f1@cal": 0.7288
+          },
+          "autoencoder": {
+            "auroc": 0.6764,
+            "aupr": 0.459,
+            "fpr95": 0.5041,
+            "detect@cal": 0.4959,
+            "known_reject@cal": 0.0465,
+            "silent_benign@cal": 0.0003,
+            "open_f1@cal": 0.7236
+          }
+        },
+        "guard": {
+          "tabm_disagree": {
+            "silent_alarm_only": 0.0,
+            "q0.01": {
+              "silent": 0.0,
+              "review": 0.00038,
+              "caught": 0.5931
+            },
+            "q0.05": {
+              "silent": 0.0,
+              "review": 0.00038,
+              "caught": 0.5931
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.088,
+              "caught": 0.5931
+            }
+          },
+          "tabm_energy": {
+            "silent_alarm_only": 0.0,
+            "q0.01": {
+              "silent": 0.0,
+              "review": 0.00762,
+              "caught": 0.5931
+            },
+            "q0.05": {
+              "silent": 0.0,
+              "review": 0.01775,
+              "caught": 0.5931
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.08912,
+              "caught": 0.5931
+            }
+          },
+          "tabm_msp": {
+            "silent_alarm_only": 0.0,
+            "q0.01": {
+              "silent": 0.0,
+              "review": 0.00725,
+              "caught": 0.5931
+            },
+            "q0.05": {
+              "silent": 0.0,
+              "review": 0.0135,
+              "caught": 0.5931
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.08513,
+              "caught": 0.5931
+            }
+          },
+          "knn": {
+            "silent_alarm_only": 0.0,
+            "q0.01": {
+              "silent": 0.0,
+              "review": 0.00962,
+              "caught": 0.5931
+            },
+            "q0.05": {
+              "silent": 0.0,
+              "review": 0.03662,
+              "caught": 0.5931
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.07362,
+              "caught": 0.5931
+            }
+          },
+          "openmax": {
+            "silent_alarm_only": 0.0,
+            "q0.01": {
+              "silent": 0.0,
+              "review": 0.00775,
+              "caught": 0.5931
+            },
+            "q0.05": {
+              "silent": 0.0,
+              "review": 0.0155,
+              "caught": 0.5931
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.088,
+              "caught": 0.5931
+            }
+          },
+          "mahalanobis": {
+            "silent_alarm_only": 0.0,
+            "q0.01": {
+              "silent": 0.0,
+              "review": 0.00675,
+              "caught": 0.5931
+            },
+            "q0.05": {
+              "silent": 0.0,
+              "review": 0.03413,
+              "caught": 0.5931
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.07062,
+              "caught": 0.5931
+            }
+          },
+          "autoencoder": {
+            "silent_alarm_only": 0.0,
+            "q0.01": {
+              "silent": 0.0,
+              "review": 0.00813,
+              "caught": 0.5931
+            },
+            "q0.05": {
+              "silent": 0.0,
+              "review": 0.03625,
+              "caught": 0.5931
+            },
+            "q0.1": {
+              "silent": 0.0,
+              "review": 0.073,
+              "caught": 0.5931
+            }
+          }
+        },
+        "seconds": {
+          "knn": 11.1,
+          "openmax": 0.2,
+          "mahalanobis": 3.7,
+          "autoencoder": 12.0
+        },
+        "n_unknown": 6291
+      }
+    }
+  },
+  "runtime_seconds": 3581.5
+}

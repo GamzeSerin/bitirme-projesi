@@ -1,0 +1,41 @@
+Okunuyor: /kaggle/input/datasets/mohamedamineferrag/edgeiiotset-cyber-security-dataset-of-iot-iiot/Edge-IIoTset dataset/Selected dataset for ML and DL/DNN-EdgeIIoT-dataset.csv
+Hizasız satır (frame.time zaman değil): 122782 {'DDoS_UDP': 121568, 'MITM': 1214} -> atıldı
+Edge-IIoTset: 296506 satır, koşul C_seq_ack_yok; aileler ['DDOS', 'RECON', 'WEB', 'BRUTEFORCE', 'MALWARE']; tohumlar [42, 1, 2]
+[tohum 42] DDOS: tabm_disagree 0.779  tabm_energy 0.622  tabm_msp 0.646  knn 0.914  openmax 0.612  mahalanobis 0.914  autoencoder 0.830  | q=%5 kaçış: tabm_disagree 0.0001  tabm_energy 0.0001  tabm_msp 0.0001  knn 0.0003  openmax 0.0001  mahalanobis 0.0004  autoencoder 0.0004  (153 s)
+[tohum 42] RECON: tabm_disagree 0.896  tabm_energy 0.581  tabm_msp 0.674  knn 0.888  openmax 0.554  mahalanobis 0.949  autoencoder 0.914  | q=%5 kaçış: tabm_disagree 0.0001  tabm_energy 0.0001  tabm_msp 0.0001  knn 0.0004  openmax 0.0002  mahalanobis 0.0002  autoencoder 0.0004  (254 s)
+[tohum 42] WEB: tabm_disagree 0.880  tabm_energy 0.876  tabm_msp 0.837  knn 0.867  openmax 0.798  mahalanobis 0.778  autoencoder 0.524  | q=%5 kaçış: tabm_disagree 0.0033  tabm_energy 0.0033  tabm_msp 0.0033  knn 0.0185  openmax 0.0033  mahalanobis 0.0120  autoencoder 0.0229  (168 s)
+[tohum 42] BRUTEFORCE: tabm_disagree 0.861  tabm_energy 0.809  tabm_msp 0.821  knn 0.859  openmax 0.790  mahalanobis 0.833  autoencoder 0.523  | q=%5 kaçış: tabm_disagree 0.0486  tabm_energy 0.0339  tabm_msp 0.0414  knn 0.1104  openmax 0.0508  mahalanobis 0.1145  autoencoder 0.1155  (235 s)
+/usr/local/lib/python3.13/dist-packages/scipy/stats/_continuous_distns.py:2756: RuntimeWarning: overflow encountered in power
+  return -sc.expm1(-pow(x, c))
+[tohum 42] MALWARE: tabm_disagree 0.889  tabm_energy 0.858  tabm_msp 0.774  knn 0.876  openmax 0.841  mahalanobis 0.814  autoencoder 0.573  | q=%5 kaçış: tabm_disagree 0.0000  tabm_energy 0.0000  tabm_msp 0.0000  knn 0.0000  openmax 0.0000  mahalanobis 0.0000  autoencoder 0.0000  (191 s)
+[tohum 1] DDOS: tabm_disagree 0.782  tabm_energy 0.638  tabm_msp 0.655  knn 0.914  openmax 0.563  mahalanobis 0.920  autoencoder 0.819  | q=%5 kaçış: tabm_disagree 0.0002  tabm_energy 0.0002  tabm_msp 0.0005  knn 0.0001  openmax 0.0002  mahalanobis 0.0002  autoencoder 0.0002  (225 s)
+[tohum 1] RECON: tabm_disagree 0.850  tabm_energy 0.608  tabm_msp 0.655  knn 0.888  openmax 0.613  mahalanobis 0.948  autoencoder 0.913  | q=%5 kaçış: tabm_disagree 0.0001  tabm_energy 0.0001  tabm_msp 0.0001  knn 0.0004  openmax 0.0000  mahalanobis 0.0002  autoencoder 0.0004  (197 s)
+/usr/local/lib/python3.13/dist-packages/scipy/stats/_continuous_distns.py:2814: RuntimeWarning: Precision loss occurred in moment calculation due to catastrophic cancellation. This occurs when the data are nearly identical. Results may be unreliable.
+  s = stats.skew(data)
+/usr/local/lib/python3.13/dist-packages/scipy/stats/_continuous_distns.py:2756: RuntimeWarning: overflow encountered in power
+  return -sc.expm1(-pow(x, c))
+[tohum 1] WEB: tabm_disagree 0.866  tabm_energy 0.825  tabm_msp 0.848  knn 0.867  openmax 0.776  mahalanobis 0.769  autoencoder 0.588  | q=%5 kaçış: tabm_disagree 0.0033  tabm_energy 0.0033  tabm_msp 0.0022  knn 0.0101  openmax 0.0033  mahalanobis 0.0099  autoencoder 0.0136  (137 s)
+/usr/local/lib/python3.13/dist-packages/scipy/stats/_continuous_distns.py:2756: RuntimeWarning: overflow encountered in power
+  return -sc.expm1(-pow(x, c))
+[tohum 1] BRUTEFORCE: tabm_disagree 0.890  tabm_energy 0.826  tabm_msp 0.821  knn 0.859  openmax 0.815  mahalanobis 0.840  autoencoder 0.488  | q=%5 kaçış: tabm_disagree 0.0204  tabm_energy 0.0091  tabm_msp 0.0115  knn 0.0972  openmax 0.0140  mahalanobis 0.1008  autoencoder 0.1018  (512 s)
+[tohum 1] MALWARE: tabm_disagree 0.921  tabm_energy 0.793  tabm_msp 0.787  knn 0.876  openmax 0.847  mahalanobis 0.851  autoencoder 0.754  | q=%5 kaçış: tabm_disagree 0.0000  tabm_energy 0.0000  tabm_msp 0.0000  knn 0.0000  openmax 0.0000  mahalanobis 0.0000  autoencoder 0.0000  (365 s)
+[tohum 2] DDOS: tabm_disagree 0.783  tabm_energy 0.610  tabm_msp 0.663  knn 0.914  openmax 0.593  mahalanobis 0.917  autoencoder 0.864  | q=%5 kaçış: tabm_disagree 0.0020  tabm_energy 0.0025  tabm_msp 0.0024  knn 0.0001  openmax 0.0025  mahalanobis 0.0002  autoencoder 0.0002  (176 s)
+[tohum 2] RECON: tabm_disagree 0.891  tabm_energy 0.608  tabm_msp 0.674  knn 0.888  openmax 0.614  mahalanobis 0.949  autoencoder 0.835  | q=%5 kaçış: tabm_disagree 0.0001  tabm_energy 0.0001  tabm_msp 0.0001  knn 0.0004  openmax 0.0000  mahalanobis 0.0002  autoencoder 0.0004  (245 s)
+[tohum 2] WEB: tabm_disagree 0.891  tabm_energy 0.839  tabm_msp 0.836  knn 0.867  openmax 0.800  mahalanobis 0.786  autoencoder 0.612  | q=%5 kaçış: tabm_disagree 0.0030  tabm_energy 0.0002  tabm_msp 0.0022  knn 0.0127  openmax 0.0022  mahalanobis 0.0133  autoencoder 0.0153  (241 s)
+/usr/local/lib/python3.13/dist-packages/scipy/stats/_continuous_distns.py:2756: RuntimeWarning: overflow encountered in power
+  return -sc.expm1(-pow(x, c))
+[tohum 2] BRUTEFORCE: tabm_disagree 0.867  tabm_energy 0.830  tabm_msp 0.825  knn 0.859  openmax 0.783  mahalanobis 0.825  autoencoder 0.509  | q=%5 kaçış: tabm_disagree 0.0524  tabm_energy 0.0267  tabm_msp 0.0375  knn 0.0965  openmax 0.0334  mahalanobis 0.0982  autoencoder 0.1006  (235 s)
+/usr/local/lib/python3.13/dist-packages/scipy/stats/_continuous_distns.py:2756: RuntimeWarning: overflow encountered in power
+  return -sc.expm1(-pow(x, c))
+[tohum 2] MALWARE: tabm_disagree 0.882  tabm_energy 0.832  tabm_msp 0.769  knn 0.876  openmax 0.807  mahalanobis 0.825  autoencoder 0.676  | q=%5 kaçış: tabm_disagree 0.0000  tabm_energy 0.0000  tabm_msp 0.0000  knn 0.0000  openmax 0.0000  mahalanobis 0.0000  autoencoder 0.0000  (211 s)
+
+Özet (aile ortalaması, tohumlar arası ort. ± sd):
+  tabm_disagree AUROC 0.862 ± 0.001   kontrol q=%5: kaçış 0.0089 / inceleme 0.0355
+  tabm_energy   AUROC 0.744 ± 0.006   kontrol q=%5: kaçış 0.0053 / inceleme 0.0334
+  tabm_msp      AUROC 0.752 ± 0.002   kontrol q=%5: kaçış 0.0068 / inceleme 0.0317
+  knn           AUROC 0.881 ± 0.000   kontrol q=%5: kaçış 0.0231 / inceleme 0.0393
+  openmax       AUROC 0.720 ± 0.002   kontrol q=%5: kaçış 0.0073 / inceleme 0.0322
+  mahalanobis   AUROC 0.861 ± 0.004   kontrol q=%5: kaçış 0.0233 / inceleme 0.0415
+  autoencoder   AUROC 0.695 ± 0.020   kontrol q=%5: kaçış 0.0248 / inceleme 0.0425
+
+Çıktı: outputs/dnn_edgeiiot/open_set_baselines/open_set_baselines_C_seq_ack_yok.json  (3582 s)
