@@ -160,6 +160,15 @@ def summarize(ev, scen):
         conn = g.groupby("conn")["flagged"].any()
         r["baglanti"] = int(len(conn))
         r["isaretli_baglanti_%"] = round(float(conn.mean()) * 100, 2)
+        # Bağlantı kuralı (29.10/30.10.2026, XSS/Port_Scanning/Temperature sonuçlarına bakılarak tasarlandı; başka PCAP'lerde
+        # doğrulanacak): bağlantı işaretlenir ⇔ içerikli (tcp.len > 0) bir paketi NORMAL değil VEYA bir paketi SALDIRI.
+        # Boş paketlere verilen ALARM/KONTROL tek başına işaretlemez (boş ACK/SYN/FIN normalin ikizi; bilgi taşımaz).
+        rule = (g["flagged"] & (g["tcp_len"] > 0)) | (g["decision"] == "SALDIRI")
+        cr = rule.groupby(g["conn"]).any()
+        has_pay = (g["tcp_len"] > 0).groupby(g["conn"]).any()
+        r["kural_baglanti_%"] = round(float(cr.mean()) * 100, 2)
+        r["icerikli_baglanti"] = int(has_pay.sum())
+        r["kural_icerikli_baglanti_%"] = round(float(cr[has_pay].mean()) * 100, 2) if has_pay.any() else None
         rows.append(r)
     tab = pd.DataFrame(rows)
     with pd.option_context("display.width", 200, "display.max_columns", 20):
@@ -171,6 +180,11 @@ def summarize(ev, scen):
         what = "analiste giden normal bağlantı" if r["tür"] == "normal" else "fark edilen (en az bir paketi işaretli) bağlantı"
         print(f"  {r['etiket']:>16s}: NORMAL denen paketler içerikli paketlerin %{r['sessiz_icerikli_%']:.2f}'i, "
               f"boş (tcp.len = 0) paketlerin %{r['sessiz_bos_%']:.2f}'i; {r['baglanti']} bağlantı, {what} %{r['isaretli_baglanti_%']:.2f}")
+    print("\nBağlantı kuralı (içerikli paket işaretli VEYA paket SALDIRI; boş pakete verilen ALARM/KONTROL tek başına saymaz):")
+    for r in rows:
+        what = "analiste giden normal bağlantı" if r["tür"] == "normal" else "fark edilen bağlantı"
+        print(f"  {r['etiket']:>16s}: {what} %{r['kural_baglanti_%']:.2f} (tüm {r['baglanti']} bağlantı); "
+              f"içerik taşıyan {r['icerikli_baglanti']} bağlantıda %{r['kural_icerikli_baglanti_%']}")
     return rows
 
 
