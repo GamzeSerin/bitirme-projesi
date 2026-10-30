@@ -109,7 +109,10 @@ def load_sources(specs, max_packets, scen):
                            "true_family": family_of(label), "frame": meta["frame.number"].astype(int),
                            "src": meta["ip.src"].str.split(",").str[0], "dst": meta["ip.dst"].str.split(",").str[0],
                            "proto": protocol_of(meta).to_numpy(),
-                           "dport": X["tcp.dstport"].astype(int).to_numpy()})
+                           "dport": X["tcp.dstport"].astype(int).to_numpy(),
+                           "sport": pd.to_numeric(meta["tcp.srcport"].str.split(",").str[0], errors="coerce")
+                                      .fillna(0).astype(int).to_numpy(),
+                           "tcp_len": X["tcp.len"].astype(int).to_numpy()})
         df = pd.concat([df, dec], axis=1)
         frames.append(df)
         print(f"  {os.path.basename(path)} ({label}): {len(df)} paket (UDP atıldı: {int((~keep).sum())}), "
@@ -118,11 +121,23 @@ def load_sources(specs, max_packets, scen):
     return ev
 
 
+def connection_ids(ev):
+    """Bağlantı = protokol + iki uç (adres:port), yönden bağımsız. TCP dışı paketler (ARP, ICMP) kendi başına birimdir."""
+    a = ev["src"].astype(str) + ":" + ev["sport"].astype(str)
+    b = ev["dst"].astype(str) + ":" + ev["dport"].astype(str)
+    lo, hi = np.where(a < b, a, b), np.where(a < b, b, a)
+    cid = pd.Series(ev["proto"].astype(str).to_numpy() + "|" + lo + "|" + hi, index=ev.index)
+    single = ev["proto"].to_numpy() != "tcp"
+    cid[single] = "pkt|" + ev.loc[single, "source"].astype(str) + "|" + ev.loc[single, "frame"].astype(str)
+    return cid
+
+
 def summarize(ev, scen):
     unseen = scen.meta["unseen_family"]
     print(f"\nÖzet (senaryo: model {unseen} ailesini hiç görmedi; eşikler alarm {scen.tau_alarm:.4g}, "
           f"kontrol {scen.tau_guard:.4g}):")
     rows = []
+    ev = ev.assign(conn=connection_ids(ev), flagged=ev["decision"] != "NORMAL")
     for (src, lab), g in ev.groupby(["source", "true_label"], sort=False):
         share = g["decision"].value_counts(normalize=True)
         fam = g["true_family"].iloc[0]
@@ -138,12 +153,24 @@ def summarize(ev, scen):
             top = g.loc[g["decision"] == "SALDIRI", "pred_class"].value_counts(normalize=True).head(2)
             if len(top):
                 r["yorum"] += "; saldırı sanılan sınıf " + ", ".join(f"{k} %{v * 100:.0f}" for k, v in top.items())
+        # paket düzeyinin ayrıntısı ve bağlantı düzeyi (raporlama; kararlar değişmez)
+        pay = (g["tcp_len"] > 0).to_numpy()
+        r["sessiz_icerikli_%"] = round(float(((g["decision"] == "NORMAL").to_numpy() & pay).sum() / max(pay.sum(), 1)) * 100, 2)
+        r["sessiz_bos_%"] = round(float(((g["decision"] == "NORMAL").to_numpy() & ~pay).sum() / max((~pay).sum(), 1)) * 100, 2)
+        conn = g.groupby("conn")["flagged"].any()
+        r["baglanti"] = int(len(conn))
+        r["isaretli_baglanti_%"] = round(float(conn.mean()) * 100, 2)
         rows.append(r)
     tab = pd.DataFrame(rows)
     with pd.option_context("display.width", 200, "display.max_columns", 20):
         print(tab.drop(columns="yorum").to_string(index=False))
     for r in rows:
         print(f"  {r['etiket']:>16s} ({r['tür']}): {r['yorum']}")
+    print("\nAyrıntı (raporlama; kararlar aynı):")
+    for r in rows:
+        what = "analiste giden normal bağlantı" if r["tür"] == "normal" else "fark edilen (en az bir paketi işaretli) bağlantı"
+        print(f"  {r['etiket']:>16s}: NORMAL denen paketler içerikli paketlerin %{r['sessiz_icerikli_%']:.2f}'i, "
+              f"boş (tcp.len = 0) paketlerin %{r['sessiz_bos_%']:.2f}'i; {r['baglanti']} bağlantı, {what} %{r['isaretli_baglanti_%']:.2f}")
     return rows
 
 
