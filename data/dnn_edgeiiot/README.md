@@ -798,6 +798,35 @@ sonuçlar çoğu tohum ve ailede birebir aynı (tohum 1 ve 2'de yük q = %0,5'te
 4. Diğer kontroller (q = %5, tohum ort.): MSP kaçış %0,05 / yük %5,8; anlaşmazlık %0,01 / %7,8; kNN %0,74 / %12,7. Enerji en düşük yükle
    aynı düzeyde kaçış veriyor; kNN yine en kötüsü.
 
+## Zaman bölmesinde yeniden kalibrasyon. Analiz planı (sonuçlardan ÖNCE yazıldı, 31.10.2026)
+
+Soru: Zaman bölmesinde iki sinyal kuralı kaçışı durdurdu ama analist bütçesi tutmadı: q = %1'de bile normal trafiğin %4,0'ı kontrole
+gitti (plato; yukarıdaki sonuçlar, madde 2). Önerilen çare yeniden kalibrasyon: model aynı kalır, yalnız eşikler daha yeni trafikle
+yeniden seçilir. Bu çare bütçeyi geri getiriyor mu, kaçışı bozmadan?
+
+- **Kod:** `src/two_signal.py --split time --skip-cp --recal-frac 0.25` (ortak araç; `recalibration()`). Bölme, model, LOFO ve q
+  değerleri zaman bölmesi deneyiyle aynı. Test penceresi her ince etikette kayıt sırasıyla ikiye ayrılır: **ilk %25 W1** (yeniden
+  kalibrasyon penceresi; etiketin verisinin %5'i), **kalan %75 W2** (değerlendirme). Bütün sayılar **yalnız W2'de** ölçülür; üç
+  eşik seçimi aynı satırlarda karşılaştırılır:
+  - **base:** eşikler eskisi gibi eğitim havuzunun son %10'undan (yeniden kalibrasyon yok);
+  - **R1 (yalnız kontrol eşiği):** alarm eşiği aynı; kontrol eşiği W1'deki gerçek BENIGN, alarm almamış ve BENIGN denmiş satırların
+    (1 − q) yüzdeliği. Sahada yalnız "onaylanmış normal trafik" gerektirir;
+  - **R2 (iki eşik):** alarm eşiği W1'in bilinen satırlarının %95'i, kontrol eşiği R1 gibi (yeni alarm eşiğiyle). Bilinen
+    saldırıların da etiketli olmasını gerektirir.
+  Görülmemiş ailenin satırları W1'de hiçbir eşikte kullanılmaz.
+- **Koşul C, 5 aile, model tohumu 42 / 1 / 2.** Çıktı `outputs/dnn_edgeiiot/two_signal/two_signal_C_seq_ack_yok_time_recal*.json`
+  (anahtar `recalibration`).
+- **Raporlanan** (W2, 5 aile ortalaması ± tohum sapması ve aile başına; enerji kontrolü ana, diğerleri ek): q = %0,5 / 1 / 2 / 5 /
+  10'da kontrolün analist yükü (normal trafiğin kontrole giden payı), alarmın normal trafikteki yükü, toplam yük ve sessiz kaçış.
+- **Yorum çerçevesi (önceden):** R1 için "bütçe geri geldi" yazılır, eğer (a) q = %1 ve %5'te kontrolün yükü q'nun en fazla 2 katı
+  ise (≤ %2 ve ≤ %10) ve (b) yük q ile birlikte artıyorsa (plato yok: q = %1'deki yük q = %5'tekinden küçük) ve (c) q = %5'te sessiz
+  kaçış base'den en fazla 0,5 puan yüksekse. (a) veya (b) tutmazsa "yeniden kalibrasyon yetmiyor" yazılır ve aile bazında nedeni
+  raporlanır; (c) tutmazsa "bütçe kaçış pahasına geri geliyor" yazılır. R2 aynı ölçütlerle ayrıca raporlanır. Hangisi çıkarsa çıksın
+  raporlanır.
+- **Bilinen sınırlılıklar:** W1 ve W2 aynı kayıt içinde ardışık parçalar; gerçek zaman ekseni yok (zaman bölmesiyle aynı sınırlılık).
+  W1'in etiketli olduğu varsayılır (sahada analistin onayladığı trafik). Tek bir pencere oranı (%25) önceden seçildi; başka oranlar
+  denenirse duyarlılık olarak ayrıca yazılır.
+
 ## Literatür karşılaştırması: OpenMax, Mahalanobis, otokodlayıcı. Analiz planı (sonuçlardan ÖNCE yazıldı, 29.10.2026)
 
 Soru: Açık küme tanıma ve dağılım dışı tespit literatüründe bilinen yöntemler, TabM'in üye anlaşmazlığından (tezin alarmı) ve enerjisinden (tezin BENIGN kontrolü) daha iyi mi? Eşik yok; aşağıdakilerin tamamı raporlanır. Bir yöntem TabM skorlarını geçerse bu açıkça yazılır.
