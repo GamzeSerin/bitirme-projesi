@@ -122,6 +122,39 @@ def temporal_split(idx, fine, test_frac):
     return np.concatenate(a), np.concatenate(b)
 
 
+def recalibration(fam, guards, alarm_key, target, b, tau1, S_cal, G_cal, pred_cal, cal_ben,
+                  S_te, G_te, pred_te, is_unk, is_ben, in_w1):
+    """Aynı modelin skorlarıyla üç eşik seçimi, hepsi W2'de değerlendirilir (README, 'Zaman bölmesinde yeniden kalibrasyon').
+    base: kalibrasyon (eğitimin son %10'u). R1: alarm eşiği aynı, kontrol eşiği W1'in gerçek BENIGN satırlarından.
+    R2: alarm eşiği W1'in bilinen satırlarından (target yüzdeliği) ve kontrol eşiği W1'den. Görülmemiş satırlar W1'de kullanılmaz."""
+    w2 = ~in_w1
+    u2, n2 = is_unk & w2, is_ben & w2
+    kn_w1 = in_w1 & ~is_unk
+    tau_r2 = float(np.quantile(S_te[alarm_key][kn_w1], target))
+    out = []
+    for v, ta in (("base", tau1), ("R1", tau1), ("R2", tau_r2)):
+        alarm = S_te[alarm_key] > ta
+        to_guard = (~alarm) & (pred_te == b)
+        if v == "base":
+            ref_scores = {g: G_cal[g][(~(S_cal[alarm_key] > tau1)) & (pred_cal == b) & cal_ben] for g in guards}
+        else:
+            ref = in_w1 & is_ben & ~alarm & (pred_te == b)
+            ref_scores = {g: G_te[g][ref] for g in guards}
+        a_ben = float((alarm & n2).sum() / max(n2.sum(), 1))
+        for g in guards:
+            for q in QS:
+                tau_g = float(np.quantile(ref_scores[g], 1 - q))
+                flag = to_guard & (G_te[g] > tau_g)
+                rev = float((flag & n2).sum() / max(n2.sum(), 1))
+                out.append({"family": fam, "variant": v, "guard": g, "q": q, "tau_alarm": ta, "tau_guard": tau_g,
+                            "n_ref": int(len(ref_scores[g])), "n_unknown_w2": int(u2.sum()), "n_benign_w2": int(n2.sum()),
+                            "silent_benign": round(float((to_guard & ~flag & u2).sum() / max(u2.sum(), 1)), 5),
+                            "guard_review": round(rev, 5), "alarm_benign": round(a_ben, 5),
+                            "total_benign_load": round(float(((alarm | flag) & n2).sum() / max(n2.sum(), 1)), 5),
+                            "unknown_caught": round(float(((alarm | flag) & u2).sum() / max(u2.sum(), 1)), 4)})
+    return out
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--dataset", default="dnn_edgeiiot", choices=list(registry.DATASETS))
@@ -143,6 +176,10 @@ def main():
                    help="random: katmanlı rastgele 80/20 (ana deney). time: her ince etiketin kayıt sırasına göre ilk %%80 "
                         "eğitim, son %%20 test; kalibrasyon eğitimin en son %%10'u (README, zaman bölmesinde iki sinyal)")
     p.add_argument("--skip-cp", action="store_true", help="CP-TabM eğitme (kontrol listesinden cp_benign_z çıkar)")
+    p.add_argument("--recal-frac", type=float, default=0.0,
+                   help="Yalnız --split time: test penceresinin her ince etikette ilk bu kadarı yeniden kalibrasyon penceresi "
+                        "(W1), kalanı değerlendirme (W2); eşikler W1'in bilinen satırlarıyla yeniden seçilir, model aynı "
+                        "(README, 'Zaman bölmesinde yeniden kalibrasyon')")
     p.add_argument("--quick", action="store_true")
     args = p.parse_args()
     if args.quick:
@@ -166,6 +203,10 @@ def main():
     base_tag = args.condition if clf == "TabM" else f"{args.condition}_{clf.lower()}"
     if args.split == "time":
         base_tag += "_time"
+    if args.recal_frac > 0:
+        if args.split != "time":
+            raise SystemExit("--recal-frac yalnız --split time ile")
+        base_tag += "_recal"
     tag = base_tag if mseed == args.seed else f"{base_tag}_seed{mseed}"
     epochs = 3 if args.quick else 60
     t_start = time.perf_counter()
@@ -194,7 +235,11 @@ def main():
     from cp_tabm_classifier import CPTabMClassifier
     from tabm_classifier import TabMClassifier
 
-    rows, details = [], {}
+    rows, details, recal_rows = [], {}, []
+    if args.recal_frac > 0:
+        # test penceresi her ince etikette kayıt sırasıyla ikiye: ilk recal_frac W1 (yeniden kalibrasyon), kalan W2 (değerlendirme)
+        w1_idx, _ = temporal_split(idx_te, fine, 1 - args.recal_frac)
+        in_w1 = np.isin(idx_te, w1_idx)
     for fam in families:
         t0 = time.perf_counter()
         fam_cats = fam_def[fam]
@@ -264,6 +309,9 @@ def main():
             r = [x for x in rows if x["family"] == fam and x["guard"] == g]
             print(f"  {g:14s} " + "  ".join(f"q={x['q']:.3f}: kaçış {x['silent_benign']:.4f} / "
                                             f"inceleme {x['benign_review']:.4f}" for x in r if x["q"] in (0.01, 0.05)))
+        if args.recal_frac > 0:
+            recal_rows += recalibration(fam, guards, alarm_key, args.target, b, tau1, S_cal, G_cal, pred_cal, cal_ben,
+                                        S_te, G_te, pred_te, is_unk, is_ben, in_w1)
         if args.save_rows:
             np.savez_compressed(os.path.join(args.out_dir, f"rows_{fam}_{tag}.npz"),
                                 test_index=idx_te, category=category[idx_te], is_unknown=is_unk,
@@ -284,6 +332,20 @@ def main():
            "primary_guard": primary,
            "families": details, "results": rows, "mean_over_families": mean.to_dict(orient="records"),
            "runtime_seconds": round(time.perf_counter() - t_start, 1)}
+    if recal_rows:
+        rdf = pd.DataFrame(recal_rows)
+        rmean = rdf.groupby(["variant", "guard", "q"])[["silent_benign", "guard_review", "alarm_benign", "total_benign_load",
+                                                        "unknown_caught"]].mean().round(5).reset_index()
+        out["recalibration"] = {
+            "definition": (f"test penceresi her ince etikette kayıt sırasıyla: ilk %{args.recal_frac * 100:.0f} W1 (yeniden "
+                           "kalibrasyon), kalan W2 (değerlendirme; bütün sayılar W2'de). base: eğitimin son %10'undan seçilen "
+                           "eşikler; R1: alarm eşiği aynı, kontrol eşiği W1'in gerçek BENIGN satırlarından; R2: alarm eşiği W1'in "
+                           "bilinen satırlarından (%95), kontrol eşiği W1'den. Görülmemiş aile W1'de kullanılmaz. Model aynı."),
+            "recal_frac": args.recal_frac, "results": recal_rows, "mean_over_families": rmean.to_dict(orient="records")}
+        prim = rmean[rmean["guard"] == primary]
+        print(f"\nYeniden kalibrasyon (W2'de, {primary}; aile ortalaması):")
+        print(prim.pivot_table(index="variant", columns="q", values=["silent_benign", "guard_review", "total_benign_load"])
+              .round(4).to_string())
     with open(os.path.join(args.out_dir, f"two_signal_{tag}.json"), "w", encoding="utf-8") as f:
         json.dump(out, f, indent=2, ensure_ascii=False)
     plot(mean, df, spec["name"], args.condition,
