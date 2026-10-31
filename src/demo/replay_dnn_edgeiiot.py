@@ -17,6 +17,8 @@ Kullanım (yerel bilgisayar; tshark kurulu olmalı):
       --pcap "<.../Port Scanning attack.pcap>:Port_Scanning" --max-packets 20000 --events olaylar.jsonl
   --live            her ALARM/KONTROL kararını anında yazar
   --speed 50        kayıt zamanını 50 kat hızlandırarak oynatır (vermezsen beklemeden işler)
+  --db              kararları, bağlantıları ve analiste gidenleri veritabanına yazar (.env'deki DATABASE_URL;
+                    bkz. src/demo/db_dnn_edgeiiot.py). --db sqlite:///… ile adres verilebilir.
 """
 
 import argparse
@@ -132,6 +134,10 @@ def connection_ids(ev):
     return cid
 
 
+def kind_of(fam, unseen):
+    return "normal" if fam == "BENIGN" else ("GÖRÜLMEMİŞ" if fam == unseen else "bilinen")
+
+
 def summarize(ev, scen):
     unseen = scen.meta["unseen_family"]
     print(f"\nÖzet (senaryo: model {unseen} ailesini hiç görmedi; eşikler alarm {scen.tau_alarm:.4g}, "
@@ -140,8 +146,7 @@ def summarize(ev, scen):
     ev = ev.assign(conn=connection_ids(ev), flagged=ev["decision"] != "NORMAL")
     for (src, lab), g in ev.groupby(["source", "true_label"], sort=False):
         share = g["decision"].value_counts(normalize=True)
-        fam = g["true_family"].iloc[0]
-        kind = "normal" if fam == "BENIGN" else ("GÖRÜLMEMİŞ" if fam == unseen else "bilinen")
+        kind = kind_of(g["true_family"].iloc[0], unseen)
         r = {"kaynak": src, "etiket": lab, "tür": kind, "paket": len(g),
              **{d: round(float(share.get(d, 0.0)) * 100, 2) for d in DECISIONS}}
         if kind == "normal":
@@ -197,6 +202,9 @@ def main():
     p.add_argument("--speed", type=float, default=0, help="Kayıt zamanını bu kat hızlandırarak oynat (0 = beklemeden)")
     p.add_argument("--live", action="store_true", help="ALARM ve KONTROL kararlarını anında yaz")
     p.add_argument("--events", default=None, help="Bütün kararları JSONL olarak yaz (arayüz/veritabanı için)")
+    p.add_argument("--db", nargs="?", const="", default=None,
+                   help="Veritabanına yaz (adres verilmezse .env'deki DATABASE_URL)")
+    p.add_argument("--note", default=None, help="Veritabanındaki oynatma kaydına not")
     args = p.parse_args()
 
     scen = Scenario(args.bundle, args.scenario)
@@ -218,6 +226,18 @@ def main():
     if args.events:
         ev.to_json(args.events, orient="records", lines=True, force_ascii=False)
         print(f"Olaylar: {args.events} ({len(ev)} satır)")
+    if args.db is not None:
+        import db_dnn_edgeiiot as dbm
+        url = dbm.database_url(args.db or None)
+        db = dbm.DB(url)
+        dbm.init(db)
+        unseen = scen.meta["unseen_family"]
+        kinds = {s: kind_of(f, unseen) for s, f in ev.groupby("source")["true_family"].first().items()}
+        run_id, n_conn, n_alert = dbm.save_run(db, ev.assign(conn=connection_ids(ev)), scen, args.bundle,
+                                               args.max_packets, kinds, args.note)
+        db.close()
+        print(f"Veritabanı ({dbm.safe_url(url)}): oynatma {run_id}; {len(ev)} paket, {n_conn} bağlantı, "
+              f"analiste giden {n_alert}")
     return rows
 
 

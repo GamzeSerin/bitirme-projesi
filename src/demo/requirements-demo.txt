@@ -7,3 +7,6 @@ joblib
 torch
 tabm
 rtdl_num_embeddings
+
+# Veritabanı (canlı demo, 4. adım). PostgreSQL için; SQLite ile denemede gerekmez
+psycopg[binary]
