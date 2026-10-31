@@ -138,6 +138,29 @@ Aynı bekçi (TabM: alarm = üye anlaşmazlığı, kontrol = enerji) iki veri se
 - **Ciddiyet kademesi önerilmez:** görülmemiş ağır saldırılar sık sık RECON sanıldığı için insan incelemesinden kaçıyor (iki veri setinde de).
 - Ayrıntılar: `data/dnn_edgeiiot/README.md` ve `data/dataset_23/README.md` ("Gerçek DSS'te BENIGN kontrolü"). Sınırlılık: tek tohum; test kümesinde saldırı oranı ~%95, gerçek ağda normal trafik çoğunlukta olduğu için analist yükü mutlak sayıda çok daha büyük.
 
+### Bekçinin açıklanması ve derin öğrenme karşılaştırması (ortak araçlar)
+
+Edge-IIoTset'te yapılan analizler (planlar ve sonuçlar: `data/dnn_edgeiiot/README.md`); hepsi `--dataset` ile çalışır.
+
+| Analiz | Betik | Önkoşul |
+| --- | --- | --- |
+| Bilinmeyen Kararının Açıklanması (XAI-2): bekçinin kararına permütasyon Shapley + silme eğrisi sadakati | `src/xai_unknown_decision.py` | `dss_guard.py` satır dosyaları |
+| Kaçışların Karşı-Olgusal Açıklaması (XAI-3) + eş kontrolü | `src/xai_escape_counterfactual.py` | XAI-2 (kayıtlı TabM, Shapley) |
+| Derin öğrenme karşılaştırması: TabM / MLP / MC-dropout | `src/two_signal.py --classifier MLP\|MCDropout`, `src/dl_compare.py` | TabM'in two_signal koşuları (3 tohum) |
+| Tahmin süresi | `src/inference_time.py` | XAI-2 (kayıtlı TabM) |
+| Literatür karşılaştırması: OpenMax, Mahalanobis, otokodlayıcı (tek başına ve BENIGN kontrolü olarak, 3 tohum) | `src/open_set_baselines.py` | yok (GPU önerilir) |
+| Etiket karışıklığı payı: ana koşulda başka etiketle birebir aynı vektöre düşen satırlar | `src/label_noise_check.py` | yok (CPU) |
+| Zaman bölmesinde iki sinyal kuralı (3 tohum) | `src/two_signal.py --split time --skip-cp` | yükleyicinin satır sırası kayıt sırası olmalı (önce kontrol) |
+| Zaman bölmesinde yeniden kalibrasyon: model aynı, eşikler test penceresinin ilk %25'inden (3 tohum) | `src/two_signal.py --split time --skip-cp --recal-frac 0.25` | zaman bölmesiyle aynı |
+
+Hepsini sırayla (her adımda önce `--quick`) tek komutla. Varsayılan adımlar `xai2,dl,xai3,timing,baselines,noise`; zaman
+bölmesi (`time`) yalnız satır sırası kayıt sırasıysa `--steps time` ile ayrıca eklenir:
+
+```bash
+python src/xai_dl_suite.py --dataset dataset_23 --data-file data/dataset_23 \
+    --run-dir work/dataset_23/<asıl deney> --params-from run --families RECON,SPOOFING,WEB,BRUTEFORCE
+```
+
 ## Nasıl çalıştırılır?
 
 **1. Kurulum (bir kez):**
