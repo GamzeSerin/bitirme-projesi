@@ -697,6 +697,54 @@ Temperature_and_Humidity. MALWARE PCAP'leri (Backdoor, Ransomware) sınanmadı; 
 ICMP paketleri bu PCAP'lerde az ve DNN'de karşılıksız (Port_Scanning 35, Temperature 7); eğitimde ICMP satırları DDOS'ta var
 olduğu için süzgece alınmaz.
 
+## Canlı demo, 3. adım: kullanım modeli ve bağlantı kuralı (29–31.10.2026)
+
+**Kullanım modeli (yalnız demo; tezin deney sayıları bunu kullanmaz):** asıl deneyin paketiyle yerelde gerçek normal trafik
+(Temperature_and_Humidity) paketlerinin %51'i ALARM aldı. Teşhis: ağın en sık normal paket tipleri (MQTT sunucusuna boş ACK, SYN,
+CONNECT, PUBLISH, DISCONNECT) tekrar silme ve çakışma temizliği yüzünden eğitim verisinde neredeyse yok
+(`outputs/dnn_edgeiiot/demo/label_noise_check.json`). Kural ve sınırlılık `src/demo/usage_data_dnn_edgeiiot.py` başında; paket
+`outputs/dnn_edgeiiot/demo/bundle_usage/`. Bu verideki test sayıları sızıntılıdır, başarı ölçüsü değildir.
+
+**Bağlantı kuralı (sonradan tasarlandı, 30.10.2026):** bağlantı = protokol + sırasız uç noktalar. Bir bağlantı analiste gider
+⇔ içerik taşıyan (tcp.len > 0) bir paketi NORMAL değilse VEYA herhangi bir paketi SALDIRI ise. Boş pakete verilen ALARM/KONTROL
+tek başına saymaz. Paket kararları değişmez; kural raporlamadır (`src/demo/replay_dnn_edgeiiot.py`). Kural üç PCAP'e
+(Temperature, Port_Scanning, XSS) bakılarak kuruldu; sonra **kurala bakılmadan seçilen** PCAP'lerde sınandı.
+
+Ölçüm: Mac, tshark 4.6.9, kullanım modeli, WEB senaryosu (WEB ailesi eğitimde yok), her PCAP'in ilk 20.000 paketi, UDP atılır.
+
+| PCAP | Rol | Bağlantı | Paket düzeyi analiste/durdurulan | Kural: analiste giden / fark edilen bağlantı | İçerikli bağlantılarda |
+|---|---|---|---|---|---|
+| Temperature_and_Humidity | normal, tasarım | 1.318 | %9,53 analiste | **%0,23** | %0,25 |
+| Port_Scanning | bilinen, tasarım | 10.971 | %95,44 durdurulan | %77,83 | (içerikli bağlantı yok) |
+| XSS | görülmemiş, tasarım | 1.889 | %81,62 durdurulan | %60,88 | **%100** |
+| SQL_injection | görülmemiş, sınav | 1.727 | %99,95 durdurulan | %99,02 | **%100** |
+| Uploading | görülmemiş, sınav | 4.203 | %90,27 durdurulan | %79,80 | **%100** |
+| Password | bilinen, sınav | 1.802 | %99,90 durdurulan | %98,45 | **%100** |
+| DDoS_TCP | bilinen, sınav | 11.639 | %99,99 durdurulan | %99,97 | **%100** |
+| Distance | normal, sınav | 1.257 | %0,01 analiste | **%0,16** | %0,16 |
+| Heart_Rate | normal, sınav | 1.203 | %11,74 analiste | **%0,00** | %0,00 |
+| Flame_Sensor | normal, sınav | 1.256 | %5,96 analiste | **%0,08** | %0,08 |
+| Sound_Sensor | normal, sınav | 1.259 | %0,00 analiste | **%0,00** | %0,00 |
+| Soil_Moisture | normal, sınav | 1.193 | %0,04 analiste | **%0,17** | %0,17 |
+| Water_Level | normal, sınav | 1.258 | %14,21 analiste | **%0,40** | %0,40 |
+| phValue | normal, sınav | 1.180 | %7,64 analiste | **%0,25** | %0,26 |
+| IR_Receiver | normal, sınav | 1.279 | %20,41 analiste | **%0,16** | %0,16 |
+| Modbus | normal, sınav | 524 | %80,08 analiste | **%12,02** | %41,45 |
+
+**Değerlendirme:** sınav PCAP'lerinde saldırı tarafında içerik taşıyan bağlantıların tamamı fark edildi (görülmemiş SQL_injection
+ve Uploading dahil); fark edilmeyenler yalnız içerik taşımayan bağlantılar (ör. Uploading'de 4.203 bağlantının 3.146'sı). Kural
+olmadan "en az bir paketi işaretli" ölçüsüyle normal bağlantıların Water_Level'da %94,9'u, IR_Receiver'da %88,0'i analiste
+gidiyordu; kuralla dokuz normal cihazın sekizinde ≤ %0,40. Port taramasında içerik yok; kural yalnız SALDIRI kararıyla çalışır
+(%77,8 bağlantı) — kuralın en zayıf yeri.
+
+**Modbus istisnası (teşhis 31.10.2026, `src/demo/check_normal_coverage_dnn_edgeiiot.py`,
+`outputs/dnn_edgeiiot/demo/normal_coverage_Modbus.json`):** PCAP'in ilk 20 bin paketinin 13.313'ü Modbus; DNN dosyasındaki
+1.615.643 NORMAL satırın yalnız 150'si Modbus, kullanım örnekleminin 40.000 NORMAL satırının 6'sı. İçerikli paketlerin eğitim
+verisinde birebir karşılığı %1,13; `mbtcp.trans_id` (sayaç) çıkarılınca %1,19 — sayaç hipotezi reddedildi, sebep veri eksikliği.
+En sık 8 içerikli paket tipinin hiçbiri ham veride yok. Model için Modbus görülmemiş bir cihazdır; analiste sorması açık küme
+davranışıyla tutarlıdır. Sınırlılık olarak yazılır: sistem sahadaki her cihazın normal trafiğini eğitimde görmelidir.
+Yan bulgu: Modbus cevaplarında `tcp.dstport` istemcinin geçici portu (ör. 63846); oturuma özgü değer, kimlik benzeri davranabilir.
+
 ## Zaman bölmesinde iki sinyal kuralı. Analiz planı (sonuçlardan ÖNCE yazıldı, 29.10.2026)
 
 Soru: Tezin ana sonucu (iki sinyal kuralı; koşul C, q = %5'te sessiz kaçış %2,52 → %0,53) rastgele bölmeyle ölçüldü. Kapalı kümede
