@@ -851,6 +851,16 @@ sırası" kısmen cihaz sırasıdır ve son pencere eğitimde görülmemiş ciha
 sorun eşik kayması değil yeni cihazdır ve çare eşik değil, yeni cihazın normal trafiğinin eğitime eklenmesidir. Sınama:
 `src/time_window_check.py` (pencerelerde yeni vektör payı ve cihaz parmak izi `mqtt.topic_len`).
 
+**Sınama sonucu (`src/time_window_check.py`, Kaggle CPU, 02.11.2026; JSON henüz depoda değil):** zararsız satırlar fit 28.800,
+cal 3.200, W1 2.000, W2 6.000. Önceki pencerelerde hiç görülmemiş vektör payı: cal %2,4, W1 %1,5, **W2 %21,1** (W1 eklense de
+değişmiyor). Hipotez desteklendi: W2'deki normal trafiğin beşte biri önceki dönemlerde hiç bulunmayan türden. İçeriği
+(`tcp.dstport`, `tcp.len` dağılımları): W2'de daha önce olmayan değerler var: `tcp.dstport` 62302 (%9,4; yeni bir oturumun
+istemci geçici portu), 0 (%3,9; TCP dışı paket), 502 (%0,4; Modbus) ve `tcp.len` 27 (%8,2, cal'de %1,7; demodaki Modbus
+cevaplarının uzunluğu). `mqtt.topic_len` bu örneklemde hep 0 (cihaz parmak izi olarak kullanılamadı). İki kaynak: (1) kaydın
+sonunda beliren Modbus trafiği, (2) geçici port numarasının oturum kimliği gibi davranması (yeni oturum = görülmemiş vektör).
+İkisi de eşik ayarıyla düzelmez. Sınırlılık: yeni vektörlerin işaretlenen satırlarla birebir aynı olduğu henüz ölçülmedi (satır
+dosyaları ile yapılabilir). Olası devam: zaman bölmesini portsuz koşulda (E) tekrarlamak; port kaynaklı kısmı ayırır.
+
 ## Literatür karşılaştırması: OpenMax, Mahalanobis, otokodlayıcı. Analiz planı (sonuçlardan ÖNCE yazıldı, 29.10.2026)
 
 Soru: Açık küme tanıma ve dağılım dışı tespit literatüründe bilinen yöntemler, TabM'in üye anlaşmazlığından (tezin alarmı) ve enerjisinden (tezin BENIGN kontrolü) daha iyi mi? Eşik yok; aşağıdakilerin tamamı raporlanır. Bir yöntem TabM skorlarını geçerse bu açıkça yazılır.
