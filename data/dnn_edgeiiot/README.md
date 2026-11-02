@@ -827,6 +827,30 @@ yeniden seçilir. Bu çare bütçeyi geri getiriyor mu, kaçışı bozmadan?
   W1'in etiketli olduğu varsayılır (sahada analistin onayladığı trafik). Tek bir pencere oranı (%25) önceden seçildi; başka oranlar
   denenirse duyarlılık olarak ayrıca yazılır.
 
+### Zaman bölmesinde yeniden kalibrasyon: sonuçlar (02.11.2026; koşul C, 5 aile, tohum 42/1/2)
+
+Kaynak: Kaggle kaydı (her tohumun sonundaki W2 tablosu; enerji kontrolü, 5 aile ortalaması). JSON'lar
+(`two_signal_C_seq_ack_yok_time_recal*.json`) henüz depoya gönderilmedi; aile başına sayılar onlardan eklenecek.
+
+| W2, 3 tohum ort. (tohumlar 42 / 1 / 2) | q = %0,5 | q = %1 | q = %5 | q = %10 |
+|---|---|---|---|---|
+| Kontrolün yükü, base | %5,3 | %5,3 (5,4 / 6,2 / 4,4) | %5,9 (7,1 / 6,2 / 4,4) | %13,4 |
+| Kontrolün yükü, R1 (yalnız kontrol eşiği W1'den) | %5,9 | %5,9 (7,1 / 6,2 / 4,4) | %5,9 | %13,5 |
+| Kontrolün yükü, R2 (iki eşik W1'den) | %5,4 | %5,4 (7,0 / 4,8 / 4,3) | %5,4 | %13,0 |
+| Sessiz kaçış (üç seçenekte aynı) | %0,02 | %0,02 | %0,02 | %0,02 |
+| Toplam yük (alarm + kontrol), base / R1 / R2 | – | %13,2 / %13,8 / %13,8 | %13,8 / %13,8 / %13,8 | %21,2 / %21,4 / %21,6 |
+
+**Önceden yazılan çerçeveye göre değerlendirme: "yeniden kalibrasyon yetmiyor".**
+(a) tutmuyor: q = %1'de kontrolün yükü R1'de %5,9 (sınır %2). (b) tutmuyor: plato sürüyor, yük q = %0,5'ten %5'e kadar
+değişmiyor (R1'de üç tohumda da birebir aynı). (c) tutuyor: kaçış değişmiyor. R2 de aynı. Ayrıca alarmın kendisi W2'de normal
+trafiğin ≈ %8'ini analiste gönderiyor (toplam yük − kontrol yükü); eşiği W1'den yeniden seçmek (R2) bunu da düşürmüyor.
+
+**Yorum (sonuçtan sonra, hipotez):** yakın geçmişten (W1) seçilen eşik W2'deki fazlalığı hiç görmüyor; yani W2'deki işaretlenen
+normal trafik W1'de ve kalibrasyonda bulunmayan türden. Normal etiketi birçok cihazın kaydı art arda eklenerek oluşmuşsa "kayıt
+sırası" kısmen cihaz sırasıdır ve son pencere eğitimde görülmemiş cihazları içerir (demodaki Modbus bulgusunun aynısı). Bu durumda
+sorun eşik kayması değil yeni cihazdır ve çare eşik değil, yeni cihazın normal trafiğinin eğitime eklenmesidir. Sınama:
+`src/time_window_check.py` (pencerelerde yeni vektör payı ve cihaz parmak izi `mqtt.topic_len`).
+
 ## Literatür karşılaştırması: OpenMax, Mahalanobis, otokodlayıcı. Analiz planı (sonuçlardan ÖNCE yazıldı, 29.10.2026)
 
 Soru: Açık küme tanıma ve dağılım dışı tespit literatüründe bilinen yöntemler, TabM'in üye anlaşmazlığından (tezin alarmı) ve enerjisinden (tezin BENIGN kontrolü) daha iyi mi? Eşik yok; aşağıdakilerin tamamı raporlanır. Bir yöntem TabM skorlarını geçerse bu açıkça yazılır.
