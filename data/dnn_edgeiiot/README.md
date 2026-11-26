@@ -1067,6 +1067,41 @@ olduğundan bu ailelerin yüzdeleri tek tek satırlara duyarlı (ör. WEB, tohum
   durum olarak not edildi (bu ailede tohum 1 ve 2'de yük %3,6 ve %1,8).
 - Plandaki sınırlılık geçerli: paketler bağımsız sayıldı; bağlantı düzeyinde gerçek aralık büyük ihtimalle daha geniş.
 
+## Sızıntı denetimi (#24): test vektörünün eğitimde birebir eşi. Analiz planı (sonuçlardan ÖNCE yazıldı, 26.11.2026)
+
+Soru: Tekrarlar temizlikte TAM satır üzerinden atıldı (tcp.seq ve tcp.ack dahil). Koşul C bu iki sütunu çıkarınca daha önce farklı
+olan satırlar birebir aynı hale gelebilir; o zaman bir test satırının özellik vektörü eğitimde de bulunur (paket düzeyinde
+bölmenin bilinen riski). Tezin sayıları bu "ezber" satırlarına mı dayanıyor, yoksa eğitimde benzeri olmayan satırlarda da
+geçerli mi?
+
+- **Kod:** `src/leakage_check.py` (model eğitimi yok, CPU; veri seti gerektiği için Kaggle'da). İki adım:
+  1. **Eş bayrakları** (veriyle): yükleyici, koşul ve bölme `two_signal_C_seq_ack_yok.json`'daki ayarlarla aynen kurulur
+     (cap 40.000, tohum 42, kalibrasyon %10, çakışmalar atılmış). Kurulan test indeksleri satır dosyalarındaki `test_index`
+     ile birebir karşılaştırılır; tutmazsa betik durur. Her aile için o katlamanın eğitim kümesi (fit + kalibrasyon; ikisini de
+     model ya da eşikler görüyor) alınır; her test satırının koşul C vektörü (32 sütun) eğitimde birebir varsa "eşi var".
+     Karşılaştırma satır özeti (hash) ile yapılır; eşleşenler ayrıca sütun sütun doğrulanır. Bilinen satırlar için eşin
+     kategorisinin aynı olup olmadığı da kaydedilir. Bayraklar `outputs/dnn_edgeiiot/leakage/twins_C_seq_ack_yok.npz`'ye yazılır.
+  2. **Ölçümler** (bayraklar + satır dosyaları; tohum 42/1/2): eşi olan / olmayan alt kümelerde ayrı ayrı. Enerji kontrolünün
+     kararları #26'daki gibi yeniden üretilir (`bootstrap_ci.decisions`).
+- **Raporlanacaklar** (aile başına ve 5 aile ortalaması, tohum başına):
+  1. Eşi olan payı: bilinen, bilinmeyen ve normal test satırlarında. Bilinenlerde eşin kategorisi aynı mı.
+  2. Bilinen satırlarda TabM macro-F1: tümü / eşi olan / eşi olmayan.
+  3. Bilinmeyen satırlarda sessiz kaçış: kontrolsüz ve enerji q = %5; tümü / eşi olan / eşi olmayan. Kaçışların ne kadarının
+     eşi olan satırlardan geldiği.
+  4. Normal satırlarda kontrolün yükü (q = %5): eşi olan / olmayan.
+- **Yorum çerçevesi (önceden):**
+  - **Ölçüt 1, sınıflandırma:** eşi olmayan bilinen satırlarda macro-F1, tümündekinden en fazla 0,05 düşükse (5 aile ortalaması,
+    her tohumda) "sınıflandırma başarısı ezbere dayanmıyor". Daha fazla düşerse fark aynen raporlanır ve tezde macro-F1 iki
+    sayıyla verilir.
+  - **Ölçüt 2, ana iddia:** eşi olmayan bilinmeyen satırlarda enerji kontrolü sessiz kaçışı kontrolsüz duruma göre en az yarıya
+    indiriyorsa (5 aile ortalaması, her tohumda) "iki sinyal kuralı sızıntıya dayanıklı". Değilse iddia "eğitimde benzeri olan
+    satırlarla sınırlı" diye düzeltilir.
+  - Bir alt kümede 100'den az bilinmeyen satır kalan ailelerde oran yorumlanmaz, yalnız sayı yazılır. Eşi olan bilinmeyen
+    satır, modelin bilinen bir etiketle gördüğü vektörün aynısıdır; böyle satırlarda kaçış kaçınılmazdır (girdiden ayırt
+    edilemez) ve bu, etiket karışıklığı bulgusuyla (koşul C) birlikte yorumlanır.
+- **Bilinen sınırlılıklar:** yalnız birebir eş aranır (yakın eş yok); paket düzeyinde ölçülür. Bağlantı düzeyinde grup bölmesi
+  (#19) sızıntının en doğrudan kontrolüdür, burada yapılmaz.
+
 ## Sütun hizası ve değer aralığı denetimi (19.10.2026)
 
 Kod: `src/audit_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/audit/audit.json`. Ham verideki 15 etiketin her biri için 6 kontrol (zaman damgası, IP, port 0–65535, 0/1 bayrak, ARP alanları, sayısal sütunlarda metin). İhlal yalnızca DDoS_UDP (zaman %100) ve MITM'de (zaman %100, port %30, bayrak %19); Normal'de %0,11 bayrak ihlali (önemsiz); diğer 12 saldırı türünde %0. Bu iki tür bulgu 7 gereği atıldı.
