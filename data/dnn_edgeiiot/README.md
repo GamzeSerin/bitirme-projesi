@@ -890,6 +890,49 @@ canlıya daha uygundur; kaybolmazsa sorun gerçekten yeni cihazdır.
 - **Bilinen sınırlılıklar:** zaman bölmesinin sınırlılıkları (kayıt sırası gerçek zaman ekseni değil). E, portların yanında
   sayaçları da çıkarır; etki "port + sayaç" olarak okunur (yalnız port için B koşulu gerekir, burada koşulmaz).
 
+### Zaman bölmesi, portsuz koşul (E): sonuçlar (26.11.2026; Kaggle GPU, 5 aile, tohum 42/1/2)
+
+Çıktılar `outputs/dnn_edgeiiot/two_signal/time_window_check_E_hepsi_cikarildi.json`, `two_signal_E_hepsi_cikarildi_time.json`,
+`s1/…_time_seed1.json`, `s2/…_time_seed2.json` ve satır dosyaları. C sütunu 29.10 zaman bölmesi koşusu (aynı tohumlar). Toplam yük
+(alarm VEYA kontrol) E'de satır dosyalarından (kontrol kararları #26'daki gibi yeniden üretildi); C'nin zaman bölmesi satır dosyaları
+depoda olmadığından C için yalnız kontrol yükü var.
+
+| 5 aile ortalaması (tohum 42 / 1 / 2) | C, zaman bölmesi | E, zaman bölmesi |
+|---|---|---|
+| W2'de daha önce görülmemiş normal vektör payı | %21,1 | **%5,5** |
+| Bilinen macro-F1 | 0,757 / 0,754 / 0,760 | 0,640 / 0,636 / 0,636 |
+| Alarm AUROC | 0,806 / 0,792 / 0,787 | 0,756 / 0,757 / 0,802 |
+| Kontrolsüz sessiz kaçış | %4,8 / 5,0 / 4,7 | %2,8 / 2,8 / 2,7 |
+| Kontrolün yükü, q = %1 | %4,1 / 4,6 / 3,3 | %1,0 / 0,9 / 0,9 |
+| Kontrolün yükü, q = %5 | %5,3 / 4,6 / 3,3 (ort. %4,4) | **%2,0 / 1,7 / 0,9 (ort. %1,5)** |
+| Kontrolün yükü, q = %10 | %11,4 / 11,5 / 10,2 | %2,0 / 1,7 / 0,9 |
+| Sessiz kaçış, q = %5 | %0,01 / 0,10 / 0,04 | %0,05 / 0,10 / 0,05 |
+| Alarmın normal trafikteki yükü | – | %10,6 / 10,8 / 9,7 |
+| Toplam yük, q = %5 | – (W2'de ≈ %13,8, yeniden kalibrasyon koşusu) | %12,6 / 12,5 / 10,6 |
+
+Aile başına (E, 3 tohum ort., q = %5): kontrolsüz kaçış WEB **%11,8**, DDOS %1,7, diğerleri ≤ %0,3; enerjiyle kaçış en çok %0,2
+(DDOS); kontrolün yükü %1,2–2,0.
+
+**Önceden yazılan ölçütlere göre değerlendirme:**
+1. **Yenilik:** W2'nin yeni vektör payı %21,1 → %5,5 (sınır ≤ %10,6) → **sağlandı**: yeniliğin yaklaşık dörtte üçü port (ve
+   sayaç) kaynaklı. Kalan pay gerçek yeni trafik: W2'de `tcp.len` 27'nin payı %8,2 (cal'de %1,7; demodaki Modbus cevabı).
+2. **Analist yükü:** (a) q = %5'te kontrolün yükü ort. %1,5 (sınır ≤ %2,2) → tutuyor; (b) plato yok: yük q ile artıyor (q = %1'de
+   %0,9–1,0, q = %5'te %0,9–2,0; tohum 2'de artış küçük) → tutuyor; (c) q = %5'te kaçış %0,05–0,10 (sınır ≤ %0,55) → tutuyor.
+   Plandaki ifadeyle: **"plato port kaynaklı"**. Rastgele bölmede korkulan "kör bekçi" burada yok: kontrol hem çalışıyor hem
+   kaçışı durduruyor.
+
+**Betimleyici ve ölçütün kapsamadığı (önemli):**
+- **Toplam analist yükü düşmüyor:** E'de alarmın kendisi (üye anlaşmazlığı) normal trafiğin %10'unu analiste gönderiyor; toplam
+  %10,6–12,6, C'nin W2'deki ≈ %13,8'inden yalnız biraz az. Plan ölçütü kontrol yükü üzerineydi; "portsuz model canlıya daha
+  uygun" sonucu bu yüzden yalnız kontrol (bekçi) için geçerli, sistemin toplam yükü için değil.
+- **Sınıflandırma belirgin zayıflıyor:** bilinen macro-F1 0,757 → 0,637. Portlar sınıflandırma için hâlâ bilgi taşıyor.
+- **Kaçışın hangi aileden geldiği değişiyor:** WEB'in kontrolsüz kaçışı E'de %11,8 (C'de zaman bölmesinde %1,4); rastgele
+  bölmedeki E bulgusuyla aynı yön.
+- **Karar (26.11.2026, Gamze):** demo paketi ve tezin ana sonuçları koşul C'de kalır (bütün ana sayılar C ile ölçüldü; E'nin
+  sınıflandırma ve WEB kaçışı zayıflıkları). Bu deney tezde bulgu ve gelecek çalışma önerisi olarak yazılır: zaman kaymasındaki
+  bekçi yükünün büyük kısmı port vekilinden geliyor; canlıda port alanlarının kimlik gibi davranmaması (ör. geçici portun
+  gruplanması) ya da yeni trafik payının izlenmesi önerilir; bunun sınıflandırmaya ve kaçışa etkisi ayrıca sınanmalı.
+
 ## Literatür karşılaştırması: OpenMax, Mahalanobis, otokodlayıcı. Analiz planı (sonuçlardan ÖNCE yazıldı, 29.10.2026)
 
 Soru: Açık küme tanıma ve dağılım dışı tespit literatüründe bilinen yöntemler, TabM'in üye anlaşmazlığından (tezin alarmı) ve enerjisinden (tezin BENIGN kontrolü) daha iyi mi? Eşik yok; aşağıdakilerin tamamı raporlanır. Bir yöntem TabM skorlarını geçerse bu açıkça yazılır.
