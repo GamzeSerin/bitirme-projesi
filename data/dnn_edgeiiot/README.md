@@ -931,6 +931,42 @@ Mahalanobis %1,17, otokodlayıcı %1,73.
 - Sınırlılık: Mahalanobis/kNN AUROC'ta anlaşmazlığa eşit ya da biraz önde olduğundan, alarm sinyali olarak anlaşmazlığın
   üstünlüğü iddia edilmez; iddia, ek model ve ek veri yapısı gerektirmeden aynı düzeyde olmasıdır.
 
+## Baz modeller: çoğunluk sınıfı, "her şeye normal" ve rastgele inceleme. Analiz planı (sonuçlardan ÖNCE yazıldı, 26.11.2026)
+
+Soru: Tezin sayıları (bilinen sınıflarda macro-F1, sessiz kaçış, analist yükü) hiçbir şey öğrenmeyen kurallara göre ne kadar iyi?
+"%0,5 sessiz kaçış" tek başına iyi mi kötü mü söylemez; aynı test satırlarında bir alt sınırla yan yana konunca anlam kazanır.
+
+- **Kod:** `src/trivial_baselines.py` (model eğitimi yok, veri seti gerekmez, CPU). Girdi: `two_signal.py`'nin kaydettiği test
+  satırı dosyaları `outputs/dnn_edgeiiot/two_signal/{.,s1,s2}/rows_<AİLE>_C_seq_ack_yok.npz` (kategori, TabM tahmini, alarm) ve
+  aynı klasörlerdeki `two_signal_C_seq_ack_yok.json` (enerji kontrolünün sonuçları). Koşul C, 5 aile, tohum 42/1/2; test
+  satırları tezin sayılarıyla birebir aynı.
+- **Baz kurallar** (ayarlar sabit):
+  1. **Çoğunluk sınıfı:** her aile için o katlamanın en sık bilinen kategorisini her bilinen test satırına söyler. Ölçüm: bilinen
+     test satırlarında macro-F1 (`two_signal.py` ile aynı tanım: `labels=` bilinen kategoriler). Eğitim dağılımı satır
+     dosyalarında yok; bölme etiket bazında katmanlı (%80/20) olduğundan eğitimdeki en sık kategori testtekiyle aynıdır, bu
+     yüzden test satırlarından alınır (sabit tahmincide yalnız hangi sınıfın seçildiğini belirler).
+  2. **"Her şeye normal" (hiç alarm yok, kontrol yok):** her satıra BENIGN der. Sessiz kaçış = görülmemiş ailenin bütün satırları
+     (%100), analist yükü %0. Tanım gereği; ölçeğin uç noktası olarak tabloya yazılır.
+  3. **Rastgele inceleme:** alarm TabM anlaşmazlığıyla aynı kalır; BENIGN kontrolü yerine BENIGN denen ve alarm almayan
+     trafiğin rastgele r kadarı analiste gider. Beklenen sessiz kaçış = kontrolsüz kaçış × (1 − r). r, rastgele incelemenin
+     normal (BENIGN) test trafiğindeki yükü enerji kontrolünün aynı aile, tohum ve q'daki GERÇEKLEŞEN yüküne (JSON'daki
+     `benign_review`) eşit olacak şekilde seçilir: r = gerçekleşen yük ÷ normal trafiğin alarm almayıp BENIGN denen payı (satır
+     dosyasından). Yani iki kural aynı analist yükünde karşılaştırılır. Beklenen değer kapalı formülle hesaplanır; ayrıca
+     1.000 rastgele çekilişle %95 aralığı verilir (tohum 0).
+- **Raporlanacaklar:** aile başına ve 5 aile ortalaması; TabM'in bilinen macro-F1'i ve enerji kontrolünün sessiz kaçışı (q = %1 / 2 /
+  5 / 10) aynı tabloda, tohumlar arası ort. ± sd. Her ailede bilinen test satır sayısı ve çoğunluk kategorisi.
+- **Yorum çerçevesi (önceden):**
+  - macro-F1: TabM, çoğunluk sınıfının açıkça üstünde olmalı (beklenen çoğunluk macro-F1'i ≈ 1/(bilinen kategori sayısı) × o
+    sınıfın F1'i, yani 0,1 civarı). Değilse sınıflandırma iddiası geçersiz sayılır.
+  - **Ana ölçüt, BENIGN kontrolü:** enerji kontrolü q = %5'te, aynı gerçekleşen yükteki rastgele incelemeye göre sessiz kaçışı
+    (5 aile ortalaması) **en az 2 kat** düşürmeli, 3 tohumun HER BİRİNDE. Sağlanırsa "kontrol skoru, bütçeyi rastgele harcamaktan iyi" denir.
+    1–2 kat arasıysa "kısmen; kazancın bir kısmı yalnızca bütçeden geliyor" diye raporlanır. Kazanç 1 katın altındaysa
+    (rastgele kadar ya da kötü) kontrolün katkısı yok demektir; bu olumsuz bulgu da tezde aynen yazılır.
+  - q = %1, 2, 10 ve aile başına sonuçlar betimleyicidir; ölçüte girmez. Kaçışın sıfır olduğu ailelerde (DDOS, RECON, MALWARE)
+    oran tanımsızdır; yalnız ortalama ve kaçışın görüldüğü aileler (WEB, BRUTEFORCE) yorumlanır.
+- **Bilinen sınırlılık:** çoğunluk kategorisi test satırlarından okunur (yukarıda). Zaman bölmesi bu planın dışında (gerekirse ayrı
+  plan).
+
 ## Sütun hizası ve değer aralığı denetimi (19.10.2026)
 
 Kod: `src/audit_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/audit/audit.json`. Ham verideki 15 etiketin her biri için 6 kontrol (zaman damgası, IP, port 0–65535, 0/1 bayrak, ARP alanları, sayısal sütunlarda metin). İhlal yalnızca DDoS_UDP (zaman %100) ve MITM'de (zaman %100, port %30, bayrak %19); Normal'de %0,11 bayrak ihlali (önemsiz); diğer 12 saldırı türünde %0. Bu iki tür bulgu 7 gereği atıldı.
