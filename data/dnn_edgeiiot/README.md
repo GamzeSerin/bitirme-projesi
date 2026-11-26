@@ -861,6 +861,35 @@ sonunda beliren Modbus trafiği, (2) geçici port numarasının oturum kimliği 
 İkisi de eşik ayarıyla düzelmez. Sınırlılık: yeni vektörlerin işaretlenen satırlarla birebir aynı olduğu henüz ölçülmedi (satır
 dosyaları ile yapılabilir). Olası devam: zaman bölmesini portsuz koşulda (E) tekrarlamak; port kaynaklı kısmı ayırır.
 
+## Zaman bölmesi, portsuz koşul (E) (#9). Analiz planı (sonuçlardan ÖNCE yazıldı, 26.11.2026)
+
+Soru: Zaman bölmesinde analist yükü bütçeye uymadı (q = %1'de bile ~%4; plato) ve yeniden kalibrasyon düzeltmedi. Sınama, W2'deki
+normal trafiğin %21,1'inin daha önce hiç görülmemiş vektör olduğunu, kaynaklardan birinin de geçici portların oturum kimliği gibi
+davranması olduğunu gösterdi; #24 de analist yükünün neredeyse tamamının eğitimde benzeri olmayan normal satırlardan geldiğini
+buldu. Portlar (ve sayaçlar) çıkarılınca bu "yenilik" ve plato kayboluyor mu? Kaybolursa sorun port vekilidir ve portsuz model
+canlıya daha uygundur; kaybolmazsa sorun gerçekten yeni cihazdır.
+
+- **Kod:** (1) `src/time_window_check.py --condition E_hepsi_cikarildi` (model yok, CPU; pencereler C ile aynı). (2)
+  `src/two_signal.py --split time --skip-cp --condition E_hepsi_cikarildi`, model tohumu 42 / 1 / 2 (Kaggle GPU). Bölme, LOFO,
+  eşik tanımları, q değerleri ve TabM ayarları C'nin zaman bölmesi koşusuyla aynı; yalnız koşul farklı (portlar, tcp.seq/ack ve
+  iki sayaç çıkarılmış). Satır dosyaları depoya alınır (alarmın normal trafikteki yükü için).
+- **Karşılaştırma:** C, zaman bölmesi (29.10, 3 tohum; yukarıda) ile yan yana; ayrıca E, rastgele bölme (tohum 42; "Portsuz bekçi").
+- **Raporlananlar** (5 aile ortalaması ± tohum sapması ve aile başına): bilinen macro-F1, alarm AUROC, kontrolsüz kaçış; enerji
+  kontrolüyle q = %0,5 / 1 / 2 / 5 / 10'da sessiz kaçış ve kontrolün yükü; alarmın normal trafikteki yükü ve toplam yük (satır
+  dosyalarından); W2'de daha önce görülmemiş normal vektör payı.
+- **Yorum çerçevesi (önceden):**
+  - **Ölçüt 1, yenilik:** E'de W2'nin yeni vektör payı C'dekinin (%21,1) en fazla yarısıysa (≤ %10,6) "yeniliğin önemli kısmı port
+    kaynaklı" yazılır; değilse "yenilik port dışında (cihaz)".
+  - **Ölçüt 2, analist yükü** (enerji kontrolü, 3 tohum ortalaması): (a) q = %5'te kontrolün yükü C'nin zaman bölmesindekinin
+    (%4,4) en fazla yarısı (≤ %2,2), (b) plato yok (q = %1'deki yük q = %5'tekinden küçük), (c) q = %5'te sessiz kaçış C'nin zaman
+    bölmesindekinden (%0,05) en fazla 0,5 puan yüksek. Üçü de tutarsa "plato port kaynaklı; portsuz model canlıya daha uygun".
+    (a) tutup (c) tutmazsa "yük düşüyor ama kaçış pahasına". (a) tutmazsa "plato port kaynaklı değil". (b) ayrıca raporlanır.
+  - **Önceden bilinen risk:** rastgele bölmede koşul E'de enerji skorlarında büyük bağlar vardı ve kontrol q ≤ %5'te hiç çalışmadı
+    (yük %0, kaçış azalmadı). Aynısı burada olursa (a) tutar ama (c) büyük ihtimalle tutmaz; sonuç "kör bekçi" olarak yazılır, yükün
+    düşmesi başarı sayılmaz.
+- **Bilinen sınırlılıklar:** zaman bölmesinin sınırlılıkları (kayıt sırası gerçek zaman ekseni değil). E, portların yanında
+  sayaçları da çıkarır; etki "port + sayaç" olarak okunur (yalnız port için B koşulu gerekir, burada koşulmaz).
+
 ## Literatür karşılaştırması: OpenMax, Mahalanobis, otokodlayıcı. Analiz planı (sonuçlardan ÖNCE yazıldı, 29.10.2026)
 
 Soru: Açık küme tanıma ve dağılım dışı tespit literatüründe bilinen yöntemler, TabM'in üye anlaşmazlığından (tezin alarmı) ve enerjisinden (tezin BENIGN kontrolü) daha iyi mi? Eşik yok; aşağıdakilerin tamamı raporlanır. Bir yöntem TabM skorlarını geçerse bu açıkça yazılır.
