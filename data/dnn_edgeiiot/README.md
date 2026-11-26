@@ -1028,6 +1028,45 @@ Soru: Tezin ana sayıları (sessiz kaçış, analist yükü) test satırlarını
   olduğundan gerçek belirsizlik büyük ihtimalle daha geniştir (bağlantı düzeyinde grup bootstrap'ı #19 ile birlikte, gelecek
   çalışma). Eşik ve kalibrasyon belirsizliği dahil değildir.
 
+### Bootstrap güven aralıkları: sonuçlar (26.11.2026; koşul C, 5 aile, tohum 42/1/2; çıktı `outputs/dnn_edgeiiot/bootstrap_ci/`)
+
+Kod: `python src/bootstrap_ci.py` (CPU, ~2 s). Kararların yeniden üretimi: 75 durumun (5 aile × 5 q × 3 tohum) hepsinde
+inceleme ve sessiz kaçış sayıları JSON'la birebir tutturuldu (betik tutmazsa durur).
+
+**1. Aile başına test sayıları** (bölme sabit, 3 tohumda aynı; "kaçan" sütunları tohum 42 / 1 / 2):
+
+| Dışarıdaki aile | Bilinen test | Bilinmeyen test | Normal test | Kaçan, kontrolsüz | Kaçan, enerji q = %5 |
+|---|---|---|---|---|---|
+| DDOS | 37.927 | 21.375 | 8.000 | 10 / 10 / 59 | 2 / 5 / 54 |
+| RECON | 48.398 | 10.904 | 8.000 | 5 / 5 / 5 | 1 / 1 / 1 |
+| WEB | 50.727 | 8.575 | 8.000 | 198 / 119 / 133 | 28 / 28 / 2 |
+| BRUTEFORCE | 55.145 | 4.157 | 8.000 | 484 / 426 / 421 | 141 / 38 / 111 |
+| MALWARE | 53.011 | 6.291 | 8.000 | 0 / 0 / 0 | 0 / 0 / 0 |
+
+Sessiz kaçışın neredeyse tamamı iki aileden geliyor: BRUTEFORCE (en az bilinmeyen satır, 4.157) ve WEB. Sayılar küçük
+olduğundan bu ailelerin yüzdeleri tek tek satırlara duyarlı (ör. WEB, tohum 2: 2 satır = %0,02).
+
+**2. 5 aile ortalaması, %95 bootstrap aralığı** (B = 2.000):
+
+| Tohum | Kontrolsüz kaçış | Enerji kaçışı, q = %5 | Fark (kontrolsüz − enerji) | Kontrolün yükü, q = %5 |
+|---|---|---|---|---|
+| 42 | %2,81 [2,60; 3,01] | %0,75 [0,64; 0,86] | %2,06 [1,88; 2,24] | %3,21 [3,04; 3,38] |
+| 1 | %2,35 [2,15; 2,54] | %0,26 [0,19; 0,32] | %2,09 [1,91; 2,28] | %3,63 [3,45; 3,82] |
+| 2 | %2,40 [2,21; 2,60] | %0,59 [0,50; 0,69] | %1,81 [1,65; 1,98] | %3,18 [3,00; 3,35] |
+
+**Önceden yazılan ölçüte göre değerlendirme:** farkın %95 alt ucu her tohumda 0'ın çok üstünde (1,88 / 1,91 / 1,65 puan) →
+**sağlandı**. "İki sinyal kaçışı azaltır" iddiası test örneğinin şansıyla açıklanamaz.
+
+**Betimleyici (ölçüte girmez):**
+- **Belirsizliğin asıl kaynağı model tohumu.** q = %5'te enerji kaçışının tohumlar arası sd'si 0,25 puan, bootstrap yarı
+  genişliği ortalama 0,09 puan; tohum aralıkları birbiriyle örtüşmüyor (tohum 1: %0,19–0,32, tohum 42: %0,64–0,86). q = %1'de
+  ikisi yakın (0,26'ya karşı 0,18), q = %10'da bootstrap daha büyük (0,03'e karşı 0,01). Tezde "%0,5" tek sayı olarak değil,
+  tohum aralığıyla (%0,26–0,75) yazılmalı.
+- **MALWARE, tohum 42:** enerji kontrolü q ≤ %5'te normal trafiğe hiç dokunmuyor (yük %0), q = %10'da birden %8,9. Kontrol eşiği
+  kalibrasyonda seçildiği için test dağılımıyla uyuşmamış; kaçış olmadığından ölçütü etkilemez, ama yükün q'yu izlemediği bir
+  durum olarak not edildi (bu ailede tohum 1 ve 2'de yük %3,6 ve %1,8).
+- Plandaki sınırlılık geçerli: paketler bağımsız sayıldı; bağlantı düzeyinde gerçek aralık büyük ihtimalle daha geniş.
+
 ## Sütun hizası ve değer aralığı denetimi (19.10.2026)
 
 Kod: `src/audit_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/audit/audit.json`. Ham verideki 15 etiketin her biri için 6 kontrol (zaman damgası, IP, port 0–65535, 0/1 bayrak, ARP alanları, sayısal sütunlarda metin). İhlal yalnızca DDoS_UDP (zaman %100) ve MITM'de (zaman %100, port %30, bayrak %19); Normal'de %0,11 bayrak ihlali (önemsiz); diğer 12 saldırı türünde %0. Bu iki tür bulgu 7 gereği atıldı.

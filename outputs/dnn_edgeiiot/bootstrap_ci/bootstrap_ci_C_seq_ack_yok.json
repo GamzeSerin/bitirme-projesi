@@ -1,0 +1,1936 @@
+{
+  "dataset_id": "dnn_edgeiiot",
+  "condition": "C_seq_ack_yok",
+  "guard": "tabm_energy",
+  "plan": "data/dnn_edgeiiot/README.md, '#26' (26.11.2026, sonuçlardan önce)",
+  "seeds": {
+    "42": {
+      "families": {
+        "DDOS": {
+          "n_known_test": 37927,
+          "n_unknown_test": 21375,
+          "n_benign_test": 8000,
+          "n_silent_alarm_only": 10,
+          "silent_alarm_only": {
+            "est": 0.00047,
+            "ci95": [
+              0.00019,
+              0.0008
+            ]
+          },
+          "q": {
+            "0.01": {
+              "n_silent_energy": 4,
+              "silent_energy": {
+                "est": 0.00019,
+                "ci95": [
+                  5e-05,
+                  0.00037
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.00028,
+                "ci95": [
+                  9e-05,
+                  0.00051
+                ]
+              },
+              "guard_load": {
+                "est": 0.01263,
+                "ci95": [
+                  0.01025,
+                  0.01512
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.03488,
+                "ci95": [
+                  0.031,
+                  0.039
+                ]
+              }
+            },
+            "0.05": {
+              "n_silent_energy": 2,
+              "silent_energy": {
+                "est": 9e-05,
+                "ci95": [
+                  0.0,
+                  0.00023
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.00037,
+                "ci95": [
+                  0.00014,
+                  0.00065
+                ]
+              },
+              "guard_load": {
+                "est": 0.04788,
+                "ci95": [
+                  0.04312,
+                  0.05237
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.07013,
+                "ci95": [
+                  0.0645,
+                  0.07575
+                ]
+              }
+            },
+            "0.1": {
+              "n_silent_energy": 2,
+              "silent_energy": {
+                "est": 9e-05,
+                "ci95": [
+                  0.0,
+                  0.00023
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.00037,
+                "ci95": [
+                  0.00014,
+                  0.00065
+                ]
+              },
+              "guard_load": {
+                "est": 0.04788,
+                "ci95": [
+                  0.04312,
+                  0.05237
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.07013,
+                "ci95": [
+                  0.0645,
+                  0.07575
+                ]
+              }
+            }
+          }
+        },
+        "RECON": {
+          "n_known_test": 48398,
+          "n_unknown_test": 10904,
+          "n_benign_test": 8000,
+          "n_silent_alarm_only": 5,
+          "silent_alarm_only": {
+            "est": 0.00046,
+            "ci95": [
+              9e-05,
+              0.00092
+            ]
+          },
+          "q": {
+            "0.01": {
+              "n_silent_energy": 5,
+              "silent_energy": {
+                "est": 0.00046,
+                "ci95": [
+                  9e-05,
+                  0.00092
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.0,
+                "ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "guard_load": {
+                "est": 0.01,
+                "ci95": [
+                  0.00788,
+                  0.01225
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.03513,
+                "ci95": [
+                  0.03125,
+                  0.03925
+                ]
+              }
+            },
+            "0.05": {
+              "n_silent_energy": 1,
+              "silent_energy": {
+                "est": 9e-05,
+                "ci95": [
+                  0.0,
+                  0.00028
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.00037,
+                "ci95": [
+                  9e-05,
+                  0.00073
+                ]
+              },
+              "guard_load": {
+                "est": 0.02675,
+                "ci95": [
+                  0.02325,
+                  0.03012
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.05187,
+                "ci95": [
+                  0.04737,
+                  0.05675
+                ]
+              }
+            },
+            "0.1": {
+              "n_silent_energy": 1,
+              "silent_energy": {
+                "est": 9e-05,
+                "ci95": [
+                  0.0,
+                  0.00028
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.00037,
+                "ci95": [
+                  9e-05,
+                  0.00073
+                ]
+              },
+              "guard_load": {
+                "est": 0.02675,
+                "ci95": [
+                  0.02325,
+                  0.03012
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.05187,
+                "ci95": [
+                  0.04737,
+                  0.05675
+                ]
+              }
+            }
+          }
+        },
+        "WEB": {
+          "n_known_test": 50727,
+          "n_unknown_test": 8575,
+          "n_benign_test": 8000,
+          "n_silent_alarm_only": 198,
+          "silent_alarm_only": {
+            "est": 0.02309,
+            "ci95": [
+              0.01994,
+              0.02636
+            ]
+          },
+          "q": {
+            "0.01": {
+              "n_silent_energy": 99,
+              "silent_energy": {
+                "est": 0.01155,
+                "ci95": [
+                  0.00933,
+                  0.01388
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.01155,
+                "ci95": [
+                  0.00933,
+                  0.01388
+                ]
+              },
+              "guard_load": {
+                "est": 0.0055,
+                "ci95": [
+                  0.004,
+                  0.00725
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.01475,
+                "ci95": [
+                  0.01225,
+                  0.0175
+                ]
+              }
+            },
+            "0.05": {
+              "n_silent_energy": 28,
+              "silent_energy": {
+                "est": 0.00327,
+                "ci95": [
+                  0.0021,
+                  0.00455
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.01983,
+                "ci95": [
+                  0.01703,
+                  0.02286
+                ]
+              },
+              "guard_load": {
+                "est": 0.04038,
+                "ci95": [
+                  0.03625,
+                  0.04462
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.04963,
+                "ci95": [
+                  0.04525,
+                  0.05438
+                ]
+              }
+            },
+            "0.1": {
+              "n_silent_energy": 28,
+              "silent_energy": {
+                "est": 0.00327,
+                "ci95": [
+                  0.0021,
+                  0.00455
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.01983,
+                "ci95": [
+                  0.01703,
+                  0.02286
+                ]
+              },
+              "guard_load": {
+                "est": 0.0475,
+                "ci95": [
+                  0.043,
+                  0.05225
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.05675,
+                "ci95": [
+                  0.05187,
+                  0.062
+                ]
+              }
+            }
+          }
+        },
+        "BRUTEFORCE": {
+          "n_known_test": 55145,
+          "n_unknown_test": 4157,
+          "n_benign_test": 8000,
+          "n_silent_alarm_only": 484,
+          "silent_alarm_only": {
+            "est": 0.11643,
+            "ci95": [
+              0.10657,
+              0.12581
+            ]
+          },
+          "q": {
+            "0.01": {
+              "n_silent_energy": 413,
+              "silent_energy": {
+                "est": 0.09935,
+                "ci95": [
+                  0.09021,
+                  0.10778
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.01708,
+                "ci95": [
+                  0.01347,
+                  0.02093
+                ]
+              },
+              "guard_load": {
+                "est": 0.01087,
+                "ci95": [
+                  0.00863,
+                  0.01312
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.06263,
+                "ci95": [
+                  0.05738,
+                  0.06788
+                ]
+              }
+            },
+            "0.05": {
+              "n_silent_energy": 141,
+              "silent_energy": {
+                "est": 0.03392,
+                "ci95": [
+                  0.02863,
+                  0.03945
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.08251,
+                "ci95": [
+                  0.07409,
+                  0.09069
+                ]
+              },
+              "guard_load": {
+                "est": 0.04537,
+                "ci95": [
+                  0.04087,
+                  0.05013
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.09713,
+                "ci95": [
+                  0.09087,
+                  0.10362
+                ]
+              }
+            },
+            "0.1": {
+              "n_silent_energy": 4,
+              "silent_energy": {
+                "est": 0.00096,
+                "ci95": [
+                  0.00024,
+                  0.00217
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.11547,
+                "ci95": [
+                  0.10536,
+                  0.12485
+                ]
+              },
+              "guard_load": {
+                "est": 0.091,
+                "ci95": [
+                  0.08488,
+                  0.09788
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.14275,
+                "ci95": [
+                  0.13525,
+                  0.15088
+                ]
+              }
+            }
+          }
+        },
+        "MALWARE": {
+          "n_known_test": 53011,
+          "n_unknown_test": 6291,
+          "n_benign_test": 8000,
+          "n_silent_alarm_only": 0,
+          "silent_alarm_only": {
+            "est": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ]
+          },
+          "q": {
+            "0.01": {
+              "n_silent_energy": 0,
+              "silent_energy": {
+                "est": 0.0,
+                "ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.0,
+                "ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "guard_load": {
+                "est": 0.0,
+                "ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.03925,
+                "ci95": [
+                  0.035,
+                  0.04375
+                ]
+              }
+            },
+            "0.05": {
+              "n_silent_energy": 0,
+              "silent_energy": {
+                "est": 0.0,
+                "ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.0,
+                "ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "guard_load": {
+                "est": 0.0,
+                "ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.03925,
+                "ci95": [
+                  0.035,
+                  0.04375
+                ]
+              }
+            },
+            "0.1": {
+              "n_silent_energy": 0,
+              "silent_energy": {
+                "est": 0.0,
+                "ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.0,
+                "ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "guard_load": {
+                "est": 0.08862,
+                "ci95": [
+                  0.0825,
+                  0.095
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.12787,
+                "ci95": [
+                  0.12075,
+                  0.1355
+                ]
+              }
+            }
+          }
+        }
+      },
+      "mean_over_families": {
+        "silent_alarm_only": {
+          "est": 0.02809,
+          "ci95": [
+            0.02596,
+            0.03014
+          ]
+        },
+        "q": {
+          "0.01": {
+            "silent_energy": {
+              "est": 0.02231,
+              "ci95": [
+                0.02043,
+                0.02415
+              ]
+            },
+            "diff_alarm_only_minus_energy": {
+              "est": 0.00578,
+              "ci95": [
+                0.0049,
+                0.00666
+              ]
+            },
+            "guard_load": {
+              "est": 0.0078,
+              "ci95": [
+                0.00693,
+                0.00865
+              ]
+            },
+            "ci95_half_width_silent_energy": 0.00186
+          },
+          "0.05": {
+            "silent_energy": {
+              "est": 0.00747,
+              "ci95": [
+                0.00638,
+                0.0086
+              ]
+            },
+            "diff_alarm_only_minus_energy": {
+              "est": 0.02062,
+              "ci95": [
+                0.01883,
+                0.02237
+              ]
+            },
+            "guard_load": {
+              "est": 0.03208,
+              "ci95": [
+                0.0304,
+                0.03375
+              ]
+            },
+            "ci95_half_width_silent_energy": 0.00111
+          },
+          "0.1": {
+            "silent_energy": {
+              "est": 0.00088,
+              "ci95": [
+                0.00058,
+                0.0012
+              ]
+            },
+            "diff_alarm_only_minus_energy": {
+              "est": 0.02721,
+              "ci95": [
+                0.02511,
+                0.02923
+              ]
+            },
+            "guard_load": {
+              "est": 0.06035,
+              "ci95": [
+                0.05805,
+                0.06282
+              ]
+            },
+            "ci95_half_width_silent_energy": 0.00031
+          }
+        }
+      }
+    },
+    "1": {
+      "families": {
+        "DDOS": {
+          "n_known_test": 37927,
+          "n_unknown_test": 21375,
+          "n_benign_test": 8000,
+          "n_silent_alarm_only": 10,
+          "silent_alarm_only": {
+            "est": 0.00047,
+            "ci95": [
+              0.00023,
+              0.0008
+            ]
+          },
+          "q": {
+            "0.01": {
+              "n_silent_energy": 7,
+              "silent_energy": {
+                "est": 0.00033,
+                "ci95": [
+                  9e-05,
+                  0.00056
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.00014,
+                "ci95": [
+                  0.0,
+                  0.00033
+                ]
+              },
+              "guard_load": {
+                "est": 0.00962,
+                "ci95": [
+                  0.0075,
+                  0.01175
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.04325,
+                "ci95": [
+                  0.03875,
+                  0.04775
+                ]
+              }
+            },
+            "0.05": {
+              "n_silent_energy": 5,
+              "silent_energy": {
+                "est": 0.00023,
+                "ci95": [
+                  5e-05,
+                  0.00047
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.00023,
+                "ci95": [
+                  5e-05,
+                  0.00047
+                ]
+              },
+              "guard_load": {
+                "est": 0.02438,
+                "ci95": [
+                  0.02088,
+                  0.02763
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.058,
+                "ci95": [
+                  0.05275,
+                  0.06338
+                ]
+              }
+            },
+            "0.1": {
+              "n_silent_energy": 5,
+              "silent_energy": {
+                "est": 0.00023,
+                "ci95": [
+                  5e-05,
+                  0.00047
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.00023,
+                "ci95": [
+                  5e-05,
+                  0.00047
+                ]
+              },
+              "guard_load": {
+                "est": 0.08737,
+                "ci95": [
+                  0.08138,
+                  0.09388
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.121,
+                "ci95": [
+                  0.114,
+                  0.12837
+                ]
+              }
+            }
+          }
+        },
+        "RECON": {
+          "n_known_test": 48398,
+          "n_unknown_test": 10904,
+          "n_benign_test": 8000,
+          "n_silent_alarm_only": 5,
+          "silent_alarm_only": {
+            "est": 0.00046,
+            "ci95": [
+              9e-05,
+              0.00092
+            ]
+          },
+          "q": {
+            "0.01": {
+              "n_silent_energy": 5,
+              "silent_energy": {
+                "est": 0.00046,
+                "ci95": [
+                  9e-05,
+                  0.00092
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.0,
+                "ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "guard_load": {
+                "est": 0.01025,
+                "ci95": [
+                  0.00813,
+                  0.0125
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.03812,
+                "ci95": [
+                  0.03413,
+                  0.04225
+                ]
+              }
+            },
+            "0.05": {
+              "n_silent_energy": 1,
+              "silent_energy": {
+                "est": 9e-05,
+                "ci95": [
+                  0.0,
+                  0.00028
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.00037,
+                "ci95": [
+                  9e-05,
+                  0.00073
+                ]
+              },
+              "guard_load": {
+                "est": 0.03325,
+                "ci95": [
+                  0.0295,
+                  0.03725
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.06112,
+                "ci95": [
+                  0.056,
+                  0.0665
+                ]
+              }
+            },
+            "0.1": {
+              "n_silent_energy": 1,
+              "silent_energy": {
+                "est": 9e-05,
+                "ci95": [
+                  0.0,
+                  0.00028
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.00037,
+                "ci95": [
+                  9e-05,
+                  0.00073
+                ]
+              },
+              "guard_load": {
+                "est": 0.09438,
+                "ci95": [
+                  0.08812,
+                  0.10063
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.12225,
+                "ci95": [
+                  0.11513,
+                  0.12938
+                ]
+              }
+            }
+          }
+        },
+        "WEB": {
+          "n_known_test": 50727,
+          "n_unknown_test": 8575,
+          "n_benign_test": 8000,
+          "n_silent_alarm_only": 119,
+          "silent_alarm_only": {
+            "est": 0.01388,
+            "ci95": [
+              0.01143,
+              0.01633
+            ]
+          },
+          "q": {
+            "0.01": {
+              "n_silent_energy": 28,
+              "silent_energy": {
+                "est": 0.00327,
+                "ci95": [
+                  0.00198,
+                  0.00455
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.01061,
+                "ci95": [
+                  0.00851,
+                  0.01283
+                ]
+              },
+              "guard_load": {
+                "est": 0.00813,
+                "ci95": [
+                  0.00625,
+                  0.01013
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.03188,
+                "ci95": [
+                  0.028,
+                  0.03575
+                ]
+              }
+            },
+            "0.05": {
+              "n_silent_energy": 28,
+              "silent_energy": {
+                "est": 0.00327,
+                "ci95": [
+                  0.00198,
+                  0.00455
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.01061,
+                "ci95": [
+                  0.00851,
+                  0.01283
+                ]
+              },
+              "guard_load": {
+                "est": 0.03925,
+                "ci95": [
+                  0.03513,
+                  0.04362
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.063,
+                "ci95": [
+                  0.05788,
+                  0.06838
+                ]
+              }
+            },
+            "0.1": {
+              "n_silent_energy": 28,
+              "silent_energy": {
+                "est": 0.00327,
+                "ci95": [
+                  0.00198,
+                  0.00455
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.01061,
+                "ci95": [
+                  0.00851,
+                  0.01283
+                ]
+              },
+              "guard_load": {
+                "est": 0.03925,
+                "ci95": [
+                  0.03513,
+                  0.04362
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.063,
+                "ci95": [
+                  0.05788,
+                  0.06838
+                ]
+              }
+            }
+          }
+        },
+        "BRUTEFORCE": {
+          "n_known_test": 55145,
+          "n_unknown_test": 4157,
+          "n_benign_test": 8000,
+          "n_silent_alarm_only": 426,
+          "silent_alarm_only": {
+            "est": 0.10248,
+            "ci95": [
+              0.09334,
+              0.11162
+            ]
+          },
+          "q": {
+            "0.01": {
+              "n_silent_energy": 340,
+              "silent_energy": {
+                "est": 0.08179,
+                "ci95": [
+                  0.07313,
+                  0.08997
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.02069,
+                "ci95": [
+                  0.01636,
+                  0.02502
+                ]
+              },
+              "guard_load": {
+                "est": 0.00988,
+                "ci95": [
+                  0.00775,
+                  0.012
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.05588,
+                "ci95": [
+                  0.051,
+                  0.061
+                ]
+              }
+            },
+            "0.05": {
+              "n_silent_energy": 38,
+              "silent_energy": {
+                "est": 0.00914,
+                "ci95": [
+                  0.00625,
+                  0.01227
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.09334,
+                "ci95": [
+                  0.08468,
+                  0.10248
+                ]
+              },
+              "guard_load": {
+                "est": 0.04813,
+                "ci95": [
+                  0.04337,
+                  0.053
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.09413,
+                "ci95": [
+                  0.08762,
+                  0.10063
+                ]
+              }
+            },
+            "0.1": {
+              "n_silent_energy": 3,
+              "silent_energy": {
+                "est": 0.00072,
+                "ci95": [
+                  0.0,
+                  0.00168
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.10176,
+                "ci95": [
+                  0.09261,
+                  0.1109
+                ]
+              },
+              "guard_load": {
+                "est": 0.08275,
+                "ci95": [
+                  0.07675,
+                  0.08887
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.12875,
+                "ci95": [
+                  0.12137,
+                  0.13588
+                ]
+              }
+            }
+          }
+        },
+        "MALWARE": {
+          "n_known_test": 53011,
+          "n_unknown_test": 6291,
+          "n_benign_test": 8000,
+          "n_silent_alarm_only": 0,
+          "silent_alarm_only": {
+            "est": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ]
+          },
+          "q": {
+            "0.01": {
+              "n_silent_energy": 0,
+              "silent_energy": {
+                "est": 0.0,
+                "ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.0,
+                "ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "guard_load": {
+                "est": 0.00575,
+                "ci95": [
+                  0.00413,
+                  0.00737
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.04213,
+                "ci95": [
+                  0.0375,
+                  0.04662
+                ]
+              }
+            },
+            "0.05": {
+              "n_silent_energy": 0,
+              "silent_energy": {
+                "est": 0.0,
+                "ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.0,
+                "ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "guard_load": {
+                "est": 0.03637,
+                "ci95": [
+                  0.03225,
+                  0.04075
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.07275,
+                "ci95": [
+                  0.0665,
+                  0.07875
+                ]
+              }
+            },
+            "0.1": {
+              "n_silent_energy": 0,
+              "silent_energy": {
+                "est": 0.0,
+                "ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.0,
+                "ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "guard_load": {
+                "est": 0.03637,
+                "ci95": [
+                  0.03225,
+                  0.04075
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.07275,
+                "ci95": [
+                  0.0665,
+                  0.07875
+                ]
+              }
+            }
+          }
+        }
+      },
+      "mean_over_families": {
+        "silent_alarm_only": {
+          "est": 0.02346,
+          "ci95": [
+            0.02152,
+            0.02539
+          ]
+        },
+        "q": {
+          "0.01": {
+            "silent_energy": {
+              "est": 0.01717,
+              "ci95": [
+                0.01549,
+                0.01883
+              ]
+            },
+            "diff_alarm_only_minus_energy": {
+              "est": 0.00629,
+              "ci95": [
+                0.00537,
+                0.00726
+              ]
+            },
+            "guard_load": {
+              "est": 0.00873,
+              "ci95": [
+                0.00785,
+                0.00962
+              ]
+            },
+            "ci95_half_width_silent_energy": 0.00167
+          },
+          "0.05": {
+            "silent_energy": {
+              "est": 0.00255,
+              "ci95": [
+                0.00191,
+                0.00322
+              ]
+            },
+            "diff_alarm_only_minus_energy": {
+              "est": 0.02091,
+              "ci95": [
+                0.01909,
+                0.0228
+              ]
+            },
+            "guard_load": {
+              "est": 0.03628,
+              "ci95": [
+                0.03445,
+                0.03818
+              ]
+            },
+            "ci95_half_width_silent_energy": 0.00065
+          },
+          "0.1": {
+            "silent_energy": {
+              "est": 0.00086,
+              "ci95": [
+                0.00058,
+                0.00117
+              ]
+            },
+            "diff_alarm_only_minus_energy": {
+              "est": 0.02259,
+              "ci95": [
+                0.02065,
+                0.02452
+              ]
+            },
+            "guard_load": {
+              "est": 0.06802,
+              "ci95": [
+                0.06555,
+                0.07043
+              ]
+            },
+            "ci95_half_width_silent_energy": 0.0003
+          }
+        }
+      }
+    },
+    "2": {
+      "families": {
+        "DDOS": {
+          "n_known_test": 37927,
+          "n_unknown_test": 21375,
+          "n_benign_test": 8000,
+          "n_silent_alarm_only": 59,
+          "silent_alarm_only": {
+            "est": 0.00276,
+            "ci95": [
+              0.00201,
+              0.00351
+            ]
+          },
+          "q": {
+            "0.01": {
+              "n_silent_energy": 56,
+              "silent_energy": {
+                "est": 0.00262,
+                "ci95": [
+                  0.00192,
+                  0.00337
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.00014,
+                "ci95": [
+                  0.0,
+                  0.00033
+                ]
+              },
+              "guard_load": {
+                "est": 0.00637,
+                "ci95": [
+                  0.00475,
+                  0.00813
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.041,
+                "ci95": [
+                  0.037,
+                  0.04537
+                ]
+              }
+            },
+            "0.05": {
+              "n_silent_energy": 54,
+              "silent_energy": {
+                "est": 0.00253,
+                "ci95": [
+                  0.00182,
+                  0.00323
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.00023,
+                "ci95": [
+                  5e-05,
+                  0.00047
+                ]
+              },
+              "guard_load": {
+                "est": 0.02525,
+                "ci95": [
+                  0.02175,
+                  0.02875
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.05987,
+                "ci95": [
+                  0.05475,
+                  0.06525
+                ]
+              }
+            },
+            "0.1": {
+              "n_silent_energy": 54,
+              "silent_energy": {
+                "est": 0.00253,
+                "ci95": [
+                  0.00182,
+                  0.00323
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.00023,
+                "ci95": [
+                  5e-05,
+                  0.00047
+                ]
+              },
+              "guard_load": {
+                "est": 0.02525,
+                "ci95": [
+                  0.02175,
+                  0.02875
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.05987,
+                "ci95": [
+                  0.05475,
+                  0.06525
+                ]
+              }
+            }
+          }
+        },
+        "RECON": {
+          "n_known_test": 48398,
+          "n_unknown_test": 10904,
+          "n_benign_test": 8000,
+          "n_silent_alarm_only": 5,
+          "silent_alarm_only": {
+            "est": 0.00046,
+            "ci95": [
+              9e-05,
+              0.00092
+            ]
+          },
+          "q": {
+            "0.01": {
+              "n_silent_energy": 3,
+              "silent_energy": {
+                "est": 0.00028,
+                "ci95": [
+                  0.0,
+                  0.00064
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.00018,
+                "ci95": [
+                  0.0,
+                  0.00046
+                ]
+              },
+              "guard_load": {
+                "est": 0.01025,
+                "ci95": [
+                  0.00825,
+                  0.0125
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.04088,
+                "ci95": [
+                  0.0365,
+                  0.04488
+                ]
+              }
+            },
+            "0.05": {
+              "n_silent_energy": 1,
+              "silent_energy": {
+                "est": 9e-05,
+                "ci95": [
+                  0.0,
+                  0.00028
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.00037,
+                "ci95": [
+                  9e-05,
+                  0.00073
+                ]
+              },
+              "guard_load": {
+                "est": 0.03025,
+                "ci95": [
+                  0.0265,
+                  0.03375
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.06087,
+                "ci95": [
+                  0.05525,
+                  0.06588
+                ]
+              }
+            },
+            "0.1": {
+              "n_silent_energy": 1,
+              "silent_energy": {
+                "est": 9e-05,
+                "ci95": [
+                  0.0,
+                  0.00028
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.00037,
+                "ci95": [
+                  9e-05,
+                  0.00073
+                ]
+              },
+              "guard_load": {
+                "est": 0.03025,
+                "ci95": [
+                  0.0265,
+                  0.03375
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.06087,
+                "ci95": [
+                  0.05525,
+                  0.06588
+                ]
+              }
+            }
+          }
+        },
+        "WEB": {
+          "n_known_test": 50727,
+          "n_unknown_test": 8575,
+          "n_benign_test": 8000,
+          "n_silent_alarm_only": 133,
+          "silent_alarm_only": {
+            "est": 0.01551,
+            "ci95": [
+              0.01306,
+              0.01808
+            ]
+          },
+          "q": {
+            "0.01": {
+              "n_silent_energy": 28,
+              "silent_energy": {
+                "est": 0.00327,
+                "ci95": [
+                  0.0021,
+                  0.00443
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.01224,
+                "ci95": [
+                  0.01003,
+                  0.01458
+                ]
+              },
+              "guard_load": {
+                "est": 0.008,
+                "ci95": [
+                  0.00613,
+                  0.01
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.0135,
+                "ci95": [
+                  0.011,
+                  0.01625
+                ]
+              }
+            },
+            "0.05": {
+              "n_silent_energy": 2,
+              "silent_energy": {
+                "est": 0.00023,
+                "ci95": [
+                  0.0,
+                  0.00058
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.01528,
+                "ci95": [
+                  0.01294,
+                  0.01784
+                ]
+              },
+              "guard_load": {
+                "est": 0.04325,
+                "ci95": [
+                  0.03887,
+                  0.04775
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.04875,
+                "ci95": [
+                  0.04425,
+                  0.0535
+                ]
+              }
+            },
+            "0.1": {
+              "n_silent_energy": 2,
+              "silent_energy": {
+                "est": 0.00023,
+                "ci95": [
+                  0.0,
+                  0.00058
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.01528,
+                "ci95": [
+                  0.01294,
+                  0.01784
+                ]
+              },
+              "guard_load": {
+                "est": 0.05713,
+                "ci95": [
+                  0.052,
+                  0.06225
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.06263,
+                "ci95": [
+                  0.05737,
+                  0.06788
+                ]
+              }
+            }
+          }
+        },
+        "BRUTEFORCE": {
+          "n_known_test": 55145,
+          "n_unknown_test": 4157,
+          "n_benign_test": 8000,
+          "n_silent_alarm_only": 421,
+          "silent_alarm_only": {
+            "est": 0.10127,
+            "ci95": [
+              0.09213,
+              0.1109
+            ]
+          },
+          "q": {
+            "0.01": {
+              "n_silent_energy": 371,
+              "silent_energy": {
+                "est": 0.08925,
+                "ci95": [
+                  0.08106,
+                  0.09839
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.01203,
+                "ci95": [
+                  0.0089,
+                  0.0154
+                ]
+              },
+              "guard_load": {
+                "est": 0.00813,
+                "ci95": [
+                  0.00613,
+                  0.01025
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.05475,
+                "ci95": [
+                  0.04963,
+                  0.06
+                ]
+              }
+            },
+            "0.05": {
+              "n_silent_energy": 111,
+              "silent_energy": {
+                "est": 0.0267,
+                "ci95": [
+                  0.02213,
+                  0.03175
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.07457,
+                "ci95": [
+                  0.06663,
+                  0.08275
+                ]
+              },
+              "guard_load": {
+                "est": 0.0425,
+                "ci95": [
+                  0.03812,
+                  0.04713
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.08912,
+                "ci95": [
+                  0.08263,
+                  0.09575
+                ]
+              }
+            },
+            "0.1": {
+              "n_silent_energy": 3,
+              "silent_energy": {
+                "est": 0.00072,
+                "ci95": [
+                  0.0,
+                  0.00168
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.10055,
+                "ci95": [
+                  0.09165,
+                  0.11018
+                ]
+              },
+              "guard_load": {
+                "est": 0.09325,
+                "ci95": [
+                  0.087,
+                  0.09988
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.13987,
+                "ci95": [
+                  0.13225,
+                  0.1475
+                ]
+              }
+            }
+          }
+        },
+        "MALWARE": {
+          "n_known_test": 53011,
+          "n_unknown_test": 6291,
+          "n_benign_test": 8000,
+          "n_silent_alarm_only": 0,
+          "silent_alarm_only": {
+            "est": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ]
+          },
+          "q": {
+            "0.01": {
+              "n_silent_energy": 0,
+              "silent_energy": {
+                "est": 0.0,
+                "ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.0,
+                "ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "guard_load": {
+                "est": 0.00762,
+                "ci95": [
+                  0.00575,
+                  0.0095
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.02875,
+                "ci95": [
+                  0.025,
+                  0.03238
+                ]
+              }
+            },
+            "0.05": {
+              "n_silent_energy": 0,
+              "silent_energy": {
+                "est": 0.0,
+                "ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.0,
+                "ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "guard_load": {
+                "est": 0.01775,
+                "ci95": [
+                  0.015,
+                  0.02063
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.03887,
+                "ci95": [
+                  0.0345,
+                  0.043
+                ]
+              }
+            },
+            "0.1": {
+              "n_silent_energy": 0,
+              "silent_energy": {
+                "est": 0.0,
+                "ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "diff_alarm_only_minus_energy": {
+                "est": 0.0,
+                "ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "guard_load": {
+                "est": 0.08912,
+                "ci95": [
+                  0.08325,
+                  0.09513
+                ]
+              },
+              "total_benign_load": {
+                "est": 0.11025,
+                "ci95": [
+                  0.1035,
+                  0.11713
+                ]
+              }
+            }
+          }
+        }
+      },
+      "mean_over_families": {
+        "silent_alarm_only": {
+          "est": 0.024,
+          "ci95": [
+            0.0221,
+            0.02598
+          ]
+        },
+        "q": {
+          "0.01": {
+            "silent_energy": {
+              "est": 0.01908,
+              "ci95": [
+                0.01735,
+                0.02091
+              ]
+            },
+            "diff_alarm_only_minus_energy": {
+              "est": 0.00492,
+              "ci95": [
+                0.00415,
+                0.00576
+              ]
+            },
+            "guard_load": {
+              "est": 0.00807,
+              "ci95": [
+                0.0072,
+                0.00895
+              ]
+            },
+            "ci95_half_width_silent_energy": 0.00178
+          },
+          "0.05": {
+            "silent_energy": {
+              "est": 0.00591,
+              "ci95": [
+                0.00497,
+                0.00693
+              ]
+            },
+            "diff_alarm_only_minus_energy": {
+              "est": 0.01809,
+              "ci95": [
+                0.01645,
+                0.0198
+              ]
+            },
+            "guard_load": {
+              "est": 0.0318,
+              "ci95": [
+                0.03003,
+                0.0335
+              ]
+            },
+            "ci95_half_width_silent_energy": 0.00098
+          },
+          "0.1": {
+            "silent_energy": {
+              "est": 0.00071,
+              "ci95": [
+                0.00051,
+                0.00095
+              ]
+            },
+            "diff_alarm_only_minus_energy": {
+              "est": 0.02329,
+              "ci95": [
+                0.02142,
+                0.02524
+              ]
+            },
+            "guard_load": {
+              "est": 0.059,
+              "ci95": [
+                0.05677,
+                0.0613
+              ]
+            },
+            "ci95_half_width_silent_energy": 0.00022
+          }
+        }
+      }
+    }
+  },
+  "seed_vs_bootstrap": {
+    "0.01": {
+      "silent_energy_seed_sd": 0.0026,
+      "silent_energy_boot_half_width_mean": 0.00177
+    },
+    "0.05": {
+      "silent_energy_seed_sd": 0.00251,
+      "silent_energy_boot_half_width_mean": 0.00091
+    },
+    "0.1": {
+      "silent_energy_seed_sd": 9e-05,
+      "silent_energy_boot_half_width_mean": 0.00028
+    }
+  },
+  "criterion_q": 0.05,
+  "criterion_diff_ci_low": [
+    0.01883,
+    0.01909,
+    0.01645
+  ],
+  "verdict": "sağlandı (her tohumda farkın %95 alt ucu > 0)",
+  "settings": {
+    "runs": [
+      "outputs/dnn_edgeiiot/two_signal",
+      "outputs/dnn_edgeiiot/two_signal/s1",
+      "outputs/dnn_edgeiiot/two_signal/s2"
+    ],
+    "condition": "C_seq_ack_yok",
+    "out_dir": "outputs/dnn_edgeiiot/bootstrap_ci",
+    "B": 2000
+  },
+  "runtime": {
+    "python": "3.13.18",
+    "os": "Linux-6.18.44-fc-v880-x86_64-with-glibc2.39",
+    "processor": "x86_64",
+    "cpu_count": 2,
+    "cuda": null,
+    "gpu": null,
+    "in_colab": false,
+    "in_kaggle": false,
+    "libraries": {
+      "numpy": "2.5.3",
+      "pandas": "3.0.5",
+      "scipy": "1.18.1",
+      "scikit-learn": "1.9.1"
+    }
+  }
+}
