@@ -28,6 +28,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import numpy as np
 
 from common import open_set_registry as registry
+from common.contract import environment_info
 from common.taxonomy import SEVERITY
 
 ACTIONS = ["ALLOW", "LOG_MONITOR", "ANALYST_REVIEW", "ALERT", "BLOCK"]
@@ -103,6 +104,7 @@ def main():
            "low": args.low, "high": args.high, "variants": VARIANTS, "thresholds": thresholds,
            "mean_over_families": mean, "per_family": per_family}
     path = os.path.join(rows_dir, f"alarm_tiers_{cond}.json")
+    out["runtime"] = environment_info()  # yazılım sürümleri ve donanım (common/contract.py)
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(out, fh, indent=2, ensure_ascii=False)
 

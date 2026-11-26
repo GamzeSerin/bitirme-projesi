@@ -57,6 +57,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 from common import open_set_registry as registry
+from common.contract import environment_info
 from common.taxonomy import COMMON_CLASSES
 from open_set_lofo import KNNScore, model_scores
 
@@ -346,6 +347,7 @@ def main():
         print(f"\nYeniden kalibrasyon (W2'de, {primary}; aile ortalaması):")
         print(prim.pivot_table(index="variant", columns="q", values=["silent_benign", "guard_review", "total_benign_load"])
               .round(4).to_string())
+    out["runtime"] = environment_info()  # yazılım sürümleri ve donanım (common/contract.py)
     with open(os.path.join(args.out_dir, f"two_signal_{tag}.json"), "w", encoding="utf-8") as f:
         json.dump(out, f, indent=2, ensure_ascii=False)
     plot(mean, df, spec["name"], args.condition,

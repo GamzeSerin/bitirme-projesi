@@ -28,6 +28,7 @@ import numpy as np
 import pandas as pd
 
 from common import open_set_registry as registry
+from common.contract import environment_info
 from two_signal import temporal_split
 
 
@@ -100,6 +101,7 @@ def main():
             print(f"   {w:4s} " + "  ".join(f"{float(k):g}: %{v * 100:.1f}" for k, v in vc.items()))
         out["fingerprint"][c] = r
     path = os.path.join(out_dir, f"time_window_check_{cond}.json")
+    out["runtime"] = environment_info()  # yazılım sürümleri ve donanım (common/contract.py)
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(out, fh, indent=2, ensure_ascii=False)
     print(f"\nÇıktı: {path}")

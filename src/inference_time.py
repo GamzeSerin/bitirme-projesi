@@ -30,6 +30,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 
 from common import open_set_registry as registry
+from common.contract import environment_info
 from common.taxonomy import COMMON_CLASSES
 
 
@@ -162,6 +163,7 @@ def main():
            "torch": torch.__version__, "cuda_device": torch.cuda.get_device_name(0) if torch.cuda.is_available() else None,
            "cpu_threads": torch.get_num_threads(), "results": results}
     path = os.path.join(out_dir, f"inference_time_{args.family}_{cond}.json")
+    out["runtime"] = environment_info()  # yazılım sürümleri ve donanım (common/contract.py)
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(out, fh, indent=2, ensure_ascii=False)
     print(f"Çıktı: {path}")

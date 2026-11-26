@@ -27,6 +27,7 @@ import numpy as np
 import pandas as pd
 
 from common import open_set_registry as registry
+from common.contract import environment_info
 
 
 def mixed_share(X, fine, category):
@@ -75,6 +76,7 @@ def main():
             print(f"   {k:28s} %{v * 100:5.1f}   en sık karıştığı: {r['mixed_with'][k]}")
     out["seconds"] = round(time.perf_counter() - t0, 1)
     path = os.path.join(out_dir, f"label_noise_{cond}.json")
+    out["runtime"] = environment_info()  # yazılım sürümleri ve donanım (common/contract.py)
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(out, fh, indent=2, ensure_ascii=False)
     print(f"\nÇıktı: {path}")

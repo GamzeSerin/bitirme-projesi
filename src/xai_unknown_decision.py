@@ -49,6 +49,7 @@ from sklearn.model_selection import train_test_split
 
 import model_ml as shared
 from common import open_set_registry as registry
+from common.contract import environment_info
 from common.taxonomy import COMMON_CLASSES
 from open_set_lofo import model_scores
 
@@ -343,6 +344,7 @@ def main():
            "port_columns": ports, "families": out_fam, "runtime_seconds": round(time.perf_counter() - t_start, 1)}
     sfx = args.condition + (f"_{args.tag}" if args.tag else "")
     path = os.path.join(args.out_dir, f"xai_unknown_decision_{sfx}.json")
+    out["runtime"] = environment_info()  # yazılım sürümleri ve donanım (common/contract.py)
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(out, fh, indent=2, ensure_ascii=False, default=lambda o: o.item() if hasattr(o, "item") else str(o))
     plot(out, os.path.join(args.out_dir, f"fig_xai_unknown_decision_{args.dataset}_{sfx}.png"))

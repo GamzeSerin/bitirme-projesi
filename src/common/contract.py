@@ -87,21 +87,40 @@ def stratified_sample(y, per_class, seed):
 
 
 def environment_info():
-    """Makaledeki 'deney ortamı' bölümü için: donanım + kütüphane sürümleri."""
+    """Deney ortamı: donanım + kütüphane sürümleri (makaledeki 'deney ortamı' bölümü ve yeniden üretilebilirlik).
+
+    Kurallar:
+    - Ortak araçlar sonuç JSON'una bunu "runtime" anahtarıyla yazar (manifest.json'daki "runtime" ile aynı ad).
+      "environment" adı kullanılmaz: manifest'te o ad ağ ortamını (ör. "Tüketici IoT ağı") anlatıyor.
+    - Kurulu olmayan kütüphane listeye girmez (hata vermez). torch yoksa "cuda" ve "gpu" None olur.
+    - Yalnız ileriye dönük: eski sonuç JSON'ları bunun için yeniden koşulmaz; o koşuların Kaggle ortamı README'de bir kez yazılı.
+    """
     from importlib.metadata import PackageNotFoundError, version
     libs = {}
-    for pkg in ("numpy", "pandas", "scikit-learn", "xgboost", "lightgbm", "shap",
-                "torch", "tensorflow"):
+    for pkg in ("numpy", "pandas", "scipy", "scikit-learn", "xgboost", "lightgbm", "shap",
+                "torch", "tabm", "tensorflow"):
         try:
             libs[pkg] = version(pkg)
         except PackageNotFoundError:
+            pass
+    cuda, gpu = None, None
+    if "torch" in libs:
+        try:
+            import torch
+            cuda = torch.version.cuda
+            if torch.cuda.is_available():
+                gpu = torch.cuda.get_device_name(0)
+        except Exception:  # sürüm bilgisi deneyi durdurmamalı
             pass
     return {
         "python": platform.python_version(),
         "os": platform.platform(),
         "processor": platform.processor() or platform.machine(),
         "cpu_count": os.cpu_count(),
+        "cuda": cuda,
+        "gpu": gpu,
         "in_colab": "google.colab" in sys.modules,
+        "in_kaggle": "KAGGLE_KERNEL_RUN_TYPE" in os.environ,
         "libraries": libs,
     }
 

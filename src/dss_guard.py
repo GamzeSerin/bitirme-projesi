@@ -46,6 +46,7 @@ from sklearn.model_selection import StratifiedKFold, train_test_split
 
 import model_ml as shared
 from common import open_set_registry as registry
+from common.contract import environment_info
 from common.taxonomy import COMMON_CLASSES, SEVERITY
 from open_set_lofo import model_scores
 
@@ -293,6 +294,7 @@ def main():
         "runtime_seconds": round(time.perf_counter() - t_start, 1),
     }
     path = os.path.join(args.out_dir, f"dss_guard_{tag}.json")
+    out["runtime"] = environment_info()  # yazılım sürümleri ve donanım (common/contract.py)
     with open(path, "w", encoding="utf-8") as f:
         json.dump(out, f, indent=2, ensure_ascii=False, default=lambda o: o.item() if hasattr(o, "item") else str(o))
 
