@@ -1102,6 +1102,51 @@ geçerli mi?
 - **Bilinen sınırlılıklar:** yalnız birebir eş aranır (yakın eş yok); paket düzeyinde ölçülür. Bağlantı düzeyinde grup bölmesi
   (#19) sızıntının en doğrudan kontrolüdür, burada yapılmaz.
 
+### Sızıntı denetimi: sonuçlar (26.11.2026; Kaggle, koşul C, 5 aile, tohum 42/1/2; çıktı `outputs/dnn_edgeiiot/leakage/`)
+
+Kod: `python src/leakage_check.py --data-file <csv>` (Kaggle CPU, birkaç dakika). Bölme yeniden kuruldu ve 5 ailede satır
+dosyalarındaki `test_index` ile birebir tuttu (296.506 satır, 32 özellik); hash ile bulunan eşler sütun sütun doğrulandı.
+
+**1. Eşi olan pay** (test satırlarının koşul C vektörü o katlamanın eğitiminde birebir var; 5 aile ortalaması):
+bilinen **%63,7** (aile başına %60–70), normal **%74,6**, bilinmeyen **%28,6** (DDOS %14, RECON %8, WEB %32, BRUTEFORCE %44,
+MALWARE %44). Bilinen satırların eşlerinin yalnız %63–79'u aynı kategoride; kalanında eğitimdeki eş BAŞKA bir kategoriyle
+etiketli (koşul C'deki etiket karışıklığı bulgusunun aynısı).
+
+**2. Alt kümelerde ölçümler** (5 aile ortalaması; tohum 42 / 1 / 2):
+
+| | Tümü | Eşi olan | Eşi olmayan |
+|---|---|---|---|
+| Bilinen macro-F1 | 0,875 / 0,875 / 0,875 | 0,820 / 0,820 / 0,821 | **0,876 / 0,878 / 0,886** |
+| Kontrolsüz sessiz kaçış | %2,81 / 2,35 / 2,40 | %1,72 / 1,55 / 1,46 | %3,62 / 2,95 / 3,08 |
+| Enerji kaçışı, q = %5 | %0,75 / 0,26 / 0,59 | %0,54 / 0,18 / 0,39 | **%0,93 / 0,33 / 0,72** |
+| Kontrolün yükü (normal), q = %5 | %3,2 / 3,6 / 3,2 | %0,4 / 0,5 / 0,4 | %11,4 / 12,8 / 11,3 |
+
+**Önceden yazılan ölçütlere göre değerlendirme:**
+1. **Sınıflandırma:** eşi olmayan bilinenlerde macro-F1 tümünden düşük değil, biraz YÜKSEK (fark −0,001 / −0,004 / −0,012;
+   ölçüt ≤ 0,05) → **sağlandı**. Sınıflandırma başarısı ezbere dayanmıyor.
+2. **Ana iddia:** eşi olmayan bilinmeyenlerde enerji / kontrolsüz kaçış oranı 0,26 / 0,11 / 0,23 (ölçüt ≤ 0,5) → **sağlandı**.
+   İki sinyal kuralı sızıntıya dayanıklı: kaçışı eğitimde benzeri olmayan satırlarda da 4–9 kat azaltıyor.
+
+**Betimleyici (ölçüte girmez):**
+- **Eşi olan satırlar DAHA ZOR, kolay değil.** macro-F1 eşi olanlarda 0,82, olmayanlarda 0,88. Sebep: eşlerin üçte birine yakını
+  eğitimde başka kategoriyle etiketli; aynı vektöre iki farklı cevap öğretilmiş. Sızıntı burada skoru şişirmiyor, etiket
+  karışıklığı düşürüyor. Tezde paket düzeyi bölmenin riski "ezber" değil "aynı girdiye çelişen etiket" olarak anlatılmalı.
+- **Kaçışın çoğu eşi OLMAYAN bilinmeyenlerden** (ör. tohum 42, WEB: 198 kaçışın 167'si, BRUTEFORCE: 484'ün 351'i). Yani
+  kaçışlar "modelin bilinen bir etiketle gördüğü vektörün aynısı" olmaktan çok, gerçekten yeni ama normale benzeyen satırlar.
+- **Analist yükü neredeyse tamamen eğitimde benzeri olmayan normal trafikten geliyor:** eşi olan normal satırlarda %0,4–0,5,
+  olmayanlarda %11–13. Normal test satırlarının dörtte biri yeni vektör olduğu için ortalama %3,2–3,6'ya iniyor. Bu, zaman
+  bölmesindeki analist yükü platosunun ve Modbus sahnesinin aynı mekanizması: **model yeni normali şüpheli buluyor**. Canlıda
+  "yeni trafik payı" izlenmeli (kayma göstergesi, #14) ve yük bununla birlikte yorumlanmalı.
+- Plandaki sınırlılık: yalnız birebir eş; paket düzeyi. Bağlantı düzeyinde grup bölmesi (#19) ayrıca gerekir.
+
+### Kaggle ortam kaydı (#27; 26.11.2026, `outputs/dnn_edgeiiot/kaggle_environment.json`)
+
+Python 3.13.16, numpy 2.1.3, pandas 2.3.3, scipy 1.16.3, scikit-learn 1.6.1, torch 2.11.0+cu130 (CUDA 13.0), Tesla T4,
+4 CPU. Bu, 26.11.2026'daki Kaggle imajıdır; Ekim'deki koşular daha eski bir imajda yapılmış olabilir (Kaggle imajı
+sabitlenmedi; o koşuların sürümleri kayıtlı değil, bu kayıt yaklaşık bir referanstır). `tabm` bu oturumda kurulu değildi
+(sızıntı denetimi gerektirmiyor; `requirements.txt`'de yok, TabM deneylerinde ayrıca kuruluyor). Bundan sonraki sonuç
+JSON'ları kendi `runtime` alanını taşır.
+
 ## Sütun hizası ve değer aralığı denetimi (19.10.2026)
 
 Kod: `src/audit_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/audit/audit.json`. Ham verideki 15 etiketin her biri için 6 kontrol (zaman damgası, IP, port 0–65535, 0/1 bayrak, ARP alanları, sayısal sütunlarda metin). İhlal yalnızca DDoS_UDP (zaman %100) ve MITM'de (zaman %100, port %30, bayrak %19); Normal'de %0,11 bayrak ihlali (önemsiz); diğer 12 saldırı türünde %0. Bu iki tür bulgu 7 gereği atıldı.
