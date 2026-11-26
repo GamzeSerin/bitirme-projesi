@@ -68,7 +68,7 @@ class DB:
                 path = os.path.join(ROOT, path)
             os.makedirs(os.path.dirname(path), exist_ok=True)
             self.kind, self.ph = "sqlite", "?"
-            self.conn = sqlite3.connect(path)
+            self.conn = sqlite3.connect(path, check_same_thread=False)  # web sunucusu: istekler kilitle sırayla
             self.conn.execute("PRAGMA foreign_keys = ON")
         elif url.startswith(("postgresql", "postgres")):
             try:

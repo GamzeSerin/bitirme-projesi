@@ -10,3 +10,7 @@ rtdl_num_embeddings
 
 # Veritabanı (canlı demo, 4. adım). PostgreSQL için; SQLite ile denemede gerekmez
 psycopg[binary]
+
+# Web arayüzü (canlı demo, 5. adım)
+fastapi
+uvicorn
