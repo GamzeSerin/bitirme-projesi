@@ -20,6 +20,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import numpy as np
 
 from common import open_set_registry as registry
+from common.contract import environment_info
 from common.taxonomy import COMMON_CLASSES
 from two_signal import CLASSIFIERS, extra_metrics
 
@@ -116,6 +117,7 @@ def main():
            "summary": summary, "per_family_mean_over_seeds": fam_table,
            "runs": {clf: {s: v["file"] for s, v in by.items()} for clf, by in per.items()}}
     path = os.path.join(out_dir, f"dl_compare_{cond}.json")
+    out["runtime"] = environment_info()  # yazılım sürümleri ve donanım (common/contract.py)
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(out, fh, indent=2, ensure_ascii=False)
     for clf, sm in summary.items():

@@ -52,6 +52,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPRegressor
 
 from common import open_set_registry as registry
+from common.contract import environment_info
 from common.taxonomy import COMMON_CLASSES
 from open_set_lofo import KNNScore, evaluate, model_scores
 
@@ -321,6 +322,7 @@ def main():
            "summary": summary, "per_seed": {str(k): v for k, v in res.items()},
            "runtime_seconds": round(time.perf_counter() - t_start, 1)}
     path = os.path.join(args.out_dir, f"open_set_baselines_{args.condition}.json")
+    out["runtime"] = environment_info()  # yazılım sürümleri ve donanım (common/contract.py)
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(out, fh, indent=2, ensure_ascii=False)
     plot(summary, families, os.path.join(args.out_dir, f"fig_open_set_baselines_{args.dataset}_{args.condition}.png"),
