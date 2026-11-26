@@ -998,6 +998,36 @@ bakmaktan" gelmiyor.
 gücü %3 civarındaki yükten sonra ortaya çıkıyor. Bu, 21.10 bulgusuyla ("etkili olması için %1'den büyük bütçe gerekiyor")
 tutarlı ve tezde q = %5 seçiminin gerekçesi olarak yazılabilir.
 
+## Aile başına örnek sayıları ve bootstrap %95 güven aralıkları (#26). Analiz planı (sonuçlardan ÖNCE yazıldı, 26.11.2026)
+
+Soru: Tezin ana sayıları (sessiz kaçış, analist yükü) test satırlarının şansına ne kadar bağlı? Şimdiye kadar yalnız tohum sapması
+(modeli 3 kez eğitmenin değişkenliği) raporlandı; aynı model başka bir test örneğinde ne verirdi, bu ayrıca ölçülür.
+
+- **Kod:** `src/bootstrap_ci.py` (model eğitimi yok, veri seti gerekmez, CPU). Girdi: #18'deki gibi `two_signal` satır dosyaları
+  ve sonuç JSON'ları (koşul C, 5 aile, tohum 42/1/2).
+- **Kararların yeniden üretimi:** kontrol eşikleri satır dosyalarına kaydedilmemiş. Her aile, tohum ve q için eşik, test
+  satırlarında JSON'daki inceleme sayısını (normal trafik) ve sessiz kaçış sayısını (bilinmeyen) birlikte tutturacak şekilde
+  seçilir. Ön kontrol (sonuçlara bakmadan, yalnız tutarlılık): 75 durumun hepsinde böyle bir eşik var. Eşik sabit tutulur
+  (canlıdaki gibi); kalibrasyon kümesinin şansı bu aralığa dahil DEĞİLDİR (sınırlılık).
+- **Bootstrap:** her ailede test satırları, bilinmeyen ve normal (BENIGN) gruplar AYRI ayrı yerine koyarak yeniden çekilir
+  (grup büyüklükleri sabit), B = 2.000, tohum 0. Yüzdelik yöntemi (%2,5 ve %97,5). 5 aile ortalamasının aralığı için her
+  aile bağımsız çekilir, her tekrarda ortalama alınır.
+- **Ölçümler** (enerji kontrolü; q = %1 / 5 / 10, ana q = %5):
+  1. Sessiz kaçış: kontrolsüz (yalnız alarm) ve enerji kontrolüyle; ve ikisinin farkı (eşli: aynı çekilişte).
+  2. Analist yükü (normal trafik): kontrolün gönderdiği pay ve toplam yük (alarm VEYA kontrol).
+  3. Aile başına test sayıları: bilinen, bilinmeyen, normal satır; kaçışın gerçekleştiği satır sayısı (aralığın neden geniş ya
+     da dar olduğunu gösterir).
+  4. Her ölçüm için tohum sapmasıyla yan yana: bootstrap aralığının yarı genişliği ile tohumlar arası standart sapma.
+- **Yorum çerçevesi (önceden):**
+  - **Ana ölçüt:** "iki sinyal kaçışı azaltır" iddiası (%2,5 → %0,5) test örneğine dayanıklı sayılır, eğer q = %5'te
+    5 aile ortalamasında (kontrolsüz − enerji) farkının %95 aralığının alt ucu 0'ın üstündeyse, 3 tohumun HER BİRİNDE.
+    Bir tohumda aralık 0'ı içerirse "o tohumda test örneği şansından ayırt edilemiyor" diye raporlanır.
+  - Betimleyici: hangi belirsizlik kaynağı büyük (test örneği mi, model tohumu mu); kaçışın görüldüğü ailelerde (WEB,
+    BRUTEFORCE) aile başına aralıklar. Kaçışın ~0 olduğu ailelerde aralık dejenere olabilir; olduğu gibi yazılır.
+- **Bilinen sınırlılıklar:** satırlar paket düzeyinde ve bağımsız varsayılır; aynı bağlantının paketleri birbirine bağımlı
+  olduğundan gerçek belirsizlik büyük ihtimalle daha geniştir (bağlantı düzeyinde grup bootstrap'ı #19 ile birlikte, gelecek
+  çalışma). Eşik ve kalibrasyon belirsizliği dahil değildir.
+
 ## Sütun hizası ve değer aralığı denetimi (19.10.2026)
 
 Kod: `src/audit_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/audit/audit.json`. Ham verideki 15 etiketin her biri için 6 kontrol (zaman damgası, IP, port 0–65535, 0/1 bayrak, ARP alanları, sayısal sütunlarda metin). İhlal yalnızca DDoS_UDP (zaman %100) ve MITM'de (zaman %100, port %30, bayrak %19); Normal'de %0,11 bayrak ihlali (önemsiz); diğer 12 saldırı türünde %0. Bu iki tür bulgu 7 gereği atıldı.
