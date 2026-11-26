@@ -967,6 +967,37 @@ Soru: Tezin sayıları (bilinen sınıflarda macro-F1, sessiz kaçış, analist 
 - **Bilinen sınırlılık:** çoğunluk kategorisi test satırlarından okunur (yukarıda). Zaman bölmesi bu planın dışında (gerekirse ayrı
   plan).
 
+### Baz modeller: sonuçlar (26.11.2026; koşul C, 5 aile, tohum 42/1/2; çıktı `outputs/dnn_edgeiiot/trivial_baselines/`)
+
+Kod: `python src/trivial_baselines.py` (CPU, birkaç saniye). Doğrulama: satır dosyalarından hesaplanan kontrolsüz sessiz kaçış, 15
+aile × tohum çiftinin hepsinde sonuç JSON'undakiyle birebir aynı (aynı test satırları).
+
+**1. Bilinen sınıflarda macro-F1** (5 aile ortalaması): çoğunluk sınıfı **0,111** (3 tohumda aynı; tahminci modelden
+bağımsız), TabM **0,875 ± 0,000** (0,8751 / 0,8747 / 0,8745). Çoğunluk kategorisi DDOS ailesi dışarıdayken RECON, diğer dört
+ailede DDOS (etiket başına 40 bin sınırı ve DDOS'un 4 etiketi yüzünden). Aile başına çoğunluk 0,089–0,123, TabM 0,82–0,94.
+Ölçüte göre: TabM çoğunluk sınıfının açıkça üstünde; sınıflandırma iddiası geçerli.
+
+**2. Sessiz kaçış, aynı analist yükünde** (5 aile ortalaması, tohumlar arası ort. ± sd; "her şeye normal" kuralında %100 kaçış, %0 yük):
+
+| q | Normal trafikte gerçekleşen yük | Enerji kontrolü | Rastgele inceleme | Oran (rastgele / enerji), tohum 42 / 1 / 2 |
+|---|---|---|---|---|
+| %1 | %0,82 ± 0,05 | %1,95 ± 0,26 | %2,49 ± 0,25 | 1,24 / 1,35 / 1,25 |
+| %2 | %1,54 ± 0,07 | %1,60 ± 0,12 | %2,47 ± 0,24 | 1,61 / 1,56 / 1,47 |
+| **%5** | %3,34 ± 0,25 | **%0,53 ± 0,25** | %2,39 ± 0,24 | **3,57 / 8,73 / 3,87** |
+| %10 | %6,25 ± 0,49 | %0,08 ± 0,01 | %2,28 ± 0,23 | 28,9 / 24,9 / 30,4 |
+
+Kontrolsüz (yalnız alarm) kaçış %2,52. Rastgele incelemenin 1.000 çekilişlik %95 aralıkları dar (q = %5'te WEB'de ±0,1 puan,
+BRUTEFORCE'ta ±0,2 puan); enerji kontrolünün değerleri her tohumda bu aralıkların çok altında (ör. BRUTEFORCE, q = %5: enerji
+%3,4 / %0,9 / %2,7, rastgele %11,0 / %9,7 / %9,6).
+
+**Önceden yazılan ölçüte göre değerlendirme:** q = %5'te oran her tohumda ≥ 2 (3,6 / 8,7 / 3,9) → **sağlandı**. Enerji
+kontrolü, analist bütçesini rastgele harcamaktan 3,6–8,7 kat daha az sessiz kaçış veriyor; kazanç yalnızca "daha çok vakaya
+bakmaktan" gelmiyor.
+
+**Betimleyici (ölçüte girmez):** küçük bütçelerde (q ≤ %2) kazanç yalnızca 1,2–1,6 kat; enerji kontrolünün asıl ayırt edici
+gücü %3 civarındaki yükten sonra ortaya çıkıyor. Bu, 21.10 bulgusuyla ("etkili olması için %1'den büyük bütçe gerekiyor")
+tutarlı ve tezde q = %5 seçiminin gerekçesi olarak yazılabilir.
+
 ## Sütun hizası ve değer aralığı denetimi (19.10.2026)
 
 Kod: `src/audit_dnn_edgeiiot.py`, çıktı: `outputs/dnn_edgeiiot/audit/audit.json`. Ham verideki 15 etiketin her biri için 6 kontrol (zaman damgası, IP, port 0–65535, 0/1 bayrak, ARP alanları, sayısal sütunlarda metin). İhlal yalnızca DDoS_UDP (zaman %100) ve MITM'de (zaman %100, port %30, bayrak %19); Normal'de %0,11 bayrak ihlali (önemsiz); diğer 12 saldırı türünde %0. Bu iki tür bulgu 7 gereği atıldı.

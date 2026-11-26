@@ -1,0 +1,1336 @@
+{
+  "dataset_id": "dnn_edgeiiot",
+  "condition": "C_seq_ack_yok",
+  "guard": "tabm_energy",
+  "plan": "data/dnn_edgeiiot/README.md, 'Baz modeller' (26.11.2026, sonuçlardan önce)",
+  "always_benign": {
+    "silent_benign": 1.0,
+    "benign_load": 0.0,
+    "note": "tanım gereği"
+  },
+  "seeds": {
+    "42": {
+      "families": {
+        "DDOS": {
+          "n_known_test": 37927,
+          "n_unknown_test": 21375,
+          "n_benign_test": 8000,
+          "known_categories": [
+            "BENIGN",
+            "BRUTEFORCE",
+            "MALWARE",
+            "RECON",
+            "WEB"
+          ],
+          "majority_category": "RECON",
+          "majority_macro_f1": 0.0893,
+          "tabm_macro_f1": 0.8877,
+          "silent_alarm_only": 0.00047,
+          "silent_alarm_only_json": 0.0005,
+          "benign_reach_guard": 0.8595
+        },
+        "RECON": {
+          "n_known_test": 48398,
+          "n_unknown_test": 10904,
+          "n_benign_test": 8000,
+          "known_categories": [
+            "BENIGN",
+            "BRUTEFORCE",
+            "DDOS",
+            "MALWARE",
+            "WEB"
+          ],
+          "majority_category": "DDOS",
+          "majority_macro_f1": 0.1225,
+          "tabm_macro_f1": 0.8467,
+          "silent_alarm_only": 0.00046,
+          "silent_alarm_only_json": 0.0005,
+          "benign_reach_guard": 0.85575
+        },
+        "WEB": {
+          "n_known_test": 50727,
+          "n_unknown_test": 8575,
+          "n_benign_test": 8000,
+          "known_categories": [
+            "BENIGN",
+            "BRUTEFORCE",
+            "DDOS",
+            "MALWARE",
+            "RECON"
+          ],
+          "majority_category": "DDOS",
+          "majority_macro_f1": 0.1186,
+          "tabm_macro_f1": 0.8886,
+          "silent_alarm_only": 0.02309,
+          "silent_alarm_only_json": 0.0231,
+          "benign_reach_guard": 0.87113
+        },
+        "BRUTEFORCE": {
+          "n_known_test": 55145,
+          "n_unknown_test": 4157,
+          "n_benign_test": 8000,
+          "known_categories": [
+            "BENIGN",
+            "DDOS",
+            "MALWARE",
+            "RECON",
+            "WEB"
+          ],
+          "majority_category": "DDOS",
+          "majority_macro_f1": 0.1117,
+          "tabm_macro_f1": 0.9325,
+          "silent_alarm_only": 0.11643,
+          "silent_alarm_only_json": 0.1164,
+          "benign_reach_guard": 0.8895
+        },
+        "MALWARE": {
+          "n_known_test": 53011,
+          "n_unknown_test": 6291,
+          "n_benign_test": 8000,
+          "known_categories": [
+            "BENIGN",
+            "BRUTEFORCE",
+            "DDOS",
+            "RECON",
+            "WEB"
+          ],
+          "majority_category": "DDOS",
+          "majority_macro_f1": 0.1149,
+          "tabm_macro_f1": 0.8199,
+          "silent_alarm_only": 0.0,
+          "silent_alarm_only_json": 0.0,
+          "benign_reach_guard": 0.83213
+        }
+      },
+      "results": [
+        {
+          "family": "DDOS",
+          "q": 0.005,
+          "load": 0.00637,
+          "r": 0.00741,
+          "silent_energy": 0.00023,
+          "silent_random": 0.00046,
+          "silent_random_ci95": [
+            0.00042,
+            0.00047
+          ]
+        },
+        {
+          "family": "DDOS",
+          "q": 0.01,
+          "load": 0.01263,
+          "r": 0.01469,
+          "silent_energy": 0.00019,
+          "silent_random": 0.00046,
+          "silent_random_ci95": [
+            0.00042,
+            0.00047
+          ]
+        },
+        {
+          "family": "DDOS",
+          "q": 0.02,
+          "load": 0.02237,
+          "r": 0.02603,
+          "silent_energy": 0.00019,
+          "silent_random": 0.00046,
+          "silent_random_ci95": [
+            0.00037,
+            0.00047
+          ]
+        },
+        {
+          "family": "DDOS",
+          "q": 0.05,
+          "load": 0.04788,
+          "r": 0.05571,
+          "silent_energy": 9e-05,
+          "silent_random": 0.00044,
+          "silent_random_ci95": [
+            0.00037,
+            0.00047
+          ]
+        },
+        {
+          "family": "DDOS",
+          "q": 0.1,
+          "load": 0.04788,
+          "r": 0.05571,
+          "silent_energy": 9e-05,
+          "silent_random": 0.00044,
+          "silent_random_ci95": [
+            0.00037,
+            0.00047
+          ]
+        },
+        {
+          "family": "RECON",
+          "q": 0.005,
+          "load": 0.00562,
+          "r": 0.00657,
+          "silent_energy": 0.00046,
+          "silent_random": 0.00046,
+          "silent_random_ci95": [
+            0.00037,
+            0.00046
+          ]
+        },
+        {
+          "family": "RECON",
+          "q": 0.01,
+          "load": 0.01,
+          "r": 0.01169,
+          "silent_energy": 0.00046,
+          "silent_random": 0.00045,
+          "silent_random_ci95": [
+            0.00037,
+            0.00046
+          ]
+        },
+        {
+          "family": "RECON",
+          "q": 0.02,
+          "load": 0.0175,
+          "r": 0.02045,
+          "silent_energy": 0.00028,
+          "silent_random": 0.00045,
+          "silent_random_ci95": [
+            0.00037,
+            0.00046
+          ]
+        },
+        {
+          "family": "RECON",
+          "q": 0.05,
+          "load": 0.02675,
+          "r": 0.03126,
+          "silent_energy": 9e-05,
+          "silent_random": 0.00044,
+          "silent_random_ci95": [
+            0.00037,
+            0.00046
+          ]
+        },
+        {
+          "family": "RECON",
+          "q": 0.1,
+          "load": 0.02675,
+          "r": 0.03126,
+          "silent_energy": 9e-05,
+          "silent_random": 0.00044,
+          "silent_random_ci95": [
+            0.00037,
+            0.00046
+          ]
+        },
+        {
+          "family": "WEB",
+          "q": 0.005,
+          "load": 0.00263,
+          "r": 0.00302,
+          "silent_energy": 0.01749,
+          "silent_random": 0.02302,
+          "silent_random_ci95": [
+            0.02274,
+            0.02309
+          ]
+        },
+        {
+          "family": "WEB",
+          "q": 0.01,
+          "load": 0.0055,
+          "r": 0.00631,
+          "silent_energy": 0.01155,
+          "silent_random": 0.02294,
+          "silent_random_ci95": [
+            0.02262,
+            0.02309
+          ]
+        },
+        {
+          "family": "WEB",
+          "q": 0.02,
+          "load": 0.014,
+          "r": 0.01607,
+          "silent_energy": 0.00863,
+          "silent_random": 0.02272,
+          "silent_random_ci95": [
+            0.02227,
+            0.02309
+          ]
+        },
+        {
+          "family": "WEB",
+          "q": 0.05,
+          "load": 0.04038,
+          "r": 0.04635,
+          "silent_energy": 0.00327,
+          "silent_random": 0.02202,
+          "silent_random_ci95": [
+            0.02122,
+            0.02262
+          ]
+        },
+        {
+          "family": "WEB",
+          "q": 0.1,
+          "load": 0.0475,
+          "r": 0.05453,
+          "silent_energy": 0.00327,
+          "silent_random": 0.02183,
+          "silent_random_ci95": [
+            0.02099,
+            0.02251
+          ]
+        },
+        {
+          "family": "BRUTEFORCE",
+          "q": 0.005,
+          "load": 0.0055,
+          "r": 0.00618,
+          "silent_energy": 0.10777,
+          "silent_random": 0.11571,
+          "silent_random_ci95": [
+            0.11475,
+            0.11643
+          ]
+        },
+        {
+          "family": "BRUTEFORCE",
+          "q": 0.01,
+          "load": 0.01087,
+          "r": 0.01222,
+          "silent_energy": 0.09935,
+          "silent_random": 0.11501,
+          "silent_random_ci95": [
+            0.11378,
+            0.11595
+          ]
+        },
+        {
+          "family": "BRUTEFORCE",
+          "q": 0.02,
+          "load": 0.01912,
+          "r": 0.0215,
+          "silent_energy": 0.0765,
+          "silent_random": 0.11393,
+          "silent_random_ci95": [
+            0.11234,
+            0.11523
+          ]
+        },
+        {
+          "family": "BRUTEFORCE",
+          "q": 0.05,
+          "load": 0.04537,
+          "r": 0.05101,
+          "silent_energy": 0.03392,
+          "silent_random": 0.11049,
+          "silent_random_ci95": [
+            0.10825,
+            0.11258
+          ]
+        },
+        {
+          "family": "BRUTEFORCE",
+          "q": 0.1,
+          "load": 0.091,
+          "r": 0.1023,
+          "silent_energy": 0.00096,
+          "silent_random": 0.10452,
+          "silent_random_ci95": [
+            0.10151,
+            0.10753
+          ]
+        },
+        {
+          "family": "MALWARE",
+          "q": 0.005,
+          "load": 0.0,
+          "r": 0.0,
+          "silent_energy": 0.0,
+          "silent_random": 0.0,
+          "silent_random_ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "family": "MALWARE",
+          "q": 0.01,
+          "load": 0.0,
+          "r": 0.0,
+          "silent_energy": 0.0,
+          "silent_random": 0.0,
+          "silent_random_ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "family": "MALWARE",
+          "q": 0.02,
+          "load": 0.0,
+          "r": 0.0,
+          "silent_energy": 0.0,
+          "silent_random": 0.0,
+          "silent_random_ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "family": "MALWARE",
+          "q": 0.05,
+          "load": 0.0,
+          "r": 0.0,
+          "silent_energy": 0.0,
+          "silent_random": 0.0,
+          "silent_random_ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "family": "MALWARE",
+          "q": 0.1,
+          "load": 0.08862,
+          "r": 0.1065,
+          "silent_energy": 0.0,
+          "silent_random": 0.0,
+          "silent_random_ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "mean_over_families": {
+        "0.005": {
+          "load": 0.00402,
+          "silent_energy": 0.02519,
+          "silent_random": 0.02793,
+          "ratio_random_over_energy": 1.11
+        },
+        "0.01": {
+          "load": 0.0078,
+          "silent_energy": 0.02231,
+          "silent_random": 0.02777,
+          "ratio_random_over_energy": 1.24
+        },
+        "0.02": {
+          "load": 0.0146,
+          "silent_energy": 0.01712,
+          "silent_random": 0.02751,
+          "ratio_random_over_energy": 1.61
+        },
+        "0.05": {
+          "load": 0.03208,
+          "silent_energy": 0.00747,
+          "silent_random": 0.02668,
+          "ratio_random_over_energy": 3.57
+        },
+        "0.1": {
+          "load": 0.06035,
+          "silent_energy": 0.00088,
+          "silent_random": 0.02545,
+          "ratio_random_over_energy": 28.85
+        }
+      },
+      "majority_macro_f1_mean": 0.1114,
+      "tabm_macro_f1_mean": 0.8751
+    },
+    "1": {
+      "families": {
+        "DDOS": {
+          "n_known_test": 37927,
+          "n_unknown_test": 21375,
+          "n_benign_test": 8000,
+          "known_categories": [
+            "BENIGN",
+            "BRUTEFORCE",
+            "MALWARE",
+            "RECON",
+            "WEB"
+          ],
+          "majority_category": "RECON",
+          "majority_macro_f1": 0.0893,
+          "tabm_macro_f1": 0.8881,
+          "silent_alarm_only": 0.00047,
+          "silent_alarm_only_json": 0.0005,
+          "benign_reach_guard": 0.84513
+        },
+        "RECON": {
+          "n_known_test": 48398,
+          "n_unknown_test": 10904,
+          "n_benign_test": 8000,
+          "known_categories": [
+            "BENIGN",
+            "BRUTEFORCE",
+            "DDOS",
+            "MALWARE",
+            "WEB"
+          ],
+          "majority_category": "DDOS",
+          "majority_macro_f1": 0.1225,
+          "tabm_macro_f1": 0.8455,
+          "silent_alarm_only": 0.00046,
+          "silent_alarm_only_json": 0.0005,
+          "benign_reach_guard": 0.85225
+        },
+        "WEB": {
+          "n_known_test": 50727,
+          "n_unknown_test": 8575,
+          "n_benign_test": 8000,
+          "known_categories": [
+            "BENIGN",
+            "BRUTEFORCE",
+            "DDOS",
+            "MALWARE",
+            "RECON"
+          ],
+          "majority_category": "DDOS",
+          "majority_macro_f1": 0.1186,
+          "tabm_macro_f1": 0.8832,
+          "silent_alarm_only": 0.01388,
+          "silent_alarm_only_json": 0.0139,
+          "benign_reach_guard": 0.8625
+        },
+        "BRUTEFORCE": {
+          "n_known_test": 55145,
+          "n_unknown_test": 4157,
+          "n_benign_test": 8000,
+          "known_categories": [
+            "BENIGN",
+            "DDOS",
+            "MALWARE",
+            "RECON",
+            "WEB"
+          ],
+          "majority_category": "DDOS",
+          "majority_macro_f1": 0.1117,
+          "tabm_macro_f1": 0.9364,
+          "silent_alarm_only": 0.10248,
+          "silent_alarm_only_json": 0.1025,
+          "benign_reach_guard": 0.89863
+        },
+        "MALWARE": {
+          "n_known_test": 53011,
+          "n_unknown_test": 6291,
+          "n_benign_test": 8000,
+          "known_categories": [
+            "BENIGN",
+            "BRUTEFORCE",
+            "DDOS",
+            "RECON",
+            "WEB"
+          ],
+          "majority_category": "DDOS",
+          "majority_macro_f1": 0.1149,
+          "tabm_macro_f1": 0.8201,
+          "silent_alarm_only": 0.0,
+          "silent_alarm_only_json": 0.0,
+          "benign_reach_guard": 0.84575
+        }
+      },
+      "results": [
+        {
+          "family": "DDOS",
+          "q": 0.005,
+          "load": 0.00588,
+          "r": 0.00696,
+          "silent_energy": 0.00033,
+          "silent_random": 0.00046,
+          "silent_random_ci95": [
+            0.00042,
+            0.00047
+          ]
+        },
+        {
+          "family": "DDOS",
+          "q": 0.01,
+          "load": 0.00962,
+          "r": 0.01138,
+          "silent_energy": 0.00033,
+          "silent_random": 0.00046,
+          "silent_random_ci95": [
+            0.00042,
+            0.00047
+          ]
+        },
+        {
+          "family": "DDOS",
+          "q": 0.02,
+          "load": 0.01812,
+          "r": 0.02144,
+          "silent_energy": 0.00028,
+          "silent_random": 0.00046,
+          "silent_random_ci95": [
+            0.00042,
+            0.00047
+          ]
+        },
+        {
+          "family": "DDOS",
+          "q": 0.05,
+          "load": 0.02438,
+          "r": 0.02885,
+          "silent_energy": 0.00023,
+          "silent_random": 0.00045,
+          "silent_random_ci95": [
+            0.00042,
+            0.00047
+          ]
+        },
+        {
+          "family": "DDOS",
+          "q": 0.1,
+          "load": 0.08737,
+          "r": 0.10338,
+          "silent_energy": 0.00023,
+          "silent_random": 0.00042,
+          "silent_random_ci95": [
+            0.00033,
+            0.00047
+          ]
+        },
+        {
+          "family": "RECON",
+          "q": 0.005,
+          "load": 0.0065,
+          "r": 0.00763,
+          "silent_energy": 0.00046,
+          "silent_random": 0.00046,
+          "silent_random_ci95": [
+            0.00037,
+            0.00046
+          ]
+        },
+        {
+          "family": "RECON",
+          "q": 0.01,
+          "load": 0.01025,
+          "r": 0.01203,
+          "silent_energy": 0.00046,
+          "silent_random": 0.00045,
+          "silent_random_ci95": [
+            0.00037,
+            0.00046
+          ]
+        },
+        {
+          "family": "RECON",
+          "q": 0.02,
+          "load": 0.01862,
+          "r": 0.02185,
+          "silent_energy": 0.00028,
+          "silent_random": 0.00045,
+          "silent_random_ci95": [
+            0.00037,
+            0.00046
+          ]
+        },
+        {
+          "family": "RECON",
+          "q": 0.05,
+          "load": 0.03325,
+          "r": 0.03901,
+          "silent_energy": 9e-05,
+          "silent_random": 0.00044,
+          "silent_random_ci95": [
+            0.00037,
+            0.00046
+          ]
+        },
+        {
+          "family": "RECON",
+          "q": 0.1,
+          "load": 0.09438,
+          "r": 0.11074,
+          "silent_energy": 9e-05,
+          "silent_random": 0.00041,
+          "silent_random_ci95": [
+            0.00028,
+            0.00046
+          ]
+        },
+        {
+          "family": "WEB",
+          "q": 0.005,
+          "load": 0.00325,
+          "r": 0.00377,
+          "silent_energy": 0.00781,
+          "silent_random": 0.01383,
+          "silent_random_ci95": [
+            0.01364,
+            0.01388
+          ]
+        },
+        {
+          "family": "WEB",
+          "q": 0.01,
+          "load": 0.00813,
+          "r": 0.00943,
+          "silent_energy": 0.00327,
+          "silent_random": 0.01375,
+          "silent_random_ci95": [
+            0.01341,
+            0.01388
+          ]
+        },
+        {
+          "family": "WEB",
+          "q": 0.02,
+          "load": 0.01413,
+          "r": 0.01638,
+          "silent_energy": 0.00327,
+          "silent_random": 0.01365,
+          "silent_random_ci95": [
+            0.01329,
+            0.01388
+          ]
+        },
+        {
+          "family": "WEB",
+          "q": 0.05,
+          "load": 0.03925,
+          "r": 0.04551,
+          "silent_energy": 0.00327,
+          "silent_random": 0.01325,
+          "silent_random_ci95": [
+            0.01271,
+            0.01376
+          ]
+        },
+        {
+          "family": "WEB",
+          "q": 0.1,
+          "load": 0.03925,
+          "r": 0.04551,
+          "silent_energy": 0.00327,
+          "silent_random": 0.01325,
+          "silent_random_ci95": [
+            0.01271,
+            0.01376
+          ]
+        },
+        {
+          "family": "BRUTEFORCE",
+          "q": 0.005,
+          "load": 0.00363,
+          "r": 0.00404,
+          "silent_energy": 0.09478,
+          "silent_random": 0.10206,
+          "silent_random_ci95": [
+            0.10127,
+            0.10248
+          ]
+        },
+        {
+          "family": "BRUTEFORCE",
+          "q": 0.01,
+          "load": 0.00988,
+          "r": 0.01099,
+          "silent_energy": 0.08179,
+          "silent_random": 0.10135,
+          "silent_random_ci95": [
+            0.10031,
+            0.10224
+          ]
+        },
+        {
+          "family": "BRUTEFORCE",
+          "q": 0.02,
+          "load": 0.01438,
+          "r": 0.016,
+          "silent_energy": 0.07024,
+          "silent_random": 0.10084,
+          "silent_random_ci95": [
+            0.09935,
+            0.10176
+          ]
+        },
+        {
+          "family": "BRUTEFORCE",
+          "q": 0.05,
+          "load": 0.04813,
+          "r": 0.05356,
+          "silent_energy": 0.00914,
+          "silent_random": 0.09699,
+          "silent_random_ci95": [
+            0.09478,
+            0.09887
+          ]
+        },
+        {
+          "family": "BRUTEFORCE",
+          "q": 0.1,
+          "load": 0.08275,
+          "r": 0.09209,
+          "silent_energy": 0.00072,
+          "silent_random": 0.09304,
+          "silent_random_ci95": [
+            0.09021,
+            0.09574
+          ]
+        },
+        {
+          "family": "MALWARE",
+          "q": 0.005,
+          "load": 0.00325,
+          "r": 0.00384,
+          "silent_energy": 0.0,
+          "silent_random": 0.0,
+          "silent_random_ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "family": "MALWARE",
+          "q": 0.01,
+          "load": 0.00575,
+          "r": 0.0068,
+          "silent_energy": 0.0,
+          "silent_random": 0.0,
+          "silent_random_ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "family": "MALWARE",
+          "q": 0.02,
+          "load": 0.01413,
+          "r": 0.01671,
+          "silent_energy": 0.0,
+          "silent_random": 0.0,
+          "silent_random_ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "family": "MALWARE",
+          "q": 0.05,
+          "load": 0.03637,
+          "r": 0.043,
+          "silent_energy": 0.0,
+          "silent_random": 0.0,
+          "silent_random_ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "family": "MALWARE",
+          "q": 0.1,
+          "load": 0.03637,
+          "r": 0.043,
+          "silent_energy": 0.0,
+          "silent_random": 0.0,
+          "silent_random_ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "mean_over_families": {
+        "0.005": {
+          "load": 0.0045,
+          "silent_energy": 0.02068,
+          "silent_random": 0.02336,
+          "ratio_random_over_energy": 1.13
+        },
+        "0.01": {
+          "load": 0.00873,
+          "silent_energy": 0.01717,
+          "silent_random": 0.0232,
+          "ratio_random_over_energy": 1.35
+        },
+        "0.02": {
+          "load": 0.01588,
+          "silent_energy": 0.01481,
+          "silent_random": 0.02308,
+          "ratio_random_over_energy": 1.56
+        },
+        "0.05": {
+          "load": 0.03628,
+          "silent_energy": 0.00255,
+          "silent_random": 0.02223,
+          "ratio_random_over_energy": 8.73
+        },
+        "0.1": {
+          "load": 0.06802,
+          "silent_energy": 0.00086,
+          "silent_random": 0.02142,
+          "ratio_random_over_energy": 24.85
+        }
+      },
+      "majority_macro_f1_mean": 0.1114,
+      "tabm_macro_f1_mean": 0.8747
+    },
+    "2": {
+      "families": {
+        "DDOS": {
+          "n_known_test": 37927,
+          "n_unknown_test": 21375,
+          "n_benign_test": 8000,
+          "known_categories": [
+            "BENIGN",
+            "BRUTEFORCE",
+            "MALWARE",
+            "RECON",
+            "WEB"
+          ],
+          "majority_category": "RECON",
+          "majority_macro_f1": 0.0893,
+          "tabm_macro_f1": 0.8849,
+          "silent_alarm_only": 0.00276,
+          "silent_alarm_only_json": 0.0028,
+          "benign_reach_guard": 0.84713
+        },
+        "RECON": {
+          "n_known_test": 48398,
+          "n_unknown_test": 10904,
+          "n_benign_test": 8000,
+          "known_categories": [
+            "BENIGN",
+            "BRUTEFORCE",
+            "DDOS",
+            "MALWARE",
+            "WEB"
+          ],
+          "majority_category": "DDOS",
+          "majority_macro_f1": 0.1225,
+          "tabm_macro_f1": 0.843,
+          "silent_alarm_only": 0.00046,
+          "silent_alarm_only_json": 0.0005,
+          "benign_reach_guard": 0.85513
+        },
+        "WEB": {
+          "n_known_test": 50727,
+          "n_unknown_test": 8575,
+          "n_benign_test": 8000,
+          "known_categories": [
+            "BENIGN",
+            "BRUTEFORCE",
+            "DDOS",
+            "MALWARE",
+            "RECON"
+          ],
+          "majority_category": "DDOS",
+          "majority_macro_f1": 0.1186,
+          "tabm_macro_f1": 0.884,
+          "silent_alarm_only": 0.01551,
+          "silent_alarm_only_json": 0.0155,
+          "benign_reach_guard": 0.874
+        },
+        "BRUTEFORCE": {
+          "n_known_test": 55145,
+          "n_unknown_test": 4157,
+          "n_benign_test": 8000,
+          "known_categories": [
+            "BENIGN",
+            "DDOS",
+            "MALWARE",
+            "RECON",
+            "WEB"
+          ],
+          "majority_category": "DDOS",
+          "majority_macro_f1": 0.1117,
+          "tabm_macro_f1": 0.9353,
+          "silent_alarm_only": 0.10127,
+          "silent_alarm_only_json": 0.1013,
+          "benign_reach_guard": 0.89438
+        },
+        "MALWARE": {
+          "n_known_test": 53011,
+          "n_unknown_test": 6291,
+          "n_benign_test": 8000,
+          "known_categories": [
+            "BENIGN",
+            "BRUTEFORCE",
+            "DDOS",
+            "RECON",
+            "WEB"
+          ],
+          "majority_category": "DDOS",
+          "majority_macro_f1": 0.1149,
+          "tabm_macro_f1": 0.8254,
+          "silent_alarm_only": 0.0,
+          "silent_alarm_only_json": 0.0,
+          "benign_reach_guard": 0.85325
+        }
+      },
+      "results": [
+        {
+          "family": "DDOS",
+          "q": 0.005,
+          "load": 0.00375,
+          "r": 0.00443,
+          "silent_energy": 0.00262,
+          "silent_random": 0.00275,
+          "silent_random_ci95": [
+            0.00267,
+            0.00276
+          ]
+        },
+        {
+          "family": "DDOS",
+          "q": 0.01,
+          "load": 0.00637,
+          "r": 0.00752,
+          "silent_energy": 0.00262,
+          "silent_random": 0.00274,
+          "silent_random_ci95": [
+            0.00267,
+            0.00276
+          ]
+        },
+        {
+          "family": "DDOS",
+          "q": 0.02,
+          "load": 0.01337,
+          "r": 0.01578,
+          "silent_energy": 0.00253,
+          "silent_random": 0.00272,
+          "silent_random_ci95": [
+            0.00262,
+            0.00276
+          ]
+        },
+        {
+          "family": "DDOS",
+          "q": 0.05,
+          "load": 0.02525,
+          "r": 0.02981,
+          "silent_energy": 0.00253,
+          "silent_random": 0.00268,
+          "silent_random_ci95": [
+            0.00253,
+            0.00276
+          ]
+        },
+        {
+          "family": "DDOS",
+          "q": 0.1,
+          "load": 0.02525,
+          "r": 0.02981,
+          "silent_energy": 0.00253,
+          "silent_random": 0.00268,
+          "silent_random_ci95": [
+            0.00253,
+            0.00276
+          ]
+        },
+        {
+          "family": "RECON",
+          "q": 0.005,
+          "load": 0.00588,
+          "r": 0.00688,
+          "silent_energy": 0.00028,
+          "silent_random": 0.00046,
+          "silent_random_ci95": [
+            0.00037,
+            0.00046
+          ]
+        },
+        {
+          "family": "RECON",
+          "q": 0.01,
+          "load": 0.01025,
+          "r": 0.01199,
+          "silent_energy": 0.00028,
+          "silent_random": 0.00045,
+          "silent_random_ci95": [
+            0.00037,
+            0.00046
+          ]
+        },
+        {
+          "family": "RECON",
+          "q": 0.02,
+          "load": 0.01937,
+          "r": 0.02265,
+          "silent_energy": 0.00028,
+          "silent_random": 0.00045,
+          "silent_random_ci95": [
+            0.00037,
+            0.00046
+          ]
+        },
+        {
+          "family": "RECON",
+          "q": 0.05,
+          "load": 0.03025,
+          "r": 0.03537,
+          "silent_energy": 9e-05,
+          "silent_random": 0.00044,
+          "silent_random_ci95": [
+            0.00037,
+            0.00046
+          ]
+        },
+        {
+          "family": "RECON",
+          "q": 0.1,
+          "load": 0.03025,
+          "r": 0.03537,
+          "silent_energy": 9e-05,
+          "silent_random": 0.00044,
+          "silent_random_ci95": [
+            0.00037,
+            0.00046
+          ]
+        },
+        {
+          "family": "WEB",
+          "q": 0.005,
+          "load": 0.00438,
+          "r": 0.00501,
+          "silent_energy": 0.00618,
+          "silent_random": 0.01543,
+          "silent_random_ci95": [
+            0.01516,
+            0.01551
+          ]
+        },
+        {
+          "family": "WEB",
+          "q": 0.01,
+          "load": 0.008,
+          "r": 0.00915,
+          "silent_energy": 0.00327,
+          "silent_random": 0.01537,
+          "silent_random_ci95": [
+            0.01504,
+            0.01551
+          ]
+        },
+        {
+          "family": "WEB",
+          "q": 0.02,
+          "load": 0.01375,
+          "r": 0.01573,
+          "silent_energy": 0.00327,
+          "silent_random": 0.01527,
+          "silent_random_ci95": [
+            0.01493,
+            0.01551
+          ]
+        },
+        {
+          "family": "WEB",
+          "q": 0.05,
+          "load": 0.04325,
+          "r": 0.04949,
+          "silent_energy": 0.00023,
+          "silent_random": 0.01474,
+          "silent_random_ci95": [
+            0.01411,
+            0.01528
+          ]
+        },
+        {
+          "family": "WEB",
+          "q": 0.1,
+          "load": 0.05713,
+          "r": 0.06537,
+          "silent_energy": 0.00023,
+          "silent_random": 0.0145,
+          "silent_random_ci95": [
+            0.01376,
+            0.01504
+          ]
+        },
+        {
+          "family": "BRUTEFORCE",
+          "q": 0.005,
+          "load": 0.00263,
+          "r": 0.00294,
+          "silent_energy": 0.09767,
+          "silent_random": 0.10098,
+          "silent_random_ci95": [
+            0.10031,
+            0.10127
+          ]
+        },
+        {
+          "family": "BRUTEFORCE",
+          "q": 0.01,
+          "load": 0.00813,
+          "r": 0.00909,
+          "silent_energy": 0.08925,
+          "silent_random": 0.10035,
+          "silent_random_ci95": [
+            0.09935,
+            0.10103
+          ]
+        },
+        {
+          "family": "BRUTEFORCE",
+          "q": 0.02,
+          "load": 0.01475,
+          "r": 0.01649,
+          "silent_energy": 0.07433,
+          "silent_random": 0.0996,
+          "silent_random_ci95": [
+            0.09815,
+            0.10079
+          ]
+        },
+        {
+          "family": "BRUTEFORCE",
+          "q": 0.05,
+          "load": 0.0425,
+          "r": 0.04752,
+          "silent_energy": 0.0267,
+          "silent_random": 0.09646,
+          "silent_random_ci95": [
+            0.09453,
+            0.09839
+          ]
+        },
+        {
+          "family": "BRUTEFORCE",
+          "q": 0.1,
+          "load": 0.09325,
+          "r": 0.10426,
+          "silent_energy": 0.00072,
+          "silent_random": 0.09072,
+          "silent_random_ci95": [
+            0.08804,
+            0.09358
+          ]
+        },
+        {
+          "family": "MALWARE",
+          "q": 0.005,
+          "load": 0.00363,
+          "r": 0.00425,
+          "silent_energy": 0.0,
+          "silent_random": 0.0,
+          "silent_random_ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "family": "MALWARE",
+          "q": 0.01,
+          "load": 0.00762,
+          "r": 0.00893,
+          "silent_energy": 0.0,
+          "silent_random": 0.0,
+          "silent_random_ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "family": "MALWARE",
+          "q": 0.02,
+          "load": 0.01775,
+          "r": 0.0208,
+          "silent_energy": 0.0,
+          "silent_random": 0.0,
+          "silent_random_ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "family": "MALWARE",
+          "q": 0.05,
+          "load": 0.01775,
+          "r": 0.0208,
+          "silent_energy": 0.0,
+          "silent_random": 0.0,
+          "silent_random_ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "family": "MALWARE",
+          "q": 0.1,
+          "load": 0.08912,
+          "r": 0.10445,
+          "silent_energy": 0.0,
+          "silent_random": 0.0,
+          "silent_random_ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "mean_over_families": {
+        "0.005": {
+          "load": 0.00405,
+          "silent_energy": 0.02135,
+          "silent_random": 0.02392,
+          "ratio_random_over_energy": 1.12
+        },
+        "0.01": {
+          "load": 0.00807,
+          "silent_energy": 0.01908,
+          "silent_random": 0.02378,
+          "ratio_random_over_energy": 1.25
+        },
+        "0.02": {
+          "load": 0.0158,
+          "silent_energy": 0.01608,
+          "silent_random": 0.02361,
+          "ratio_random_over_energy": 1.47
+        },
+        "0.05": {
+          "load": 0.0318,
+          "silent_energy": 0.00591,
+          "silent_random": 0.02286,
+          "ratio_random_over_energy": 3.87
+        },
+        "0.1": {
+          "load": 0.059,
+          "silent_energy": 0.00071,
+          "silent_random": 0.02167,
+          "ratio_random_over_energy": 30.35
+        }
+      },
+      "majority_macro_f1_mean": 0.1114,
+      "tabm_macro_f1_mean": 0.8745
+    }
+  },
+  "criterion_q": 0.05,
+  "criterion_ratios": [
+    3.57,
+    8.73,
+    3.87
+  ],
+  "verdict": "sağlandı (her tohumda >= 2 kat)",
+  "settings": {
+    "runs": [
+      "outputs/dnn_edgeiiot/two_signal",
+      "outputs/dnn_edgeiiot/two_signal/s1",
+      "outputs/dnn_edgeiiot/two_signal/s2"
+    ],
+    "condition": "C_seq_ack_yok",
+    "out_dir": "outputs/dnn_edgeiiot/trivial_baselines",
+    "n_draws": 1000
+  },
+  "runtime": {
+    "python": "3.13.18",
+    "os": "Linux-6.18.44-fc-v880-x86_64-with-glibc2.39",
+    "processor": "x86_64",
+    "cpu_count": 2,
+    "cuda": null,
+    "gpu": null,
+    "in_colab": false,
+    "in_kaggle": false,
+    "libraries": {
+      "numpy": "2.5.3",
+      "pandas": "3.0.5",
+      "scipy": "1.18.1",
+      "scikit-learn": "1.9.1"
+    }
+  }
+}
