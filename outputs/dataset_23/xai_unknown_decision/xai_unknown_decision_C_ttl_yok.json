@@ -1,0 +1,5095 @@
+{
+  "dataset_id": "dataset_23",
+  "condition": "C_ttl_yok",
+  "dropped_features": [
+    "Time_To_Live"
+  ],
+  "status": "Analiz planı sonuçlardan önce yazıldı (README, Bilinmeyen Kararının Açıklanması / XAI-2); eşik yok",
+  "settings": {
+    "dataset": "dataset_23",
+    "data_file": "data/dataset_23",
+    "run_dir": "work/dataset_23/3ed30bf6",
+    "params_from": "run",
+    "manifest": "outputs/dataset_23/manifest.json",
+    "rows_dir": "outputs/dataset_23/dss_guard",
+    "out_dir": "outputs/dataset_23/xai_unknown_decision",
+    "condition": "C_ttl_yok",
+    "families": "RECON,SPOOFING,WEB,BRUTEFORCE",
+    "cap": 40000,
+    "seed": 42,
+    "model_seed": null,
+    "cal_size": 0.1,
+    "target": 0.95,
+    "q": 0.05,
+    "per_group": 50,
+    "n_background": 50,
+    "n_perm": 10,
+    "n_delete_bg": 20,
+    "n_random": 20,
+    "k_max": 10,
+    "n_jobs": -1,
+    "tag": "",
+    "quick": false
+  },
+  "model_seed": 42,
+  "tabm_params_from": {
+    "TabM": "result_TabM_b9a0d9.joblib"
+  },
+  "port_columns": [],
+  "families": {
+    "RECON": {
+      "categories": [
+        "RECON"
+      ],
+      "decision_source": "dss",
+      "check_vs_dss_guard": {
+        "disagree": 1.0,
+        "energy": 1.0,
+        "alarm_agreement": 1.0
+      },
+      "tau_alarm": 0.02885504439473152,
+      "tau_guard": -1.8152745962142944,
+      "group_sizes": {
+        "alarm_unknown": 5186,
+        "guard_unknown": 730,
+        "silent_unknown": 2959,
+        "alarm_benign": 1316,
+        "guard_benign": 274
+      },
+      "background": "bilinen normal (BENIGN) eğitim trafiği",
+      "background_mean_score": {
+        "disagree": 0.017977,
+        "energy": -3.047404
+      },
+      "groups": {
+        "alarm_unknown": {
+          "n_available": 5186,
+          "n_explained": 50,
+          "explained_score": "disagree",
+          "top_disagree": [
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.042806,
+              "mean_shap": 0.042083
+            },
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.027415,
+              "mean_shap": -0.017092
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.021623,
+              "mean_shap": 0.009197
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.014931,
+              "mean_shap": 0.004761
+            },
+            {
+              "feature": "rst_flag_number",
+              "mean_abs_shap": 0.011367,
+              "mean_shap": 0.009983
+            },
+            {
+              "feature": "ack_flag_number",
+              "mean_abs_shap": 0.007546,
+              "mean_shap": 0.005218
+            },
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.006388,
+              "mean_shap": 0.005161
+            },
+            {
+              "feature": "syn_count",
+              "mean_abs_shap": 0.00619,
+              "mean_shap": 0.005576
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.005691,
+              "mean_shap": -0.002932
+            },
+            {
+              "feature": "IAT",
+              "mean_abs_shap": 0.00554,
+              "mean_shap": 0.000749
+            }
+          ],
+          "port_share_disagree": null,
+          "efficiency_gap_disagree": 0.0,
+          "top_energy": [
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.382603,
+              "mean_shap": 0.356969
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.266345,
+              "mean_shap": 0.157102
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.203962,
+              "mean_shap": 0.154737
+            },
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.189028,
+              "mean_shap": -0.039232
+            },
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.177509,
+              "mean_shap": 0.119568
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.134647,
+              "mean_shap": 0.064218
+            },
+            {
+              "feature": "syn_flag_number",
+              "mean_abs_shap": 0.092403,
+              "mean_shap": 0.078634
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.088321,
+              "mean_shap": -0.002551
+            },
+            {
+              "feature": "syn_count",
+              "mean_abs_shap": 0.083711,
+              "mean_shap": 0.076388
+            },
+            {
+              "feature": "ack_flag_number",
+              "mean_abs_shap": 0.079795,
+              "mean_shap": 0.059188
+            }
+          ],
+          "port_share_energy": null,
+          "efficiency_gap_energy": 0.0,
+          "faithfulness": {
+            "score": "disagree",
+            "ks": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            "scale": "düşüş / kalibrasyon IQR",
+            "iqr": 0.005732,
+            "mean_drop_iqr_shap": [
+              1.5677,
+              1.315,
+              1.3241,
+              2.1323,
+              2.6491,
+              3.4232,
+              3.793,
+              4.2352,
+              4.4544,
+              4.559
+            ],
+            "mean_drop_iqr_random": [
+              -1.0391,
+              -1.9852,
+              -3.017,
+              -4.0612,
+              -4.8494,
+              -5.8506,
+              -6.4159,
+              -6.9825,
+              -7.5311,
+              -8.0162
+            ],
+            "relative": {
+              "n_rows": 50,
+              "mean_rel_drop_shap": [
+                0.0236,
+                -0.2656,
+                -0.2662,
+                -0.1258,
+                -0.1378,
+                0.0338,
+                0.0892,
+                0.1598,
+                0.1894,
+                0.2137
+              ],
+              "mean_rel_drop_random": [
+                -0.2162,
+                -0.4047,
+                -0.5873,
+                -0.8062,
+                -0.9787,
+                -1.1554,
+                -1.2597,
+                -1.3773,
+                -1.494,
+                -1.5981
+              ]
+            },
+            "auc_shap_mean": 2.9453,
+            "auc_random_mean": -4.9748,
+            "paired_diff_median": 5.1671,
+            "paired_diff_mean": 7.9201,
+            "frac_rows_shap_better": 1.0,
+            "wilcoxon_statistic": 0.0,
+            "wilcoxon_p": 1.7763568394002505e-15
+          },
+          "analyst_cards": [
+            {
+              "test_row": 342523,
+              "category": "RECON",
+              "score": "disagree",
+              "score_value": 0.2497,
+              "reasons": [
+                {
+                  "feature": "rst_flag_number",
+                  "value": 1.0,
+                  "shap": 0.086236,
+                  "percentile_in_known": 96.2
+                },
+                {
+                  "feature": "HTTPS",
+                  "value": 0.0,
+                  "shap": 0.074103,
+                  "percentile_in_known": 0.0
+                },
+                {
+                  "feature": "Rate",
+                  "value": 36921.69140625,
+                  "shap": 0.066744,
+                  "percentile_in_known": 88.5
+                }
+              ]
+            },
+            {
+              "test_row": 101869,
+              "category": "RECON",
+              "score": "disagree",
+              "score_value": 0.05388,
+              "reasons": [
+                {
+                  "feature": "AVG",
+                  "value": 60.0,
+                  "shap": 0.030643,
+                  "percentile_in_known": 0.1
+                },
+                {
+                  "feature": "syn_count",
+                  "value": 9.0,
+                  "shap": 0.020841,
+                  "percentile_in_known": 81.6
+                },
+                {
+                  "feature": "ack_flag_number",
+                  "value": 0.0,
+                  "shap": 0.020661,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            },
+            {
+              "test_row": 391791,
+              "category": "RECON",
+              "score": "disagree",
+              "score_value": 0.03912,
+              "reasons": [
+                {
+                  "feature": "HTTPS",
+                  "value": 0.0,
+                  "shap": 0.044426,
+                  "percentile_in_known": 0.0
+                },
+                {
+                  "feature": "Header_Length",
+                  "value": 10.800000190734863,
+                  "shap": 0.013927,
+                  "percentile_in_known": 46.8
+                },
+                {
+                  "feature": "AVG",
+                  "value": 106.9000015258789,
+                  "shap": 0.008806,
+                  "percentile_in_known": 59.1
+                }
+              ]
+            }
+          ]
+        },
+        "guard_unknown": {
+          "n_available": 730,
+          "n_explained": 50,
+          "explained_score": "energy",
+          "top_disagree": [
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.021058,
+              "mean_shap": -0.021058
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.013755,
+              "mean_shap": 0.013389
+            },
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.010676,
+              "mean_shap": 0.01009
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.009472,
+              "mean_shap": -0.009472
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.005861,
+              "mean_shap": 0.004097
+            },
+            {
+              "feature": "IAT",
+              "mean_abs_shap": 0.005694,
+              "mean_shap": -0.005694
+            },
+            {
+              "feature": "Std",
+              "mean_abs_shap": 0.004499,
+              "mean_shap": 0.004461
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.004295,
+              "mean_shap": -0.001861
+            },
+            {
+              "feature": "ack_flag_number",
+              "mean_abs_shap": 0.003524,
+              "mean_shap": 0.003511
+            },
+            {
+              "feature": "syn_flag_number",
+              "mean_abs_shap": 0.003232,
+              "mean_shap": 0.002923
+            }
+          ],
+          "port_share_disagree": null,
+          "efficiency_gap_disagree": 0.0,
+          "top_energy": [
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.303988,
+              "mean_shap": 0.303795
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.282556,
+              "mean_shap": 0.281187
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.211691,
+              "mean_shap": 0.211691
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.204778,
+              "mean_shap": 0.204778
+            },
+            {
+              "feature": "syn_flag_number",
+              "mean_abs_shap": 0.123417,
+              "mean_shap": 0.114263
+            },
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.111828,
+              "mean_shap": -0.102811
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.095261,
+              "mean_shap": 0.030396
+            },
+            {
+              "feature": "ack_flag_number",
+              "mean_abs_shap": 0.084614,
+              "mean_shap": 0.084614
+            },
+            {
+              "feature": "syn_count",
+              "mean_abs_shap": 0.078352,
+              "mean_shap": 0.073295
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.063265,
+              "mean_shap": -0.063265
+            }
+          ],
+          "port_share_energy": null,
+          "efficiency_gap_energy": 0.0,
+          "faithfulness": {
+            "score": "energy",
+            "ks": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            "scale": "düşüş / kalibrasyon IQR",
+            "iqr": 7.184043,
+            "mean_drop_iqr_shap": [
+              0.0189,
+              0.0498,
+              0.0773,
+              0.1104,
+              0.1483,
+              0.1733,
+              0.1893,
+              0.2028,
+              0.2135,
+              0.222
+            ],
+            "mean_drop_iqr_random": [
+              0.0012,
+              0.0024,
+              0.0042,
+              0.0059,
+              0.0075,
+              0.0093,
+              0.0122,
+              0.0141,
+              0.0158,
+              0.0179
+            ],
+            "relative": {
+              "n_rows": 50,
+              "mean_rel_drop_shap": [
+                0.1061,
+                0.2786,
+                0.4324,
+                0.6167,
+                0.8281,
+                0.9662,
+                1.055,
+                1.1288,
+                1.1885,
+                1.2352
+              ],
+              "mean_rel_drop_random": [
+                0.0065,
+                0.0131,
+                0.0231,
+                0.0327,
+                0.0416,
+                0.0512,
+                0.0672,
+                0.0778,
+                0.0876,
+                0.0992
+              ]
+            },
+            "auc_shap_mean": 0.1406,
+            "auc_random_mean": 0.009,
+            "paired_diff_median": 0.1319,
+            "paired_diff_mean": 0.1315,
+            "frac_rows_shap_better": 1.0,
+            "wilcoxon_statistic": 0.0,
+            "wilcoxon_p": 1.7763568394002505e-15
+          },
+          "analyst_cards": [
+            {
+              "test_row": 356714,
+              "category": "RECON",
+              "score": "energy",
+              "score_value": -1.6845,
+              "reasons": [
+                {
+                  "feature": "Max",
+                  "value": 583.0,
+                  "shap": 0.397825,
+                  "percentile_in_known": 72.3
+                },
+                {
+                  "feature": "syn_count",
+                  "value": 2.0,
+                  "shap": 0.271475,
+                  "percentile_in_known": 78.7
+                },
+                {
+                  "feature": "syn_flag_number",
+                  "value": 0.20000000298023224,
+                  "shap": 0.267088,
+                  "percentile_in_known": 81.8
+                }
+              ]
+            },
+            {
+              "test_row": 276080,
+              "category": "RECON",
+              "score": "energy",
+              "score_value": -1.73199,
+              "reasons": [
+                {
+                  "feature": "Header_Length",
+                  "value": 19.200000762939453,
+                  "shap": 0.425606,
+                  "percentile_in_known": 49.1
+                },
+                {
+                  "feature": "HTTPS",
+                  "value": 0.20000000298023224,
+                  "shap": 0.278647,
+                  "percentile_in_known": 86.6
+                },
+                {
+                  "feature": "ICMP",
+                  "value": 0.10000000149011612,
+                  "shap": 0.211056,
+                  "percentile_in_known": 87.8
+                }
+              ]
+            },
+            {
+              "test_row": 18671,
+              "category": "RECON",
+              "score": "energy",
+              "score_value": -1.74634,
+              "reasons": [
+                {
+                  "feature": "Header_Length",
+                  "value": 15.600000381469727,
+                  "shap": 0.423504,
+                  "percentile_in_known": 48.2
+                },
+                {
+                  "feature": "Max",
+                  "value": 1201.0,
+                  "shap": 0.363465,
+                  "percentile_in_known": 80.2
+                },
+                {
+                  "feature": "psh_flag_number",
+                  "value": 0.4000000059604645,
+                  "shap": 0.293767,
+                  "percentile_in_known": 92.3
+                }
+              ]
+            }
+          ]
+        },
+        "silent_unknown": {
+          "n_available": 2959,
+          "n_explained": 50,
+          "explained_score": null,
+          "top_disagree": [
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.022581,
+              "mean_shap": -0.012708
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.01112,
+              "mean_shap": 0.005195
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.009917,
+              "mean_shap": 0.004996
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.005808,
+              "mean_shap": -0.004966
+            },
+            {
+              "feature": "Std",
+              "mean_abs_shap": 0.005081,
+              "mean_shap": 0.002754
+            },
+            {
+              "feature": "IAT",
+              "mean_abs_shap": 0.003964,
+              "mean_shap": -0.003135
+            },
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.003447,
+              "mean_shap": 0.001824
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.003256,
+              "mean_shap": 0.001388
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.003154,
+              "mean_shap": 6.1e-05
+            },
+            {
+              "feature": "fin_count",
+              "mean_abs_shap": 0.002584,
+              "mean_shap": 0.002333
+            }
+          ],
+          "port_share_disagree": null,
+          "efficiency_gap_disagree": 0.0,
+          "top_energy": [
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.267018,
+              "mean_shap": 0.138861
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.265535,
+              "mean_shap": 0.161278
+            },
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.253108,
+              "mean_shap": -0.103043
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.201448,
+              "mean_shap": 0.132764
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.17985,
+              "mean_shap": 0.058087
+            },
+            {
+              "feature": "syn_flag_number",
+              "mean_abs_shap": 0.132292,
+              "mean_shap": 0.114213
+            },
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.120249,
+              "mean_shap": 0.069602
+            },
+            {
+              "feature": "syn_count",
+              "mean_abs_shap": 0.083596,
+              "mean_shap": 0.073884
+            },
+            {
+              "feature": "fin_count",
+              "mean_abs_shap": 0.067533,
+              "mean_shap": 0.061864
+            },
+            {
+              "feature": "fin_flag_number",
+              "mean_abs_shap": 0.060593,
+              "mean_shap": 0.055851
+            }
+          ],
+          "port_share_energy": null,
+          "efficiency_gap_energy": 0.0,
+          "analyst_cards": [
+            {
+              "test_row": 319168,
+              "category": "RECON",
+              "score": "energy",
+              "score_value": -1.94249,
+              "reasons": [
+                {
+                  "feature": "Max",
+                  "value": 1483.0,
+                  "shap": 0.543301,
+                  "percentile_in_known": 81.3
+                },
+                {
+                  "feature": "psh_flag_number",
+                  "value": 0.4000000059604645,
+                  "shap": 0.278576,
+                  "percentile_in_known": 92.3
+                },
+                {
+                  "feature": "AVG",
+                  "value": 346.6000061035156,
+                  "shap": 0.144125,
+                  "percentile_in_known": 65.1
+                }
+              ]
+            },
+            {
+              "test_row": 612528,
+              "category": "RECON",
+              "score": "energy",
+              "score_value": -3.97331,
+              "reasons": [
+                {
+                  "feature": "AVG",
+                  "value": 66.0,
+                  "shap": 0.286751,
+                  "percentile_in_known": 54.3
+                },
+                {
+                  "feature": "Max",
+                  "value": 66.0,
+                  "shap": 0.24191,
+                  "percentile_in_known": 35.0
+                },
+                {
+                  "feature": "UDP",
+                  "value": 0.0,
+                  "shap": 0.035908,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            },
+            {
+              "test_row": 193966,
+              "category": "RECON",
+              "score": "energy",
+              "score_value": -3.24883,
+              "reasons": [
+                {
+                  "feature": "Max",
+                  "value": 83.0,
+                  "shap": 0.586313,
+                  "percentile_in_known": 43.8
+                },
+                {
+                  "feature": "AVG",
+                  "value": 67.69999694824219,
+                  "shap": 0.273349,
+                  "percentile_in_known": 55.1
+                },
+                {
+                  "feature": "IAT",
+                  "value": 0.0015755891799926758,
+                  "shap": 0.041845,
+                  "percentile_in_known": 89.6
+                }
+              ]
+            }
+          ]
+        },
+        "alarm_benign": {
+          "n_available": 1316,
+          "n_explained": 50,
+          "explained_score": "disagree",
+          "top_disagree": [
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.030231,
+              "mean_shap": 0.010594
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.028651,
+              "mean_shap": 0.02413
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.019125,
+              "mean_shap": -0.011186
+            },
+            {
+              "feature": "Std",
+              "mean_abs_shap": 0.009324,
+              "mean_shap": -0.005839
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.009209,
+              "mean_shap": -0.00066
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.008091,
+              "mean_shap": 0.002212
+            },
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.006239,
+              "mean_shap": 0.003674
+            },
+            {
+              "feature": "IAT",
+              "mean_abs_shap": 0.005392,
+              "mean_shap": 0.001041
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.005135,
+              "mean_shap": 0.003631
+            },
+            {
+              "feature": "ack_flag_number",
+              "mean_abs_shap": 0.003724,
+              "mean_shap": 0.001517
+            }
+          ],
+          "port_share_disagree": null,
+          "efficiency_gap_disagree": 0.0,
+          "top_energy": [
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.311536,
+              "mean_shap": 0.268188
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.285639,
+              "mean_shap": -0.062462
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.283135,
+              "mean_shap": 0.049692
+            },
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.273492,
+              "mean_shap": 0.146385
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.198058,
+              "mean_shap": 0.10652
+            },
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.195572,
+              "mean_shap": 0.085216
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.083961,
+              "mean_shap": 0.022324
+            },
+            {
+              "feature": "Min",
+              "mean_abs_shap": 0.067396,
+              "mean_shap": -0.0001
+            },
+            {
+              "feature": "ack_flag_number",
+              "mean_abs_shap": 0.061113,
+              "mean_shap": 0.029536
+            },
+            {
+              "feature": "IAT",
+              "mean_abs_shap": 0.057181,
+              "mean_shap": 0.00752
+            }
+          ],
+          "port_share_energy": null,
+          "efficiency_gap_energy": 0.0,
+          "faithfulness": {
+            "score": "disagree",
+            "ks": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            "scale": "düşüş / kalibrasyon IQR",
+            "iqr": 0.005732,
+            "mean_drop_iqr_shap": [
+              1.904,
+              2.1756,
+              3.1853,
+              3.6083,
+              4.0941,
+              4.1051,
+              4.518,
+              4.5387,
+              4.5674,
+              4.6701
+            ],
+            "mean_drop_iqr_random": [
+              -0.7769,
+              -1.6082,
+              -2.4891,
+              -3.1837,
+              -3.8556,
+              -4.3987,
+              -5.1758,
+              -5.6597,
+              -5.7116,
+              -5.9727
+            ],
+            "relative": {
+              "n_rows": 50,
+              "mean_rel_drop_shap": [
+                0.0735,
+                0.1139,
+                0.2656,
+                0.353,
+                0.4277,
+                0.3992,
+                0.5265,
+                0.512,
+                0.5238,
+                0.5361
+              ],
+              "mean_rel_drop_random": [
+                -0.1625,
+                -0.3592,
+                -0.5756,
+                -0.7263,
+                -0.8838,
+                -1.0125,
+                -1.1503,
+                -1.2451,
+                -1.2792,
+                -1.37
+              ]
+            },
+            "auc_shap_mean": 3.7367,
+            "auc_random_mean": -3.8832,
+            "paired_diff_median": 6.1874,
+            "paired_diff_mean": 7.6199,
+            "frac_rows_shap_better": 1.0,
+            "wilcoxon_statistic": 0.0,
+            "wilcoxon_p": 1.7763568394002505e-15
+          },
+          "analyst_cards": [
+            {
+              "test_row": 694405,
+              "category": "BENIGN",
+              "score": "disagree",
+              "score_value": 0.03948,
+              "reasons": [
+                {
+                  "feature": "HTTPS",
+                  "value": 0.10000000149011612,
+                  "shap": 0.024316,
+                  "percentile_in_known": 85.5
+                },
+                {
+                  "feature": "Max",
+                  "value": 789.0,
+                  "shap": 0.006358,
+                  "percentile_in_known": 79.1
+                },
+                {
+                  "feature": "Std",
+                  "value": 285.7361755371094,
+                  "shap": 0.003897,
+                  "percentile_in_known": 81.4
+                }
+              ]
+            },
+            {
+              "test_row": 121767,
+              "category": "BENIGN",
+              "score": "disagree",
+              "score_value": 0.02934,
+              "reasons": [
+                {
+                  "feature": "HTTPS",
+                  "value": 0.0,
+                  "shap": 0.052484,
+                  "percentile_in_known": 0.0
+                },
+                {
+                  "feature": "ack_flag_number",
+                  "value": 0.0,
+                  "shap": 0.022375,
+                  "percentile_in_known": 0.0
+                },
+                {
+                  "feature": "TCP",
+                  "value": 0.0,
+                  "shap": 0.009722,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            },
+            {
+              "test_row": 668182,
+              "category": "BENIGN",
+              "score": "disagree",
+              "score_value": 0.05612,
+              "reasons": [
+                {
+                  "feature": "HTTPS",
+                  "value": 0.10000000149011612,
+                  "shap": 0.021712,
+                  "percentile_in_known": 85.5
+                },
+                {
+                  "feature": "Max",
+                  "value": 1364.0,
+                  "shap": 0.017148,
+                  "percentile_in_known": 80.8
+                },
+                {
+                  "feature": "ack_count",
+                  "value": 2.0,
+                  "shap": 0.010115,
+                  "percentile_in_known": 69.0
+                }
+              ]
+            }
+          ]
+        },
+        "guard_benign": {
+          "n_available": 274,
+          "n_explained": 50,
+          "explained_score": "energy",
+          "top_disagree": [
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.020912,
+              "mean_shap": -0.020912
+            },
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.010712,
+              "mean_shap": 0.01043
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.010035,
+              "mean_shap": 0.009241
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.009586,
+              "mean_shap": -0.009563
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.005988,
+              "mean_shap": 0.005596
+            },
+            {
+              "feature": "IAT",
+              "mean_abs_shap": 0.004915,
+              "mean_shap": -0.004915
+            },
+            {
+              "feature": "Std",
+              "mean_abs_shap": 0.004207,
+              "mean_shap": 0.004204
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.003605,
+              "mean_shap": -0.001589
+            },
+            {
+              "feature": "ICMP",
+              "mean_abs_shap": 0.003047,
+              "mean_shap": 0.002928
+            },
+            {
+              "feature": "ack_flag_number",
+              "mean_abs_shap": 0.002864,
+              "mean_shap": 0.002654
+            }
+          ],
+          "port_share_disagree": null,
+          "efficiency_gap_disagree": 0.0,
+          "top_energy": [
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.319985,
+              "mean_shap": 0.319985
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.223878,
+              "mean_shap": 0.222587
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.215585,
+              "mean_shap": 0.215585
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.210831,
+              "mean_shap": 0.210831
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.127808,
+              "mean_shap": 0.092834
+            },
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.115177,
+              "mean_shap": -0.109525
+            },
+            {
+              "feature": "ICMP",
+              "mean_abs_shap": 0.099864,
+              "mean_shap": 0.096242
+            },
+            {
+              "feature": "syn_flag_number",
+              "mean_abs_shap": 0.088574,
+              "mean_shap": 0.075431
+            },
+            {
+              "feature": "ack_flag_number",
+              "mean_abs_shap": 0.070804,
+              "mean_shap": 0.068806
+            },
+            {
+              "feature": "Min",
+              "mean_abs_shap": 0.069238,
+              "mean_shap": 0.067688
+            }
+          ],
+          "port_share_energy": null,
+          "efficiency_gap_energy": 0.0,
+          "faithfulness": {
+            "score": "energy",
+            "ks": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            "scale": "düşüş / kalibrasyon IQR",
+            "iqr": 7.184043,
+            "mean_drop_iqr_shap": [
+              0.0233,
+              0.0496,
+              0.0772,
+              0.114,
+              0.1488,
+              0.1738,
+              0.189,
+              0.2006,
+              0.2107,
+              0.2178
+            ],
+            "mean_drop_iqr_random": [
+              0.002,
+              0.0037,
+              0.0058,
+              0.0076,
+              0.0089,
+              0.0108,
+              0.0127,
+              0.015,
+              0.0173,
+              0.0199
+            ],
+            "relative": {
+              "n_rows": 50,
+              "mean_rel_drop_shap": [
+                0.1304,
+                0.2762,
+                0.4309,
+                0.6359,
+                0.827,
+                0.9645,
+                1.048,
+                1.1114,
+                1.1669,
+                1.2059
+              ],
+              "mean_rel_drop_random": [
+                0.0109,
+                0.0203,
+                0.032,
+                0.0421,
+                0.0493,
+                0.0599,
+                0.0702,
+                0.0825,
+                0.0953,
+                0.1098
+              ]
+            },
+            "auc_shap_mean": 0.1405,
+            "auc_random_mean": 0.0104,
+            "paired_diff_median": 0.1291,
+            "paired_diff_mean": 0.1301,
+            "frac_rows_shap_better": 1.0,
+            "wilcoxon_statistic": 0.0,
+            "wilcoxon_p": 1.7763568394002505e-15
+          },
+          "analyst_cards": [
+            {
+              "test_row": 392601,
+              "category": "BENIGN",
+              "score": "energy",
+              "score_value": -1.68901,
+              "reasons": [
+                {
+                  "feature": "Header_Length",
+                  "value": 17.600000381469727,
+                  "shap": 0.437909,
+                  "percentile_in_known": 48.5
+                },
+                {
+                  "feature": "AVG",
+                  "value": 113.80000305175781,
+                  "shap": 0.240738,
+                  "percentile_in_known": 59.5
+                },
+                {
+                  "feature": "ICMP",
+                  "value": 0.10000000149011612,
+                  "shap": 0.219043,
+                  "percentile_in_known": 87.8
+                }
+              ]
+            },
+            {
+              "test_row": 77532,
+              "category": "BENIGN",
+              "score": "energy",
+              "score_value": -1.79628,
+              "reasons": [
+                {
+                  "feature": "Header_Length",
+                  "value": 16.799999237060547,
+                  "shap": 0.430715,
+                  "percentile_in_known": 48.4
+                },
+                {
+                  "feature": "ICMP",
+                  "value": 0.10000000149011612,
+                  "shap": 0.260935,
+                  "percentile_in_known": 87.8
+                },
+                {
+                  "feature": "HTTPS",
+                  "value": 0.4000000059604645,
+                  "shap": 0.230966,
+                  "percentile_in_known": 88.0
+                }
+              ]
+            },
+            {
+              "test_row": 622479,
+              "category": "BENIGN",
+              "score": "energy",
+              "score_value": -1.77511,
+              "reasons": [
+                {
+                  "feature": "Header_Length",
+                  "value": 19.200000762939453,
+                  "shap": 0.318411,
+                  "percentile_in_known": 49.1
+                },
+                {
+                  "feature": "psh_flag_number",
+                  "value": 0.4000000059604645,
+                  "shap": 0.275483,
+                  "percentile_in_known": 92.3
+                },
+                {
+                  "feature": "HTTPS",
+                  "value": 0.30000001192092896,
+                  "shap": 0.273742,
+                  "percentile_in_known": 87.4
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "model_calls": 5340320,
+      "seconds": 270.0
+    },
+    "SPOOFING": {
+      "categories": [
+        "SPOOFING"
+      ],
+      "decision_source": "dss",
+      "check_vs_dss_guard": {
+        "disagree": 1.0,
+        "energy": 1.0,
+        "alarm_agreement": 1.0
+      },
+      "tau_alarm": 0.10991823673248291,
+      "tau_guard": -1.2157636880874634,
+      "group_sizes": {
+        "alarm_unknown": 5386,
+        "guard_unknown": 135,
+        "silent_unknown": 836,
+        "alarm_benign": 1829,
+        "guard_benign": 262
+      },
+      "background": "bilinen normal (BENIGN) eğitim trafiği",
+      "background_mean_score": {
+        "disagree": 0.059794,
+        "energy": -2.387383
+      },
+      "groups": {
+        "alarm_unknown": {
+          "n_available": 5386,
+          "n_explained": 50,
+          "explained_score": "disagree",
+          "top_disagree": [
+            {
+              "feature": "Min",
+              "mean_abs_shap": 0.08466,
+              "mean_shap": 0.07946
+            },
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.073094,
+              "mean_shap": 0.047786
+            },
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.050905,
+              "mean_shap": -0.003229
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.050873,
+              "mean_shap": 0.044405
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.040448,
+              "mean_shap": 0.034372
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.031956,
+              "mean_shap": 0.023508
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.029596,
+              "mean_shap": 0.021623
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.027024,
+              "mean_shap": 0.00727
+            },
+            {
+              "feature": "UDP",
+              "mean_abs_shap": 0.022083,
+              "mean_shap": -0.011305
+            },
+            {
+              "feature": "ack_flag_number",
+              "mean_abs_shap": 0.015763,
+              "mean_shap": 0.011422
+            }
+          ],
+          "port_share_disagree": null,
+          "efficiency_gap_disagree": 0.0,
+          "top_energy": [
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.506607,
+              "mean_shap": 0.340541
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.38355,
+              "mean_shap": 0.364109
+            },
+            {
+              "feature": "Min",
+              "mean_abs_shap": 0.363227,
+              "mean_shap": 0.279642
+            },
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.330314,
+              "mean_shap": 0.121811
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.303501,
+              "mean_shap": 0.270996
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.273121,
+              "mean_shap": 0.064116
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.241385,
+              "mean_shap": 0.172252
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.192527,
+              "mean_shap": 0.163991
+            },
+            {
+              "feature": "UDP",
+              "mean_abs_shap": 0.178587,
+              "mean_shap": -0.082796
+            },
+            {
+              "feature": "DNS",
+              "mean_abs_shap": 0.114719,
+              "mean_shap": 0.061193
+            }
+          ],
+          "port_share_energy": null,
+          "efficiency_gap_energy": 0.0,
+          "faithfulness": {
+            "score": "disagree",
+            "ks": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            "scale": "düşüş / kalibrasyon IQR",
+            "iqr": 0.005029,
+            "mean_drop_iqr_shap": [
+              23.3617,
+              26.4466,
+              29.3369,
+              30.9558,
+              31.239,
+              31.8234,
+              32.8195,
+              33.522,
+              34.8102,
+              36.0696
+            ],
+            "mean_drop_iqr_random": [
+              -0.6864,
+              -1.5594,
+              -2.5761,
+              -3.5444,
+              -4.1596,
+              -4.6112,
+              -4.7577,
+              -5.1603,
+              -5.2804,
+              -5.1648
+            ],
+            "relative": {
+              "n_rows": 50,
+              "mean_rel_drop_shap": [
+                0.429,
+                0.4516,
+                0.4958,
+                0.5485,
+                0.5483,
+                0.5453,
+                0.55,
+                0.5754,
+                0.5886,
+                0.6109
+              ],
+              "mean_rel_drop_random": [
+                -0.0639,
+                -0.1106,
+                -0.1541,
+                -0.2008,
+                -0.2425,
+                -0.2714,
+                -0.2965,
+                -0.3251,
+                -0.3468,
+                -0.355
+              ]
+            },
+            "auc_shap_mean": 31.0385,
+            "auc_random_mean": -3.75,
+            "paired_diff_median": 25.6517,
+            "paired_diff_mean": 34.7885,
+            "frac_rows_shap_better": 1.0,
+            "wilcoxon_statistic": 0.0,
+            "wilcoxon_p": 1.7763568394002505e-15
+          },
+          "analyst_cards": [
+            {
+              "test_row": 701558,
+              "category": "SPOOFING",
+              "score": "disagree",
+              "score_value": 0.23265,
+              "reasons": [
+                {
+                  "feature": "Max",
+                  "value": 1500.0,
+                  "shap": 0.131131,
+                  "percentile_in_known": 83.3
+                },
+                {
+                  "feature": "DNS",
+                  "value": 0.20000000298023224,
+                  "shap": 0.019342,
+                  "percentile_in_known": 98.2
+                },
+                {
+                  "feature": "Rate",
+                  "value": 1018.5541381835938,
+                  "shap": 0.016815,
+                  "percentile_in_known": 16.1
+                }
+              ]
+            },
+            {
+              "test_row": 423990,
+              "category": "SPOOFING",
+              "score": "disagree",
+              "score_value": 0.27957,
+              "reasons": [
+                {
+                  "feature": "Max",
+                  "value": 1500.0,
+                  "shap": 0.158881,
+                  "percentile_in_known": 83.3
+                },
+                {
+                  "feature": "Tot sum",
+                  "value": 13566.0,
+                  "shap": 0.065204,
+                  "percentile_in_known": 67.6
+                },
+                {
+                  "feature": "psh_flag_number",
+                  "value": 0.0,
+                  "shap": 0.041544,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            },
+            {
+              "test_row": 226813,
+              "category": "SPOOFING",
+              "score": "disagree",
+              "score_value": 0.15318,
+              "reasons": [
+                {
+                  "feature": "Rate",
+                  "value": 11519.6484375,
+                  "shap": 0.06995,
+                  "percentile_in_known": 56.7
+                },
+                {
+                  "feature": "AVG",
+                  "value": 500.3999938964844,
+                  "shap": 0.036211,
+                  "percentile_in_known": 68.5
+                },
+                {
+                  "feature": "UDP",
+                  "value": 0.0,
+                  "shap": 0.016731,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            }
+          ]
+        },
+        "guard_unknown": {
+          "n_available": 135,
+          "n_explained": 50,
+          "explained_score": "energy",
+          "top_disagree": [
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.042527,
+              "mean_shap": -0.020283
+            },
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.039181,
+              "mean_shap": 0.00661
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.027294,
+              "mean_shap": 0.019844
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.025404,
+              "mean_shap": 0.020108
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.024835,
+              "mean_shap": 0.018956
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.023822,
+              "mean_shap": -0.005118
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.012593,
+              "mean_shap": -0.002061
+            },
+            {
+              "feature": "UDP",
+              "mean_abs_shap": 0.012448,
+              "mean_shap": 0.005922
+            },
+            {
+              "feature": "Std",
+              "mean_abs_shap": 0.009033,
+              "mean_shap": -0.003632
+            },
+            {
+              "feature": "Min",
+              "mean_abs_shap": 0.008812,
+              "mean_shap": -0.005424
+            }
+          ],
+          "port_share_disagree": null,
+          "efficiency_gap_disagree": 0.0,
+          "top_energy": [
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.324394,
+              "mean_shap": 0.1461
+            },
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.309593,
+              "mean_shap": -0.105473
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.302812,
+              "mean_shap": 0.25573
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.302058,
+              "mean_shap": 0.297793
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.280624,
+              "mean_shap": 0.243307
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.242441,
+              "mean_shap": 0.064873
+            },
+            {
+              "feature": "UDP",
+              "mean_abs_shap": 0.134707,
+              "mean_shap": 0.081954
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.104654,
+              "mean_shap": 0.060611
+            },
+            {
+              "feature": "Min",
+              "mean_abs_shap": 0.081208,
+              "mean_shap": -0.051126
+            },
+            {
+              "feature": "IAT",
+              "mean_abs_shap": 0.077693,
+              "mean_shap": 0.057423
+            }
+          ],
+          "port_share_energy": null,
+          "efficiency_gap_energy": 0.0,
+          "faithfulness": {
+            "score": "energy",
+            "ks": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            "scale": "düşüş / kalibrasyon IQR",
+            "iqr": 29.75017,
+            "mean_drop_iqr_shap": [
+              0.0148,
+              0.0185,
+              0.0228,
+              0.0245,
+              0.0266,
+              0.0296,
+              0.0338,
+              0.0384,
+              0.0396,
+              0.04
+            ],
+            "mean_drop_iqr_random": [
+              -0.0007,
+              -0.0013,
+              -0.0018,
+              -0.0023,
+              -0.0024,
+              -0.0028,
+              -0.0033,
+              -0.0033,
+              -0.0035,
+              -0.0034
+            ],
+            "relative": {
+              "n_rows": 0
+            },
+            "auc_shap_mean": 0.0289,
+            "auc_random_mean": -0.0025,
+            "paired_diff_median": 0.0295,
+            "paired_diff_mean": 0.0313,
+            "frac_rows_shap_better": 1.0,
+            "wilcoxon_statistic": 0.0,
+            "wilcoxon_p": 1.7763568394002505e-15
+          },
+          "analyst_cards": [
+            {
+              "test_row": 419746,
+              "category": "SPOOFING",
+              "score": "energy",
+              "score_value": -1.15548,
+              "reasons": [
+                {
+                  "feature": "Rate",
+                  "value": 41486.6875,
+                  "shap": 1.060099,
+                  "percentile_in_known": 91.5
+                },
+                {
+                  "feature": "AVG",
+                  "value": 66.0,
+                  "shap": 0.423499,
+                  "percentile_in_known": 54.1
+                },
+                {
+                  "feature": "Max",
+                  "value": 66.0,
+                  "shap": 0.180569,
+                  "percentile_in_known": 35.1
+                }
+              ]
+            },
+            {
+              "test_row": 135368,
+              "category": "SPOOFING",
+              "score": "energy",
+              "score_value": -1.06249,
+              "reasons": [
+                {
+                  "feature": "psh_flag_number",
+                  "value": 0.30000001192092896,
+                  "shap": 0.446828,
+                  "percentile_in_known": 90.3
+                },
+                {
+                  "feature": "Rate",
+                  "value": 2420.81494140625,
+                  "shap": 0.33142,
+                  "percentile_in_known": 25.5
+                },
+                {
+                  "feature": "Tot sum",
+                  "value": 9348.0,
+                  "shap": 0.312009,
+                  "percentile_in_known": 66.1
+                }
+              ]
+            },
+            {
+              "test_row": 235686,
+              "category": "SPOOFING",
+              "score": "energy",
+              "score_value": -0.98712,
+              "reasons": [
+                {
+                  "feature": "Max",
+                  "value": 1500.0,
+                  "shap": 0.848325,
+                  "percentile_in_known": 83.3
+                },
+                {
+                  "feature": "Std",
+                  "value": 451.8018493652344,
+                  "shap": 0.137543,
+                  "percentile_in_known": 84.0
+                },
+                {
+                  "feature": "UDP",
+                  "value": 0.0,
+                  "shap": 0.130412,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            }
+          ]
+        },
+        "silent_unknown": {
+          "n_available": 836,
+          "n_explained": 50,
+          "explained_score": null,
+          "top_disagree": [
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.043633,
+              "mean_shap": -0.019684
+            },
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.036209,
+              "mean_shap": 0.007922
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.033224,
+              "mean_shap": 0.020377
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.021261,
+              "mean_shap": -0.004012
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.015935,
+              "mean_shap": 0.002835
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.014848,
+              "mean_shap": 0.004429
+            },
+            {
+              "feature": "UDP",
+              "mean_abs_shap": 0.013047,
+              "mean_shap": 0.004336
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.011716,
+              "mean_shap": -0.001288
+            },
+            {
+              "feature": "Std",
+              "mean_abs_shap": 0.009813,
+              "mean_shap": -0.006017
+            },
+            {
+              "feature": "HTTP",
+              "mean_abs_shap": 0.009569,
+              "mean_shap": -0.003416
+            }
+          ],
+          "port_share_disagree": null,
+          "efficiency_gap_disagree": 0.0,
+          "top_energy": [
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.386881,
+              "mean_shap": 0.227951
+            },
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.370263,
+              "mean_shap": -0.143025
+            },
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.288346,
+              "mean_shap": 0.08043
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.270217,
+              "mean_shap": 0.032073
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.181015,
+              "mean_shap": 0.122227
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.153388,
+              "mean_shap": 0.087317
+            },
+            {
+              "feature": "UDP",
+              "mean_abs_shap": 0.148104,
+              "mean_shap": 0.067769
+            },
+            {
+              "feature": "HTTP",
+              "mean_abs_shap": 0.115843,
+              "mean_shap": -0.016784
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.092806,
+              "mean_shap": -0.018658
+            },
+            {
+              "feature": "Std",
+              "mean_abs_shap": 0.091867,
+              "mean_shap": -0.005127
+            }
+          ],
+          "port_share_energy": null,
+          "efficiency_gap_energy": 0.0,
+          "analyst_cards": [
+            {
+              "test_row": 293716,
+              "category": "SPOOFING",
+              "score": "energy",
+              "score_value": -1.27397,
+              "reasons": [
+                {
+                  "feature": "psh_flag_number",
+                  "value": 0.5,
+                  "shap": 0.411168,
+                  "percentile_in_known": 93.6
+                },
+                {
+                  "feature": "Max",
+                  "value": 534.0,
+                  "shap": 0.342573,
+                  "percentile_in_known": 63.5
+                },
+                {
+                  "feature": "AVG",
+                  "value": 159.3000030517578,
+                  "shap": 0.203475,
+                  "percentile_in_known": 63.7
+                }
+              ]
+            },
+            {
+              "test_row": 336345,
+              "category": "SPOOFING",
+              "score": "energy",
+              "score_value": -1.72279,
+              "reasons": [
+                {
+                  "feature": "Max",
+                  "value": 1462.0,
+                  "shap": 0.989364,
+                  "percentile_in_known": 82.7
+                },
+                {
+                  "feature": "psh_flag_number",
+                  "value": 0.0,
+                  "shap": 0.304059,
+                  "percentile_in_known": 0.0
+                },
+                {
+                  "feature": "Tot sum",
+                  "value": 9148.0,
+                  "shap": 0.279373,
+                  "percentile_in_known": 65.9
+                }
+              ]
+            },
+            {
+              "test_row": 643957,
+              "category": "SPOOFING",
+              "score": "energy",
+              "score_value": -1.62607,
+              "reasons": [
+                {
+                  "feature": "psh_flag_number",
+                  "value": 0.5,
+                  "shap": 0.407977,
+                  "percentile_in_known": 93.6
+                },
+                {
+                  "feature": "Max",
+                  "value": 230.0,
+                  "shap": 0.276016,
+                  "percentile_in_known": 55.6
+                },
+                {
+                  "feature": "AVG",
+                  "value": 121.19999694824219,
+                  "shap": 0.221156,
+                  "percentile_in_known": 61.5
+                }
+              ]
+            }
+          ]
+        },
+        "alarm_benign": {
+          "n_available": 1829,
+          "n_explained": 50,
+          "explained_score": "disagree",
+          "top_disagree": [
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.062052,
+              "mean_shap": 0.051488
+            },
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.038509,
+              "mean_shap": -0.012255
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.034211,
+              "mean_shap": 0.028827
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.019214,
+              "mean_shap": 0.012799
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.018197,
+              "mean_shap": 0.004709
+            },
+            {
+              "feature": "UDP",
+              "mean_abs_shap": 0.017398,
+              "mean_shap": -0.011065
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.016514,
+              "mean_shap": 0.004284
+            },
+            {
+              "feature": "ICMP",
+              "mean_abs_shap": 0.015395,
+              "mean_shap": 0.008859
+            },
+            {
+              "feature": "SSH",
+              "mean_abs_shap": 0.010175,
+              "mean_shap": 0.00832
+            },
+            {
+              "feature": "DNS",
+              "mean_abs_shap": 0.010152,
+              "mean_shap": 0.002513
+            }
+          ],
+          "port_share_disagree": null,
+          "efficiency_gap_disagree": 0.0,
+          "top_energy": [
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.481334,
+              "mean_shap": 0.419321
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.281533,
+              "mean_shap": 0.217573
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.265827,
+              "mean_shap": 0.198417
+            },
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.256841,
+              "mean_shap": 0.027033
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.233561,
+              "mean_shap": 0.126056
+            },
+            {
+              "feature": "UDP",
+              "mean_abs_shap": 0.169334,
+              "mean_shap": -0.099608
+            },
+            {
+              "feature": "DNS",
+              "mean_abs_shap": 0.137097,
+              "mean_shap": -0.010289
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.123066,
+              "mean_shap": 0.077107
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.102985,
+              "mean_shap": -0.00403
+            },
+            {
+              "feature": "Std",
+              "mean_abs_shap": 0.092522,
+              "mean_shap": 0.051924
+            }
+          ],
+          "port_share_energy": null,
+          "efficiency_gap_energy": 0.0,
+          "faithfulness": {
+            "score": "disagree",
+            "ks": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            "scale": "düşüş / kalibrasyon IQR",
+            "iqr": 0.005029,
+            "mean_drop_iqr_shap": [
+              4.4194,
+              7.1796,
+              7.3982,
+              6.3212,
+              6.7781,
+              7.3008,
+              7.4234,
+              8.0993,
+              8.7691,
+              9.6201
+            ],
+            "mean_drop_iqr_random": [
+              -1.1134,
+              -2.6453,
+              -3.8798,
+              -5.2495,
+              -6.3112,
+              -7.2694,
+              -8.0968,
+              -8.8782,
+              -9.5267,
+              -10.2357
+            ],
+            "relative": {
+              "n_rows": 50,
+              "mean_rel_drop_shap": [
+                0.1478,
+                0.2686,
+                0.2584,
+                0.194,
+                0.2031,
+                0.2219,
+                0.2013,
+                0.2397,
+                0.2773,
+                0.3146
+              ],
+              "mean_rel_drop_random": [
+                -0.0736,
+                -0.1742,
+                -0.2537,
+                -0.338,
+                -0.4052,
+                -0.4574,
+                -0.5161,
+                -0.5687,
+                -0.6208,
+                -0.6715
+              ]
+            },
+            "auc_shap_mean": 7.3309,
+            "auc_random_mean": -6.3206,
+            "paired_diff_median": 11.0992,
+            "paired_diff_mean": 13.6515,
+            "frac_rows_shap_better": 0.98,
+            "wilcoxon_statistic": 1.0,
+            "wilcoxon_p": 3.552713678800501e-15
+          },
+          "analyst_cards": [
+            {
+              "test_row": 732745,
+              "category": "BENIGN",
+              "score": "disagree",
+              "score_value": 0.19554,
+              "reasons": [
+                {
+                  "feature": "SSH",
+                  "value": 0.10000000149011612,
+                  "shap": 0.111695,
+                  "percentile_in_known": 99.6
+                },
+                {
+                  "feature": "Tot sum",
+                  "value": 18030.0,
+                  "shap": 0.064849,
+                  "percentile_in_known": 69.9
+                },
+                {
+                  "feature": "psh_flag_number",
+                  "value": 0.0,
+                  "shap": 0.02706,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            },
+            {
+              "test_row": 208462,
+              "category": "BENIGN",
+              "score": "disagree",
+              "score_value": 0.16413,
+              "reasons": [
+                {
+                  "feature": "SSH",
+                  "value": 0.10000000149011612,
+                  "shap": 0.109709,
+                  "percentile_in_known": 99.6
+                },
+                {
+                  "feature": "HTTPS",
+                  "value": 0.0,
+                  "shap": 0.070769,
+                  "percentile_in_known": 0.0
+                },
+                {
+                  "feature": "Header_Length",
+                  "value": 15.199999809265137,
+                  "shap": 0.064836,
+                  "percentile_in_known": 46.2
+                }
+              ]
+            },
+            {
+              "test_row": 694763,
+              "category": "BENIGN",
+              "score": "disagree",
+              "score_value": 0.19738,
+              "reasons": [
+                {
+                  "feature": "Header_Length",
+                  "value": 10.399999618530273,
+                  "shap": 0.108964,
+                  "percentile_in_known": 44.4
+                },
+                {
+                  "feature": "HTTPS",
+                  "value": 0.10000000149011612,
+                  "shap": 0.075372,
+                  "percentile_in_known": 84.6
+                },
+                {
+                  "feature": "ack_flag_number",
+                  "value": 0.10000000149011612,
+                  "shap": 0.041601,
+                  "percentile_in_known": 74.4
+                }
+              ]
+            }
+          ]
+        },
+        "guard_benign": {
+          "n_available": 262,
+          "n_explained": 50,
+          "explained_score": "energy",
+          "top_disagree": [
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.065501,
+              "mean_shap": 0.048332
+            },
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.040182,
+              "mean_shap": -0.028246
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.020078,
+              "mean_shap": 0.003318
+            },
+            {
+              "feature": "UDP",
+              "mean_abs_shap": 0.018186,
+              "mean_shap": -0.012587
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.017406,
+              "mean_shap": 0.012039
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.015329,
+              "mean_shap": 0.007871
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.012731,
+              "mean_shap": 0.005556
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.012496,
+              "mean_shap": 0.003711
+            },
+            {
+              "feature": "Min",
+              "mean_abs_shap": 0.008662,
+              "mean_shap": 0.00369
+            },
+            {
+              "feature": "DNS",
+              "mean_abs_shap": 0.007148,
+              "mean_shap": 0.003163
+            }
+          ],
+          "port_share_disagree": null,
+          "efficiency_gap_disagree": 0.0,
+          "top_energy": [
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.525634,
+              "mean_shap": 0.410711
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.36413,
+              "mean_shap": 0.341887
+            },
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.311594,
+              "mean_shap": -0.144398
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.261846,
+              "mean_shap": 0.251343
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.199258,
+              "mean_shap": 0.158676
+            },
+            {
+              "feature": "UDP",
+              "mean_abs_shap": 0.176228,
+              "mean_shap": -0.103456
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.142431,
+              "mean_shap": 0.047891
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.137928,
+              "mean_shap": 0.112516
+            },
+            {
+              "feature": "DNS",
+              "mean_abs_shap": 0.110114,
+              "mean_shap": 0.039839
+            },
+            {
+              "feature": "Std",
+              "mean_abs_shap": 0.099823,
+              "mean_shap": 0.087305
+            }
+          ],
+          "port_share_energy": null,
+          "efficiency_gap_energy": 0.0,
+          "faithfulness": {
+            "score": "energy",
+            "ks": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            "scale": "düşüş / kalibrasyon IQR",
+            "iqr": 29.75017,
+            "mean_drop_iqr_shap": [
+              0.0064,
+              0.011,
+              0.0137,
+              0.016,
+              0.0181,
+              0.0209,
+              0.0236,
+              0.0258,
+              0.0283,
+              0.0296
+            ],
+            "mean_drop_iqr_random": [
+              -0.0008,
+              -0.0013,
+              -0.0021,
+              -0.0027,
+              -0.0034,
+              -0.004,
+              -0.0042,
+              -0.0047,
+              -0.0051,
+              -0.0051
+            ],
+            "relative": {
+              "n_rows": 0
+            },
+            "auc_shap_mean": 0.0193,
+            "auc_random_mean": -0.0033,
+            "paired_diff_median": 0.0222,
+            "paired_diff_mean": 0.0227,
+            "frac_rows_shap_better": 1.0,
+            "wilcoxon_statistic": 0.0,
+            "wilcoxon_p": 1.7763568394002505e-15
+          },
+          "analyst_cards": [
+            {
+              "test_row": 63873,
+              "category": "BENIGN",
+              "score": "energy",
+              "score_value": -0.69975,
+              "reasons": [
+                {
+                  "feature": "Header_Length",
+                  "value": 8.0,
+                  "shap": 0.801345,
+                  "percentile_in_known": 29.3
+                },
+                {
+                  "feature": "AVG",
+                  "value": 60.0,
+                  "shap": 0.660493,
+                  "percentile_in_known": 0.0
+                },
+                {
+                  "feature": "Max",
+                  "value": 60.0,
+                  "shap": 0.208916,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            },
+            {
+              "test_row": 111058,
+              "category": "BENIGN",
+              "score": "energy",
+              "score_value": -1.20745,
+              "reasons": [
+                {
+                  "feature": "Max",
+                  "value": 427.0,
+                  "shap": 0.412989,
+                  "percentile_in_known": 62.4
+                },
+                {
+                  "feature": "Header_Length",
+                  "value": 22.399999618530273,
+                  "shap": 0.3839,
+                  "percentile_in_known": 89.2
+                },
+                {
+                  "feature": "AVG",
+                  "value": 138.3000030517578,
+                  "shap": 0.281615,
+                  "percentile_in_known": 62.7
+                }
+              ]
+            },
+            {
+              "test_row": 644304,
+              "category": "BENIGN",
+              "score": "energy",
+              "score_value": -1.09034,
+              "reasons": [
+                {
+                  "feature": "Header_Length",
+                  "value": 16.399999618530273,
+                  "shap": 0.784645,
+                  "percentile_in_known": 46.7
+                },
+                {
+                  "feature": "HTTPS",
+                  "value": 0.30000001192092896,
+                  "shap": 0.35102,
+                  "percentile_in_known": 87.4
+                },
+                {
+                  "feature": "AVG",
+                  "value": 166.0,
+                  "shap": 0.31126,
+                  "percentile_in_known": 64.6
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "model_calls": 5340320,
+      "seconds": 760.4
+    },
+    "WEB": {
+      "categories": [
+        "WEB"
+      ],
+      "decision_source": "dss",
+      "check_vs_dss_guard": {
+        "disagree": 1.0,
+        "energy": 1.0,
+        "alarm_agreement": 1.0
+      },
+      "tau_alarm": 0.047638989984989166,
+      "tau_guard": -1.578574776649475,
+      "group_sizes": {
+        "alarm_unknown": 168,
+        "guard_unknown": 10,
+        "silent_unknown": 52,
+        "alarm_benign": 1331,
+        "guard_benign": 292
+      },
+      "background": "bilinen normal (BENIGN) eğitim trafiği",
+      "background_mean_score": {
+        "disagree": 0.025635,
+        "energy": -2.117116
+      },
+      "groups": {
+        "alarm_unknown": {
+          "n_available": 168,
+          "n_explained": 50,
+          "explained_score": "disagree",
+          "top_disagree": [
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.050964,
+              "mean_shap": -0.01687
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.032074,
+              "mean_shap": 0.02915
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.030862,
+              "mean_shap": 0.001793
+            },
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.018409,
+              "mean_shap": 0.012738
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.012961,
+              "mean_shap": -9.3e-05
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.010966,
+              "mean_shap": 0.004561
+            },
+            {
+              "feature": "IAT",
+              "mean_abs_shap": 0.006488,
+              "mean_shap": -0.000833
+            },
+            {
+              "feature": "ack_flag_number",
+              "mean_abs_shap": 0.005505,
+              "mean_shap": 0.004179
+            },
+            {
+              "feature": "fin_flag_number",
+              "mean_abs_shap": 0.005356,
+              "mean_shap": 0.003815
+            },
+            {
+              "feature": "Min",
+              "mean_abs_shap": 0.005355,
+              "mean_shap": 0.000468
+            }
+          ],
+          "port_share_disagree": null,
+          "efficiency_gap_disagree": 0.0,
+          "top_energy": [
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.249618,
+              "mean_shap": 0.078345
+            },
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.215596,
+              "mean_shap": -0.061633
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.155261,
+              "mean_shap": 0.096161
+            },
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.15416,
+              "mean_shap": 0.113542
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.123616,
+              "mean_shap": 0.07974
+            },
+            {
+              "feature": "Min",
+              "mean_abs_shap": 0.088977,
+              "mean_shap": 0.034057
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.081999,
+              "mean_shap": -0.00496
+            },
+            {
+              "feature": "HTTP",
+              "mean_abs_shap": 0.067413,
+              "mean_shap": -0.046365
+            },
+            {
+              "feature": "UDP",
+              "mean_abs_shap": 0.048573,
+              "mean_shap": -0.006751
+            },
+            {
+              "feature": "DNS",
+              "mean_abs_shap": 0.048052,
+              "mean_shap": 0.011213
+            }
+          ],
+          "port_share_energy": null,
+          "efficiency_gap_energy": 0.0,
+          "faithfulness": {
+            "score": "disagree",
+            "ks": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            "scale": "düşüş / kalibrasyon IQR",
+            "iqr": 0.005281,
+            "mean_drop_iqr_shap": [
+              1.2221,
+              2.1164,
+              2.4283,
+              3.2634,
+              4.4836,
+              5.6184,
+              5.8484,
+              6.1246,
+              6.17,
+              6.0958
+            ],
+            "mean_drop_iqr_random": [
+              -1.443,
+              -2.4995,
+              -3.5247,
+              -4.6555,
+              -5.3845,
+              -6.6202,
+              -7.3246,
+              -7.9553,
+              -8.5701,
+              -8.8964
+            ],
+            "relative": {
+              "n_rows": 50,
+              "mean_rel_drop_shap": [
+                -0.0294,
+                0.055,
+                0.0968,
+                0.2264,
+                0.3681,
+                0.48,
+                0.5063,
+                0.5561,
+                0.5533,
+                0.5432
+              ],
+              "mean_rel_drop_random": [
+                -0.2083,
+                -0.3722,
+                -0.5208,
+                -0.7052,
+                -0.8072,
+                -0.9741,
+                -1.0905,
+                -1.1906,
+                -1.2949,
+                -1.3505
+              ]
+            },
+            "auc_shap_mean": 4.3371,
+            "auc_random_mean": -5.6874,
+            "paired_diff_median": 8.9344,
+            "paired_diff_mean": 10.0245,
+            "frac_rows_shap_better": 1.0,
+            "wilcoxon_statistic": 0.0,
+            "wilcoxon_p": 1.7763568394002505e-15
+          },
+          "analyst_cards": [
+            {
+              "test_row": 85288,
+              "category": "WEB",
+              "score": "disagree",
+              "score_value": 0.05548,
+              "reasons": [
+                {
+                  "feature": "AVG",
+                  "value": 103.80000305175781,
+                  "shap": 0.019576,
+                  "percentile_in_known": 58.0
+                },
+                {
+                  "feature": "fin_flag_number",
+                  "value": 0.10000000149011612,
+                  "shap": 0.012751,
+                  "percentile_in_known": 91.8
+                },
+                {
+                  "feature": "HTTPS",
+                  "value": 0.5,
+                  "shap": 0.009095,
+                  "percentile_in_known": 87.5
+                }
+              ]
+            },
+            {
+              "test_row": 469482,
+              "category": "WEB",
+              "score": "disagree",
+              "score_value": 0.0696,
+              "reasons": [
+                {
+                  "feature": "Tot sum",
+                  "value": 20932.0,
+                  "shap": 0.113852,
+                  "percentile_in_known": 72.1
+                },
+                {
+                  "feature": "Rate",
+                  "value": 9364.3759765625,
+                  "shap": 0.042937,
+                  "percentile_in_known": 53.2
+                },
+                {
+                  "feature": "Min",
+                  "value": 1514.0,
+                  "shap": 0.007593,
+                  "percentile_in_known": 99.7
+                }
+              ]
+            },
+            {
+              "test_row": 295986,
+              "category": "WEB",
+              "score": "disagree",
+              "score_value": 0.13585,
+              "reasons": [
+                {
+                  "feature": "Tot sum",
+                  "value": 15140.0,
+                  "shap": 0.100136,
+                  "percentile_in_known": 69.4
+                },
+                {
+                  "feature": "Header_Length",
+                  "value": 20.0,
+                  "shap": 0.058151,
+                  "percentile_in_known": 57.0
+                },
+                {
+                  "feature": "Rate",
+                  "value": 10493.6298828125,
+                  "shap": 0.056063,
+                  "percentile_in_known": 56.0
+                }
+              ]
+            }
+          ]
+        },
+        "guard_unknown": {
+          "n_available": 10,
+          "n_explained": 10,
+          "explained_score": "energy",
+          "top_disagree": [
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.032704,
+              "mean_shap": -0.02446
+            },
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.021454,
+              "mean_shap": 0.019819
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.017354,
+              "mean_shap": 0.012501
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.013434,
+              "mean_shap": 0.007586
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.010503,
+              "mean_shap": -0.009509
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.006437,
+              "mean_shap": 0.004127
+            },
+            {
+              "feature": "IAT",
+              "mean_abs_shap": 0.005506,
+              "mean_shap": -0.00506
+            },
+            {
+              "feature": "ack_flag_number",
+              "mean_abs_shap": 0.003679,
+              "mean_shap": 0.002521
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.003259,
+              "mean_shap": 0.000471
+            },
+            {
+              "feature": "Min",
+              "mean_abs_shap": 0.003183,
+              "mean_shap": 0.002201
+            }
+          ],
+          "port_share_disagree": null,
+          "efficiency_gap_disagree": 0.0,
+          "top_energy": [
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.190943,
+              "mean_shap": 0.183246
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.185533,
+              "mean_shap": 0.162866
+            },
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.173309,
+              "mean_shap": -0.103818
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.133617,
+              "mean_shap": 0.133617
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.089946,
+              "mean_shap": 0.085219
+            },
+            {
+              "feature": "Min",
+              "mean_abs_shap": 0.075019,
+              "mean_shap": 0.072268
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.058888,
+              "mean_shap": -0.028091
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.052492,
+              "mean_shap": 0.04059
+            },
+            {
+              "feature": "Std",
+              "mean_abs_shap": 0.046941,
+              "mean_shap": 0.046941
+            },
+            {
+              "feature": "UDP",
+              "mean_abs_shap": 0.045897,
+              "mean_shap": -0.044825
+            }
+          ],
+          "port_share_energy": null,
+          "efficiency_gap_energy": 0.0,
+          "faithfulness": {
+            "score": "energy",
+            "ks": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            "scale": "düşüş / kalibrasyon IQR",
+            "iqr": 16.775663,
+            "mean_drop_iqr_shap": [
+              0.0048,
+              0.0141,
+              0.0239,
+              0.0299,
+              0.0321,
+              0.0336,
+              0.0363,
+              0.0394,
+              0.0416,
+              0.0427
+            ],
+            "mean_drop_iqr_random": [
+              -0.0006,
+              -0.0,
+              0.0001,
+              0.0001,
+              0.0006,
+              0.0015,
+              0.0023,
+              0.0022,
+              0.0019,
+              0.0025
+            ],
+            "relative": {
+              "n_rows": 0
+            },
+            "auc_shap_mean": 0.0298,
+            "auc_random_mean": 0.0011,
+            "paired_diff_median": 0.0284,
+            "paired_diff_mean": 0.0288,
+            "frac_rows_shap_better": 1.0,
+            "wilcoxon_statistic": 0.0,
+            "wilcoxon_p": 0.001953125
+          },
+          "analyst_cards": [
+            {
+              "test_row": 209385,
+              "category": "WEB",
+              "score": "energy",
+              "score_value": -1.49091,
+              "reasons": [
+                {
+                  "feature": "Header_Length",
+                  "value": 16.799999237060547,
+                  "shap": 0.253761,
+                  "percentile_in_known": 46.2
+                },
+                {
+                  "feature": "AVG",
+                  "value": 148.60000610351562,
+                  "shap": 0.179074,
+                  "percentile_in_known": 61.7
+                },
+                {
+                  "feature": "Max",
+                  "value": 224.0,
+                  "shap": 0.145561,
+                  "percentile_in_known": 53.9
+                }
+              ]
+            },
+            {
+              "test_row": 81953,
+              "category": "WEB",
+              "score": "energy",
+              "score_value": -1.50527,
+              "reasons": [
+                {
+                  "feature": "HTTPS",
+                  "value": 0.10000000149011612,
+                  "shap": 0.276232,
+                  "percentile_in_known": 81.9
+                },
+                {
+                  "feature": "AVG",
+                  "value": 84.5999984741211,
+                  "shap": 0.224019,
+                  "percentile_in_known": 55.5
+                },
+                {
+                  "feature": "Header_Length",
+                  "value": 16.799999237060547,
+                  "shap": 0.198366,
+                  "percentile_in_known": 46.2
+                }
+              ]
+            },
+            {
+              "test_row": 256265,
+              "category": "WEB",
+              "score": "energy",
+              "score_value": -1.50579,
+              "reasons": [
+                {
+                  "feature": "Header_Length",
+                  "value": 16.399999618530273,
+                  "shap": 0.229887,
+                  "percentile_in_known": 46.0
+                },
+                {
+                  "feature": "HTTPS",
+                  "value": 0.30000001192092896,
+                  "shap": 0.158835,
+                  "percentile_in_known": 85.2
+                },
+                {
+                  "feature": "AVG",
+                  "value": 160.6999969482422,
+                  "shap": 0.14892,
+                  "percentile_in_known": 62.3
+                }
+              ]
+            }
+          ]
+        },
+        "silent_unknown": {
+          "n_available": 52,
+          "n_explained": 50,
+          "explained_score": null,
+          "top_disagree": [
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.031874,
+              "mean_shap": 0.005459
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.020606,
+              "mean_shap": -0.003339
+            },
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.010609,
+              "mean_shap": -0.003367
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.009434,
+              "mean_shap": -0.00018
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.005751,
+              "mean_shap": 0.003442
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.005504,
+              "mean_shap": -0.0013
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.005104,
+              "mean_shap": 0.000577
+            },
+            {
+              "feature": "Std",
+              "mean_abs_shap": 0.004267,
+              "mean_shap": -0.00129
+            },
+            {
+              "feature": "Min",
+              "mean_abs_shap": 0.003908,
+              "mean_shap": -0.000857
+            },
+            {
+              "feature": "IAT",
+              "mean_abs_shap": 0.00372,
+              "mean_shap": 0.000448
+            }
+          ],
+          "port_share_disagree": null,
+          "efficiency_gap_disagree": 0.0,
+          "top_energy": [
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.222539,
+              "mean_shap": 0.003232
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.209864,
+              "mean_shap": 0.007545
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.196426,
+              "mean_shap": 0.003172
+            },
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.084,
+              "mean_shap": -0.019867
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.081012,
+              "mean_shap": 0.001347
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.066598,
+              "mean_shap": 0.030702
+            },
+            {
+              "feature": "Min",
+              "mean_abs_shap": 0.062901,
+              "mean_shap": -0.000522
+            },
+            {
+              "feature": "UDP",
+              "mean_abs_shap": 0.029908,
+              "mean_shap": 0.010818
+            },
+            {
+              "feature": "Std",
+              "mean_abs_shap": 0.029761,
+              "mean_shap": 0.006387
+            },
+            {
+              "feature": "IAT",
+              "mean_abs_shap": 0.02817,
+              "mean_shap": 0.006677
+            }
+          ],
+          "port_share_energy": null,
+          "efficiency_gap_energy": 0.0,
+          "analyst_cards": [
+            {
+              "test_row": 58918,
+              "category": "WEB",
+              "score": "energy",
+              "score_value": -1.74466,
+              "reasons": [
+                {
+                  "feature": "AVG",
+                  "value": 108.19999694824219,
+                  "shap": 0.168513,
+                  "percentile_in_known": 58.5
+                },
+                {
+                  "feature": "Max",
+                  "value": 196.0,
+                  "shap": 0.113888,
+                  "percentile_in_known": 51.6
+                },
+                {
+                  "feature": "psh_flag_number",
+                  "value": 0.30000001192092896,
+                  "shap": 0.109174,
+                  "percentile_in_known": 89.5
+                }
+              ]
+            },
+            {
+              "test_row": 365698,
+              "category": "WEB",
+              "score": "energy",
+              "score_value": -2.48559,
+              "reasons": [
+                {
+                  "feature": "AVG",
+                  "value": 66.0,
+                  "shap": 0.259289,
+                  "percentile_in_known": 51.7
+                },
+                {
+                  "feature": "Max",
+                  "value": 66.0,
+                  "shap": 0.105769,
+                  "percentile_in_known": 33.5
+                },
+                {
+                  "feature": "Rate",
+                  "value": 1419.2481689453125,
+                  "shap": 0.056314,
+                  "percentile_in_known": 21.2
+                }
+              ]
+            },
+            {
+              "test_row": 64782,
+              "category": "WEB",
+              "score": "energy",
+              "score_value": -1.65614,
+              "reasons": [
+                {
+                  "feature": "Header_Length",
+                  "value": 20.0,
+                  "shap": 0.198611,
+                  "percentile_in_known": 57.0
+                },
+                {
+                  "feature": "Max",
+                  "value": 358.0,
+                  "shap": 0.134992,
+                  "percentile_in_known": 60.3
+                },
+                {
+                  "feature": "AVG",
+                  "value": 221.89999389648438,
+                  "shap": 0.115482,
+                  "percentile_in_known": 65.2
+                }
+              ]
+            }
+          ]
+        },
+        "alarm_benign": {
+          "n_available": 1331,
+          "n_explained": 50,
+          "explained_score": "disagree",
+          "top_disagree": [
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.054088,
+              "mean_shap": 0.012628
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.028961,
+              "mean_shap": -0.009585
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.019757,
+              "mean_shap": 0.014137
+            },
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.017646,
+              "mean_shap": 0.007931
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.011718,
+              "mean_shap": 0.0003
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.008236,
+              "mean_shap": 0.004329
+            },
+            {
+              "feature": "Std",
+              "mean_abs_shap": 0.007743,
+              "mean_shap": -0.004723
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.006887,
+              "mean_shap": 0.00453
+            },
+            {
+              "feature": "Min",
+              "mean_abs_shap": 0.005558,
+              "mean_shap": 0.003512
+            },
+            {
+              "feature": "ack_flag_number",
+              "mean_abs_shap": 0.005339,
+              "mean_shap": 0.002748
+            }
+          ],
+          "port_share_disagree": null,
+          "efficiency_gap_disagree": 0.0,
+          "top_energy": [
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.254092,
+              "mean_shap": 0.115406
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.232448,
+              "mean_shap": -0.050443
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.141367,
+              "mean_shap": 0.052304
+            },
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.136949,
+              "mean_shap": 0.059979
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.083587,
+              "mean_shap": 0.009758
+            },
+            {
+              "feature": "Min",
+              "mean_abs_shap": 0.080314,
+              "mean_shap": 0.042334
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.075524,
+              "mean_shap": 0.022306
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.058149,
+              "mean_shap": 0.031891
+            },
+            {
+              "feature": "UDP",
+              "mean_abs_shap": 0.057848,
+              "mean_shap": -0.008177
+            },
+            {
+              "feature": "DNS",
+              "mean_abs_shap": 0.050382,
+              "mean_shap": 0.000841
+            }
+          ],
+          "port_share_energy": null,
+          "efficiency_gap_energy": 0.0,
+          "faithfulness": {
+            "score": "disagree",
+            "ks": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            "scale": "düşüş / kalibrasyon IQR",
+            "iqr": 0.005281,
+            "mean_drop_iqr_shap": [
+              0.3056,
+              1.7191,
+              2.7465,
+              3.5405,
+              3.862,
+              4.0214,
+              4.5768,
+              4.7562,
+              5.064,
+              5.1136
+            ],
+            "mean_drop_iqr_random": [
+              -0.9598,
+              -2.0364,
+              -3.0576,
+              -4.0938,
+              -4.8727,
+              -5.7644,
+              -6.693,
+              -7.2858,
+              -7.8611,
+              -8.4576
+            ],
+            "relative": {
+              "n_rows": 50,
+              "mean_rel_drop_shap": [
+                -0.0898,
+                0.0612,
+                0.2086,
+                0.3589,
+                0.409,
+                0.411,
+                0.4855,
+                0.5026,
+                0.5408,
+                0.5513
+              ],
+              "mean_rel_drop_random": [
+                -0.1857,
+                -0.375,
+                -0.5451,
+                -0.7234,
+                -0.8669,
+                -1.0238,
+                -1.2043,
+                -1.3093,
+                -1.4134,
+                -1.5221
+              ]
+            },
+            "auc_shap_mean": 3.5706,
+            "auc_random_mean": -5.1082,
+            "paired_diff_median": 8.1836,
+            "paired_diff_mean": 8.6788,
+            "frac_rows_shap_better": 1.0,
+            "wilcoxon_statistic": 0.0,
+            "wilcoxon_p": 1.7763568394002505e-15
+          },
+          "analyst_cards": [
+            {
+              "test_row": 584868,
+              "category": "BENIGN",
+              "score": "disagree",
+              "score_value": 0.06738,
+              "reasons": [
+                {
+                  "feature": "HTTPS",
+                  "value": 0.30000001192092896,
+                  "shap": 0.024166,
+                  "percentile_in_known": 85.2
+                },
+                {
+                  "feature": "AVG",
+                  "value": 553.7999877929688,
+                  "shap": 0.019754,
+                  "percentile_in_known": 71.5
+                },
+                {
+                  "feature": "psh_flag_number",
+                  "value": 0.6000000238418579,
+                  "shap": 0.016715,
+                  "percentile_in_known": 94.1
+                }
+              ]
+            },
+            {
+              "test_row": 520022,
+              "category": "BENIGN",
+              "score": "disagree",
+              "score_value": 0.0505,
+              "reasons": [
+                {
+                  "feature": "Tot sum",
+                  "value": 19969.0,
+                  "shap": 0.115627,
+                  "percentile_in_known": 72.0
+                },
+                {
+                  "feature": "Rate",
+                  "value": 4606.08837890625,
+                  "shap": 0.028667,
+                  "percentile_in_known": 38.1
+                },
+                {
+                  "feature": "IAT",
+                  "value": 0.0003421068249735981,
+                  "shap": 0.015739,
+                  "percentile_in_known": 69.3
+                }
+              ]
+            },
+            {
+              "test_row": 167057,
+              "category": "BENIGN",
+              "score": "disagree",
+              "score_value": 0.06105,
+              "reasons": [
+                {
+                  "feature": "psh_flag_number",
+                  "value": 0.6000000238418579,
+                  "shap": 0.030698,
+                  "percentile_in_known": 94.1
+                },
+                {
+                  "feature": "AVG",
+                  "value": 102.9000015258789,
+                  "shap": 0.01755,
+                  "percentile_in_known": 57.9
+                },
+                {
+                  "feature": "HTTPS",
+                  "value": 0.4000000059604645,
+                  "shap": 0.012946,
+                  "percentile_in_known": 86.4
+                }
+              ]
+            }
+          ]
+        },
+        "guard_benign": {
+          "n_available": 292,
+          "n_explained": 50,
+          "explained_score": "energy",
+          "top_disagree": [
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.031948,
+              "mean_shap": -0.024876
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.016031,
+              "mean_shap": 0.012577
+            },
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.015736,
+              "mean_shap": 0.012116
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.010207,
+              "mean_shap": 0.007713
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.01006,
+              "mean_shap": -0.009943
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.005718,
+              "mean_shap": 0.003489
+            },
+            {
+              "feature": "ack_flag_number",
+              "mean_abs_shap": 0.00425,
+              "mean_shap": 0.003637
+            },
+            {
+              "feature": "syn_flag_number",
+              "mean_abs_shap": 0.004038,
+              "mean_shap": 0.002748
+            },
+            {
+              "feature": "IAT",
+              "mean_abs_shap": 0.003784,
+              "mean_shap": -0.003601
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.0037,
+              "mean_shap": 0.002595
+            }
+          ],
+          "port_share_disagree": null,
+          "efficiency_gap_disagree": 0.0,
+          "top_energy": [
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.188373,
+              "mean_shap": 0.168641
+            },
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.174367,
+              "mean_shap": -0.113814
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.166743,
+              "mean_shap": 0.166743
+            },
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.13204,
+              "mean_shap": 0.116444
+            },
+            {
+              "feature": "Min",
+              "mean_abs_shap": 0.075425,
+              "mean_shap": 0.074286
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.065774,
+              "mean_shap": 0.065187
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.054388,
+              "mean_shap": -0.047877
+            },
+            {
+              "feature": "Std",
+              "mean_abs_shap": 0.047622,
+              "mean_shap": 0.045858
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.042542,
+              "mean_shap": 0.029225
+            },
+            {
+              "feature": "syn_flag_number",
+              "mean_abs_shap": 0.036394,
+              "mean_shap": 0.031725
+            }
+          ],
+          "port_share_energy": null,
+          "efficiency_gap_energy": 0.0,
+          "faithfulness": {
+            "score": "energy",
+            "ks": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            "scale": "düşüş / kalibrasyon IQR",
+            "iqr": 16.775663,
+            "mean_drop_iqr_shap": [
+              0.0086,
+              0.0184,
+              0.0281,
+              0.0321,
+              0.0354,
+              0.0391,
+              0.0418,
+              0.0426,
+              0.0438,
+              0.0453
+            ],
+            "mean_drop_iqr_random": [
+              0.0003,
+              0.0005,
+              0.001,
+              0.0013,
+              0.0015,
+              0.0021,
+              0.0023,
+              0.0025,
+              0.0029,
+              0.0034
+            ],
+            "relative": {
+              "n_rows": 0
+            },
+            "auc_shap_mean": 0.0335,
+            "auc_random_mean": 0.0018,
+            "paired_diff_median": 0.0315,
+            "paired_diff_mean": 0.0318,
+            "frac_rows_shap_better": 1.0,
+            "wilcoxon_statistic": 0.0,
+            "wilcoxon_p": 1.7763568394002505e-15
+          },
+          "analyst_cards": [
+            {
+              "test_row": 309486,
+              "category": "BENIGN",
+              "score": "energy",
+              "score_value": -1.57014,
+              "reasons": [
+                {
+                  "feature": "Header_Length",
+                  "value": 18.799999237060547,
+                  "shap": 0.24549,
+                  "percentile_in_known": 47.1
+                },
+                {
+                  "feature": "AVG",
+                  "value": 103.80000305175781,
+                  "shap": 0.206882,
+                  "percentile_in_known": 58.0
+                },
+                {
+                  "feature": "Max",
+                  "value": 230.0,
+                  "shap": 0.154399,
+                  "percentile_in_known": 54.0
+                }
+              ]
+            },
+            {
+              "test_row": 160026,
+              "category": "BENIGN",
+              "score": "energy",
+              "score_value": -1.53628,
+              "reasons": [
+                {
+                  "feature": "AVG",
+                  "value": 145.39999389648438,
+                  "shap": 0.151175,
+                  "percentile_in_known": 61.5
+                },
+                {
+                  "feature": "Header_Length",
+                  "value": 22.399999618530273,
+                  "shap": 0.142967,
+                  "percentile_in_known": 87.1
+                },
+                {
+                  "feature": "Max",
+                  "value": 411.0,
+                  "shap": 0.13716,
+                  "percentile_in_known": 60.9
+                }
+              ]
+            },
+            {
+              "test_row": 412988,
+              "category": "BENIGN",
+              "score": "energy",
+              "score_value": -1.51835,
+              "reasons": [
+                {
+                  "feature": "Max",
+                  "value": 230.0,
+                  "shap": 0.209815,
+                  "percentile_in_known": 54.0
+                },
+                {
+                  "feature": "AVG",
+                  "value": 140.0,
+                  "shap": 0.178915,
+                  "percentile_in_known": 61.2
+                },
+                {
+                  "feature": "Min",
+                  "value": 60.0,
+                  "shap": 0.130028,
+                  "percentile_in_known": 2.5
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "model_calls": 4452280,
+      "seconds": 415.2
+    },
+    "BRUTEFORCE": {
+      "categories": [
+        "BRUTEFORCE"
+      ],
+      "decision_source": "dss",
+      "check_vs_dss_guard": {
+        "disagree": 1.0,
+        "energy": 1.0,
+        "alarm_agreement": 1.0
+      },
+      "tau_alarm": 0.03495219349861145,
+      "tau_guard": -1.708418607711792,
+      "group_sizes": {
+        "alarm_unknown": 114,
+        "guard_unknown": 7,
+        "silent_unknown": 30,
+        "alarm_benign": 1390,
+        "guard_benign": 268
+      },
+      "background": "bilinen normal (BENIGN) eğitim trafiği",
+      "background_mean_score": {
+        "disagree": 0.024542,
+        "energy": -2.60006
+      },
+      "groups": {
+        "alarm_unknown": {
+          "n_available": 114,
+          "n_explained": 50,
+          "explained_score": "disagree",
+          "top_disagree": [
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.056942,
+              "mean_shap": -0.039603
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.03555,
+              "mean_shap": 0.01984
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.030461,
+              "mean_shap": 0.028185
+            },
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.018642,
+              "mean_shap": 0.016999
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.013759,
+              "mean_shap": -0.002426
+            },
+            {
+              "feature": "Min",
+              "mean_abs_shap": 0.009423,
+              "mean_shap": 0.000329
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.007831,
+              "mean_shap": -0.003431
+            },
+            {
+              "feature": "Std",
+              "mean_abs_shap": 0.007493,
+              "mean_shap": 0.005021
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.006708,
+              "mean_shap": 0.001692
+            },
+            {
+              "feature": "IAT",
+              "mean_abs_shap": 0.005773,
+              "mean_shap": -0.001139
+            }
+          ],
+          "port_share_disagree": null,
+          "efficiency_gap_disagree": 0.0,
+          "top_energy": [
+            {
+              "feature": "SSH",
+              "mean_abs_shap": 0.418095,
+              "mean_shap": -0.392976
+            },
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.3664,
+              "mean_shap": -0.151497
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.357237,
+              "mean_shap": 0.20591
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.238749,
+              "mean_shap": 0.205438
+            },
+            {
+              "feature": "Min",
+              "mean_abs_shap": 0.201793,
+              "mean_shap": -0.112009
+            },
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.167668,
+              "mean_shap": 0.144523
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.143352,
+              "mean_shap": 0.058053
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.130319,
+              "mean_shap": 0.08189
+            },
+            {
+              "feature": "Std",
+              "mean_abs_shap": 0.076943,
+              "mean_shap": 0.027014
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.064153,
+              "mean_shap": 0.022659
+            }
+          ],
+          "port_share_energy": null,
+          "efficiency_gap_energy": 0.0,
+          "faithfulness": {
+            "score": "disagree",
+            "ks": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            "scale": "düşüş / kalibrasyon IQR",
+            "iqr": 0.004145,
+            "mean_drop_iqr_shap": [
+              0.6146,
+              2.2745,
+              3.5854,
+              3.9249,
+              4.307,
+              4.4465,
+              4.2918,
+              4.3252,
+              4.3117,
+              4.1966
+            ],
+            "mean_drop_iqr_random": [
+              -1.3933,
+              -2.5988,
+              -3.807,
+              -5.1745,
+              -5.9996,
+              -6.986,
+              -7.7685,
+              -8.5516,
+              -9.2251,
+              -9.8861
+            ],
+            "relative": {
+              "n_rows": 50,
+              "mean_rel_drop_shap": [
+                -0.2078,
+                -0.1339,
+                -0.0665,
+                -0.0014,
+                -0.0171,
+                -0.0327,
+                -0.0706,
+                -0.0534,
+                -0.0552,
+                -0.0663
+              ],
+              "mean_rel_drop_random": [
+                -0.1912,
+                -0.3664,
+                -0.5332,
+                -0.706,
+                -0.8305,
+                -0.9813,
+                -1.0904,
+                -1.1927,
+                -1.3035,
+                -1.3951
+              ]
+            },
+            "auc_shap_mean": 3.6278,
+            "auc_random_mean": -6.139,
+            "paired_diff_median": 8.7385,
+            "paired_diff_mean": 9.7669,
+            "frac_rows_shap_better": 0.94,
+            "wilcoxon_statistic": 24.0,
+            "wilcoxon_p": 1.3535839116229909e-12
+          },
+          "analyst_cards": [
+            {
+              "test_row": 513742,
+              "category": "BRUTEFORCE",
+              "score": "disagree",
+              "score_value": 0.16199,
+              "reasons": [
+                {
+                  "feature": "Tot sum",
+                  "value": 7827.0,
+                  "shap": 0.056157,
+                  "percentile_in_known": 65.4
+                },
+                {
+                  "feature": "HTTP",
+                  "value": 0.699999988079071,
+                  "shap": 0.043757,
+                  "percentile_in_known": 94.0
+                },
+                {
+                  "feature": "Header_Length",
+                  "value": 23.600000381469727,
+                  "shap": 0.036178,
+                  "percentile_in_known": 88.4
+                }
+              ]
+            },
+            {
+              "test_row": 30033,
+              "category": "BRUTEFORCE",
+              "score": "disagree",
+              "score_value": 0.07616,
+              "reasons": [
+                {
+                  "feature": "Header_Length",
+                  "value": 18.399999618530273,
+                  "shap": 0.053241,
+                  "percentile_in_known": 46.9
+                },
+                {
+                  "feature": "HTTP",
+                  "value": 0.30000001192092896,
+                  "shap": 0.02546,
+                  "percentile_in_known": 92.5
+                },
+                {
+                  "feature": "AVG",
+                  "value": 182.3000030517578,
+                  "shap": 0.021862,
+                  "percentile_in_known": 64.4
+                }
+              ]
+            },
+            {
+              "test_row": 155290,
+              "category": "BRUTEFORCE",
+              "score": "disagree",
+              "score_value": 0.10617,
+              "reasons": [
+                {
+                  "feature": "Header_Length",
+                  "value": 20.0,
+                  "shap": 0.074903,
+                  "percentile_in_known": 57.0
+                },
+                {
+                  "feature": "rst_flag_number",
+                  "value": 0.10000000149011612,
+                  "shap": 0.02024,
+                  "percentile_in_known": 90.1
+                },
+                {
+                  "feature": "psh_flag_number",
+                  "value": 0.6000000238418579,
+                  "shap": 0.014912,
+                  "percentile_in_known": 94.1
+                }
+              ]
+            }
+          ]
+        },
+        "guard_unknown": {
+          "n_available": 7,
+          "n_explained": 7,
+          "explained_score": "energy",
+          "top_disagree": [
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.050067,
+              "mean_shap": -0.034679
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.028156,
+              "mean_shap": 0.01183
+            },
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.026474,
+              "mean_shap": 0.022705
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.01728,
+              "mean_shap": 0.010236
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.016769,
+              "mean_shap": 0.005422
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.0086,
+              "mean_shap": -0.008023
+            },
+            {
+              "feature": "Std",
+              "mean_abs_shap": 0.005738,
+              "mean_shap": 0.000262
+            },
+            {
+              "feature": "IAT",
+              "mean_abs_shap": 0.005248,
+              "mean_shap": -0.005248
+            },
+            {
+              "feature": "ack_flag_number",
+              "mean_abs_shap": 0.004649,
+              "mean_shap": 0.003698
+            },
+            {
+              "feature": "Min",
+              "mean_abs_shap": 0.004186,
+              "mean_shap": -0.004186
+            }
+          ],
+          "port_share_disagree": null,
+          "efficiency_gap_disagree": 0.0,
+          "top_energy": [
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.380697,
+              "mean_shap": 0.380697
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.281133,
+              "mean_shap": 0.189458
+            },
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.279697,
+              "mean_shap": -0.081607
+            },
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.251048,
+              "mean_shap": 0.233971
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.156618,
+              "mean_shap": 0.132059
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.095195,
+              "mean_shap": 0.029635
+            },
+            {
+              "feature": "ICMP",
+              "mean_abs_shap": 0.056085,
+              "mean_shap": 0.047484
+            },
+            {
+              "feature": "Std",
+              "mean_abs_shap": 0.046602,
+              "mean_shap": 0.035222
+            },
+            {
+              "feature": "UDP",
+              "mean_abs_shap": 0.044007,
+              "mean_shap": -0.013336
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.036156,
+              "mean_shap": 0.020739
+            }
+          ],
+          "port_share_energy": null,
+          "efficiency_gap_energy": 0.0,
+          "faithfulness": {
+            "score": "energy",
+            "ks": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            "scale": "düşüş / kalibrasyon IQR",
+            "iqr": 16.79427,
+            "mean_drop_iqr_shap": [
+              0.0155,
+              0.0252,
+              0.0309,
+              0.0446,
+              0.0538,
+              0.0584,
+              0.0604,
+              0.0619,
+              0.0616,
+              0.0625
+            ],
+            "mean_drop_iqr_random": [
+              -0.0004,
+              0.0004,
+              0.0012,
+              0.0016,
+              0.0017,
+              0.0027,
+              0.0031,
+              0.0031,
+              0.0029,
+              0.0036
+            ],
+            "relative": {
+              "n_rows": 0
+            },
+            "auc_shap_mean": 0.0475,
+            "auc_random_mean": 0.002,
+            "paired_diff_median": 0.0456,
+            "paired_diff_mean": 0.0455,
+            "frac_rows_shap_better": 1.0,
+            "wilcoxon_statistic": 0.0,
+            "wilcoxon_p": 0.015625
+          },
+          "analyst_cards": [
+            {
+              "test_row": 457965,
+              "category": "BRUTEFORCE",
+              "score": "energy",
+              "score_value": -1.53662,
+              "reasons": [
+                {
+                  "feature": "Header_Length",
+                  "value": 19.200000762939453,
+                  "shap": 0.460762,
+                  "percentile_in_known": 47.4
+                },
+                {
+                  "feature": "AVG",
+                  "value": 105.0,
+                  "shap": 0.445625,
+                  "percentile_in_known": 58.1
+                },
+                {
+                  "feature": "Max",
+                  "value": 230.0,
+                  "shap": 0.216737,
+                  "percentile_in_known": 53.9
+                }
+              ]
+            },
+            {
+              "test_row": 379616,
+              "category": "BRUTEFORCE",
+              "score": "energy",
+              "score_value": -1.46573,
+              "reasons": [
+                {
+                  "feature": "Header_Length",
+                  "value": 9.199999809265137,
+                  "shap": 0.357844,
+                  "percentile_in_known": 40.7
+                },
+                {
+                  "feature": "HTTPS",
+                  "value": 0.30000001192092896,
+                  "shap": 0.309055,
+                  "percentile_in_known": 85.2
+                },
+                {
+                  "feature": "AVG",
+                  "value": 154.60000610351562,
+                  "shap": 0.213855,
+                  "percentile_in_known": 62.0
+                }
+              ]
+            },
+            {
+              "test_row": 180123,
+              "category": "BRUTEFORCE",
+              "score": "energy",
+              "score_value": -1.59331,
+              "reasons": [
+                {
+                  "feature": "AVG",
+                  "value": 86.80000305175781,
+                  "shap": 0.600841,
+                  "percentile_in_known": 55.7
+                },
+                {
+                  "feature": "Header_Length",
+                  "value": 20.0,
+                  "shap": 0.485238,
+                  "percentile_in_known": 57.0
+                },
+                {
+                  "feature": "Max",
+                  "value": 156.0,
+                  "shap": 0.150587,
+                  "percentile_in_known": 48.0
+                }
+              ]
+            }
+          ]
+        },
+        "silent_unknown": {
+          "n_available": 30,
+          "n_explained": 30,
+          "explained_score": null,
+          "top_disagree": [
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.051025,
+              "mean_shap": -0.019099
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.036856,
+              "mean_shap": 0.013937
+            },
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.017812,
+              "mean_shap": 0.008643
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.007588,
+              "mean_shap": 0.000796
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.006474,
+              "mean_shap": -0.002096
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.006028,
+              "mean_shap": -0.000478
+            },
+            {
+              "feature": "Std",
+              "mean_abs_shap": 0.005596,
+              "mean_shap": -0.001155
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.00502,
+              "mean_shap": -0.000933
+            },
+            {
+              "feature": "IAT",
+              "mean_abs_shap": 0.004786,
+              "mean_shap": -0.001961
+            },
+            {
+              "feature": "UDP",
+              "mean_abs_shap": 0.004073,
+              "mean_shap": -0.000669
+            }
+          ],
+          "port_share_disagree": null,
+          "efficiency_gap_disagree": 0.0,
+          "top_energy": [
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.37289,
+              "mean_shap": -0.149361
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.3618,
+              "mean_shap": 0.169356
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.229144,
+              "mean_shap": 0.108643
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.168908,
+              "mean_shap": 0.01783
+            },
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.167509,
+              "mean_shap": 0.080729
+            },
+            {
+              "feature": "SSH",
+              "mean_abs_shap": 0.127484,
+              "mean_shap": -0.085146
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.08832,
+              "mean_shap": 0.032637
+            },
+            {
+              "feature": "Min",
+              "mean_abs_shap": 0.078783,
+              "mean_shap": -0.021247
+            },
+            {
+              "feature": "UDP",
+              "mean_abs_shap": 0.065439,
+              "mean_shap": -0.015953
+            },
+            {
+              "feature": "Std",
+              "mean_abs_shap": 0.058925,
+              "mean_shap": 0.039048
+            }
+          ],
+          "port_share_energy": null,
+          "efficiency_gap_energy": 0.0,
+          "analyst_cards": [
+            {
+              "test_row": 314442,
+              "category": "BRUTEFORCE",
+              "score": "energy",
+              "score_value": -2.18666,
+              "reasons": [
+                {
+                  "feature": "AVG",
+                  "value": 112.69999694824219,
+                  "shap": 0.444055,
+                  "percentile_in_known": 58.9
+                },
+                {
+                  "feature": "psh_flag_number",
+                  "value": 0.5,
+                  "shap": 0.403062,
+                  "percentile_in_known": 93.3
+                },
+                {
+                  "feature": "Max",
+                  "value": 326.0,
+                  "shap": 0.220242,
+                  "percentile_in_known": 58.8
+                }
+              ]
+            },
+            {
+              "test_row": 729695,
+              "category": "BRUTEFORCE",
+              "score": "energy",
+              "score_value": -1.73848,
+              "reasons": [
+                {
+                  "feature": "Header_Length",
+                  "value": 17.600000381469727,
+                  "shap": 0.41243,
+                  "percentile_in_known": 46.4
+                },
+                {
+                  "feature": "AVG",
+                  "value": 105.19999694824219,
+                  "shap": 0.40755,
+                  "percentile_in_known": 58.1
+                },
+                {
+                  "feature": "Max",
+                  "value": 230.0,
+                  "shap": 0.201224,
+                  "percentile_in_known": 53.9
+                }
+              ]
+            },
+            {
+              "test_row": 499374,
+              "category": "BRUTEFORCE",
+              "score": "energy",
+              "score_value": -1.86717,
+              "reasons": [
+                {
+                  "feature": "Max",
+                  "value": 1207.0,
+                  "shap": 0.564946,
+                  "percentile_in_known": 80.3
+                },
+                {
+                  "feature": "AVG",
+                  "value": 183.60000610351562,
+                  "shap": 0.215993,
+                  "percentile_in_known": 64.4
+                },
+                {
+                  "feature": "Header_Length",
+                  "value": 26.399999618530273,
+                  "shap": 0.090526,
+                  "percentile_in_known": 90.6
+                }
+              ]
+            }
+          ]
+        },
+        "alarm_benign": {
+          "n_available": 1390,
+          "n_explained": 50,
+          "explained_score": "disagree",
+          "top_disagree": [
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.055577,
+              "mean_shap": -0.006061
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.036045,
+              "mean_shap": -0.000788
+            },
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.020559,
+              "mean_shap": 0.010519
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.017216,
+              "mean_shap": 0.010949
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.009763,
+              "mean_shap": 0.000744
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.008802,
+              "mean_shap": 0.005614
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.008128,
+              "mean_shap": -0.000454
+            },
+            {
+              "feature": "Std",
+              "mean_abs_shap": 0.00732,
+              "mean_shap": -0.000225
+            },
+            {
+              "feature": "UDP",
+              "mean_abs_shap": 0.006287,
+              "mean_shap": -0.000753
+            },
+            {
+              "feature": "IAT",
+              "mean_abs_shap": 0.00618,
+              "mean_shap": -0.000696
+            }
+          ],
+          "port_share_disagree": null,
+          "efficiency_gap_disagree": 0.0,
+          "top_energy": [
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.346494,
+              "mean_shap": 0.024111
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.315745,
+              "mean_shap": 0.050809
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.231847,
+              "mean_shap": 0.087743
+            },
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.210311,
+              "mean_shap": 0.123429
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.170169,
+              "mean_shap": 0.119839
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.114109,
+              "mean_shap": 0.082307
+            },
+            {
+              "feature": "UDP",
+              "mean_abs_shap": 0.078404,
+              "mean_shap": -0.01684
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.065277,
+              "mean_shap": 0.024573
+            },
+            {
+              "feature": "Min",
+              "mean_abs_shap": 0.05895,
+              "mean_shap": 0.009229
+            },
+            {
+              "feature": "Std",
+              "mean_abs_shap": 0.056897,
+              "mean_shap": 0.010254
+            }
+          ],
+          "port_share_energy": null,
+          "efficiency_gap_energy": 0.0,
+          "faithfulness": {
+            "score": "disagree",
+            "ks": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            "scale": "düşüş / kalibrasyon IQR",
+            "iqr": 0.004145,
+            "mean_drop_iqr_shap": [
+              -1.2593,
+              -0.7438,
+              -1.7102,
+              -0.2013,
+              0.5068,
+              1.1335,
+              1.2918,
+              1.4497,
+              1.4429,
+              1.448
+            ],
+            "mean_drop_iqr_random": [
+              -1.4702,
+              -3.2211,
+              -4.8478,
+              -6.2983,
+              -7.7152,
+              -9.0175,
+              -10.1418,
+              -11.0543,
+              -11.8169,
+              -12.4678
+            ],
+            "relative": {
+              "n_rows": 50,
+              "mean_rel_drop_shap": [
+                -0.4359,
+                -0.4136,
+                -0.6572,
+                -0.3815,
+                -0.267,
+                -0.1628,
+                -0.1581,
+                -0.1334,
+                -0.1212,
+                -0.1167
+              ],
+              "mean_rel_drop_random": [
+                -0.2951,
+                -0.6697,
+                -0.9869,
+                -1.2796,
+                -1.5621,
+                -1.8025,
+                -2.0183,
+                -2.2081,
+                -2.3322,
+                -2.4564
+              ]
+            },
+            "auc_shap_mean": 0.3358,
+            "auc_random_mean": -7.8051,
+            "paired_diff_median": 7.2888,
+            "paired_diff_mean": 8.1409,
+            "frac_rows_shap_better": 0.98,
+            "wilcoxon_statistic": 2.0,
+            "wilcoxon_p": 5.329070518200751e-15
+          },
+          "analyst_cards": [
+            {
+              "test_row": 318888,
+              "category": "BENIGN",
+              "score": "disagree",
+              "score_value": 0.04687,
+              "reasons": [
+                {
+                  "feature": "Header_Length",
+                  "value": 19.200000762939453,
+                  "shap": 0.090302,
+                  "percentile_in_known": 47.4
+                },
+                {
+                  "feature": "Tot sum",
+                  "value": 10766.0,
+                  "shap": 0.061866,
+                  "percentile_in_known": 67.3
+                },
+                {
+                  "feature": "psh_flag_number",
+                  "value": 0.0,
+                  "shap": 0.007693,
+                  "percentile_in_known": 0.0
+                }
+              ]
+            },
+            {
+              "test_row": 219931,
+              "category": "BENIGN",
+              "score": "disagree",
+              "score_value": 0.05842,
+              "reasons": [
+                {
+                  "feature": "Tot sum",
+                  "value": 6442.0,
+                  "shap": 0.035593,
+                  "percentile_in_known": 62.9
+                },
+                {
+                  "feature": "Max",
+                  "value": 1514.0,
+                  "shap": 0.019458,
+                  "percentile_in_known": 84.1
+                },
+                {
+                  "feature": "Header_Length",
+                  "value": 26.0,
+                  "shap": 0.018336,
+                  "percentile_in_known": 90.4
+                }
+              ]
+            },
+            {
+              "test_row": 184302,
+              "category": "BENIGN",
+              "score": "disagree",
+              "score_value": 0.06125,
+              "reasons": [
+                {
+                  "feature": "Header_Length",
+                  "value": 15.199999809265137,
+                  "shap": 0.055929,
+                  "percentile_in_known": 45.4
+                },
+                {
+                  "feature": "HTTPS",
+                  "value": 0.30000001192092896,
+                  "shap": 0.029623,
+                  "percentile_in_known": 85.2
+                },
+                {
+                  "feature": "AVG",
+                  "value": 143.8000030517578,
+                  "shap": 0.013555,
+                  "percentile_in_known": 61.4
+                }
+              ]
+            }
+          ]
+        },
+        "guard_benign": {
+          "n_available": 268,
+          "n_explained": 50,
+          "explained_score": "energy",
+          "top_disagree": [
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.047015,
+              "mean_shap": -0.047015
+            },
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.02823,
+              "mean_shap": 0.02823
+            },
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.021686,
+              "mean_shap": 0.019673
+            },
+            {
+              "feature": "Rate",
+              "mean_abs_shap": 0.008388,
+              "mean_shap": -0.007787
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.008159,
+              "mean_shap": 0.004833
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.007062,
+              "mean_shap": -0.002364
+            },
+            {
+              "feature": "IAT",
+              "mean_abs_shap": 0.005957,
+              "mean_shap": -0.004191
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.005835,
+              "mean_shap": 0.002825
+            },
+            {
+              "feature": "Std",
+              "mean_abs_shap": 0.004659,
+              "mean_shap": 0.004182
+            },
+            {
+              "feature": "UDP",
+              "mean_abs_shap": 0.003938,
+              "mean_shap": -0.001789
+            }
+          ],
+          "port_share_disagree": null,
+          "efficiency_gap_disagree": 0.0,
+          "top_energy": [
+            {
+              "feature": "AVG",
+              "mean_abs_shap": 0.317786,
+              "mean_shap": 0.317786
+            },
+            {
+              "feature": "Tot sum",
+              "mean_abs_shap": 0.249504,
+              "mean_shap": -0.248842
+            },
+            {
+              "feature": "Max",
+              "mean_abs_shap": 0.237287,
+              "mean_shap": 0.237287
+            },
+            {
+              "feature": "Header_Length",
+              "mean_abs_shap": 0.228829,
+              "mean_shap": 0.21263
+            },
+            {
+              "feature": "psh_flag_number",
+              "mean_abs_shap": 0.197746,
+              "mean_shap": 0.171461
+            },
+            {
+              "feature": "HTTPS",
+              "mean_abs_shap": 0.100604,
+              "mean_shap": 0.090101
+            },
+            {
+              "feature": "UDP",
+              "mean_abs_shap": 0.050129,
+              "mean_shap": -0.023931
+            },
+            {
+              "feature": "ICMP",
+              "mean_abs_shap": 0.047804,
+              "mean_shap": 0.037474
+            },
+            {
+              "feature": "Std",
+              "mean_abs_shap": 0.047685,
+              "mean_shap": 0.046332
+            },
+            {
+              "feature": "IAT",
+              "mean_abs_shap": 0.045543,
+              "mean_shap": 0.014844
+            }
+          ],
+          "port_share_energy": null,
+          "efficiency_gap_energy": 0.0,
+          "faithfulness": {
+            "score": "energy",
+            "ks": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            "scale": "düşüş / kalibrasyon IQR",
+            "iqr": 16.79427,
+            "mean_drop_iqr_shap": [
+              0.0099,
+              0.0161,
+              0.0273,
+              0.0362,
+              0.0453,
+              0.0503,
+              0.0525,
+              0.0545,
+              0.0559,
+              0.0567
+            ],
+            "mean_drop_iqr_random": [
+              0.0003,
+              0.0006,
+              0.001,
+              0.0012,
+              0.0017,
+              0.0021,
+              0.0023,
+              0.0025,
+              0.0031,
+              0.0037
+            ],
+            "relative": {
+              "n_rows": 0
+            },
+            "auc_shap_mean": 0.0405,
+            "auc_random_mean": 0.0018,
+            "paired_diff_median": 0.0381,
+            "paired_diff_mean": 0.0386,
+            "frac_rows_shap_better": 1.0,
+            "wilcoxon_statistic": 0.0,
+            "wilcoxon_p": 1.7763568394002505e-15
+          },
+          "analyst_cards": [
+            {
+              "test_row": 114997,
+              "category": "BENIGN",
+              "score": "energy",
+              "score_value": -1.58463,
+              "reasons": [
+                {
+                  "feature": "psh_flag_number",
+                  "value": 0.6000000238418579,
+                  "shap": 0.305398,
+                  "percentile_in_known": 94.1
+                },
+                {
+                  "feature": "AVG",
+                  "value": 133.0,
+                  "shap": 0.252558,
+                  "percentile_in_known": 60.7
+                },
+                {
+                  "feature": "ICMP",
+                  "value": 0.10000000149011612,
+                  "shap": 0.212727,
+                  "percentile_in_known": 87.9
+                }
+              ]
+            },
+            {
+              "test_row": 529059,
+              "category": "BENIGN",
+              "score": "energy",
+              "score_value": -1.6829,
+              "reasons": [
+                {
+                  "feature": "AVG",
+                  "value": 112.5999984741211,
+                  "shap": 0.35683,
+                  "percentile_in_known": 58.9
+                },
+                {
+                  "feature": "psh_flag_number",
+                  "value": 0.5,
+                  "shap": 0.352272,
+                  "percentile_in_known": 93.3
+                },
+                {
+                  "feature": "Max",
+                  "value": 230.0,
+                  "shap": 0.241457,
+                  "percentile_in_known": 53.9
+                }
+              ]
+            },
+            {
+              "test_row": 293491,
+              "category": "BENIGN",
+              "score": "energy",
+              "score_value": -1.67109,
+              "reasons": [
+                {
+                  "feature": "Max",
+                  "value": 792.0,
+                  "shap": 0.609862,
+                  "percentile_in_known": 79.2
+                },
+                {
+                  "feature": "AVG",
+                  "value": 151.1999969482422,
+                  "shap": 0.25314,
+                  "percentile_in_known": 61.8
+                },
+                {
+                  "feature": "Rate",
+                  "value": 551.5120239257812,
+                  "shap": 0.146332,
+                  "percentile_in_known": 14.1
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "model_calls": 4025657,
+      "seconds": 380.7
+    }
+  },
+  "runtime_seconds": 1841.9,
+  "runtime": {
+    "python": "3.14.8",
+    "os": "Windows-11-10.0.26300-SP0",
+    "processor": "Intel64 Family 6 Model 186 Stepping 2, GenuineIntel",
+    "cpu_count": 16,
+    "cuda": "12.8",
+    "gpu": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "in_colab": false,
+    "in_kaggle": false,
+    "libraries": {
+      "numpy": "2.5.4",
+      "pandas": "3.0.6",
+      "scipy": "1.18.1",
+      "scikit-learn": "1.9.1",
+      "xgboost": "3.4.1",
+      "lightgbm": "4.7.0",
+      "shap": "0.54.1",
+      "torch": "2.11.0+cu128",
+      "tabm": "0.0.3"
+    }
+  }
+}

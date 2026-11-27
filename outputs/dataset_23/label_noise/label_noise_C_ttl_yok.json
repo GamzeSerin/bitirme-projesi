@@ -1,0 +1,289 @@
+{
+  "dataset_id": "dataset_23",
+  "condition": "C_ttl_yok",
+  "dropped_by_condition": [
+    "Time_To_Live"
+  ],
+  "experiment_sample": {
+    "rows": 738144,
+    "unique_vectors": 736944,
+    "mixed_share_all": 0.001,
+    "by_fine_label": {
+      "BACKDOOR_MALWARE": 0.0,
+      "BENIGN": 0.0002,
+      "BROWSERHIJACKING": 0.0,
+      "COMMANDINJECTION": 0.0,
+      "DDOS-ACK_FRAGMENTATION": 0.0,
+      "DDOS-HTTP_FLOOD": 0.0,
+      "DDOS-ICMP_FLOOD": 0.0,
+      "DDOS-ICMP_FRAGMENTATION": 0.0,
+      "DDOS-PSHACK_FLOOD": 0.0,
+      "DDOS-RSTFINFLOOD": 0.0,
+      "DDOS-SLOWLORIS": 0.0,
+      "DDOS-SYNONYMOUSIP_FLOOD": 0.0007,
+      "DDOS-SYN_FLOOD": 0.0013,
+      "DDOS-TCP_FLOOD": 0.001,
+      "DDOS-UDP_FLOOD": 0.0024,
+      "DDOS-UDP_FRAGMENTATION": 0.0,
+      "DICTIONARYBRUTEFORCE": 0.0,
+      "DNS_SPOOFING": 0.0001,
+      "DOS-HTTP_FLOOD": 0.0,
+      "DOS-SYN_FLOOD": 0.001,
+      "DOS-TCP_FLOOD": 0.001,
+      "DOS-UDP_FLOOD": 0.0026,
+      "MIRAI-GREETH_FLOOD": 0.0,
+      "MIRAI-GREIP_FLOOD": 0.0,
+      "MIRAI-UDPPLAIN": 0.0,
+      "MITM-ARPSPOOFING": 0.0005,
+      "RECON-HOSTDISCOVERY": 0.0007,
+      "RECON-OSSCAN": 0.0231,
+      "RECON-PINGSWEEP": 0.0,
+      "RECON-PORTSCAN": 0.0283,
+      "SQLINJECTION": 0.0,
+      "UPLOADING_ATTACK": 0.0,
+      "VULNERABILITYSCAN": 0.0001,
+      "XSS": 0.0
+    },
+    "by_category": {
+      "BENIGN": 0.0002,
+      "BRUTEFORCE": 0.0,
+      "DDOS": 0.0006,
+      "DOS": 0.0015,
+      "MIRAI": 0.0,
+      "RECON": 0.0067,
+      "SPOOFING": 0.0004,
+      "WEB": 0.0
+    },
+    "mixed_with": {
+      "BACKDOOR_MALWARE": {},
+      "BENIGN": {
+        "MITM-ARPSPOOFING": 0.7,
+        "DNS_SPOOFING": 0.1,
+        "RECON-OSSCAN": 0.1
+      },
+      "BROWSERHIJACKING": {},
+      "COMMANDINJECTION": {},
+      "DDOS-ACK_FRAGMENTATION": {},
+      "DDOS-HTTP_FLOOD": {},
+      "DDOS-ICMP_FLOOD": {},
+      "DDOS-ICMP_FRAGMENTATION": {},
+      "DDOS-PSHACK_FLOOD": {},
+      "DDOS-RSTFINFLOOD": {},
+      "DDOS-SLOWLORIS": {},
+      "DDOS-SYNONYMOUSIP_FLOOD": {
+        "DDOS-SYN_FLOOD": 0.7,
+        "DOS-SYN_FLOOD": 0.3
+      },
+      "DDOS-SYN_FLOOD": {
+        "DOS-SYN_FLOOD": 0.618,
+        "DDOS-SYNONYMOUSIP_FLOOD": 0.382
+      },
+      "DDOS-TCP_FLOOD": {
+        "DOS-TCP_FLOOD": 1.0
+      },
+      "DDOS-UDP_FLOOD": {
+        "DOS-UDP_FLOOD": 1.0
+      },
+      "DDOS-UDP_FRAGMENTATION": {},
+      "DICTIONARYBRUTEFORCE": {},
+      "DNS_SPOOFING": {
+        "MITM-ARPSPOOFING": 0.5,
+        "BENIGN": 0.5
+      },
+      "DOS-HTTP_FLOOD": {},
+      "DOS-SYN_FLOOD": {
+        "DDOS-SYN_FLOOD": 0.825,
+        "DDOS-SYNONYMOUSIP_FLOOD": 0.175
+      },
+      "DOS-TCP_FLOOD": {
+        "DDOS-TCP_FLOOD": 1.0
+      },
+      "DOS-UDP_FLOOD": {
+        "DDOS-UDP_FLOOD": 1.0
+      },
+      "MIRAI-GREETH_FLOOD": {},
+      "MIRAI-GREIP_FLOOD": {},
+      "MIRAI-UDPPLAIN": {},
+      "MITM-ARPSPOOFING": {
+        "BENIGN": 0.615,
+        "RECON-OSSCAN": 0.231,
+        "RECON-PORTSCAN": 0.077
+      },
+      "RECON-HOSTDISCOVERY": {
+        "VULNERABILITYSCAN": 0.429,
+        "RECON-PORTSCAN": 0.286,
+        "RECON-OSSCAN": 0.286
+      },
+      "RECON-OSSCAN": {
+        "RECON-PORTSCAN": 0.961,
+        "MITM-ARPSPOOFING": 0.017,
+        "RECON-HOSTDISCOVERY": 0.011
+      },
+      "RECON-PINGSWEEP": {},
+      "RECON-PORTSCAN": {
+        "RECON-OSSCAN": 0.982,
+        "RECON-HOSTDISCOVERY": 0.012,
+        "MITM-ARPSPOOFING": 0.006
+      },
+      "SQLINJECTION": {},
+      "UPLOADING_ATTACK": {},
+      "VULNERABILITYSCAN": {
+        "RECON-HOSTDISCOVERY": 0.8,
+        "BENIGN": 0.2
+      },
+      "XSS": {}
+    }
+  },
+  "cleaned_full": {
+    "rows": 2015272,
+    "unique_vectors": 1997997,
+    "mixed_share_all": 0.0028,
+    "by_fine_label": {
+      "BACKDOOR_MALWARE": 0.0,
+      "BENIGN": 0.0004,
+      "BROWSERHIJACKING": 0.0,
+      "COMMANDINJECTION": 0.0,
+      "DDOS-ACK_FRAGMENTATION": 0.0,
+      "DDOS-HTTP_FLOOD": 0.0,
+      "DDOS-ICMP_FLOOD": 0.0,
+      "DDOS-ICMP_FRAGMENTATION": 0.0,
+      "DDOS-PSHACK_FLOOD": 0.0,
+      "DDOS-RSTFINFLOOD": 0.0,
+      "DDOS-SLOWLORIS": 0.0,
+      "DDOS-SYNONYMOUSIP_FLOOD": 0.0024,
+      "DDOS-SYN_FLOOD": 0.0029,
+      "DDOS-TCP_FLOOD": 0.0025,
+      "DDOS-UDP_FLOOD": 0.008,
+      "DDOS-UDP_FRAGMENTATION": 0.0,
+      "DICTIONARYBRUTEFORCE": 0.0,
+      "DNS_SPOOFING": 0.0002,
+      "DOS-HTTP_FLOOD": 0.0,
+      "DOS-SYN_FLOOD": 0.0042,
+      "DOS-TCP_FLOOD": 0.0038,
+      "DOS-UDP_FLOOD": 0.0104,
+      "MIRAI-GREETH_FLOOD": 0.0,
+      "MIRAI-GREIP_FLOOD": 0.0,
+      "MIRAI-UDPPLAIN": 0.0,
+      "MITM-ARPSPOOFING": 0.0011,
+      "RECON-HOSTDISCOVERY": 0.0008,
+      "RECON-OSSCAN": 0.0234,
+      "RECON-PINGSWEEP": 0.0,
+      "RECON-PORTSCAN": 0.0283,
+      "SQLINJECTION": 0.0,
+      "UPLOADING_ATTACK": 0.0,
+      "VULNERABILITYSCAN": 0.0002,
+      "XSS": 0.0
+    },
+    "by_category": {
+      "BENIGN": 0.0004,
+      "BRUTEFORCE": 0.0,
+      "DDOS": 0.0021,
+      "DOS": 0.0069,
+      "MIRAI": 0.0,
+      "RECON": 0.0068,
+      "SPOOFING": 0.0007,
+      "WEB": 0.0
+    },
+    "mixed_with": {
+      "BACKDOOR_MALWARE": {},
+      "BENIGN": {
+        "MITM-ARPSPOOFING": 0.69,
+        "RECON-OSSCAN": 0.103,
+        "DNS_SPOOFING": 0.069
+      },
+      "BROWSERHIJACKING": {},
+      "COMMANDINJECTION": {},
+      "DDOS-ACK_FRAGMENTATION": {},
+      "DDOS-HTTP_FLOOD": {},
+      "DDOS-ICMP_FLOOD": {},
+      "DDOS-ICMP_FRAGMENTATION": {},
+      "DDOS-PSHACK_FLOOD": {},
+      "DDOS-RSTFINFLOOD": {},
+      "DDOS-SLOWLORIS": {},
+      "DDOS-SYNONYMOUSIP_FLOOD": {
+        "DDOS-SYN_FLOOD": 0.634,
+        "DOS-SYN_FLOOD": 0.366
+      },
+      "DDOS-SYN_FLOOD": {
+        "DOS-SYN_FLOOD": 0.612,
+        "DDOS-SYNONYMOUSIP_FLOOD": 0.388
+      },
+      "DDOS-TCP_FLOOD": {
+        "DOS-TCP_FLOOD": 1.0
+      },
+      "DDOS-UDP_FLOOD": {
+        "DOS-UDP_FLOOD": 1.0
+      },
+      "DDOS-UDP_FRAGMENTATION": {},
+      "DICTIONARYBRUTEFORCE": {},
+      "DNS_SPOOFING": {
+        "BENIGN": 0.667,
+        "MITM-ARPSPOOFING": 0.333
+      },
+      "DOS-HTTP_FLOOD": {},
+      "DOS-SYN_FLOOD": {
+        "DDOS-SYN_FLOOD": 0.738,
+        "DDOS-SYNONYMOUSIP_FLOOD": 0.262
+      },
+      "DOS-TCP_FLOOD": {
+        "DDOS-TCP_FLOOD": 1.0
+      },
+      "DOS-UDP_FLOOD": {
+        "DDOS-UDP_FLOOD": 1.0
+      },
+      "MIRAI-GREETH_FLOOD": {},
+      "MIRAI-GREIP_FLOOD": {},
+      "MIRAI-UDPPLAIN": {},
+      "MITM-ARPSPOOFING": {
+        "BENIGN": 0.821,
+        "RECON-OSSCAN": 0.107,
+        "RECON-PORTSCAN": 0.036
+      },
+      "RECON-HOSTDISCOVERY": {
+        "VULNERABILITYSCAN": 0.375,
+        "RECON-PORTSCAN": 0.25,
+        "RECON-OSSCAN": 0.25
+      },
+      "RECON-OSSCAN": {
+        "RECON-PORTSCAN": 0.95,
+        "BENIGN": 0.022,
+        "MITM-ARPSPOOFING": 0.017
+      },
+      "RECON-PINGSWEEP": {},
+      "RECON-PORTSCAN": {
+        "RECON-OSSCAN": 0.97,
+        "RECON-HOSTDISCOVERY": 0.012,
+        "BENIGN": 0.012
+      },
+      "SQLINJECTION": {},
+      "UPLOADING_ATTACK": {},
+      "VULNERABILITYSCAN": {
+        "RECON-HOSTDISCOVERY": 0.571,
+        "BENIGN": 0.429
+      },
+      "XSS": {}
+    }
+  },
+  "seconds": 82.8,
+  "runtime": {
+    "python": "3.14.8",
+    "os": "Windows-11-10.0.26300-SP0",
+    "processor": "Intel64 Family 6 Model 186 Stepping 2, GenuineIntel",
+    "cpu_count": 16,
+    "cuda": "12.8",
+    "gpu": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "in_colab": false,
+    "in_kaggle": false,
+    "libraries": {
+      "numpy": "2.5.4",
+      "pandas": "3.0.6",
+      "scipy": "1.18.1",
+      "scikit-learn": "1.9.1",
+      "xgboost": "3.4.1",
+      "lightgbm": "4.7.0",
+      "shap": "0.54.1",
+      "torch": "2.11.0+cu128",
+      "tabm": "0.0.3"
+    }
+  }
+}

@@ -1,0 +1,61 @@
+5 dosya okunuyor: ['Merged01.csv', 'Merged02.csv', 'Merged03.csv', 'Merged04.csv', 'Merged05.csv']
+CICIoT2023: 738144 satır, koşul C_ttl_yok; aileler ['FLOOD', 'MIRAI', 'RECON', 'SPOOFING', 'WEB', 'BRUTEFORCE']; analist bütçeleri q = [0.005, 0.01, 0.02, 0.05, 0.1]
+
+=== FLOOD ['DOS', 'DDOS'] (kör oranı 0.0625) — yalnız alarm: yakalanan 0.441, sessiz BENIGN kaçışı 0.003 ===
+  MCDropout: alarm AUROC 0.7154, enerji AUROC 0.6147, bilinen macro-F1 0.6122, eğitim 30 s
+  mcd_disagree   q=0.010: kaçış 0.0025 / inceleme 0.0037  q=0.050: kaçış 0.0019 / inceleme 0.0366
+  mcd_msp        q=0.010: kaçış 0.0010 / inceleme 0.0091  q=0.050: kaçış 0.0005 / inceleme 0.0409
+  mcd_energy     q=0.010: kaçış 0.0009 / inceleme 0.0115  q=0.050: kaçış 0.0006 / inceleme 0.0406
+  knn            q=0.010: kaçış 0.0016 / inceleme 0.0071  q=0.050: kaçış 0.0000 / inceleme 0.0465
+  (58 s)
+
+=== MIRAI ['MIRAI'] (kör oranı 0.0625) — yalnız alarm: yakalanan 0.518, sessiz BENIGN kaçışı 0.000 ===
+  MCDropout: alarm AUROC 0.8391, enerji AUROC 0.3873, bilinen macro-F1 0.587, eğitim 54 s
+  mcd_disagree   q=0.010: kaçış 0.0000 / inceleme 0.0063  q=0.050: kaçış 0.0000 / inceleme 0.0361
+  mcd_msp        q=0.010: kaçış 0.0000 / inceleme 0.0065  q=0.050: kaçış 0.0000 / inceleme 0.0295
+  mcd_energy     q=0.010: kaçış 0.0000 / inceleme 0.0074  q=0.050: kaçış 0.0000 / inceleme 0.0341
+  knn            q=0.010: kaçış 0.0000 / inceleme 0.0060  q=0.050: kaçış 0.0000 / inceleme 0.0409
+  (85 s)
+
+=== RECON ['RECON'] (kör oranı 0.0625) — yalnız alarm: yakalanan 0.169, sessiz BENIGN kaçışı 0.321 ===
+  MCDropout: alarm AUROC 0.879, enerji AUROC 0.9402, bilinen macro-F1 0.693, eğitim 58 s
+  mcd_disagree   q=0.010: kaçış 0.3149 / inceleme 0.0099  q=0.050: kaçış 0.2969 / inceleme 0.0393
+  mcd_msp        q=0.010: kaçış 0.3086 / inceleme 0.0073  q=0.050: kaçış 0.2570 / inceleme 0.0421
+  mcd_energy     q=0.010: kaçış 0.3135 / inceleme 0.0057  q=0.050: kaçış 0.2754 / inceleme 0.0374
+  knn            q=0.010: kaçış 0.3130 / inceleme 0.0064  q=0.050: kaçış 0.2804 / inceleme 0.0426
+  (90 s)
+
+=== SPOOFING ['SPOOFING'] (kör oranı 0.0625) — yalnız alarm: yakalanan 0.699, sessiz BENIGN kaçışı 0.183 ===
+  MCDropout: alarm AUROC 0.9545, enerji AUROC 0.9737, bilinen macro-F1 0.6273, eğitim 98 s
+  mcd_disagree   q=0.010: kaçış 0.1808 / inceleme 0.0077  q=0.050: kaçış 0.1728 / inceleme 0.0321
+  mcd_msp        q=0.010: kaçış 0.1787 / inceleme 0.0044  q=0.050: kaçış 0.1602 / inceleme 0.0350
+  mcd_energy     q=0.010: kaçış 0.1782 / inceleme 0.0055  q=0.050: kaçış 0.1629 / inceleme 0.0311
+  knn            q=0.010: kaçış 0.1813 / inceleme 0.0071  q=0.050: kaçış 0.1681 / inceleme 0.0415
+  (133 s)
+
+=== WEB ['WEB'] (kör oranı 0.0625) — yalnız alarm: yakalanan 0.426, sessiz BENIGN kaçışı 0.249 ===
+  MCDropout: alarm AUROC 0.9124, enerji AUROC 0.9422, bilinen macro-F1 0.7347, eğitim 102 s
+  mcd_disagree   q=0.010: kaçış 0.2487 / inceleme 0.0060  q=0.050: kaçış 0.2196 / inceleme 0.0389
+  mcd_msp        q=0.010: kaçış 0.2249 / inceleme 0.0074  q=0.050: kaçış 0.1693 / inceleme 0.0372
+  mcd_energy     q=0.010: kaçış 0.2328 / inceleme 0.0066  q=0.050: kaçış 0.2037 / inceleme 0.0360
+  knn            q=0.010: kaçış 0.2381 / inceleme 0.0075  q=0.050: kaçış 0.2116 / inceleme 0.0414
+  (135 s)
+
+=== BRUTEFORCE ['BRUTEFORCE'] (kör oranı 0.0625) — yalnız alarm: yakalanan 0.446, sessiz BENIGN kaçışı 0.248 ===
+  MCDropout: alarm AUROC 0.8764, enerji AUROC 0.8238, bilinen macro-F1 0.7253, eğitim 151 s
+  mcd_disagree   q=0.010: kaçış 0.2376 / inceleme 0.0103  q=0.050: kaçış 0.1881 / inceleme 0.0398
+  mcd_msp        q=0.010: kaçış 0.2376 / inceleme 0.0091  q=0.050: kaçış 0.2228 / inceleme 0.0366
+  mcd_energy     q=0.010: kaçış 0.2475 / inceleme 0.0091  q=0.050: kaçış 0.2228 / inceleme 0.0350
+  knn            q=0.010: kaçış 0.2426 / inceleme 0.0069  q=0.050: kaçış 0.2129 / inceleme 0.0401
+  (185 s)
+
+Ailelerin ortalaması (q = analist bütçesi):
+             benign_review                                 silent_benign                                
+q                    0.005   0.010   0.020   0.050   0.100         0.005   0.010   0.020   0.050   0.100
+guard                                                                                                   
+knn                 0.0034  0.0068  0.0161  0.0422  0.0745        0.1652  0.1628  0.1564  0.1455  0.1325
+mcd_disagree        0.0042  0.0073  0.0140  0.0371  0.0735        0.1655  0.1641  0.1593  0.1466  0.1329
+mcd_energy          0.0036  0.0076  0.0161  0.0357  0.0725        0.1646  0.1622  0.1583  0.1442  0.1228
+mcd_msp             0.0037  0.0073  0.0152  0.0369  0.0727        0.1613  0.1585  0.1505  0.1350  0.1158
+
+Çıktılar: outputs/dataset_23/two_signal  (711 s)
