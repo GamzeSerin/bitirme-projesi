@@ -9,10 +9,10 @@ Veri kontrolü (5 dosya, 18.10.2026):
 | | satır |
 |---|---|
 | Ham | 3.579.609 |
-| Tekrarlar silindikten sonra | 2.207.417 |
 | inf içeren satır | 81 |
+| inf satırları ve tekrarlar silindikten sonra | 2.207.338 |
 
-- 1.372.192 tekrarın yaklaşık 529 bini **dosyalar arası**. Bu yüzden tekrarlar birleştirmeden sonra silinir.
+- 1.372.190 tekrarın (`manifest.json` → `data_prep`; ilk denetimdeki 2.207.417 / 1.372.192 inf satırları silinmeden sayılmıştı) yaklaşık 529 bini **dosyalar arası**. Bu yüzden tekrarlar birleştirmeden sonra silinir.
 - `Tot size` sütunu `AVG` ile birebir aynı, `Variance` de `Std²`'ye eşit. İkisi de atılır.
 - En nadir ince etiketler (tekil): UPLOADING_ATTACK 112, RECON-PINGSWEEP 183, BACKDOOR_MALWARE 234, XSS 326.
 
@@ -169,6 +169,21 @@ TabM (Gorishniy vd., ICLR 2025; ekibin ortak `model_ml.py` bağlantısı, PR #7)
 - **Durma kuralı kontrolü (24.10.2026, yeni koşu yok):** "TabM'in geride kalması durma kuralından mı?" sorusu için kayıtlı son modelin eğitim geçmişine bakıldı (`work/dataset_23/3ed30bf6/models/TabM_b9a0d9.joblib`: `history_`, `best_epoch_`, `best_epoch_by_f1_`). Doğrulama kaybına göre en iyi epoch 6, doğrulama macro-F1'ine göre en iyi epoch da 6 (macro-F1 0,668); fark 0. Eğitim 15. epoch'ta sabır dolunca bitti; 6'dan sonra doğrulama macro-F1'i 0,628–0,651 arasında kaldı, yükselme eğilimi yok. Kriter (fark < 0,01) sağlandığı için F1'e göre durdurulan TabM duyarlılık analizine gerek görülmedi: TabM'in bu veride ağaçların gerisinde kalması durma kuralından kaynaklanmıyor. Not: fold modelleri kaydedilmediği için bu kontrol yalnız test tahminlerini üreten son model için yapılabildi; doğrulama F1'i epoch'tan epoch'a ±0,02 oynuyor.
 - **Görülmemiş saldırı deneyi için not:** TabM, ölçütlerde belirlendiği gibi resmi varsayılanlarla kullanılır; sonuçlardan sonra ayar yapılmaz. TabM'li sonuçlar yorumlanırken bu veri setinde sınıflandırıcı olarak ağaç modellerinden zayıf olduğu, özellikle WEB ve BRUTEFORCE'ta, göz önünde tutulur.
 
+## Eğitim, doğrulama ve test skorları (27.11.2026)
+
+Aşırı uyumu görmek için her modelin eğitim kümesindeki skoru, doğrulama (5-fold OOF) skoru ve test skoru yan yana (`python src/train_scores.py` → `outputs/dataset_23/train_val_scores.json`). Yeniden eğitim yok: resmi model dosyaları kayıttaki anahtarla bulunur, bölme resmi çalıştırmayla aynı. Betik ayrıca modelin test skorunu yeniden hesaplar; beşinde de `metrics.json` ile birebir aynı (doğru dosyalar yüklendi).
+
+| Model | Eğitim macro-F1 | Doğrulama (OOF) | Test |
+| --- | --- | --- | --- |
+| DT | 0,932 | 0,652 | 0,644 |
+| RF | 0,907 | 0,712 | 0,706 |
+| XGB | 0,903 | 0,714 | 0,707 |
+| LGBM | 0,829 | 0,710 | 0,694 |
+| LR | 0,556 | 0,555 | 0,552 |
+
+- Doğrulama ve test skorları birbirine çok yakın (fark ≤ 0,016): seçim sızıntısı ya da test kümesine aşırı uyum izi yok. Doğrulama skoruna göre seçilen model XGB (resmi birincil modelle aynı).
+- Ağaç modellerinde eğitim skoru doğrulamanın çok üstünde (DT 0,93 → 0,65). Bu, derin ağaçların eğitim satırlarını büyük ölçüde ezberlediğini gösteriyor; ama genelleme skoru OOF ve testte tutarlı olduğu için sonuçları etkilemiyor. LR'de üç skor neredeyse aynı: doğrusal model veriyi az öğreniyor, ezberlemiyor.
+
 ## Kapalı kümede 3 tohum (25.10.2026)
 
 Soru: DSS, XGB ve RF arasındaki sıralama ve küçük farklar eğitim rastgeleliğine karşı da sağlam mı? Bölme, örneklem ve fold'lar tohum 42'de sabit; yalnız model eğitim tohumu değişti (1 ve 2). Ayarlar tohum 42'nin aramasından alındı, arama tekrarlanmadı. Komut (resmi çalıştırmayla aynı bayraklar): `python src/model_ml.py --models DT,RF,XGB,LGBM,LR --tune --gpu --model-seed 1` (ve `2`) → `outputs/dataset_23/seeds/s1`, `s2` (sözleşme dosyaları değişmez). DSS her tohum klasörü için `main.py` ile ayrı ayrı hesaplandı (klasör `<dizin>/dataset_23` olarak verilip `--outputs <dizin>`). TabM bu kontrolde yok (DSS'te oylamıyor).
@@ -222,7 +237,7 @@ Ortak araç (`python src/cost_dnn_edgeiiot.py --dataset dataset_23 --data-file d
 
 ### Ablation, ortak format
 
-Ortak araç sabit ayarlarla çalışır (RF 100 ağaç, derinlik 40, `max_features` 0,5; DT derinlik 20; sınıf ağırlığı yok; 300 bootstrap). Bu yüzden değerler yukarıdaki ilk tablodan biraz düşük; ekip karşılaştırmasında bu tablo esas alınır.
+Ortak araç sabit ayarlarla çalışır (RF 100 ağaç, derinlik 40, `max_features` 0,5, sınıf ağırlığı `balanced_subsample`; DT derinlik 20, entropy, sınıf ağırlığı `balanced`; 300 bootstrap). Bu yüzden değerler yukarıdaki ilk tablodan biraz düşük; ekip karşılaştırmasında bu tablo esas alınır.
 
 | Koşul | RF test macro-F1 [%95 GA] | DT | En güçlü tek sütun |
 | --- | --- | --- | --- |

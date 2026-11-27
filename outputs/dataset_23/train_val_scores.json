@@ -1,0 +1,130 @@
+{
+  "selected_by_validation": "XGB",
+  "models": {
+    "DT": {
+      "model_file": "DT_94be77.joblib",
+      "train_macro_f1": 0.931851,
+      "train_dr_fpr": [
+        99.71,
+        1.58
+      ],
+      "val_oof_macro_f1": 0.652216,
+      "val_dr_fpr": [
+        98.07,
+        29.65
+      ],
+      "test_macro_f1": 0.643633,
+      "test_check_from_model": 0.643633,
+      "train_per_class_f1": {
+        "BENIGN": 0.967514,
+        "RECON": 0.97519,
+        "SPOOFING": 0.986901,
+        "BRUTEFORCE": 0.936195,
+        "WEB": 0.86939,
+        "DOS": 0.804339,
+        "DDOS": 0.915318,
+        "MIRAI": 0.999958
+      }
+    },
+    "RF": {
+      "model_file": "RF_4deb3c.joblib",
+      "train_macro_f1": 0.906868,
+      "train_dr_fpr": [
+        99.18,
+        8.48
+      ],
+      "val_oof_macro_f1": 0.711975,
+      "val_dr_fpr": [
+        98.46,
+        19.37
+      ],
+      "test_macro_f1": 0.705555,
+      "test_check_from_model": 0.705555,
+      "train_per_class_f1": {
+        "BENIGN": 0.889321,
+        "RECON": 0.912701,
+        "SPOOFING": 0.935332,
+        "BRUTEFORCE": 0.894678,
+        "WEB": 0.92943,
+        "DOS": 0.786612,
+        "DDOS": 0.907437,
+        "MIRAI": 0.999432
+      }
+    },
+    "XGB": {
+      "model_file": "XGB_818edd.joblib",
+      "train_macro_f1": 0.903373,
+      "train_dr_fpr": [
+        99.2,
+        6.15
+      ],
+      "val_oof_macro_f1": 0.713999,
+      "val_dr_fpr": [
+        98.46,
+        18.1
+      ],
+      "test_macro_f1": 0.707384,
+      "test_check_from_model": 0.707384,
+      "train_per_class_f1": {
+        "BENIGN": 0.903044,
+        "RECON": 0.925089,
+        "SPOOFING": 0.961482,
+        "BRUTEFORCE": 0.931204,
+        "WEB": 0.914943,
+        "DOS": 0.723857,
+        "DDOS": 0.867571,
+        "MIRAI": 0.999792
+      }
+    },
+    "LGBM": {
+      "model_file": "LGBM_f98717.joblib",
+      "train_macro_f1": 0.828815,
+      "train_dr_fpr": [
+        98.83,
+        12.83
+      ],
+      "val_oof_macro_f1": 0.709753,
+      "val_dr_fpr": [
+        98.44,
+        18.56
+      ],
+      "test_macro_f1": 0.693458,
+      "test_check_from_model": 0.693458,
+      "train_per_class_f1": {
+        "BENIGN": 0.839958,
+        "RECON": 0.864078,
+        "SPOOFING": 0.933465,
+        "BRUTEFORCE": 0.771894,
+        "WEB": 0.642256,
+        "DOS": 0.716321,
+        "DDOS": 0.862737,
+        "MIRAI": 0.999812
+      }
+    },
+    "LR": {
+      "model_file": "LR_e2cbed.joblib",
+      "train_macro_f1": 0.555848,
+      "train_dr_fpr": [
+        97.89,
+        36.44
+      ],
+      "val_oof_macro_f1": 0.554826,
+      "val_dr_fpr": [
+        97.89,
+        36.48
+      ],
+      "test_macro_f1": 0.552174,
+      "test_check_from_model": 0.552174,
+      "train_per_class_f1": {
+        "BENIGN": 0.634375,
+        "RECON": 0.616499,
+        "SPOOFING": 0.600345,
+        "BRUTEFORCE": 0.106129,
+        "WEB": 0.080929,
+        "DOS": 0.636124,
+        "DDOS": 0.784834,
+        "MIRAI": 0.987548
+      }
+    }
+  }
+}
