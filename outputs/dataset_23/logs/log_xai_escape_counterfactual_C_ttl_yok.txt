@@ -1,0 +1,44 @@
+5 dosya okunuyor: ['Merged01.csv', 'Merged02.csv', 'Merged03.csv', 'Merged04.csv', 'Merged05.csv']
+CICIoT2023: 738144 satır, koşul C_ttl_yok, 35 özellik (port: []); aileler ['RECON', 'SPOOFING', 'WEB', 'BRUTEFORCE']
+
+=== RECON: eğitim 493866, kalibrasyon 54875, test 147629 (bilinmeyen 10443) ===
+  dss_guard ile karşılaştırma (kayıtlı TabM): {'disagree': 1.0, 'energy': 1.0, 'alarm_agreement': 1.0}
+  sessiz kaçan: 2959
+  n=50  başlangıç payı medyan -0.03 IQR  yakalanma k=1..5: [1.0, 1.0, 1.0, 1.0, 1.0] (rastgele [0.37, 0.6, 0.73, 0.83, 0.9])
+  en sık değişen: [('Tot sum', 20), ('ICMP', 17), ('ack_count', 11), ('fin_count', 2)]  tetik: {'alarm+energy': 37, 'alarm': 13}  port payı: None
+  yalnız enerji: yakalanma [1.0, 1.0, 1.0, 1.0, 1.0] (rastgele [0.17, 0.306, 0.42, 0.517, 0.594])  en sık [('ack_count', 31), ('ICMP', 15), ('Tot sum', 3), ('Rate', 1)]  port payı None
+  XAI-2 ile tutarlılık: {'spearman_gain_vs_abs_shap_median': 0.009157509157509156, 'shap_rank_of_changed_median': 16.0, 'changed_in_shap_top5_share': 0.42}
+  gerçekçilik: 9.645838773039944 / gerçek 0.026  (64 s, 21,806 model satırı)
+  eş kontrolü: alarm_unknown: n=5186, birebir eş %0, en yakın etiket {'BENIGN': 0.318, 'BRUTEFORCE': 0.1388, 'DDOS': 0.0376, 'DOS': 0.1132, 'MIRAI': 0.0017, 'SPOOFING': 0.2862, 'WEB': 0.1045}; guard_unknown: n=730, birebir eş %0, en yakın etiket {'BENIGN': 0.6027, 'BRUTEFORCE': 0.0233, 'SPOOFING': 0.3027, 'WEB': 0.0712}; silent_unknown: n=2959, birebir eş %0, en yakın etiket {'BENIGN': 0.6928, 'BRUTEFORCE': 0.0186, 'SPOOFING': 0.2457, 'WEB': 0.0429}
+
+=== SPOOFING: eğitim 505985, kalibrasyon 56221, test 147629 (bilinmeyen 7078) ===
+  dss_guard ile karşılaştırma (kayıtlı TabM): {'disagree': 0.9996, 'energy': 1.0, 'alarm_agreement': 1.0}
+  sessiz kaçan: 836
+  n=50  başlangıç payı medyan -0.02 IQR  yakalanma k=1..5: [1.0, 1.0, 1.0, 1.0, 1.0] (rastgele [0.3, 0.52, 0.64, 0.74, 0.81])
+  en sık değişen: [('fin_count', 24), ('ICMP', 13), ('Protocol Type', 7), ('Tot sum', 3), ('fin_flag_number', 2)]  tetik: {'alarm+energy': 48, 'alarm': 2}  port payı: None
+  yalnız enerji: yakalanma [1.0, 1.0, 1.0, 1.0, 1.0] (rastgele [0.164, 0.321, 0.473, 0.578, 0.651])  en sık [('fin_count', 36), ('Protocol Type', 5), ('Header_Length', 3), ('ICMP', 3), ('ack_count', 2)]  port payı None
+  XAI-2 ile tutarlılık: {'spearman_gain_vs_abs_shap_median': 0.11568986568986568, 'shap_rank_of_changed_median': 19.0, 'changed_in_shap_top5_share': 0.08}
+  gerçekçilik: 2.527938525757308 / gerçek 0.020  (62 s, 21,436 model satırı)
+  eş kontrolü: alarm_unknown: n=5386, birebir eş %0, en yakın etiket {'BENIGN': 0.355, 'BRUTEFORCE': 0.0119, 'DDOS': 0.0316, 'DOS': 0.0434, 'MIRAI': 0.0381, 'RECON': 0.4814, 'WEB': 0.0386}; guard_unknown: n=135, birebir eş %0, en yakın etiket {'BENIGN': 0.4444, 'BRUTEFORCE': 0.0074, 'RECON': 0.5185, 'WEB': 0.0296}; silent_unknown: n=836, birebir eş %0, en yakın etiket {'BENIGN': 0.7189, 'BRUTEFORCE': 0.0036, 'RECON': 0.2703, 'WEB': 0.0072}
+
+=== WEB: eğitim 530103, kalibrasyon 58901, test 147629 (bilinmeyen 378) ===
+  dss_guard ile karşılaştırma (kayıtlı TabM): {'disagree': 1.0, 'energy': 1.0, 'alarm_agreement': 1.0}
+  sessiz kaçan: 52
+  n=50  başlangıç payı medyan -0.02 IQR  yakalanma k=1..5: [1.0, 1.0, 1.0, 1.0, 1.0] (rastgele [0.29, 0.51, 0.63, 0.73, 0.8])
+  en sık değişen: [('Protocol Type', 41), ('ICMP', 4), ('ack_count', 2), ('Tot sum', 2), ('AVG', 1)]  tetik: {'alarm': 29, 'alarm+energy': 21}  port payı: None
+  yalnız enerji: yakalanma [1.0, 1.0, 1.0, 1.0, 1.0] (rastgele [0.102, 0.206, 0.298, 0.387, 0.456])  en sık [('ack_count', 35), ('Tot sum', 10), ('AVG', 3), ('ICMP', 2)]  port payı None
+  XAI-2 ile tutarlılık: {'spearman_gain_vs_abs_shap_median': 0.03220882345570348, 'shap_rank_of_changed_median': 21.5, 'changed_in_shap_top5_share': 0.06}
+  gerçekçilik: 4.135360472554016 / gerçek 0.026  (62 s, 21,596 model satırı)
+  eş kontrolü: alarm_unknown: n=168, birebir eş %0, en yakın etiket {'BENIGN': 0.2202, 'BRUTEFORCE': 0.0357, 'RECON': 0.5893, 'SPOOFING': 0.1548}; guard_unknown: n=10, birebir eş %0, en yakın etiket {'BENIGN': 0.4, 'RECON': 0.4, 'SPOOFING': 0.2}; silent_unknown: n=52, birebir eş %0, en yakın etiket {'BENIGN': 0.5577, 'RECON': 0.2692, 'SPOOFING': 0.1731}
+
+=== BRUTEFORCE: eğitim 530737, kalibrasyon 58971, test 147629 (bilinmeyen 202) ===
+  dss_guard ile karşılaştırma (kayıtlı TabM): {'disagree': 0.9998, 'energy': 1.0, 'alarm_agreement': 1.0}
+  sessiz kaçan: 30
+  n=30  başlangıç payı medyan -0.03 IQR  yakalanma k=1..5: [1.0, 1.0, 1.0, 1.0, 1.0] (rastgele [0.34, 0.57, 0.69, 0.79, 0.86])
+  en sık değişen: [('Protocol Type', 28), ('AVG', 2)]  tetik: {'alarm+energy': 9, 'alarm': 21}  port payı: None
+  yalnız enerji: yakalanma [1.0, 1.0, 1.0, 1.0, 1.0] (rastgele [0.0817, 0.16, 0.245, 0.33, 0.4067])  en sık [('ack_count', 21), ('Tot sum', 5), ('AVG', 4)]  port payı None
+  XAI-2 ile tutarlılık: {'spearman_gain_vs_abs_shap_median': 0.030224393574546392, 'shap_rank_of_changed_median': 24.0, 'changed_in_shap_top5_share': 0.06666666666666667}
+  gerçekçilik: 4.0097562996877905 / gerçek 0.030  (58 s, 13,000 model satırı)
+  eş kontrolü: alarm_unknown: n=114, birebir eş %0, en yakın etiket {'BENIGN': 0.2018, 'RECON': 0.6316, 'SPOOFING': 0.1404, 'WEB': 0.0263}; guard_unknown: n=7, birebir eş %0, en yakın etiket {'BENIGN': 0.2857, 'RECON': 0.4286, 'SPOOFING': 0.1429, 'WEB': 0.1429}; silent_unknown: n=30, birebir eş %0, en yakın etiket {'BENIGN': 0.5667, 'RECON': 0.2667, 'SPOOFING': 0.1, 'WEB': 0.0667}
+
+Çıktı: outputs/dataset_23/xai_escape_counterfactual\xai_escape_counterfactual_C_ttl_yok.json  (284 s)

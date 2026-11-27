@@ -1,0 +1,11 @@
+5 dosya okunuyor: ['Merged01.csv', 'Merged02.csv', 'Merged03.csv', 'Merged04.csv', 'Merged05.csv']
+CICIoT2023 RECON, koşul C_ttl_yok: 10000 satır; parametre {'TabM': 791616, 'MLP': 583575}; MLP eğitimi 59 s (bu cihazda)
+  [cuda] TabM                 toplu:      110,556 satır/sn   tek satır:    0.970 ms
+  [cuda] MLP                  toplu:    2,068,252 satır/sn   tek satır:    0.928 ms
+  [cuda] MCDropout_sirali     toplu:       60,723 satır/sn   tek satır:   43.743 ms
+  [cuda] MCDropout_vektorel   toplu:       53,491 satır/sn   tek satır:    1.206 ms
+  [cpu] TabM                 toplu:        4,787 satır/sn   tek satır:    0.769 ms
+  [cpu] MLP                  toplu:      100,347 satır/sn   tek satır:    0.475 ms
+  [cpu] MCDropout_sirali     toplu:        1,491 satır/sn   tek satır:   16.483 ms
+  [cpu] MCDropout_vektorel   toplu:        1,376 satır/sn   tek satır:    1.331 ms
+Çıktı: outputs/dataset_23/inference_time\inference_time_RECON_C_ttl_yok.json

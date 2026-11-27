@@ -354,3 +354,41 @@ Yukarıdaki iki sinyalli kural ve güvenli hata TabM'in kendi kararıyla hesapla
 ### Henüz yapılmayanlar
 
 - A ve E koşulları yalnız tohum 42 ile çalıştı (3 tohum ana koşul C'de; protokoldeki "3 tohum" ifadesi ana koşul için uygulandı). A/E'deki tek tohumlu farklar, C'deki tohum sapmasıyla (AUROC'ta çoğunlukla < 0,01) birlikte okunur.
+
+## Ortak araç takımı (xai_dl_suite, 28.11.2026)
+
+`src/xai_dl_suite.py` ile, koşul C (−Time_To_Live), tohumlar 42/1/2, aileler RECON/SPOOFING/WEB/BRUTEFORCE (XAI adımları için). Her adım önce `--quick` ile denendi; tam koşu 298 dk sürdü, hiçbir adım hata vermedi. Kayıtlar: `outputs/dataset_23/logs/`.
+
+**Derin öğrenme karşılaştırması** (`dl_compare/`, 6 ailenin ortalaması, 3 tohum ort.):
+
+| Sınıflandırıcı | Alarm AUROC | Enerji AUROC | q=%5 yakalanan | q=%5 sessiz kaçış | q=%5 inceleme | Bilinen macro-F1 |
+|---|---|---|---|---|---|---|
+| TabM | 0,920 ± 0,013 | 0,838 | 0,619 | 0,108 | 0,036 | 0,665 |
+| MC-Dropout | 0,847 ± 0,019 | 0,793 | 0,443 | 0,113 | 0,035 | 0,665 |
+| MLP | 0,672 ± 0,018 | 0,792 | 0,229 | 0,110 | 0,035 | 0,665 |
+
+Bilinen sınıflarda üç model aynı (macro-F1 farkı < 0,005). Fark bilinmeyeni ayırmada: TabM'in üye anlaşmazlığı alarmı MLP'den 0,25, MC-Dropout'tan 0,07 AUROC yüksek. Sessiz kaçış ise üçünde de ~%11; enerji koruması kaçışı modelden bağımsız olarak aynı düzeye çekiyor.
+
+**Literatür yöntemleri** (`open_set_baselines/`, 6 aile, 3 tohum, AUROC ort. ± sd; q=%5 sessiz kaçış):
+
+| Skor | AUROC | q=%5 kaçış | q=%5 inceleme |
+|---|---|---|---|
+| TabM anlaşmazlık | **0,920 ± 0,013** | 0,114 | 0,036 |
+| Autoencoder | 0,899 ± 0,005 | 0,122 | 0,035 |
+| kNN | 0,847 ± 0,000 | 0,112 | 0,036 |
+| OpenMax | 0,847 ± 0,022 | 0,113 | 0,035 |
+| TabM enerji | 0,838 ± 0,016 | 0,108 | 0,036 |
+| Mahalanobis | 0,772 ± 0,006 | 0,113 | 0,034 |
+| TabM MSP | 0,763 ± 0,011 | 0,105 | 0,037 |
+
+FLOOD ve MIRAI'de mesafe tabanlı yöntemler (kNN, autoencoder, Mahalanobis) TabM anlaşmazlığından daha iyi (FLOOD'da 0,98–0,99'a karşı ~0,79); bu ailelerde q=%5'te kaçış her yöntemde 0. RECON/SPOOFING/WEB/BRUTEFORCE'ta TabM anlaşmazlık/enerji ve OpenMax önde. Kaçış oranları yöntemler arasında birbirine çok yakın (0,105–0,122); seçimi belirleyen alarmın sıralama gücü, kaçış değil.
+
+**XAI-2, bilinmeyen kararının açıklaması** (`xai_unknown_decision/`): SHAP'a göre en önemli özellikleri bozmak, rastgele özellik bozmaya göre alarm/koruma kararını her grupta daha çok değiştiriyor (örneklerin %94–100'ünde, p < 0,02). Açıklamalar karara gerçekten bağlı. Yeniden eğitilen TabM, dss_guard'daki kayıtlı TabM ile aynı alarmları veriyor (uyum 1,0).
+
+**XAI-3, sessiz kaçışların karşı-olgusu** (`xai_escape_counterfactual/`): Sessiz kaçan bilinmeyenlerin tamamı 1 özellik değiştirilerek yakalanabiliyor (rastgele seçimde %29–34). En sık değişen özellikler `Protocol Type`, `fin_count`, `ack_count`, `ICMP`. Değiştirilen özellikler XAI-2'nin en önemli 5 özelliğinde nadiren (%6–8) çıkıyor: kaçışı kapatan özellikler kararı genelde belirleyenlerden farklı. Gerçekçilik payı gerçek mesafenin ~100 katı; bu karşı-olgular gerçek trafik örneği değil, yalnız "neye bakılırsa yakalanırdı" göstergesi. Sessiz kaçanların en yakın eğitim komşusu çoğunlukla BENIGN (%56–72), sonra RECON.
+
+**Tahmin süresi** (`inference_time/`, RECON, 10 000 satır): GPU'da TabM 110 bin satır/sn, MLP 2,07 milyon satır/sn; tek satır gecikmesi her ikisinde ~1 ms. CPU'da TabM 4,8 bin satır/sn (tek satır 0,8 ms). Vektörel MC-Dropout tek satırda 1,2 ms; sıralı MC-Dropout 44 ms. Yani TabM'in fazladan maliyeti toplu işlemede var, tek akış gecikmesinde yok.
+
+**Etiket karışıklığı** (`label_noise/`): Örneklemde aynı özellik vektörünü paylaşan farklı etiketli satır payı %0,1. Karışıklık kendi ailesi içinde: RECON-PORTSCAN↔OSSCAN (%2–3), DOS↔DDOS UDP/TCP/SYN (%0,1–0,3, FLOOD'u tek aile yapma kararını destekliyor), MITM-ARPSPOOFING↔BENIGN (%0,1). Aileler arası karışıklık ihmal edilebilir; LOFO sonuçlarını etiket gürültüsü açıklamıyor.
+
+Zaman bölmesi adımı (`time`) bu veri setinde çalıştırılmadı: CICIoT2023'te satır zaman damgası yok.

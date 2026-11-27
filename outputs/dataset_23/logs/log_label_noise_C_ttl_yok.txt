@@ -1,0 +1,76 @@
+5 dosya okunuyor: ['Merged01.csv', 'Merged02.csv', 'Merged03.csv', 'Merged04.csv', 'Merged05.csv']
+
+CICIoT2023 · experiment_sample (etiket başına en fazla 40000): 738144 satır, karışık pay %0.1
+   RECON-PORTSCAN               %  2.8   en sık karıştığı: {'RECON-OSSCAN': 0.982, 'RECON-HOSTDISCOVERY': 0.012, 'MITM-ARPSPOOFING': 0.006}
+   RECON-OSSCAN                 %  2.3   en sık karıştığı: {'RECON-PORTSCAN': 0.961, 'MITM-ARPSPOOFING': 0.017, 'RECON-HOSTDISCOVERY': 0.011}
+   DOS-UDP_FLOOD                %  0.3   en sık karıştığı: {'DDOS-UDP_FLOOD': 1.0}
+   DDOS-UDP_FLOOD               %  0.2   en sık karıştığı: {'DOS-UDP_FLOOD': 1.0}
+   DDOS-SYN_FLOOD               %  0.1   en sık karıştığı: {'DOS-SYN_FLOOD': 0.618, 'DDOS-SYNONYMOUSIP_FLOOD': 0.382}
+   DDOS-TCP_FLOOD               %  0.1   en sık karıştığı: {'DOS-TCP_FLOOD': 1.0}
+   DOS-SYN_FLOOD                %  0.1   en sık karıştığı: {'DDOS-SYN_FLOOD': 0.825, 'DDOS-SYNONYMOUSIP_FLOOD': 0.175}
+   DOS-TCP_FLOOD                %  0.1   en sık karıştığı: {'DDOS-TCP_FLOOD': 1.0}
+   DDOS-SYNONYMOUSIP_FLOOD      %  0.1   en sık karıştığı: {'DDOS-SYN_FLOOD': 0.7, 'DOS-SYN_FLOOD': 0.3}
+   RECON-HOSTDISCOVERY          %  0.1   en sık karıştığı: {'VULNERABILITYSCAN': 0.429, 'RECON-PORTSCAN': 0.286, 'RECON-OSSCAN': 0.286}
+   MITM-ARPSPOOFING             %  0.1   en sık karıştığı: {'BENIGN': 0.615, 'RECON-OSSCAN': 0.231, 'RECON-PORTSCAN': 0.077}
+   BENIGN                       %  0.0   en sık karıştığı: {'MITM-ARPSPOOFING': 0.7, 'DNS_SPOOFING': 0.1, 'RECON-OSSCAN': 0.1}
+   DNS_SPOOFING                 %  0.0   en sık karıştığı: {'MITM-ARPSPOOFING': 0.5, 'BENIGN': 0.5}
+   VULNERABILITYSCAN            %  0.0   en sık karıştığı: {'RECON-HOSTDISCOVERY': 0.8, 'BENIGN': 0.2}
+   BACKDOOR_MALWARE             %  0.0   en sık karıştığı: {}
+   BROWSERHIJACKING             %  0.0   en sık karıştığı: {}
+   COMMANDINJECTION             %  0.0   en sık karıştığı: {}
+   DDOS-ACK_FRAGMENTATION       %  0.0   en sık karıştığı: {}
+   DDOS-HTTP_FLOOD              %  0.0   en sık karıştığı: {}
+   DDOS-ICMP_FLOOD              %  0.0   en sık karıştığı: {}
+   DDOS-ICMP_FRAGMENTATION      %  0.0   en sık karıştığı: {}
+   DDOS-PSHACK_FLOOD            %  0.0   en sık karıştığı: {}
+   DDOS-RSTFINFLOOD             %  0.0   en sık karıştığı: {}
+   DDOS-SLOWLORIS               %  0.0   en sık karıştığı: {}
+   DDOS-UDP_FRAGMENTATION       %  0.0   en sık karıştığı: {}
+   DICTIONARYBRUTEFORCE         %  0.0   en sık karıştığı: {}
+   DOS-HTTP_FLOOD               %  0.0   en sık karıştığı: {}
+   MIRAI-GREETH_FLOOD           %  0.0   en sık karıştığı: {}
+   MIRAI-GREIP_FLOOD            %  0.0   en sık karıştığı: {}
+   MIRAI-UDPPLAIN               %  0.0   en sık karıştığı: {}
+   RECON-PINGSWEEP              %  0.0   en sık karıştığı: {}
+   SQLINJECTION                 %  0.0   en sık karıştığı: {}
+   UPLOADING_ATTACK             %  0.0   en sık karıştığı: {}
+   XSS                          %  0.0   en sık karıştığı: {}
+5 dosya okunuyor: ['Merged01.csv', 'Merged02.csv', 'Merged03.csv', 'Merged04.csv', 'Merged05.csv']
+
+CICIoT2023 · cleaned_full (etiket başına en fazla 1000000000): 2015272 satır, karışık pay %0.3
+   RECON-PORTSCAN               %  2.8   en sık karıştığı: {'RECON-OSSCAN': 0.97, 'RECON-HOSTDISCOVERY': 0.012, 'BENIGN': 0.012}
+   RECON-OSSCAN                 %  2.3   en sık karıştığı: {'RECON-PORTSCAN': 0.95, 'BENIGN': 0.022, 'MITM-ARPSPOOFING': 0.017}
+   DOS-UDP_FLOOD                %  1.0   en sık karıştığı: {'DDOS-UDP_FLOOD': 1.0}
+   DDOS-UDP_FLOOD               %  0.8   en sık karıştığı: {'DOS-UDP_FLOOD': 1.0}
+   DOS-SYN_FLOOD                %  0.4   en sık karıştığı: {'DDOS-SYN_FLOOD': 0.738, 'DDOS-SYNONYMOUSIP_FLOOD': 0.262}
+   DOS-TCP_FLOOD                %  0.4   en sık karıştığı: {'DDOS-TCP_FLOOD': 1.0}
+   DDOS-SYN_FLOOD               %  0.3   en sık karıştığı: {'DOS-SYN_FLOOD': 0.612, 'DDOS-SYNONYMOUSIP_FLOOD': 0.388}
+   DDOS-TCP_FLOOD               %  0.2   en sık karıştığı: {'DOS-TCP_FLOOD': 1.0}
+   DDOS-SYNONYMOUSIP_FLOOD      %  0.2   en sık karıştığı: {'DDOS-SYN_FLOOD': 0.634, 'DOS-SYN_FLOOD': 0.366}
+   MITM-ARPSPOOFING             %  0.1   en sık karıştığı: {'BENIGN': 0.821, 'RECON-OSSCAN': 0.107, 'RECON-PORTSCAN': 0.036}
+   RECON-HOSTDISCOVERY          %  0.1   en sık karıştığı: {'VULNERABILITYSCAN': 0.375, 'RECON-PORTSCAN': 0.25, 'RECON-OSSCAN': 0.25}
+   BENIGN                       %  0.0   en sık karıştığı: {'MITM-ARPSPOOFING': 0.69, 'RECON-OSSCAN': 0.103, 'DNS_SPOOFING': 0.069}
+   DNS_SPOOFING                 %  0.0   en sık karıştığı: {'BENIGN': 0.667, 'MITM-ARPSPOOFING': 0.333}
+   VULNERABILITYSCAN            %  0.0   en sık karıştığı: {'RECON-HOSTDISCOVERY': 0.571, 'BENIGN': 0.429}
+   BACKDOOR_MALWARE             %  0.0   en sık karıştığı: {}
+   BROWSERHIJACKING             %  0.0   en sık karıştığı: {}
+   COMMANDINJECTION             %  0.0   en sık karıştığı: {}
+   DDOS-ACK_FRAGMENTATION       %  0.0   en sık karıştığı: {}
+   DDOS-HTTP_FLOOD              %  0.0   en sık karıştığı: {}
+   DDOS-ICMP_FLOOD              %  0.0   en sık karıştığı: {}
+   DDOS-ICMP_FRAGMENTATION      %  0.0   en sık karıştığı: {}
+   DDOS-PSHACK_FLOOD            %  0.0   en sık karıştığı: {}
+   DDOS-RSTFINFLOOD             %  0.0   en sık karıştığı: {}
+   DDOS-SLOWLORIS               %  0.0   en sık karıştığı: {}
+   DDOS-UDP_FRAGMENTATION       %  0.0   en sık karıştığı: {}
+   DICTIONARYBRUTEFORCE         %  0.0   en sık karıştığı: {}
+   DOS-HTTP_FLOOD               %  0.0   en sık karıştığı: {}
+   MIRAI-GREETH_FLOOD           %  0.0   en sık karıştığı: {}
+   MIRAI-GREIP_FLOOD            %  0.0   en sık karıştığı: {}
+   MIRAI-UDPPLAIN               %  0.0   en sık karıştığı: {}
+   RECON-PINGSWEEP              %  0.0   en sık karıştığı: {}
+   SQLINJECTION                 %  0.0   en sık karıştığı: {}
+   UPLOADING_ATTACK             %  0.0   en sık karıştığı: {}
+   XSS                          %  0.0   en sık karıştığı: {}
+
+Çıktı: outputs/dataset_23/label_noise\label_noise_C_ttl_yok.json

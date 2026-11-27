@@ -1,0 +1,31 @@
+5 dosya okunuyor: ['Merged01.csv', 'Merged02.csv', 'Merged03.csv', 'Merged04.csv', 'Merged05.csv']
+CICIoT2023: 738144 satır, koşul C_ttl_yok; aileler ['FLOOD', 'MIRAI', 'RECON', 'SPOOFING', 'WEB', 'BRUTEFORCE']; tohumlar [42, 1, 2]
+[tohum 42] FLOOD: tabm_disagree 0.744  tabm_energy 0.660  tabm_msp 0.669  knn 0.977  openmax 0.631  mahalanobis 0.983  autoencoder 0.991  | q=%5 kaçış: tabm_disagree 0.0000  tabm_energy 0.0000  tabm_msp 0.0000  knn 0.0000  openmax 0.0000  mahalanobis 0.0000  autoencoder 0.0000  (260 s)
+[tohum 42] MIRAI: tabm_disagree 0.917  tabm_energy 0.420  tabm_msp 0.460  knn 0.912  openmax 0.516  mahalanobis 0.975  autoencoder 0.934  | q=%5 kaçış: tabm_disagree 0.0000  tabm_energy 0.0000  tabm_msp 0.0000  knn 0.0000  openmax 0.0000  mahalanobis 0.0000  autoencoder 0.0000  (510 s)
+[tohum 42] RECON: tabm_disagree 0.941  tabm_energy 0.983  tabm_msp 0.859  knn 0.829  openmax 0.968  mahalanobis 0.761  autoencoder 0.872  | q=%5 kaçış: tabm_disagree 0.2607  tabm_energy 0.2483  tabm_msp 0.2361  knn 0.2686  openmax 0.2574  mahalanobis 0.2891  autoencoder 0.2971  (410 s)
+[tohum 42] SPOOFING: tabm_disagree 0.970  tabm_energy 0.973  tabm_msp 0.869  knn 0.810  openmax 0.963  mahalanobis 0.719  autoencoder 0.916  | q=%5 kaçış: tabm_disagree 0.1057  tabm_energy 0.1022  tabm_msp 0.0983  knn 0.1086  openmax 0.0879  mahalanobis 0.1120  autoencoder 0.1074  (891 s)
+[tohum 42] WEB: tabm_disagree 0.934  tabm_energy 0.951  tabm_msp 0.842  knn 0.753  openmax 0.954  mahalanobis 0.562  autoencoder 0.793  | q=%5 kaçış: tabm_disagree 0.2090  tabm_energy 0.1984  tabm_msp 0.1825  knn 0.1825  openmax 0.1984  mahalanobis 0.1746  autoencoder 0.2169  (610 s)
+[tohum 42] BRUTEFORCE: tabm_disagree 0.946  tabm_energy 0.937  tabm_msp 0.804  knn 0.799  openmax 0.915  mahalanobis 0.644  autoencoder 0.854  | q=%5 kaçış: tabm_disagree 0.1782  tabm_energy 0.1634  tabm_msp 0.1683  knn 0.1782  openmax 0.1832  mahalanobis 0.1832  autoencoder 0.1881  (482 s)
+[tohum 1] FLOOD: tabm_disagree 0.771  tabm_energy 0.669  tabm_msp 0.701  knn 0.977  openmax 0.677  mahalanobis 0.935  autoencoder 0.991  | q=%5 kaçış: tabm_disagree 0.0000  tabm_energy 0.0000  tabm_msp 0.0000  knn 0.0000  openmax 0.0000  mahalanobis 0.0000  autoencoder 0.0000  (545 s)
+[tohum 1] MIRAI: tabm_disagree 0.970  tabm_energy 0.596  tabm_msp 0.546  knn 0.912  openmax 0.672  mahalanobis 0.958  autoencoder 0.944  | q=%5 kaçış: tabm_disagree 0.0000  tabm_energy 0.0000  tabm_msp 0.0000  knn 0.0000  openmax 0.0000  mahalanobis 0.0000  autoencoder 0.0000  (789 s)
+[tohum 1] RECON: tabm_disagree 0.937  tabm_energy 0.979  tabm_msp 0.858  knn 0.829  openmax 0.970  mahalanobis 0.772  autoencoder 0.898  | q=%5 kaçış: tabm_disagree 0.2360  tabm_energy 0.2242  tabm_msp 0.2105  knn 0.2281  openmax 0.2243  mahalanobis 0.2338  autoencoder 0.2455  (445 s)
+[tohum 1] SPOOFING: tabm_disagree 0.961  tabm_energy 0.973  tabm_msp 0.882  knn 0.810  openmax 0.967  mahalanobis 0.776  autoencoder 0.915  | q=%5 kaçış: tabm_disagree 0.1366  tabm_energy 0.1365  tabm_msp 0.1362  knn 0.1359  openmax 0.1370  mahalanobis 0.1099  autoencoder 0.1435  (514 s)
+[tohum 1] WEB: tabm_disagree 0.920  tabm_energy 0.954  tabm_msp 0.844  knn 0.753  openmax 0.946  mahalanobis 0.612  autoencoder 0.811  | q=%5 kaçış: tabm_disagree 0.1746  tabm_energy 0.1640  tabm_msp 0.1587  knn 0.1825  openmax 0.1799  mahalanobis 0.1852  autoencoder 0.1905  (446 s)
+[tohum 1] BRUTEFORCE: tabm_disagree 0.940  tabm_energy 0.883  tabm_msp 0.787  knn 0.799  openmax 0.859  mahalanobis 0.602  autoencoder 0.856  | q=%5 kaçış: tabm_disagree 0.1881  tabm_energy 0.1832  tabm_msp 0.1782  knn 0.1881  openmax 0.2079  mahalanobis 0.1931  autoencoder 0.2079  (932 s)
+[tohum 2] FLOOD: tabm_disagree 0.794  tabm_energy 0.665  tabm_msp 0.696  knn 0.977  openmax 0.731  mahalanobis 0.950  autoencoder 0.992  | q=%5 kaçış: tabm_disagree 0.0000  tabm_energy 0.0000  tabm_msp 0.0000  knn 0.0000  openmax 0.0000  mahalanobis 0.0000  autoencoder 0.0000  (490 s)
+[tohum 2] MIRAI: tabm_disagree 0.989  tabm_energy 0.611  tabm_msp 0.567  knn 0.912  openmax 0.668  mahalanobis 0.960  autoencoder 0.936  | q=%5 kaçış: tabm_disagree 0.0000  tabm_energy 0.0000  tabm_msp 0.0000  knn 0.0000  openmax 0.0000  mahalanobis 0.0000  autoencoder 0.0000  (525 s)
+[tohum 2] RECON: tabm_disagree 0.955  tabm_energy 0.971  tabm_msp 0.796  knn 0.829  openmax 0.956  mahalanobis 0.730  autoencoder 0.890  | q=%5 kaçış: tabm_disagree 0.1265  tabm_energy 0.1202  tabm_msp 0.1195  knn 0.1199  openmax 0.1217  mahalanobis 0.1262  autoencoder 0.1329  (369 s)
+[tohum 2] SPOOFING: tabm_disagree 0.970  tabm_energy 0.970  tabm_msp 0.852  knn 0.810  openmax 0.970  mahalanobis 0.786  autoencoder 0.923  | q=%5 kaçış: tabm_disagree 0.1023  tabm_energy 0.0942  tabm_msp 0.0955  knn 0.1013  openmax 0.0952  mahalanobis 0.1074  autoencoder 0.1053  (489 s)
+[tohum 2] WEB: tabm_disagree 0.943  tabm_energy 0.946  tabm_msp 0.840  knn 0.753  openmax 0.942  mahalanobis 0.541  autoencoder 0.808  | q=%5 kaçış: tabm_disagree 0.1587  tabm_energy 0.1482  tabm_msp 0.1482  knn 0.1402  openmax 0.1640  mahalanobis 0.1270  autoencoder 0.1693  (762 s)
+[tohum 2] BRUTEFORCE: tabm_disagree 0.950  tabm_energy 0.949  tabm_msp 0.862  knn 0.799  openmax 0.939  mahalanobis 0.624  autoencoder 0.852  | q=%5 kaçış: tabm_disagree 0.1832  tabm_energy 0.1683  tabm_msp 0.1535  knn 0.1832  openmax 0.1782  mahalanobis 0.1980  autoencoder 0.1832  (536 s)
+
+Özet (aile ortalaması, tohumlar arası ort. ± sd):
+  tabm_disagree AUROC 0.920 ± 0.013   kontrol q=%5: kaçış 0.1144 / inceleme 0.0357
+  tabm_energy   AUROC 0.838 ± 0.016   kontrol q=%5: kaçış 0.1084 / inceleme 0.0360
+  tabm_msp      AUROC 0.763 ± 0.011   kontrol q=%5: kaçış 0.1048 / inceleme 0.0370
+  knn           AUROC 0.847 ± 0.000   kontrol q=%5: kaçış 0.1121 / inceleme 0.0358
+  openmax       AUROC 0.847 ± 0.022   kontrol q=%5: kaçış 0.1131 / inceleme 0.0352
+  mahalanobis   AUROC 0.772 ± 0.006   kontrol q=%5: kaçış 0.1133 / inceleme 0.0339
+  autoencoder   AUROC 0.899 ± 0.005   kontrol q=%5: kaçış 0.1215 / inceleme 0.0352
+
+Çıktı: outputs/dataset_23/open_set_baselines\open_set_baselines_C_ttl_yok.json  (10041 s)

@@ -1,0 +1,54 @@
+5 dosya okunuyor: ['Merged01.csv', 'Merged02.csv', 'Merged03.csv', 'Merged04.csv', 'Merged05.csv']
+CICIoT2023: 738144 satır, koşul C_ttl_yok; aileler ['FLOOD', 'MIRAI', 'RECON', 'SPOOFING', 'WEB', 'BRUTEFORCE']; analist bütçeleri q = [0.005, 0.01, 0.02, 0.05, 0.1]
+
+=== FLOOD ['DOS', 'DDOS'] (kör oranı 0.0625) — yalnız alarm: yakalanan 0.182, sessiz BENIGN kaçışı 0.004 ===
+  MLP: alarm AUROC 0.5313, enerji AUROC 0.6064, bilinen macro-F1 0.6212, eğitim 68 s
+  mlp_msp        q=0.010: kaçış 0.0036 / inceleme 0.0046  q=0.050: kaçış 0.0030 / inceleme 0.0279
+  mlp_energy     q=0.010: kaçış 0.0036 / inceleme 0.0050  q=0.050: kaçış 0.0035 / inceleme 0.0326
+  knn            q=0.010: kaçış 0.0008 / inceleme 0.0079  q=0.050: kaçış 0.0000 / inceleme 0.0338
+  (88 s)
+
+=== MIRAI ['MIRAI'] (kör oranı 0.0625) — yalnız alarm: yakalanan 0.001, sessiz BENIGN kaçışı 0.000 ===
+  MLP: alarm AUROC 0.3073, enerji AUROC 0.453, bilinen macro-F1 0.6055, eğitim 109 s
+  mlp_msp        q=0.010: kaçış 0.0000 / inceleme 0.0077  q=0.050: kaçış 0.0000 / inceleme 0.0335
+  mlp_energy     q=0.010: kaçış 0.0000 / inceleme 0.0085  q=0.050: kaçış 0.0000 / inceleme 0.0356
+  knn            q=0.010: kaçış 0.0000 / inceleme 0.0074  q=0.050: kaçış 0.0000 / inceleme 0.0366
+  (134 s)
+
+=== RECON ['RECON'] (kör oranı 0.0625) — yalnız alarm: yakalanan 0.197, sessiz BENIGN kaçışı 0.276 ===
+  MLP: alarm AUROC 0.7564, enerji AUROC 0.912, bilinen macro-F1 0.6903, eğitim 143 s
+  mlp_msp        q=0.010: kaçış 0.2694 / inceleme 0.0074  q=0.050: kaçış 0.2400 / inceleme 0.0398
+  mlp_energy     q=0.010: kaçış 0.2606 / inceleme 0.0051  q=0.050: kaçış 0.2306 / inceleme 0.0365
+  knn            q=0.010: kaçış 0.2652 / inceleme 0.0063  q=0.050: kaçış 0.2170 / inceleme 0.0442
+  (170 s)
+
+=== SPOOFING ['SPOOFING'] (kör oranı 0.0625) — yalnız alarm: yakalanan 0.240, sessiz BENIGN kaçışı 0.199 ===
+  MLP: alarm AUROC 0.7589, enerji AUROC 0.9528, bilinen macro-F1 0.6319, eğitim 188 s
+  mlp_msp        q=0.010: kaçış 0.1933 / inceleme 0.0080  q=0.050: kaçış 0.1719 / inceleme 0.0380
+  mlp_energy     q=0.010: kaçış 0.1484 / inceleme 0.0074  q=0.050: kaçış 0.1308 / inceleme 0.0371
+  knn            q=0.010: kaçış 0.1941 / inceleme 0.0074  q=0.050: kaçış 0.1608 / inceleme 0.0401
+  (215 s)
+
+=== WEB ['WEB'] (kör oranı 0.0625) — yalnız alarm: yakalanan 0.220, sessiz BENIGN kaçışı 0.095 ===
+  MLP: alarm AUROC 0.7645, enerji AUROC 0.9364, bilinen macro-F1 0.7335, eğitim 86 s
+  mlp_msp        q=0.010: kaçış 0.0952 / inceleme 0.0039  q=0.050: kaçış 0.0926 / inceleme 0.0278
+  mlp_energy     q=0.010: kaçış 0.0926 / inceleme 0.0059  q=0.050: kaçış 0.0900 / inceleme 0.0345
+  knn            q=0.010: kaçış 0.0926 / inceleme 0.0081  q=0.050: kaçış 0.0873 / inceleme 0.0376
+  (114 s)
+
+=== BRUTEFORCE ['BRUTEFORCE'] (kör oranı 0.0625) — yalnız alarm: yakalanan 0.277, sessiz BENIGN kaçışı 0.218 ===
+  MLP: alarm AUROC 0.7943, enerji AUROC 0.8907, bilinen macro-F1 0.7277, eğitim 121 s
+  mlp_msp        q=0.010: kaçış 0.2079 / inceleme 0.0075  q=0.050: kaçış 0.1832 / inceleme 0.0375
+  mlp_energy     q=0.010: kaçış 0.2178 / inceleme 0.0069  q=0.050: kaçış 0.2129 / inceleme 0.0326
+  knn            q=0.010: kaçış 0.2030 / inceleme 0.0056  q=0.050: kaçış 0.1782 / inceleme 0.0334
+  (148 s)
+
+Ailelerin ortalaması (q = analist bütçesi):
+           benign_review                                 silent_benign                                
+q                  0.005   0.010   0.020   0.050   0.100         0.005   0.010   0.020   0.050   0.100
+guard                                                                                                 
+knn               0.0034  0.0071  0.0145  0.0376  0.0686        0.1281  0.1260  0.1218  0.1072  0.0867
+mlp_energy        0.0026  0.0065  0.0150  0.0348  0.0670        0.1239  0.1205  0.1160  0.1113  0.1038
+mlp_msp           0.0031  0.0065  0.0129  0.0341  0.0671        0.1300  0.1282  0.1248  0.1151  0.1037
+
+Çıktılar: outputs/dataset_23/two_signal\s2  (885 s)
