@@ -63,6 +63,7 @@ from sklearn.preprocessing import QuantileTransformer
 
 from ablation_dnn_edgeiiot import build_models
 from common import open_set_registry as registry
+from common.contract import environment_info
 from common.taxonomy import COMMON_CLASSES
 
 OUT_DIR = "outputs/dnn_edgeiiot/open_set"
@@ -357,6 +358,7 @@ def main():
            "families": details, "results": rows,
            "mean_over_families": summary.reset_index().to_dict(orient="records"),
            "runtime_seconds": round(time.perf_counter() - t_start, 1)}
+    out["runtime"] = environment_info()  # yazılım sürümleri ve donanım (common/contract.py)
     with open(os.path.join(args.out_dir, f"open_set_lofo_{tag}.json"), "w", encoding="utf-8") as f:
         json.dump(out, f, indent=2, ensure_ascii=False)
     plot(rows, os.path.join(args.out_dir, f"fig_open_set_auroc_{args.dataset}_{tag}.png"),
